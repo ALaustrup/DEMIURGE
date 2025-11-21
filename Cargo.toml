@@ -1,5 +1,12 @@
 [workspace]
-members = []
+members = [
+    "chain",
+    "runtime/bank_cgt",
+    "runtime/nft_dgen",
+    "runtime/fabric_manager",
+    "runtime/abyss_registry",
+    "runtime/avatars_profiles",
+]
 resolver = "2"
 
 [workspace.package]
@@ -8,5 +15,10 @@ edition = "2021"
 authors = ["Andrew Laustrup"]
 
 [workspace.dependencies]
-# Common dependencies will be added as modules are created
+serde = { version = "1.0", features = ["derive"] }
+bincode = "1.3"
+thiserror = "1.0"
+anyhow = "1.0"
+sha2 = "0.10"
+env_logger = "0.11"
 
