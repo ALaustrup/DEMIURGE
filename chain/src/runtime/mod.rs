@@ -15,8 +15,9 @@ pub mod nft_dgen;
 
 pub use abyss_registry::{get_listing, AbyssRegistryModule, ListingId};
 pub use avatars_profiles::{
-    add_gnosis_xp, add_syzygy_score, create_aeon_profile, get_aeon_profile, is_archon,
-    recompute_ascension, update_badges, AvatarsProfilesModule, AeonProfile,
+    add_gnosis_xp, add_syzygy_score, create_aeon_profile, get_aeon_profile,
+    get_address_by_handle, is_archon, recompute_ascension, set_handle, update_badges,
+    AvatarsProfilesModule, AeonProfile,
 };
 pub use bank_cgt::{get_balance_cgt, BankCgtModule};
 pub use fabric_manager::{get_fabric_asset, FabricManagerModule, FabricRootHash};

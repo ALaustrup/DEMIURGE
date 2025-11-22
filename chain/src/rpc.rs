@@ -22,8 +22,9 @@ use crate::config::DEV_FAUCET_AMOUNT;
 use crate::core::transaction::{Address, Transaction};
 use crate::node::Node;
 use crate::runtime::{
-    add_gnosis_xp, add_syzygy_score, create_aeon_profile, get_aeon_profile, recompute_ascension,
-    update_badges, BankCgtModule, FabricRootHash, ListingId, NftDgenModule, NftId, RuntimeModule,
+    add_gnosis_xp, add_syzygy_score, create_aeon_profile, get_aeon_profile,
+    get_address_by_handle, recompute_ascension, set_handle, update_badges, BankCgtModule,
+    FabricRootHash, ListingId, NftDgenModule, NftId, RuntimeModule,
 };
 
 /// JSON-RPC request envelope.
@@ -125,6 +126,17 @@ pub struct AeonRecordSyzygyParams {
 #[derive(Debug, Deserialize)]
 pub struct AeonGetAscensionParams {
     pub address: String, // hex string
+}
+
+#[derive(Debug, Deserialize)]
+pub struct AeonSetHandleParams {
+    pub address: String, // hex string
+    pub handle: String,  // handle without @
+}
+
+#[derive(Debug, Deserialize)]
+pub struct AeonGetByHandleParams {
+    pub handle: String, // handle without @
 }
 
 /// Helper functions for parsing hex addresses and hashes
@@ -887,6 +899,122 @@ async fn handle_rpc(
                     error: None,
                     id,
                 }),
+                None => Json(JsonRpcResponse {
+                    jsonrpc: "2.0".to_string(),
+                    result: Some(serde_json::Value::Null),
+                    error: None,
+                    id,
+                }),
+            }
+        }
+        "aeon_setHandle" => {
+            let params: AeonSetHandleParams = match req.params.as_ref() {
+                Some(raw) => serde_json::from_value(raw.clone())
+                    .map_err(|e| e.to_string())
+                    .unwrap_or(AeonSetHandleParams {
+                        address: String::new(),
+                        handle: String::new(),
+                    }),
+                None => AeonSetHandleParams {
+                    address: String::new(),
+                    handle: String::new(),
+                },
+            };
+
+            let address = match parse_address_hex(&params.address) {
+                Ok(addr) => addr,
+                Err(msg) => {
+                    return Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: None,
+                        error: Some(JsonRpcError {
+                            code: -32602,
+                            message: format!("invalid address: {}", msg),
+                        }),
+                        id,
+                    });
+                }
+            };
+
+            let result = node.with_state_mut(|state| {
+                set_handle(state, address, params.handle)
+            });
+
+            match result {
+                Ok(profile) => Json(JsonRpcResponse {
+                    jsonrpc: "2.0".to_string(),
+                    result: Some(json!({
+                        "address": hex::encode(profile.address),
+                        "display_name": profile.display_name,
+                        "bio": profile.bio,
+                        "handle": profile.handle,
+                        "gnosis_xp": profile.gnosis_xp,
+                        "syzygy_score": profile.syzygy_score,
+                        "ascension_level": profile.ascension_level,
+                        "badges": profile.badges,
+                        "created_at_height": profile.created_at_height,
+                    })),
+                    error: None,
+                    id,
+                }),
+                Err(msg) => Json(JsonRpcResponse {
+                    jsonrpc: "2.0".to_string(),
+                    result: None,
+                    error: Some(JsonRpcError {
+                        code: -32603,
+                        message: format!("Failed to set handle: {}", msg),
+                    }),
+                    id,
+                }),
+            }
+        }
+        "aeon_getByHandle" => {
+            let params: AeonGetByHandleParams = match req.params.as_ref() {
+                Some(raw) => serde_json::from_value(raw.clone())
+                    .map_err(|e| e.to_string())
+                    .unwrap_or(AeonGetByHandleParams {
+                        handle: String::new(),
+                    }),
+                None => AeonGetByHandleParams {
+                    handle: String::new(),
+                },
+            };
+
+            // Normalize handle (lowercase, trim)
+            let normalized = params.handle.trim().to_lowercase();
+
+            let address_opt = node.with_state(|state| {
+                get_address_by_handle(state, &normalized)
+            });
+
+            match address_opt {
+                Some(addr) => {
+                    let profile_opt = node.with_state(|state| get_aeon_profile(state, &addr));
+                    match profile_opt {
+                        Some(profile) => Json(JsonRpcResponse {
+                            jsonrpc: "2.0".to_string(),
+                            result: Some(json!({
+                                "address": hex::encode(profile.address),
+                                "display_name": profile.display_name,
+                                "bio": profile.bio,
+                                "handle": profile.handle,
+                                "gnosis_xp": profile.gnosis_xp,
+                                "syzygy_score": profile.syzygy_score,
+                                "ascension_level": profile.ascension_level,
+                                "badges": profile.badges,
+                                "created_at_height": profile.created_at_height,
+                            })),
+                            error: None,
+                            id,
+                        }),
+                        None => Json(JsonRpcResponse {
+                            jsonrpc: "2.0".to_string(),
+                            result: Some(serde_json::Value::Null),
+                            error: None,
+                            id,
+                        }),
+                    }
+                }
                 None => Json(JsonRpcResponse {
                     jsonrpc: "2.0".to_string(),
                     result: Some(serde_json::Value::Null),

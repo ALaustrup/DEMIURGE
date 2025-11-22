@@ -4,13 +4,17 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Wallet, Coins, Sparkles, Award, ArrowLeft } from "lucide-react";
+import QRCode from "react-qr-code";
 import { callRpc } from "@/lib/rpc";
+import { toAeonId } from "@/lib/aeonId";
+import { exportVault, importVault } from "@/lib/vault";
 import { DEMIURGE_RPC_URL } from "@/config/demiurge";
 
 type AeonProfile = {
   address: string;
   display_name: string;
   bio?: string;
+  handle?: string | null;
   gnosis_xp: number;
   syzygy_score: number;
   ascension_level: number;
@@ -46,6 +50,9 @@ export default function AeonPage() {
   const [nfts, setNfts] = useState<Nft[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [handleInput, setHandleInput] = useState("");
+  const [handleStatus, setHandleStatus] = useState<string | null>(null);
+  const [vaultStatus, setVaultStatus] = useState<string | null>(null);
 
   // Check if user already has a wallet
   useEffect(() => {
@@ -112,6 +119,7 @@ export default function AeonPage() {
       });
       if (profile) {
         setProfile(profile);
+        setHandleInput(profile.handle || "");
       }
 
       // Load balance
@@ -181,8 +189,19 @@ export default function AeonPage() {
                 <div className="mb-2 text-xs font-medium text-slate-400">
                   Aeon Vault Address
                 </div>
-                <div className="font-mono text-sm text-sky-300 break-all">
-                  {address}
+                <div className="flex items-center gap-2">
+                  <code className="font-mono text-xs break-all text-sky-300 max-w-full">
+                    {address}
+                  </code>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard.writeText(address);
+                    }}
+                    className="rounded-md border border-slate-600 px-2 py-1 text-[11px] text-slate-200 hover:bg-slate-800 whitespace-nowrap flex-shrink-0"
+                  >
+                    Copy
+                  </button>
                 </div>
               </div>
 
@@ -191,8 +210,19 @@ export default function AeonPage() {
                   <Wallet className="h-4 w-4" />
                   Private Key
                 </div>
-                <div className="mb-2 font-mono text-xs text-rose-300 break-all">
-                  {privateKey}
+                <div className="mb-2 flex items-center gap-2">
+                  <code className="font-mono text-xs break-all text-rose-300 max-w-full">
+                    {privateKey}
+                  </code>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard.writeText(privateKey);
+                    }}
+                    className="rounded-md border border-rose-700 px-2 py-1 text-[11px] text-rose-300 hover:bg-rose-900/50 whitespace-nowrap flex-shrink-0"
+                  >
+                    Copy
+                  </button>
                 </div>
                 <p className="text-xs text-rose-400">
                   ⚠️ Save this key. Losing it means losing access forever.
@@ -279,9 +309,12 @@ export default function AeonPage() {
               <h1 className="text-3xl font-semibold text-slate-50">
                 {profile.display_name}
               </h1>
-              <p className="mt-1 font-mono text-xs text-slate-400">
-                {profile.address.slice(0, 8)}...{profile.address.slice(-8)}
-              </p>
+              <h2 className="mt-1 text-lg font-semibold text-slate-50">
+                Aeon:{" "}
+                <span className="font-mono text-sm text-slate-300">
+                  {profile.address.slice(0, 6)}...{profile.address.slice(-4)}
+                </span>
+              </h2>
             </div>
             {ascension && ascension.badges.length > 0 && (
               <div className="flex gap-2">
@@ -300,6 +333,114 @@ export default function AeonPage() {
           {profile.bio && (
             <p className="text-sm text-slate-300">{profile.bio}</p>
           )}
+
+          {/* Aeon Vault Section */}
+          <section className="mt-4 rounded-lg border border-slate-800 bg-slate-950/60 p-4">
+            <h3 className="text-xs font-semibold text-slate-400">
+              Aeon Vault
+            </h3>
+
+            <div className="mt-2 space-y-2">
+              <div>
+                <div className="text-[11px] text-slate-500 mb-1">
+                  Hex Address
+                </div>
+                <div className="flex items-center gap-2">
+                  <code className="font-mono text-[11px] break-all text-slate-200">
+                    {profile.address}
+                  </code>
+                  <button
+                    type="button"
+                    onClick={() => navigator.clipboard.writeText(profile.address)}
+                    className="rounded-md border border-slate-600 px-2 py-[2px] text-[10px] text-slate-200 hover:bg-slate-800"
+                  >
+                    Copy
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <div className="text-[11px] text-slate-500 mb-1">
+                  Aeon ID (bech32)
+                </div>
+                <div className="flex items-center gap-2">
+                  <code className="font-mono text-[11px] break-all text-slate-200">
+                    {toAeonId(profile.address)}
+                  </code>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      navigator.clipboard.writeText(toAeonId(profile.address))
+                    }
+                    className="rounded-md border border-slate-600 px-2 py-[2px] text-[10px] text-slate-200 hover:bg-slate-800"
+                  >
+                    Copy
+                  </button>
+                </div>
+              </div>
+
+              <div className="pt-2 border-t border-slate-800 mt-2">
+                <div className="text-[11px] text-slate-500 mb-2">
+                  Scan Aeon Vault
+                </div>
+                <div className="inline-block rounded-md bg-slate-900 p-2">
+                  <QRCode value={profile.address} size={96} />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Handle Section */}
+          <section className="mt-4 rounded-lg border border-slate-800 bg-slate-950/60 p-4">
+            <h3 className="text-xs font-semibold text-slate-400">
+              Aeon Handle
+            </h3>
+
+            <div className="mt-2 text-[11px] text-slate-400">
+              Choose a unique handle other Aeons can use to find you.
+            </div>
+
+            <div className="mt-2 flex items-center gap-2">
+              <span className="text-sm text-slate-500">@</span>
+              <input
+                value={handleInput}
+                onChange={(e) => setHandleInput(e.target.value.toLowerCase())}
+                className="flex-1 rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-sm text-slate-100 outline-none focus:border-sky-500"
+                placeholder="yourname"
+              />
+              <button
+                type="button"
+                onClick={async () => {
+                  setHandleStatus(null);
+                  try {
+                    const updated = await callRpc<AeonProfile>("aeon_setHandle", {
+                      address: profile.address,
+                      handle: handleInput.replace(/^@/, ""),
+                    });
+                    setProfile(updated);
+                    setHandleStatus("Handle saved.");
+                  } catch (err: any) {
+                    setHandleStatus(err?.message ?? "Failed to save handle.");
+                  }
+                }}
+                className="rounded-md border border-slate-600 px-3 py-1 text-[12px] text-slate-50 hover:bg-slate-800"
+              >
+                Save
+              </button>
+            </div>
+
+            {profile.handle && (
+              <div className="mt-2 text-[12px] text-slate-300">
+                Current: <span className="font-mono text-sky-400">@{profile.handle}</span>
+              </div>
+            )}
+
+            {handleStatus && (
+              <div className="mt-1 text-[11px] text-slate-400">
+                {handleStatus}
+              </div>
+            )}
+          </section>
 
           <div className="grid gap-4 md:grid-cols-2">
             {/* Balance */}
@@ -383,6 +524,102 @@ export default function AeonPage() {
               <p className="text-xs text-slate-500">No NFTs yet</p>
             )}
           </div>
+
+          {/* Vault Export/Import Section */}
+          <section className="mt-4 rounded-lg border border-slate-800 bg-slate-950/60 p-4">
+            <h3 className="text-xs font-semibold text-slate-400">
+              Aeon Vault (Export / Import)
+            </h3>
+
+            <div className="mt-2 text-[11px] text-slate-400">
+              Export an encrypted backup of your Aeon Vault, or import an existing one.
+            </div>
+
+            <div className="mt-3 flex flex-col gap-3">
+              {/* EXPORT */}
+              <div>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    const password = prompt("Enter a password to encrypt your vault:");
+                    if (!password) return;
+
+                    try {
+                      // Retrieve wallet from localStorage
+                      const storedAddress = localStorage.getItem("demiurge_aeon_wallet_address");
+                      const storedKey = localStorage.getItem("demiurge_aeon_wallet_key");
+                      if (!storedAddress || !storedKey) {
+                        throw new Error("No local wallet found.");
+                      }
+
+                      const wallet = { address: storedAddress, privateKey: storedKey };
+                      const vault = await exportVault(wallet, password);
+
+                      const blob = new Blob([JSON.stringify(vault, null, 2)], {
+                        type: "application/json",
+                      });
+                      const url = URL.createObjectURL(blob);
+                      const a = document.createElement("a");
+                      a.href = url;
+                      a.download = `aeon-vault-${wallet.address.slice(0, 8)}.json`;
+                      a.click();
+                      URL.revokeObjectURL(url);
+
+                      setVaultStatus("Vault exported successfully.");
+                    } catch (err: any) {
+                      setVaultStatus(err?.message ?? "Failed to export vault.");
+                    }
+                  }}
+                  className="rounded-md border border-slate-600 px-3 py-1 text-[12px] text-slate-50 hover:bg-slate-800"
+                >
+                  Export Vault
+                </button>
+              </div>
+
+              {/* IMPORT */}
+              <div>
+                <input
+                  type="file"
+                  accept="application/json"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+
+                    const password = prompt("Enter the password used to encrypt this vault:");
+                    if (!password) return;
+
+                    try {
+                      const text = await file.text();
+                      const vault = JSON.parse(text);
+                      const restored = await importVault(vault, password);
+
+                      const newWallet = {
+                        address: restored.address,
+                        privateKey: restored.privateKey,
+                      };
+
+                      localStorage.setItem("demiurge_aeon_wallet_address", restored.address);
+                      localStorage.setItem("demiurge_aeon_wallet_key", restored.privateKey);
+
+                      setVaultStatus("Vault imported and set as active Aeon.");
+                      // Reload dashboard with new address
+                      setAddress(restored.address);
+                      await loadDashboard(restored.address);
+                    } catch (err: any) {
+                      setVaultStatus(err?.message ?? "Failed to import vault.");
+                    } finally {
+                      e.target.value = "";
+                    }
+                  }}
+                  className="mt-1 text-[11px] text-slate-300 file:mr-3 file:rounded-md file:border file:border-slate-600 file:bg-slate-900 file:px-3 file:py-1 file:text-[11px] file:text-slate-100 hover:file:bg-slate-800"
+                />
+              </div>
+            </div>
+
+            {vaultStatus && (
+              <div className="mt-2 text-[11px] text-slate-400">{vaultStatus}</div>
+            )}
+          </section>
         </motion.div>
       )}
     </main>
