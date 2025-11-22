@@ -16,6 +16,7 @@ use std::sync::Arc;
 use axum::{extract::Extension, routing::post, Json, Router};
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
+use tower_http::cors::{Any, CorsLayer};
 
 use crate::config::DEV_FAUCET_AMOUNT;
 use crate::core::transaction::{Address, Transaction};
@@ -129,10 +130,16 @@ fn parse_root_hash_hex(s: &str) -> Result<FabricRootHash, String> {
 /// - `node`: Shared reference to the Node instance
 ///
 /// # Returns
-/// An Axum Router configured with the RPC endpoint
+/// An Axum Router configured with the RPC endpoint and CORS support
 pub fn rpc_router(node: Arc<Node>) -> Router {
+    let cors = CorsLayer::new()
+        .allow_origin(Any)
+        .allow_methods(Any)
+        .allow_headers(Any);
+
     Router::new()
         .route("/rpc", post(handle_rpc))
+        .layer(cors)
         .layer(Extension(node))
 }
 
