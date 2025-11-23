@@ -1,0 +1,174 @@
+# Creators Handbook
+
+A comprehensive guide for Archons (creators) on Demiurge.
+
+## Becoming an Archon
+
+Archons are UrgeID users who have "ascended" to creator status. Archons have special privileges:
+
+- **Mint D-GEN NFTs**: Create and mint AI-native NFTs
+- **List in Abyss**: Sell NFTs in the marketplace
+- **Earn CGT**: Receive royalties and rewards
+- **Creator Economy**: Participate in the full creator ecosystem
+
+### Current Status
+
+Currently, Archon status is granted manually or through special events. The Genesis Archon is pre-funded and marked as an Archon during chain initialization.
+
+**Future**: Archon status may be earned through:
+- High Syzygy scores
+- Community contributions
+- Special achievements
+- Governance participation
+
+## Minting D-GEN NFTs
+
+D-GEN NFTs are AI-native, provenance-rich NFTs that can be minted by Archons.
+
+### NFT Structure
+
+Each D-GEN NFT includes:
+
+- **`fabric_root_hash`**: Reference to Fabric content (64-character hex string)
+- **`forge_model_id`**: Optional AI model identifier
+- **`forge_prompt_hash`**: Optional AI prompt hash
+- **`royalty_recipient`**: Optional royalty recipient address
+- **`royalty_bps`**: Royalty percentage in basis points (0-10000, where 10000 = 100%)
+
+### Minting via RPC
+
+Use the `cgt_mintDgenNft` RPC method:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "cgt_mintDgenNft",
+  "params": {
+    "owner": "YOUR_ARCHON_ADDRESS",
+    "fabric_root_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "forge_model_id": null,
+    "forge_prompt_hash": null,
+    "name": "My NFT Name",
+    "description": "NFT description"
+  },
+  "id": 1
+}
+```
+
+**Requirements**:
+- The `owner` address must be an Archon
+- `fabric_root_hash` must be a valid 64-character hex string (32 bytes)
+
+### Minting via Portal
+
+1. Go to your "My Void" dashboard (`/urgeid`)
+2. Navigate to the NFT section
+3. Click "Mint Test NFT" (dev mode) or use the minting interface
+4. Enter NFT details and submit
+
+## Listing NFTs in Abyss
+
+The Abyss marketplace allows Archons to list their D-GEN NFTs for sale.
+
+### Listing Process
+
+1. **Prepare Your NFT**: Ensure your NFT is minted and you own it
+2. **Set Price**: Choose a price in CGT
+3. **Set Royalties**: Configure royalty percentage (0-100%)
+4. **List**: Submit listing transaction
+
+### Royalties
+
+Royalties are paid to the `royalty_recipient` address (or creator if not set) on every secondary sale:
+
+- **Royalty Basis Points**: 0-10000 (0% to 100%)
+- **Example**: 500 bps = 5% royalty
+- **Automatic**: Royalties are automatically distributed on sale
+
+### Marketplace Features
+
+- **Native Integration**: NFTs are listed directly on-chain
+- **Programmable Royalties**: Set custom royalty rates per NFT
+- **Secondary Sales**: Automatic royalty distribution
+- **Discovery**: Browse and search NFTs in the marketplace
+
+## Earning CGT
+
+Archons can earn CGT through:
+
+### 1. NFT Sales
+
+- **Primary Sales**: Receive full sale price when selling your NFTs
+- **Royalties**: Earn a percentage on every secondary sale
+- **Marketplace Fees**: Small fee deducted (future feature)
+
+### 2. Syzygy Rewards
+
+- **Content Seeding**: Earn Syzygy by seeding and serving content
+- **Level-Ups**: Automatic CGT rewards (10 CGT per level)
+- **Badges**: Special rewards for achievements
+
+### 3. Creator Economy
+
+- **Fabric Seeding**: Earn CGT for seeding Fabric content
+- **Network Participation**: Rewards for network contributions
+- **Community Building**: Rewards for creating and moderating chat rooms
+
+## Best Practices
+
+### NFT Creation
+
+1. **Quality Content**: Create high-quality, original content
+2. **Provenance**: Include AI model and prompt information when available
+3. **Metadata**: Provide detailed descriptions and metadata
+4. **Royalties**: Set appropriate royalty rates (typically 5-10%)
+
+### Marketing
+
+1. **World Chat**: Share your NFTs in World Chat
+2. **Social Media**: Promote your work
+3. **Community**: Engage with the Demiurge community
+4. **Analytics**: Track your profile analytics to understand your impact
+
+### Pricing
+
+1. **Market Research**: Check similar NFTs in the marketplace
+2. **Value Proposition**: Price based on uniqueness and quality
+3. **Royalties**: Consider long-term royalty income
+4. **Flexibility**: Adjust prices based on market response
+
+## Tools & Resources
+
+### Portal Features
+
+- **My Void Dashboard**: Manage your profile, NFTs, and CGT
+- **Analytics**: Track your contribution and earnings
+- **Chat System**: Engage with the community
+- **Marketplace**: Browse and list NFTs
+
+### Developer Tools
+
+- **JSON-RPC API**: Programmatic access to chain functions
+- **GraphQL API**: Access to chat and social features
+- **SDKs**: TypeScript and Rust SDKs (coming soon)
+
+## Future Features
+
+Upcoming features for creators:
+
+- **Advanced Minting UI**: Visual NFT creation interface
+- **Batch Minting**: Mint multiple NFTs at once
+- **Collection Management**: Organize NFTs into collections
+- **Analytics Dashboard**: Detailed creator analytics
+- **Revenue Tracking**: Track earnings and royalties
+- **Creator Badges**: Special badges for active creators
+
+## Support
+
+For creator support:
+
+- **Documentation**: Check the docs for detailed guides
+- **Community**: Ask questions in World Chat
+- **Archons**: Message the Seven Archons for guidance
+- **Issues**: Report bugs or request features via GitHub
+

@@ -13,28 +13,54 @@ export default function DocsPage() {
 
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         <Card>
-          <h2 className="mb-3 text-xl font-semibold">Architecture</h2>
+          <h2 className="mb-3 text-xl font-semibold">Profile Analytics</h2>
           <p className="mb-4 text-zinc-400">
-            System design, chain architecture, Fabric, and Abyss deep dives.
+            Track your contribution to the network, view metrics, and understand your impact.
           </p>
           <a
-            href="#"
+            href="/docs/analytics"
             className="text-zinc-300 hover:text-zinc-50 underline"
           >
-            Coming soon →
+            Learn more →
           </a>
         </Card>
 
         <Card>
-          <h2 className="mb-3 text-xl font-semibold">Economics</h2>
+          <h2 className="mb-3 text-xl font-semibold">API Reference</h2>
           <p className="mb-4 text-zinc-400">
-            CGT tokenomics, emission schedules, rewards, and fee structures.
+            Complete JSON-RPC and GraphQL API documentation for developers.
           </p>
           <a
-            href="#"
+            href="/docs/api"
             className="text-zinc-300 hover:text-zinc-50 underline"
           >
-            Coming soon →
+            View API Docs →
+          </a>
+        </Card>
+
+        <Card>
+          <h2 className="mb-3 text-xl font-semibold">Creators Handbook</h2>
+          <p className="mb-4 text-zinc-400">
+            Guide for Archons: minting NFTs, listing in Abyss, earning CGT, and best practices.
+          </p>
+          <a
+            href="/docs/creators"
+            className="text-zinc-300 hover:text-zinc-50 underline"
+          >
+            Learn more →
+          </a>
+        </Card>
+
+        <Card>
+          <h2 className="mb-3 text-xl font-semibold">System & Operations</h2>
+          <p className="mb-4 text-zinc-400">
+            Technical documentation for node operators, system administrators, and infrastructure providers.
+          </p>
+          <a
+            href="/docs/system"
+            className="text-zinc-300 hover:text-zinc-50 underline"
+          >
+            View Docs →
           </a>
         </Card>
 

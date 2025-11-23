@@ -1,0 +1,616 @@
+# API Reference
+
+Complete reference documentation for the Demiurge JSON-RPC API and Abyss Gateway GraphQL API.
+
+## JSON-RPC API
+
+The Demiurge chain node exposes a JSON-RPC API at `http://127.0.0.1:8545/rpc` (configurable).
+
+### Request Format
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "METHOD_NAME",
+  "params": { /* method-specific parameters */ },
+  "id": 1
+}
+```
+
+### Response Format
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": { /* method result */ },
+  "error": null,
+  "id": 1
+}
+```
+
+## Chain Info
+
+### `cgt_getChainInfo`
+
+Get current chain status.
+
+**Parameters**: None
+
+**Response**:
+```json
+{
+  "height": 1234
+}
+```
+
+## CGT Currency
+
+### `cgt_getMetadata`
+
+Get CGT currency metadata.
+
+**Parameters**: None
+
+**Response**:
+```json
+{
+  "name": "Creator God Token",
+  "symbol": "CGT",
+  "decimals": 8,
+  "maxSupply": "100000000000000000",
+  "totalSupply": "100000000000000000"
+}
+```
+
+### `cgt_getTotalSupply`
+
+Get current total CGT supply.
+
+**Parameters**: None
+
+**Response**:
+```json
+{
+  "totalSupply": "100000000000000000"
+}
+```
+
+### `cgt_getBalance`
+
+Get CGT balance for an address.
+
+**Parameters**:
+```json
+{
+  "address": "0992f7f1c561ac4c2f4d10debc2c7cbbaf0ffa5bb0796d8291462d4aeb11fc4c"
+}
+```
+
+**Response**:
+```json
+{
+  "balance": "1000000000000000"
+}
+```
+
+Note: Balance is returned in smallest units (10^-8 CGT).
+
+### `cgt_getNonce`
+
+Get transaction nonce for an address.
+
+**Parameters**:
+```json
+{
+  "address": "0992f7f1c561ac4c2f4d10debc2c7cbbaf0ffa5bb0796d8291462d4aeb11fc4c"
+}
+```
+
+**Response**:
+```json
+{
+  "nonce": 5
+}
+```
+
+## UrgeID Identity
+
+### `urgeid_create`
+
+Create a new UrgeID profile.
+
+**Parameters**:
+```json
+{
+  "address": "0992f7f1c561ac4c2f4d10debc2c7cbbaf0ffa5bb0796d8291462d4aeb11fc4c",
+  "display_name": "My Display Name",
+  "bio": "Optional bio text"
+}
+```
+
+**Response**: Full UrgeID profile (see `urgeid_get`)
+
+### `urgeid_get`
+
+Get UrgeID profile by address.
+
+**Parameters**:
+```json
+{
+  "address": "0992f7f1c561ac4c2f4d10debc2c7cbbaf0ffa5bb0796d8291462d4aeb11fc4c"
+}
+```
+
+**Response**:
+```json
+{
+  "address": "0992f7f1c561ac4c2f4d10debc2c7cbbaf0ffa5bb0796d8291462d4aeb11fc4c",
+  "display_name": "My Display Name",
+  "bio": "Optional bio",
+  "username": "myusername",
+  "level": 3,
+  "syzygy_score": 15000,
+  "total_cgt_earned_from_rewards": "2000000000",
+  "badges": ["Luminary"],
+  "created_at_height": 100
+}
+```
+
+### `urgeid_setUsername`
+
+Set a globally unique username for an UrgeID.
+
+**Parameters**:
+```json
+{
+  "address": "0992f7f1c561ac4c2f4d10debc2c7cbbaf0ffa5bb0796d8291462d4aeb11fc4c",
+  "username": "myusername"
+}
+```
+
+**Response**:
+```json
+{
+  "address": "0992f7f1c561ac4c2f4d10debc2c7cbbaf0ffa5bb0796d8291462d4aeb11fc4c",
+  "username": "myusername"
+}
+```
+
+**Username Rules**:
+- 3-32 characters
+- Lowercase letters, numbers, underscores, and dots only
+- Globally unique across all UrgeIDs
+
+### `urgeid_resolveUsername`
+
+Resolve username to UrgeID address.
+
+**Parameters**:
+```json
+{
+  "username": "myusername"
+}
+```
+
+**Response**:
+```json
+{
+  "address": "0992f7f1c561ac4c2f4d10debc2c7cbbaf0ffa5bb0796d8291462d4aeb11fc4c"
+}
+```
+
+### `urgeid_getProfileByUsername`
+
+Get full UrgeID profile by username.
+
+**Parameters**:
+```json
+{
+  "username": "myusername"
+}
+```
+
+**Response**: Full UrgeID profile (see `urgeid_get`)
+
+### `urgeid_recordSyzygy`
+
+Record Syzygy contribution (increments score, checks for level-up, mints CGT rewards).
+
+**Parameters**:
+```json
+{
+  "address": "0992f7f1c561ac4c2f4d10debc2c7cbbaf0ffa5bb0796d8291462d4aeb11fc4c",
+  "amount": 100
+}
+```
+
+**Response**: Updated UrgeID profile (see `urgeid_get`)
+
+### `urgeid_getProgress`
+
+Get leveling progression info.
+
+**Parameters**:
+```json
+{
+  "address": "0992f7f1c561ac4c2f4d10debc2c7cbbaf0ffa5bb0796d8291462d4aeb11fc4c"
+}
+```
+
+**Response**:
+```json
+{
+  "address": "0992f7f1c561ac4c2f4d10debc2c7cbbaf0ffa5bb0796d8291462d4aeb11fc4c",
+  "level": 3,
+  "syzygyScore": 15000,
+  "currentLevelThreshold": 9000,
+  "nextLevelThreshold": 16000,
+  "progressRatio": 0.6,
+  "totalCgtEarnedFromRewards": "2000000000"
+}
+```
+
+### `urgeid_getAnalytics`
+
+Get comprehensive analytics for a user.
+
+**Parameters**:
+```json
+{
+  "address": "0992f7f1c561ac4c2f4d10debc2c7cbbaf0ffa5bb0796d8291462d4aeb11fc4c"
+}
+```
+
+**Response**:
+```json
+{
+  "address": "0992f7f1c561ac4c2f4d10debc2c7cbbaf0ffa5bb0796d8291462d4aeb11fc4c",
+  "level": 3,
+  "syzygyScore": 15000,
+  "totalCgtEarnedFromRewards": "2000000000",
+  "badges": ["Luminary"],
+  "balance": "5000000000000",
+  "totalTransactions": 25,
+  "totalNfts": 3,
+  "isArchon": true,
+  "cgtVolume": "0",
+  "createdAtHeight": 100
+}
+```
+
+## Transactions
+
+### `cgt_buildTransferTx`
+
+Build an unsigned transfer transaction.
+
+**Parameters**:
+```json
+{
+  "from": "0992f7f1c561ac4c2f4d10debc2c7cbbaf0ffa5bb0796d8291462d4aeb11fc4c",
+  "to": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "amount": "1000000000",
+  "nonce": 5,
+  "fee": 1000
+}
+```
+
+**Response**:
+```json
+{
+  "tx_hex": "deadbeef..."
+}
+```
+
+### `cgt_signTransaction`
+
+Attach Ed25519 signature to unsigned transaction.
+
+**Parameters**:
+```json
+{
+  "tx_hex": "deadbeef...",
+  "signature": "signature_hex..."
+}
+```
+
+**Response**:
+```json
+{
+  "tx_hex": "signed_tx_hex..."
+}
+```
+
+### `cgt_sendRawTransaction`
+
+Submit a signed transaction to the mempool.
+
+**Parameters**:
+```json
+{
+  "tx": "signed_tx_hex..."
+}
+```
+
+**Response**:
+```json
+{
+  "accepted": true,
+  "tx_hash": "transaction_hash_hex..."
+}
+```
+
+### `cgt_getTransaction`
+
+Get transaction by hash.
+
+**Parameters**:
+```json
+{
+  "tx_hash": "transaction_hash_hex..."
+}
+```
+
+**Response**:
+```json
+{
+  "from": "0992f7f1...",
+  "nonce": 5,
+  "module_id": "bank_cgt",
+  "call_id": "transfer",
+  "payload": "deadbeef...",
+  "fee": 1000,
+  "signature": "signature_hex...",
+  "hash": "transaction_hash_hex..."
+}
+```
+
+### `cgt_getTransactionHistory`
+
+Get transaction history for an address.
+
+**Parameters**:
+```json
+{
+  "address": "0992f7f1c561ac4c2f4d10debc2c7cbbaf0ffa5bb0796d8291462d4aeb11fc4c",
+  "limit": 50
+}
+```
+
+**Response**:
+```json
+{
+  "transactions": ["hash1", "hash2", ...]
+}
+```
+
+## NFTs
+
+### `cgt_getNftsByOwner`
+
+Get all NFTs owned by an address.
+
+**Parameters**:
+```json
+{
+  "owner": "0992f7f1c561ac4c2f4d10debc2c7cbbaf0ffa5bb0796d8291462d4aeb11fc4c"
+}
+```
+
+**Response**:
+```json
+{
+  "nfts": [1, 2, 3]
+}
+```
+
+### `cgt_mintDgenNft`
+
+Mint a new D-GEN NFT (Archons only).
+
+**Parameters**:
+```json
+{
+  "owner": "0992f7f1c561ac4c2f4d10debc2c7cbbaf0ffa5bb0796d8291462d4aeb11fc4c",
+  "fabric_root_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "forge_model_id": null,
+  "forge_prompt_hash": null,
+  "name": "My NFT",
+  "description": "NFT description"
+}
+```
+
+**Response**:
+```json
+{
+  "nft_id": 1,
+  "owner": "0992f7f1...",
+  "creator": "0992f7f1...",
+  "fabric_root_hash": "0000...",
+  "royalty_bps": 500
+}
+```
+
+## Marketplace
+
+### `cgt_getListing`
+
+Get marketplace listing by ID.
+
+**Parameters**:
+```json
+{
+  "listing_id": 1
+}
+```
+
+**Response**: Listing object (see marketplace docs)
+
+### `cgt_getFabricAsset`
+
+Get Fabric asset by root hash.
+
+**Parameters**:
+```json
+{
+  "root_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+}
+```
+
+**Response**: Fabric asset object
+
+## Dev Tools
+
+### `cgt_devFaucet`
+
+Mint CGT to an address (debug builds only).
+
+**Parameters**:
+```json
+{
+  "address": "0992f7f1c561ac4c2f4d10debc2c7cbbaf0ffa5bb0796d8291462d4aeb11fc4c"
+}
+```
+
+**Response**:
+```json
+{
+  "ok": true,
+  "balance": "10000000000000"
+}
+```
+
+**Note**: Only available in debug builds (`cargo run`). Disabled in release builds.
+
+## GraphQL API (Abyss Gateway)
+
+The Abyss Gateway provides a GraphQL API at `http://localhost:4000/graphql`.
+
+### Authentication
+
+Include headers:
+```
+x-demiurge-address: YOUR_URGEID_ADDRESS
+x-demiurge-username: YOUR_USERNAME
+```
+
+### Queries
+
+#### `worldChatMessages`
+
+Get messages from World Chat.
+
+```graphql
+query {
+  worldChatMessages(limit: 50) {
+    id
+    content
+    sender {
+      username
+      displayName
+    }
+    createdAt
+  }
+}
+```
+
+#### `dmRooms`
+
+Get your direct message rooms.
+
+```graphql
+query {
+  dmRooms {
+    id
+    members {
+      username
+    }
+    lastMessage {
+      content
+      createdAt
+    }
+  }
+}
+```
+
+#### `userChatAnalytics`
+
+Get chat analytics for a user.
+
+```graphql
+query {
+  userChatAnalytics(address: "YOUR_ADDRESS") {
+    totalMessages
+    worldChatMessages
+    dmMessages
+    roomsCreated
+    mediaShared
+  }
+}
+```
+
+### Mutations
+
+#### `sendWorldMessage`
+
+Send a message to World Chat.
+
+```graphql
+mutation {
+  sendWorldMessage(content: "Hello, Demiurge!") {
+    id
+    content
+    createdAt
+  }
+}
+```
+
+#### `sendDirectMessage`
+
+Send a direct message.
+
+```graphql
+mutation {
+  sendDirectMessage(toUsername: "recipient", content: "Hello!") {
+    id
+    content
+    createdAt
+  }
+}
+```
+
+### Subscriptions
+
+#### `worldChatFeed`
+
+Subscribe to new World Chat messages.
+
+```graphql
+subscription {
+  worldChatFeed {
+    id
+    content
+    sender {
+      username
+    }
+    createdAt
+  }
+}
+```
+
+## Error Codes
+
+Standard JSON-RPC error codes:
+- `-32600`: Invalid Request
+- `-32601`: Method not found
+- `-32602`: Invalid params
+- `-32603`: Internal error
+- `-32000`: Server error (custom)
+
+Custom error codes:
+- `-32001`: Profile not found
+- `-32002`: Username already taken
+- `-32003`: Invalid username format
+- `-32004`: Insufficient balance
+- `-32005`: Not an Archon
+

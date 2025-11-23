@@ -248,9 +248,25 @@ The Demiurge node exposes the following JSON-RPC methods:
 - `cgt_devFaucet`: Mint CGT to an address (debug builds only)
 - `cgt_devUnsafeTransfer`: Direct transfer without signature (debug builds only)
 
-## Architecture
+## Documentation
 
-See [docs/architecture.md](./architecture.md) for detailed architecture documentation.
+### User Documentation
+
+- **[Profile Analytics](./apps/portal-web/src/app/docs/analytics/page.mdx)**: Track your contribution to the network
+- **[My Void & Identity](./README.md#urgeid-sovereign-identity--my-void)**: UrgeID profiles, usernames, and leveling
+- **[Chat & Social](./apps/portal-web/src/app/docs/chat/page.mdx)**: World Chat, DMs, and media sharing
+- **[The Seven Archons](./apps/portal-web/src/app/docs/archons/page.mdx)**: Meet the Archon NPCs
+- **[Creators Handbook](./apps/portal-web/src/app/docs/creators/page.mdx)**: Guide for Archons
+
+### Developer Documentation
+
+- **[API Reference](./apps/portal-web/src/app/docs/api/page.mdx)**: Complete JSON-RPC and GraphQL API docs
+- **[Architecture](./architecture.md)**: System design and chain architecture
+- **[Quickstart](./QUICKSTART.md)**: Getting started guide
+
+### System Documentation
+
+- **[System & Operations](./apps/portal-web/src/app/docs/system/page.mdx)**: Node operations, infrastructure, and deployment
 
 ## Project Structure
 

@@ -1,0 +1,444 @@
+# System & Operator Documentation
+
+Technical documentation for system administrators and operators running Demiurge infrastructure.
+
+## Overview
+
+This documentation is intended for:
+- **Node Operators**: Running Demiurge chain nodes
+- **Infrastructure Providers**: Hosting Demiurge services
+- **System Administrators**: Managing Demiurge deployments
+- **Developers**: Building on Demiurge infrastructure
+
+## Chain Node Operations
+
+### Installation
+
+#### Prerequisites
+
+- **Rust**: Latest stable version (via rustup)
+- **RocksDB**: Automatically included via Rust dependencies
+- **System Requirements**:
+  - 4GB+ RAM recommended
+  - 10GB+ disk space for blockchain data
+  - Network connectivity for RPC and P2P
+
+#### Building
+
+```bash
+# Clone repository
+git clone https://github.com/ALaustrup/DEMIURGE.git
+cd DEMIURGE
+
+# Build release binary
+cargo build --release -p demiurge-chain
+
+# Binary location
+target/release/demiurge-chain
+```
+
+### Configuration
+
+#### Data Directory
+
+Default: `.demiurge/data`
+
+Set via environment variable:
+```bash
+export DEMIURGE_DATA_DIR=/path/to/data
+```
+
+#### RPC Endpoint
+
+Default: `http://127.0.0.1:8545/rpc`
+
+Configure in `chain/src/config.rs` or via environment:
+```bash
+export DEMIURGE_RPC_PORT=8545
+export DEMIURGE_RPC_HOST=0.0.0.0
+```
+
+#### Genesis Initialization
+
+The chain automatically initializes on first run:
+- Creates RocksDB database
+- Initializes Genesis Archon (1M CGT)
+- Sets up initial state
+
+To reset:
+```bash
+rm -rf .demiurge/data
+# Restart node
+```
+
+### Running
+
+#### Development Mode
+
+```bash
+cargo run -p demiurge-chain
+```
+
+Features:
+- Dev faucet enabled
+- Verbose logging
+- Hot reloading
+
+#### Production Mode
+
+```bash
+cargo build --release -p demiurge-chain
+./target/release/demiurge-chain
+```
+
+Features:
+- Optimized performance
+- Dev faucet disabled
+- Production logging
+
+#### As a Service
+
+**systemd** (Linux):
+
+```ini
+[Unit]
+Description=Demiurge Chain Node
+After=network.target
+
+[Service]
+Type=simple
+User=demiurge
+WorkingDirectory=/opt/demiurge
+ExecStart=/opt/demiurge/demiurge-chain
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+```
+
+**Windows Service**:
+
+Use NSSM (Non-Sucking Service Manager) or similar.
+
+### Monitoring
+
+#### Health Checks
+
+```bash
+# Check RPC endpoint
+curl -X POST http://127.0.0.1:8545/rpc \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","method":"cgt_getChainInfo","params":null,"id":1}'
+```
+
+#### Logs
+
+Logs are output to stdout/stderr. Redirect for file logging:
+
+```bash
+./demiurge-chain >> /var/log/demiurge/chain.log 2>&1
+```
+
+#### Metrics
+
+Current metrics available via RPC:
+- Chain height: `cgt_getChainInfo`
+- Total supply: `cgt_getTotalSupply`
+- Node status: RPC availability
+
+**Future**: Prometheus metrics endpoint
+
+### Backup & Recovery
+
+#### Database Backup
+
+```bash
+# Stop node
+# Copy RocksDB directory
+cp -r .demiurge/data .demiurge/data.backup
+
+# Or use RocksDB backup tools
+```
+
+#### Recovery
+
+```bash
+# Stop node
+# Restore from backup
+cp -r .demiurge/data.backup .demiurge/data
+# Restart node
+```
+
+## Abyss Gateway Operations
+
+### Installation
+
+```bash
+cd indexer/abyss-gateway
+pnpm install
+```
+
+### Configuration
+
+#### Database
+
+Default: `indexer/abyss-gateway/data/chat.db` (SQLite)
+
+Set via environment:
+```bash
+export ABYSS_DB_PATH=/path/to/chat.db
+```
+
+#### GraphQL Endpoint
+
+Default: `http://localhost:4000/graphql`
+
+Set via environment:
+```bash
+export PORT=4000
+```
+
+#### Demiurge RPC URL
+
+Required for username syncing:
+
+```bash
+export DEMIURGE_RPC_URL=http://127.0.0.1:8545/rpc
+```
+
+### Running
+
+#### Development
+
+```bash
+pnpm dev
+```
+
+#### Production
+
+```bash
+pnpm build
+pnpm start
+```
+
+Or with PM2:
+
+```bash
+pm2 start dist/index.js --name abyss-gateway
+```
+
+### Database Management
+
+#### Backup
+
+```bash
+# SQLite backup
+sqlite3 data/chat.db ".backup data/chat.db.backup"
+```
+
+#### Migration
+
+Database schema is automatically created on first run. Migrations are handled automatically.
+
+#### Cleanup
+
+Inactive rooms are automatically cleaned up every 5 minutes (20 minutes of inactivity).
+
+## Portal Web Operations
+
+### Installation
+
+```bash
+cd apps/portal-web
+pnpm install
+```
+
+### Configuration
+
+#### Environment Variables
+
+Create `.env.local`:
+
+```bash
+NEXT_PUBLIC_DEMIURGE_RPC_URL=http://127.0.0.1:8545/rpc
+NEXT_PUBLIC_ABYSS_GATEWAY_URL=http://localhost:4000/graphql
+```
+
+### Running
+
+#### Development
+
+```bash
+pnpm dev
+```
+
+#### Production
+
+```bash
+pnpm build
+pnpm start
+```
+
+Or deploy to:
+- **Vercel**: Automatic deployment
+- **Netlify**: Static export
+- **Docker**: Containerized deployment
+
+### Build Optimization
+
+```bash
+# Production build
+pnpm build
+
+# Analyze bundle
+pnpm analyze
+```
+
+## Network Configuration
+
+### Firewall Rules
+
+Required ports:
+- **8545**: JSON-RPC (chain node)
+- **4000**: GraphQL (Abyss Gateway)
+- **3000**: Portal web (development)
+
+### CORS Configuration
+
+Configure CORS in:
+- **Chain RPC**: `chain/src/rpc.rs`
+- **Abyss Gateway**: GraphQL Yoga settings
+
+### Load Balancing
+
+For production:
+- **RPC**: Use reverse proxy (nginx, Caddy)
+- **GraphQL**: Use GraphQL gateway
+- **Portal**: Use CDN for static assets
+
+## Security
+
+### Private Keys
+
+- **Never expose**: Private keys should never be stored on servers
+- **Client-side only**: Keys are generated and stored in browser localStorage
+- **Backup**: Users should export encrypted vaults
+
+### RPC Security
+
+- **Authentication**: Add API keys for production (future feature)
+- **Rate Limiting**: Implement rate limiting (future feature)
+- **HTTPS**: Use TLS in production
+
+### Database Security
+
+- **SQLite**: File permissions (read/write for service user only)
+- **Backup Encryption**: Encrypt database backups
+- **Access Control**: Restrict database file access
+
+## Troubleshooting
+
+### Common Issues
+
+#### Node Won't Start
+
+1. Check data directory permissions
+2. Verify RocksDB is accessible
+3. Check for port conflicts
+4. Review logs for errors
+
+#### RPC Not Responding
+
+1. Verify node is running
+2. Check firewall rules
+3. Test with curl
+4. Review CORS settings
+
+#### Database Errors
+
+1. Check file permissions
+2. Verify disk space
+3. Check for database corruption
+4. Restore from backup if needed
+
+### Logs
+
+#### Chain Node
+
+Logs include:
+- Initialization status
+- Transaction processing
+- RPC requests
+- Errors and warnings
+
+#### Abyss Gateway
+
+Logs include:
+- GraphQL requests
+- Database operations
+- Username sync operations
+- Errors and warnings
+
+## Performance Tuning
+
+### Chain Node
+
+- **RocksDB Options**: Tune in `chain/src/core/state.rs`
+- **Memory**: Increase for larger state
+- **CPU**: Multi-threading for RPC (future)
+
+### Abyss Gateway
+
+- **SQLite Tuning**: WAL mode, journal settings
+- **Connection Pooling**: For future PostgreSQL migration
+- **Caching**: Add Redis for frequently accessed data (future)
+
+### Portal
+
+- **Static Generation**: Pre-render pages where possible
+- **CDN**: Use CDN for static assets
+- **Image Optimization**: Optimize images and media
+
+## Scaling
+
+### Horizontal Scaling
+
+- **Multiple RPC Nodes**: Load balance RPC requests
+- **Read Replicas**: Separate read/write nodes (future)
+- **GraphQL Federation**: Multiple Gateway instances (future)
+
+### Vertical Scaling
+
+- **More RAM**: For larger state
+- **Faster CPU**: For transaction processing
+- **SSD Storage**: For database performance
+
+## Maintenance
+
+### Regular Tasks
+
+- **Backup Database**: Daily backups
+- **Monitor Logs**: Check for errors
+- **Update Dependencies**: Keep dependencies updated
+- **Security Patches**: Apply security updates
+
+### Upgrade Procedures
+
+1. **Backup**: Full database backup
+2. **Stop Services**: Graceful shutdown
+3. **Update Code**: Pull latest changes
+4. **Build**: Rebuild binaries
+5. **Test**: Verify functionality
+6. **Start**: Restart services
+7. **Monitor**: Watch for issues
+
+## Support
+
+For system operator support:
+
+- **Documentation**: Check docs for detailed guides
+- **GitHub Issues**: Report bugs or request features
+- **Community**: Join the Demiurge community
+- **Archons**: Contact system Archons for guidance
+
