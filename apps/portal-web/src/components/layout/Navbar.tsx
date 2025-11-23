@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Users, Sparkles, Cpu, Book, MessageSquare, Wallet, BarChart3 } from "lucide-react";
+import { Users, Sparkles, Cpu, Book, MessageSquare, Wallet, BarChart3, Store } from "lucide-react";
 
 const navItems = [
   { href: "/urgeid", label: "UrgeID", icon: Wallet, loggedInLabel: "My Void" },
   { href: "/chat", label: "Chat", icon: MessageSquare },
   { href: "/analytics", label: "Analytics", icon: BarChart3, loggedInOnly: true },
+  { href: "/marketplace", label: "Abyss", icon: Store },
   { href: "/pantheon", label: "Pantheon", icon: Users },
   { href: "/creators", label: "Creators", icon: Sparkles },
   { href: "/technology", label: "Technology", icon: Cpu },

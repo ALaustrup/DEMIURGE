@@ -131,6 +131,22 @@ pub struct GetUserAnalyticsParams {
 }
 
 #[derive(Debug, Deserialize)]
+pub struct CreateListingParams {
+    pub token_id: u64,
+    pub price_cgt: String, // string to handle large numbers
+}
+
+#[derive(Debug, Deserialize)]
+pub struct CancelListingParams {
+    pub listing_id: u64,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct BuyListingParams {
+    pub listing_id: u64,
+}
+
+#[derive(Debug, Deserialize)]
 pub struct SignTxParams {
     pub tx_hex: String,      // unsigned transaction hex
     pub signature: String,   // signature hex (64 bytes = 128 hex chars)
@@ -390,6 +406,312 @@ async fn handle_rpc(
             Json(JsonRpcResponse {
                 jsonrpc: "2.0".to_string(),
                 result: Some(json!(listing_opt)),
+                error: None,
+                id,
+            })
+        }
+        "cgt_getAllListings" => {
+            let listings = node.get_all_active_listings();
+            Json(JsonRpcResponse {
+                jsonrpc: "2.0".to_string(),
+                result: Some(json!({ "listings": listings })),
+                error: None,
+                id,
+            })
+        }
+        "cgt_buildCreateListingTx" => {
+            let params: CreateListingParams = match req.params.as_ref() {
+                Some(raw) => serde_json::from_value(raw.clone())
+                    .map_err(|e| e.to_string())
+                    .unwrap_or(CreateListingParams {
+                        token_id: 0,
+                        price_cgt: "0".to_string(),
+                    }),
+                None => CreateListingParams {
+                    token_id: 0,
+                    price_cgt: "0".to_string(),
+                },
+            };
+
+            let address = match req.params.as_ref().and_then(|p| p.get("from")) {
+                Some(addr_val) => {
+                    let addr_str = addr_val.as_str().unwrap_or("");
+                    match parse_address_hex(addr_str) {
+                        Ok(addr) => addr,
+                        Err(e) => {
+                            return Json(JsonRpcResponse {
+                                jsonrpc: "2.0".to_string(),
+                                result: None,
+                                error: Some(JsonRpcError {
+                                    code: -32602,
+                                    message: format!("invalid address: {}", e),
+                                }),
+                                id,
+                            });
+                        }
+                    }
+                }
+                None => {
+                    return Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: None,
+                        error: Some(JsonRpcError {
+                            code: -32602,
+                            message: "missing 'from' address".to_string(),
+                        }),
+                        id,
+                    });
+                }
+            };
+
+            let nonce = node.get_nonce(&address);
+            let price_cgt = match params.price_cgt.parse::<u128>() {
+                Ok(p) => p,
+                Err(e) => {
+                    return Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: None,
+                        error: Some(JsonRpcError {
+                            code: -32602,
+                            message: format!("invalid price: {}", e),
+                        }),
+                        id,
+                    });
+                }
+            };
+
+            use crate::runtime::abyss_registry::CreateListingParams as CreateParams;
+            let create_params = CreateParams {
+                token_id: params.token_id as NftId,
+                price_cgt,
+            };
+            let payload = match bincode::serialize(&create_params) {
+                Ok(p) => p,
+                Err(e) => {
+                    return Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: None,
+                        error: Some(JsonRpcError {
+                            code: -32603,
+                            message: format!("serialization error: {}", e),
+                        }),
+                        id,
+                    });
+                }
+            };
+
+            let tx = Transaction {
+                from: address,
+                nonce,
+                module_id: "abyss_registry".to_string(),
+                call_id: "create_listing".to_string(),
+                payload,
+                fee: 1000, // Default fee
+                signature: vec![],
+            };
+
+            let tx_hex = match bincode::serialize(&tx) {
+                Ok(bytes) => hex::encode(bytes),
+                Err(e) => {
+                    return Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: None,
+                        error: Some(JsonRpcError {
+                            code: -32603,
+                            message: format!("serialization error: {}", e),
+                        }),
+                        id,
+                    });
+                }
+            };
+
+            Json(JsonRpcResponse {
+                jsonrpc: "2.0".to_string(),
+                result: Some(json!({ "tx_hex": tx_hex })),
+                error: None,
+                id,
+            })
+        }
+        "cgt_buildCancelListingTx" => {
+            let params: CancelListingParams = match req.params.as_ref() {
+                Some(raw) => serde_json::from_value(raw.clone())
+                    .map_err(|e| e.to_string())
+                    .unwrap_or(CancelListingParams { listing_id: 0 }),
+                None => CancelListingParams { listing_id: 0 },
+            };
+
+            let address = match req.params.as_ref().and_then(|p| p.get("from")) {
+                Some(addr_val) => {
+                    let addr_str = addr_val.as_str().unwrap_or("");
+                    match parse_address_hex(addr_str) {
+                        Ok(addr) => addr,
+                        Err(e) => {
+                            return Json(JsonRpcResponse {
+                                jsonrpc: "2.0".to_string(),
+                                result: None,
+                                error: Some(JsonRpcError {
+                                    code: -32602,
+                                    message: format!("invalid address: {}", e),
+                                }),
+                                id,
+                            });
+                        }
+                    }
+                }
+                None => {
+                    return Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: None,
+                        error: Some(JsonRpcError {
+                            code: -32602,
+                            message: "missing 'from' address".to_string(),
+                        }),
+                        id,
+                    });
+                }
+            };
+
+            let nonce = node.get_nonce(&address);
+
+            use crate::runtime::abyss_registry::CancelListingParams as CancelParams;
+            let cancel_params = CancelParams {
+                listing_id: params.listing_id as ListingId,
+            };
+            let payload = match bincode::serialize(&cancel_params) {
+                Ok(p) => p,
+                Err(e) => {
+                    return Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: None,
+                        error: Some(JsonRpcError {
+                            code: -32603,
+                            message: format!("serialization error: {}", e),
+                        }),
+                        id,
+                    });
+                }
+            };
+
+            let tx = Transaction {
+                from: address,
+                nonce,
+                module_id: "abyss_registry".to_string(),
+                call_id: "cancel_listing".to_string(),
+                payload,
+                fee: 1000,
+                signature: vec![],
+            };
+
+            let tx_hex = match bincode::serialize(&tx) {
+                Ok(bytes) => hex::encode(bytes),
+                Err(e) => {
+                    return Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: None,
+                        error: Some(JsonRpcError {
+                            code: -32603,
+                            message: format!("serialization error: {}", e),
+                        }),
+                        id,
+                    });
+                }
+            };
+
+            Json(JsonRpcResponse {
+                jsonrpc: "2.0".to_string(),
+                result: Some(json!({ "tx_hex": tx_hex })),
+                error: None,
+                id,
+            })
+        }
+        "cgt_buildBuyListingTx" => {
+            let params: BuyListingParams = match req.params.as_ref() {
+                Some(raw) => serde_json::from_value(raw.clone())
+                    .map_err(|e| e.to_string())
+                    .unwrap_or(BuyListingParams { listing_id: 0 }),
+                None => BuyListingParams { listing_id: 0 },
+            };
+
+            let address = match req.params.as_ref().and_then(|p| p.get("from")) {
+                Some(addr_val) => {
+                    let addr_str = addr_val.as_str().unwrap_or("");
+                    match parse_address_hex(addr_str) {
+                        Ok(addr) => addr,
+                        Err(e) => {
+                            return Json(JsonRpcResponse {
+                                jsonrpc: "2.0".to_string(),
+                                result: None,
+                                error: Some(JsonRpcError {
+                                    code: -32602,
+                                    message: format!("invalid address: {}", e),
+                                }),
+                                id,
+                            });
+                        }
+                    }
+                }
+                None => {
+                    return Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: None,
+                        error: Some(JsonRpcError {
+                            code: -32602,
+                            message: "missing 'from' address".to_string(),
+                        }),
+                        id,
+                    });
+                }
+            };
+
+            let nonce = node.get_nonce(&address);
+
+            use crate::runtime::abyss_registry::BuyListingParams as BuyParams;
+            let buy_params = BuyParams {
+                listing_id: params.listing_id as ListingId,
+            };
+            let payload = match bincode::serialize(&buy_params) {
+                Ok(p) => p,
+                Err(e) => {
+                    return Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: None,
+                        error: Some(JsonRpcError {
+                            code: -32603,
+                            message: format!("serialization error: {}", e),
+                        }),
+                        id,
+                    });
+                }
+            };
+
+            let tx = Transaction {
+                from: address,
+                nonce,
+                module_id: "abyss_registry".to_string(),
+                call_id: "buy_listing".to_string(),
+                payload,
+                fee: 1000,
+                signature: vec![],
+            };
+
+            let tx_hex = match bincode::serialize(&tx) {
+                Ok(bytes) => hex::encode(bytes),
+                Err(e) => {
+                    return Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: None,
+                        error: Some(JsonRpcError {
+                            code: -32603,
+                            message: format!("serialization error: {}", e),
+                        }),
+                        id,
+                    });
+                }
+            };
+
+            Json(JsonRpcResponse {
+                jsonrpc: "2.0".to_string(),
+                result: Some(json!({ "tx_hex": tx_hex })),
                 error: None,
                 id,
             })

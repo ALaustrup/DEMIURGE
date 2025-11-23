@@ -13,7 +13,7 @@ pub mod bank_cgt;
 pub mod fabric_manager;
 pub mod nft_dgen;
 
-pub use abyss_registry::{get_listing, AbyssRegistryModule, ListingId};
+pub use abyss_registry::{get_all_active_listings, get_listing, AbyssRegistryModule, ListingId};
 pub use urgeid_registry::{
     create_urgeid_profile, get_address_by_handle, get_address_by_username, get_urgeid_profile,
     is_archon, record_syzygy, set_handle, set_username,

@@ -88,6 +88,25 @@ pub fn get_listing(state: &State, id: ListingId) -> Option<Listing> {
     load_listing(state, id)
 }
 
+/// Get all active listings (for marketplace browsing).
+/// This is a simple implementation that scans all listing keys.
+/// In production, you'd want an index or better storage structure.
+pub fn get_all_active_listings(state: &State) -> Vec<Listing> {
+    let mut listings = Vec::new();
+    let counter = get_next_listing_id(state);
+    
+    // Scan through all possible listing IDs (up to counter)
+    for id in 0..counter {
+        if let Some(listing) = load_listing(state, id) {
+            if listing.active {
+                listings.push(listing);
+            }
+        }
+    }
+    
+    listings
+}
+
 /// AbyssRegistryModule handles marketplace operations
 pub struct AbyssRegistryModule;
 

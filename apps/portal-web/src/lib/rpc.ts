@@ -256,6 +256,90 @@ export async function getUserAnalytics(address: string): Promise<UserAnalytics> 
   return response.result as UserAnalytics;
 }
 
+/**
+ * Marketplace types and functions
+ */
+export type Listing = {
+  id: number;
+  token_id: number;
+  seller: string;
+  price_cgt: string;
+  active: boolean;
+};
+
+export type NftMetadata = {
+  id: number;
+  owner: string;
+  creator: string;
+  fabric_root_hash: string;
+  royalty_recipient?: string | null;
+  royalty_bps?: number;
+  name?: string;
+  description?: string;
+};
+
+/**
+ * Get all active marketplace listings.
+ */
+export async function getAllListings(): Promise<{ listings: Listing[] }> {
+  return callRpc<{ listings: Listing[] }>("cgt_getAllListings", null);
+}
+
+/**
+ * Get a specific listing by ID.
+ */
+export async function getListing(listingId: number): Promise<Listing | null> {
+  return callRpc<Listing | null>("cgt_getListing", { listing_id: listingId });
+}
+
+/**
+ * Build a transaction to create a listing.
+ */
+export async function buildCreateListingTx(
+  from: string,
+  tokenId: number,
+  priceCgt: string
+): Promise<{ tx_hex: string }> {
+  return callRpc<{ tx_hex: string }>("cgt_buildCreateListingTx", {
+    from,
+    token_id: tokenId,
+    price_cgt: priceCgt,
+  });
+}
+
+/**
+ * Build a transaction to cancel a listing.
+ */
+export async function buildCancelListingTx(
+  from: string,
+  listingId: number
+): Promise<{ tx_hex: string }> {
+  return callRpc<{ tx_hex: string }>("cgt_buildCancelListingTx", {
+    from,
+    listing_id: listingId,
+  });
+}
+
+/**
+ * Build a transaction to buy a listing.
+ */
+export async function buildBuyListingTx(
+  from: string,
+  listingId: number
+): Promise<{ tx_hex: string }> {
+  return callRpc<{ tx_hex: string }>("cgt_buildBuyListingTx", {
+    from,
+    listing_id: listingId,
+  });
+}
+
+/**
+ * Get NFTs owned by an address.
+ */
+export async function getNftsByOwner(owner: string): Promise<{ nfts: number[] }> {
+  return callRpc<{ nfts: number[] }>("cgt_getNftsByOwner", { owner });
+}
+
 export async function getTransactionHistory(
   address: string,
   limit?: number

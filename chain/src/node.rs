@@ -16,7 +16,7 @@ use crate::core::block::Block;
 use crate::core::state::State;
 use crate::core::transaction::{Address, Transaction};
 use crate::runtime::{
-    get_balance_cgt, get_cgt_total_supply, get_fabric_asset, get_listing, get_nft,
+    get_all_active_listings, get_balance_cgt, get_cgt_total_supply, get_fabric_asset, get_listing, get_nft,
     get_nfts_by_owner, is_archon,
     BankCgtModule, FabricRootHash, ListingId, NftId, Runtime, RuntimeModule, UrgeIDRegistryModule,
 };
@@ -230,6 +230,11 @@ impl Node {
     /// Get marketplace listing by ID.
     pub fn get_listing(&self, id: ListingId) -> Option<crate::runtime::abyss_registry::Listing> {
         self.with_state(|state| get_listing(state, id))
+    }
+
+    /// Get all active marketplace listings.
+    pub fn get_all_active_listings(&self) -> Vec<crate::runtime::abyss_registry::Listing> {
+        self.with_state(|state| get_all_active_listings(state))
     }
 
     /// Get Fabric asset by root hash.
