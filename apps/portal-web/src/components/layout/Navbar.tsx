@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Users, Sparkles, Cpu, Book, MessageSquare, Wallet } from "lucide-react";
+import { Users, Sparkles, Cpu, Book, MessageSquare, Wallet, BarChart3 } from "lucide-react";
 
 const navItems = [
   { href: "/urgeid", label: "UrgeID", icon: Wallet, loggedInLabel: "My Void" },
   { href: "/chat", label: "Chat", icon: MessageSquare },
+  { href: "/analytics", label: "Analytics", icon: BarChart3, loggedInOnly: true },
   { href: "/pantheon", label: "Pantheon", icon: Users },
   { href: "/creators", label: "Creators", icon: Sparkles },
   { href: "/technology", label: "Technology", icon: Cpu },
@@ -49,8 +50,13 @@ export function Navbar() {
           >
             DEMIURGE
           </Link>
-          <div className="flex items-center space-x-1">
+                  <div className="flex items-center space-x-1">
             {navItems.map((item) => {
+              // Hide logged-in-only items if not logged in
+              if ((item as any).loggedInOnly && !isLoggedIn) {
+                return null;
+              }
+              
               const isActive = pathname === item.href || pathname?.startsWith(item.href);
               const Icon = item.icon;
               const displayLabel = isLoggedIn && item.loggedInLabel ? item.loggedInLabel : item.label;

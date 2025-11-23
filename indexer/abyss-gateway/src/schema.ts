@@ -72,6 +72,31 @@ const RoomSettingsType = new GraphQLObjectType({
   }),
 });
 
+// ChatAnalytics type
+const ChatAnalyticsType = new GraphQLObjectType({
+  name: "ChatAnalytics",
+  fields: () => ({
+    totalMessages: { type: new GraphQLNonNull(GraphQLInt) },
+    worldChatMessages: { type: new GraphQLNonNull(GraphQLInt) },
+    dmMessages: { type: new GraphQLNonNull(GraphQLInt) },
+    customRoomMessages: { type: new GraphQLNonNull(GraphQLInt) },
+    roomsCreated: { type: new GraphQLNonNull(GraphQLInt) },
+    roomsModerated: { type: new GraphQLNonNull(GraphQLInt) },
+    mediaShared: { type: new GraphQLNonNull(GraphQLInt) },
+    firstMessageAt: { type: GraphQLString },
+    lastMessageAt: { type: GraphQLString },
+  }),
+});
+
+// MessageActivity type
+const MessageActivityType = new GraphQLObjectType({
+  name: "MessageActivity",
+  fields: () => ({
+    date: { type: new GraphQLNonNull(GraphQLString) },
+    count: { type: new GraphQLNonNull(GraphQLInt) },
+  }),
+});
+
 // ChatRoom type
 const ChatRoomType = new GraphQLObjectType({
   name: "ChatRoom",
@@ -144,6 +169,24 @@ const QueryType = new GraphQLObjectType({
       },
       resolve: async (parent, args, context) => {
         return context.resolvers.roomSystemMessages(args, context);
+      },
+    },
+    userChatAnalytics: {
+      type: ChatAnalyticsType,
+      args: {
+        address: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve: async (parent, args, context) => {
+        return context.resolvers.userChatAnalytics(args, context);
+      },
+    },
+    userMessageActivity: {
+      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(MessageActivityType))),
+      args: {
+        address: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve: async (parent, args, context) => {
+        return context.resolvers.userMessageActivity(args, context);
       },
     },
   }),

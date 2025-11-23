@@ -234,6 +234,28 @@ export async function getTransaction(
 /**
  * Get transaction history for an address.
  */
+export type UserAnalytics = {
+  address: string;
+  level: number;
+  syzygyScore: number;
+  totalCgtEarnedFromRewards: string;
+  badges: string[];
+  balance: string;
+  totalTransactions: number;
+  totalNfts: number;
+  isArchon: boolean;
+  cgtVolume: string;
+  createdAtHeight: number | null;
+};
+
+export async function getUserAnalytics(address: string): Promise<UserAnalytics> {
+  const response = await callRpc("urgeid_getAnalytics", { address });
+  if (response.error) {
+    throw new Error(response.error.message || "Failed to get user analytics");
+  }
+  return response.result as UserAnalytics;
+}
+
 export async function getTransactionHistory(
   address: string,
   limit?: number

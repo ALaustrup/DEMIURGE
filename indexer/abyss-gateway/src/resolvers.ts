@@ -846,6 +846,22 @@ export const resolvers = {
     chatDb.removeMusicFromQueue(musicId);
     return true;
   },
+
+  async userChatAnalytics(
+    args: { address: string },
+    context: ChatContext
+  ): Promise<any> {
+    // No authentication required - analytics are public
+    return chatDb.getUserChatAnalytics(args.address);
+  },
+
+  async userMessageActivity(
+    args: { address: string },
+    context: ChatContext
+  ): Promise<any[]> {
+    // No authentication required - analytics are public
+    return chatDb.getUserMessageActivity(args.address);
+  },
 };
 
 /**

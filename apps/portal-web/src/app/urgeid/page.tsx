@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Wallet, Coins, Sparkles, ArrowLeft, Lock, Eye, EyeOff } from "lucide-react";
+import { Wallet, Coins, Sparkles, ArrowLeft, Lock, Eye, EyeOff, BarChart3 } from "lucide-react";
 import QRCode from "react-qr-code";
 import {
   callRpc,
@@ -773,9 +773,18 @@ export default function UrgeIDPage() {
           {/* Progress Bar */}
           {progress && (
             <section className="rounded-lg border border-slate-800 bg-slate-950/60 p-4">
-              <h3 className="text-xs font-semibold text-slate-400 mb-3">
-                Progress & Contribution
-              </h3>
+              <div className="mb-3 flex items-center justify-between">
+                <h3 className="text-xs font-semibold text-slate-400">
+                  Progress & Contribution
+                </h3>
+                <button
+                  onClick={() => router.push("/analytics")}
+                  className="flex items-center gap-1 rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-[11px] text-slate-300 hover:bg-slate-800"
+                >
+                  <BarChart3 className="h-3 w-3" />
+                  View Analytics
+                </button>
+              </div>
               <div className="space-y-3">
                 <div>
                   <div className="text-sm font-semibold text-slate-200">

@@ -526,6 +526,23 @@ export interface SystemMessage {
   createdAt: string;
 }
 
+export interface ChatAnalytics {
+  totalMessages: number;
+  worldChatMessages: number;
+  dmMessages: number;
+  customRoomMessages: number;
+  roomsCreated: number;
+  roomsModerated: number;
+  mediaShared: number;
+  firstMessageAt?: string | null;
+  lastMessageAt?: string | null;
+}
+
+export interface MessageActivity {
+  date: string;
+  count: number;
+}
+
 export interface RoomMusicItem {
   id: string;
   roomId: string;

@@ -126,6 +126,11 @@ pub struct UrgeIDGetProgressParams {
 }
 
 #[derive(Debug, Deserialize)]
+pub struct GetUserAnalyticsParams {
+    pub address: String, // hex string
+}
+
+#[derive(Debug, Deserialize)]
 pub struct SignTxParams {
     pub tx_hex: String,      // unsigned transaction hex
     pub signature: String,   // signature hex (64 bytes = 128 hex chars)
@@ -1770,6 +1775,95 @@ async fn handle_rpc(
                 error: None,
                 id,
             })
+        }
+        "urgeid_getAnalytics" => {
+            let params: GetUserAnalyticsParams = match req.params.as_ref() {
+                Some(raw) => serde_json::from_value(raw.clone())
+                    .map_err(|e| e.to_string())
+                    .unwrap_or(GetUserAnalyticsParams {
+                        address: String::new(),
+                    }),
+                None => GetUserAnalyticsParams {
+                    address: String::new(),
+                },
+            };
+
+            let address = match parse_address_hex(&params.address) {
+                Ok(addr) => addr,
+                Err(msg) => {
+                    return Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: None,
+                        error: Some(JsonRpcError {
+                            code: -32602,
+                            message: format!("invalid address: {}", msg),
+                        }),
+                        id,
+                    });
+                }
+            };
+
+            // Get profile for basic stats
+            let profile_opt = node.with_state(|state| get_urgeid_profile(state, &address));
+            
+            // Get transaction history
+            let tx_hashes = node.get_transactions_for_address(&address, 1000);
+            let total_transactions = tx_hashes.len();
+            
+            // Get balance
+            let balance = node.get_balance_cgt(&address);
+            
+            // Get NFTs
+            let nfts = node.get_nfts_by_owner(&address);
+            let total_nfts = nfts.len();
+            
+            // Check if Archon
+            let is_archon = node.is_archon(&address);
+            
+            // Calculate CGT volume (simplified - count transactions as activity)
+            // In production, decode payloads to get actual transfer amounts
+            let cgt_volume = 0u128; // TODO: Calculate from transaction payloads
+            
+            match profile_opt {
+                Some(profile) => {
+                    Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: Some(json!({
+                            "address": hex::encode(profile.address),
+                            "level": profile.level,
+                            "syzygyScore": profile.syzygy_score,
+                            "totalCgtEarnedFromRewards": profile.total_cgt_earned_from_rewards.to_string(),
+                            "badges": profile.badges,
+                            "balance": balance.to_string(),
+                            "totalTransactions": total_transactions,
+                            "totalNfts": total_nfts,
+                            "isArchon": is_archon,
+                            "cgtVolume": cgt_volume.to_string(),
+                            "createdAtHeight": profile.created_at_height,
+                        })),
+                        error: None,
+                        id,
+                    })
+                }
+                None => Json(JsonRpcResponse {
+                    jsonrpc: "2.0".to_string(),
+                    result: Some(json!({
+                        "address": hex::encode(address),
+                        "level": 0,
+                        "syzygyScore": 0,
+                        "totalCgtEarnedFromRewards": "0",
+                        "badges": [],
+                        "balance": balance.to_string(),
+                        "totalTransactions": total_transactions,
+                        "totalNfts": total_nfts,
+                        "isArchon": is_archon,
+                        "cgtVolume": cgt_volume.to_string(),
+                        "createdAtHeight": null,
+                    })),
+                    error: None,
+                    id,
+                }),
+            }
         }
         "cgt_getTransaction" => {
             let params: GetTxParams = match req.params.as_ref() {

@@ -956,6 +956,114 @@ export const chatDb = {
   },
 
   /**
+   * Get chat analytics for a user by address.
+   */
+  getUserChatAnalytics(address: string): {
+    totalMessages: number;
+    worldChatMessages: number;
+    dmMessages: number;
+    customRoomMessages: number;
+    roomsCreated: number;
+    roomsModerated: number;
+    mediaShared: number;
+    firstMessageAt: string | null;
+    lastMessageAt: string | null;
+  } {
+    const db = getDb();
+    const user = this.getUserByAddress(address);
+    if (!user) {
+      return {
+        totalMessages: 0,
+        worldChatMessages: 0,
+        dmMessages: 0,
+        customRoomMessages: 0,
+        roomsCreated: 0,
+        roomsModerated: 0,
+        mediaShared: 0,
+        firstMessageAt: null,
+        lastMessageAt: null,
+      };
+    }
+
+    // Get world room ID
+    const worldRoom = db.prepare("SELECT id FROM chat_rooms WHERE slug = 'world'").get() as { id: number } | undefined;
+    const worldRoomId = worldRoom?.id || 0;
+
+    // Count messages by room type
+    const stats = db
+      .prepare(`
+        SELECT 
+          COUNT(*) as total,
+          SUM(CASE WHEN room_id = ? THEN 1 ELSE 0 END) as world,
+          SUM(CASE WHEN r.type = 'dm' THEN 1 ELSE 0 END) as dm,
+          SUM(CASE WHEN r.type = 'custom' THEN 1 ELSE 0 END) as custom,
+          SUM(CASE WHEN media_url IS NOT NULL THEN 1 ELSE 0 END) as media,
+          MIN(m.created_at) as first_msg,
+          MAX(m.created_at) as last_msg
+        FROM chat_messages m
+        INNER JOIN chat_rooms r ON m.room_id = r.id
+        WHERE m.sender_id = ?
+      `)
+      .get(worldRoomId, user.id) as {
+        total: number;
+        world: number;
+        dm: number;
+        custom: number;
+        media: number;
+        first_msg: string | null;
+        last_msg: string | null;
+      } | undefined;
+
+    // Count rooms created
+    const roomsCreated = db
+      .prepare("SELECT COUNT(*) as count FROM chat_rooms WHERE creator_id = ? AND type = 'custom'")
+      .get(user.id) as { count: number } | undefined;
+
+    // Count rooms moderated
+    const roomsModerated = db
+      .prepare("SELECT COUNT(DISTINCT room_id) as count FROM chat_room_moderators WHERE user_id = ?")
+      .get(user.id) as { count: number } | undefined;
+
+    return {
+      totalMessages: stats?.total || 0,
+      worldChatMessages: stats?.world || 0,
+      dmMessages: stats?.dm || 0,
+      customRoomMessages: stats?.custom || 0,
+      roomsCreated: roomsCreated?.count || 0,
+      roomsModerated: roomsModerated?.count || 0,
+      mediaShared: stats?.media || 0,
+      firstMessageAt: stats?.first_msg || null,
+      lastMessageAt: stats?.last_msg || null,
+    };
+  },
+
+  /**
+   * Get message activity over time for a user (last 30 days, grouped by day).
+   */
+  getUserMessageActivity(address: string): Array<{ date: string; count: number }> {
+    const db = getDb();
+    const user = this.getUserByAddress(address);
+    if (!user) {
+      return [];
+    }
+
+    const activity = db
+      .prepare(`
+        SELECT 
+          DATE(created_at) as date,
+          COUNT(*) as count
+        FROM chat_messages
+        WHERE sender_id = ? 
+          AND created_at > datetime('now', '-30 days')
+        GROUP BY DATE(created_at)
+        ORDER BY date ASC
+      `)
+      .all(user.id) as Array<{ date: string; count: number }>;
+
+    return activity;
+  },
+
+  /**
    * Clean up inactive/empty custom rooms (no messages for 20 minutes or no members).
    */
   cleanupInactiveRooms(): number {
