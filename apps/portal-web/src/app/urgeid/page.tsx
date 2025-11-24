@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Wallet, Coins, Sparkles, ArrowLeft, Lock, Eye, EyeOff, BarChart3 } from "lucide-react";
+import { Wallet, Coins, Sparkles, ArrowLeft, Lock, Eye, EyeOff, BarChart3, Plus, ChevronLeft, ChevronRight } from "lucide-react";
 import QRCode from "react-qr-code";
 import {
   callRpc,
@@ -71,6 +71,10 @@ export default function UrgeIDPage() {
   const [txHistory, setTxHistory] = useState<TransactionRecord[]>([]);
   const [showSecurityModal, setShowSecurityModal] = useState(false);
   const [showPrivateKey, setShowPrivateKey] = useState(false);
+  const [minting, setMinting] = useState(false);
+  const [mintError, setMintError] = useState<string | null>(null);
+  const [nftCarouselIndex, setNftCarouselIndex] = useState(0);
+  const [isArchon, setIsArchon] = useState<boolean>(false);
 
   // Check if user already has a wallet on mount
   useEffect(() => {
@@ -167,6 +171,16 @@ export default function UrgeIDPage() {
         address: addr,
       });
       setNfts(nftsRes.nfts || []);
+
+      // Check Archon status
+      try {
+        const archonRes = await callRpc<{ is_archon: boolean }>("cgt_isArchon", {
+          address: addr,
+        });
+        setIsArchon(archonRes.is_archon || false);
+      } catch (err) {
+        setIsArchon(false);
+      }
 
       // Load progression data
       try {
@@ -270,6 +284,68 @@ export default function UrgeIDPage() {
   const shortenAddress = (addr: string) => {
     if (addr.length <= 12) return addr;
     return `${addr.slice(0, 6)}...${addr.slice(-6)}`;
+  };
+
+  // Mint Test NFT
+  const handleMintTestNft = async () => {
+    if (minting || !address || !profile) return;
+    
+    // Check Archon status first
+    if (!isArchon) {
+      setMintError("Only Archons can mint D-GEN NFTs. Archon status is required for minting.");
+      return;
+    }
+
+    setMinting(true);
+    setMintError(null);
+
+    try {
+      // Optional: Call faucet first (only in dev)
+      if (process.env.NODE_ENV !== "production") {
+        try {
+          await callRpc("cgt_devFaucet", { address });
+        } catch (e) {
+          // Faucet might fail, continue anyway
+        }
+      }
+
+      // Generate dummy hash for test NFT
+      const fabricHash = Array.from({ length: 64 }, () =>
+        Math.floor(Math.random() * 16).toString(16)
+      ).join("");
+
+      // Create NFT name with username if available
+      const nftName = profile.username 
+        ? `Test NFT by @${profile.username}`
+        : `Test NFT by ${shortenAddress(address)}`;
+
+      // Mint NFT
+      const mintRes = await callRpc<{ nft_id: number }>("cgt_mintDgenNft", {
+        owner: address,
+        fabric_root_hash: fabricHash,
+        forge_model_id: null,
+        forge_prompt_hash: null,
+        name: nftName,
+        description: profile.username 
+          ? `A test D-GEN NFT minted by @${profile.username} from My Void`
+          : `A test D-GEN NFT minted from My Void`,
+      });
+
+      if (mintRes) {
+        // Refresh NFTs
+        await loadDashboard(address);
+        setMintError(null);
+      }
+    } catch (err: any) {
+      const errorMsg = err?.message || "Failed to mint NFT";
+      if (errorMsg.includes("Archon") || errorMsg.includes("archon")) {
+        setMintError("Only Archons can mint D-GEN NFTs. You need Archon status to mint.");
+      } else {
+        setMintError(errorMsg);
+      }
+    } finally {
+      setMinting(false);
+    }
   };
 
   // Resolve recipient (username or address)
@@ -1001,25 +1077,137 @@ export default function UrgeIDPage() {
             </section>
           )}
 
-          {/* NFTs */}
-          {nfts.length > 0 && (
-            <section className="rounded-lg border border-slate-800 bg-slate-950/60 p-4">
-              <h3 className="text-xs font-semibold text-slate-400 mb-3">D-GEN NFTs</h3>
-              <div className="grid gap-2 md:grid-cols-2">
-                {nfts.map((nft) => (
-                  <div
-                    key={nft.id}
-                    className="rounded-md border border-slate-800 bg-slate-900/50 p-3"
+          {/* NFT Assets Gallery */}
+          <section className="rounded-lg border border-slate-800 bg-slate-950/60 p-4">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xs font-semibold text-slate-400 flex items-center gap-2">
+                <Sparkles className="h-4 w-4" />
+                D-GEN NFT Assets
+              </h3>
+              {process.env.NODE_ENV !== "production" && (
+                <div className="flex items-center gap-2">
+                  {isArchon && (
+                    <span className="rounded-full bg-violet-500/10 px-2 py-0.5 text-[10px] font-semibold text-violet-400">
+                      ARCHON
+                    </span>
+                  )}
+                  <button
+                    onClick={handleMintTestNft}
+                    disabled={minting || !address || !profile || !isArchon}
+                    className="group relative flex items-center justify-center w-8 h-8 rounded-full border border-violet-600/30 bg-violet-500/5 text-violet-400 transition-all duration-300 hover:border-violet-500 hover:bg-violet-500/20 hover:shadow-lg hover:shadow-violet-500/50 hover:scale-110 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
+                    title={!isArchon ? "Archon status required to mint NFTs" : minting ? "Minting..." : "Mint NFT"}
                   >
-                    <div className="text-sm font-medium text-slate-300">NFT #{nft.id}</div>
-                    <div className="text-xs text-slate-500 font-mono mt-1">
-                      {nft.fabric_root_hash.slice(0, 16)}...
-                    </div>
-                  </div>
-                ))}
+                    <Plus className={`h-5 w-5 transition-all duration-300 ${minting ? "animate-spin" : "group-hover:scale-125 group-hover:text-violet-300"}`} />
+                    {minting && (
+                      <span className="absolute inset-0 rounded-full border-2 border-violet-500 border-t-transparent animate-spin"></span>
+                    )}
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {mintError && (
+              <p className="text-xs text-rose-400 mb-3">{mintError}</p>
+            )}
+
+            {nfts.length === 0 ? (
+              <div className="text-center py-8 text-slate-500">
+                <Sparkles className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                <p className="text-sm">No NFTs yet</p>
+                {process.env.NODE_ENV !== "production" && (
+                  <p className="text-xs mt-1 text-slate-600">
+                    Click the + button to create your first NFT
+                  </p>
+                )}
               </div>
-            </section>
-          )}
+            ) : (
+              <div className="relative">
+                {/* Carousel Container */}
+                <div className="overflow-hidden rounded-lg">
+                  <div 
+                    className="flex transition-transform duration-300 ease-in-out"
+                    style={{ transform: `translateX(-${nftCarouselIndex * 100}%)` }}
+                  >
+                    {nfts.map((nft) => (
+                      <div
+                        key={nft.id}
+                        className="min-w-full flex-shrink-0"
+                      >
+                        <div className="rounded-lg border border-slate-700 bg-slate-900/50 p-4 mx-1">
+                          <div className="flex items-center justify-between mb-3">
+                            <div>
+                              <div className="text-sm font-semibold text-slate-200">
+                                NFT #{nft.id}
+                              </div>
+                              <div className="text-xs text-slate-400 mt-1">
+                                {profile?.username ? `@${profile.username}` : shortenAddress(address)}
+                              </div>
+                            </div>
+                            <div className="text-xs text-slate-500 font-mono">
+                              {nft.fabric_root_hash.slice(0, 8)}...{nft.fabric_root_hash.slice(-8)}
+                            </div>
+                          </div>
+                          <div className="aspect-square bg-slate-800/50 rounded-md flex items-center justify-center mb-3">
+                            <Sparkles className="h-12 w-12 text-violet-400/30" />
+                          </div>
+                          <div className="text-xs text-slate-400">
+                            <div className="flex justify-between">
+                              <span>Creator:</span>
+                              <span className="font-mono">{shortenAddress(nft.creator)}</span>
+                            </div>
+                            {nft.royalty_bps !== undefined && (
+                              <div className="flex justify-between mt-1">
+                                <span>Royalty:</span>
+                                <span>{(nft.royalty_bps / 100).toFixed(2)}%</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Carousel Navigation */}
+                {nfts.length > 1 && (
+                  <div className="flex items-center justify-between mt-4">
+                    <button
+                      onClick={() => setNftCarouselIndex((prev) => (prev > 0 ? prev - 1 : nfts.length - 1))}
+                      className="rounded-md border border-slate-700 bg-slate-800/50 p-2 text-slate-300 hover:bg-slate-700 disabled:opacity-50"
+                      disabled={nfts.length <= 1}
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                    </button>
+                    <div className="flex gap-1">
+                      {nfts.map((_, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setNftCarouselIndex(idx)}
+                          className={`h-2 rounded-full transition-all ${
+                            idx === nftCarouselIndex
+                              ? "w-6 bg-violet-500"
+                              : "w-2 bg-slate-700"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <button
+                      onClick={() => setNftCarouselIndex((prev) => (prev < nfts.length - 1 ? prev + 1 : 0))}
+                      className="rounded-md border border-slate-700 bg-slate-800/50 p-2 text-slate-300 hover:bg-slate-700 disabled:opacity-50"
+                      disabled={nfts.length <= 1}
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                    </button>
+                  </div>
+                )}
+
+                {/* NFT Counter */}
+                <div className="text-center mt-3 text-xs text-slate-500">
+                  {nftCarouselIndex + 1} of {nfts.length}
+                </div>
+              </div>
+            )}
+          </section>
         </motion.div>
       )}
     </main>

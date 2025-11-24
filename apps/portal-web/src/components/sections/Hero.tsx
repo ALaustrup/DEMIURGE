@@ -23,11 +23,11 @@ export function Hero() {
             developers, and artists. Build, mint, trade, and earn.
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <a href="/creators">
-              <Button variant="primary">Become an Archon</Button>
+            <a href="/urgeid">
+              <Button variant="primary">Enter My Void</Button>
             </a>
-            <a href="/pantheon">
-              <Button variant="outline">Explore the Pantheon</Button>
+            <a href="/docs">
+              <Button variant="outline">Read the Docs</Button>
             </a>
           </div>
         </motion.div>

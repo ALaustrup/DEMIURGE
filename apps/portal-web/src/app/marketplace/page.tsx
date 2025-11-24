@@ -10,6 +10,7 @@ import {
   buildCancelListingTx,
   buildBuyListingTx,
   getNftsByOwner,
+  getNft,
   callRpc,
   sendRawTransaction,
   signTransactionRpc,

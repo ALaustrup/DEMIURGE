@@ -17,6 +17,100 @@ body {
   color: var(--foreground);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
     "Segoe UI", sans-serif;
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Color shift animation for Fabric header */
+@keyframes color-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-color-shift {
+  background-size: 200% 200%;
+  animation: color-shift 3s ease-in-out infinite;
+}
+
+/* Gradient shift animation for DEMIURGE navbar */
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient-shift {
+  background-size: 200% 200%;
+  animation: gradient-shift 4s ease-in-out infinite;
+}
+
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s ease-in-out infinite;
+}
+
+/* Letter-by-letter gradient shift for DEMIURGE */
+@keyframes gradient-shift-letter {
+  0% {
+    background-position: 0% 50%;
+  }
+  25% {
+    background-position: 50% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  75% {
+    background-position: 50% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient-shift-letter {
+  background-size: 200% 200%;
+  animation: gradient-shift-letter 6s ease-in-out infinite;
+}
+
+/* White sweep animation for D to E */
+@keyframes white-sweep {
+  0% {
+    transform: translateX(-150%);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.7;
+  }
+  80% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateX(150%);
+    opacity: 0;
+  }
+}
+
+.animate-white-sweep {
+  animation: white-sweep 4s ease-in-out infinite;
 }
 
 .gradient-orbit {
@@ -31,5 +125,127 @@ body {
     -webkit-backdrop-filter: blur(12px) saturate(180%);
     background: rgba(17, 25, 40, 0.25);
     border: 1px solid rgba(255, 255, 255, 0.125);
+  }
+}
+
+/* Custom grid columns for Fabric gallery */
+.grid-cols-9 {
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+}
+
+.grid-cols-12 {
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.grid-cols-15 {
+  grid-template-columns: repeat(15, minmax(0, 1fr));
+}
+
+@media (min-width: 640px) {
+  .sm\:grid-cols-9 {
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+  }
+  .sm\:grid-cols-12 {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+  .sm\:grid-cols-15 {
+    grid-template-columns: repeat(15, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 768px) {
+  .md\:grid-cols-9 {
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+  }
+  .md\:grid-cols-12 {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+  .md\:grid-cols-15 {
+    grid-template-columns: repeat(15, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\:grid-cols-9 {
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+  }
+  .lg\:grid-cols-12 {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+  .lg\:grid-cols-15 {
+    grid-template-columns: repeat(15, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .xl\:grid-cols-9 {
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+  }
+  .xl\:grid-cols-12 {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+  .xl\:grid-cols-15 {
+    grid-template-columns: repeat(15, minmax(0, 1fr));
+  }
+}
+
+/* Masonry columns */
+.columns-9 {
+  column-count: 9;
+}
+
+.columns-12 {
+  column-count: 12;
+}
+
+.columns-15 {
+  column-count: 15;
+}
+
+@media (min-width: 640px) {
+  .sm\:columns-9 {
+    column-count: 9;
+  }
+  .sm\:columns-12 {
+    column-count: 12;
+  }
+  .sm\:columns-15 {
+    column-count: 15;
+  }
+}
+
+@media (min-width: 768px) {
+  .md\:columns-9 {
+    column-count: 9;
+  }
+  .md\:columns-12 {
+    column-count: 12;
+  }
+  .md\:columns-15 {
+    column-count: 15;
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\:columns-9 {
+    column-count: 9;
+  }
+  .lg\:columns-12 {
+    column-count: 12;
+  }
+  .lg\:columns-15 {
+    column-count: 15;
+  }
+}
+
+@media (min-width: 1280px) {
+  .xl\:columns-9 {
+    column-count: 9;
+  }
+  .xl\:columns-12 {
+    column-count: 12;
+  }
+  .xl\:columns-15 {
+    column-count: 15;
   }
 }
