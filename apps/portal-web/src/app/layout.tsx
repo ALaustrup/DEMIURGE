@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { ServiceWorkerRegistration } from "@/components/pwa/ServiceWorkerRegistration";
+import { AudioContextProvider } from "@/lib/fracture/audio/AudioContextProvider";
 
 export const metadata: Metadata = {
   title: "Demiurge — Sovereign Digital Pantheon",
@@ -44,10 +45,12 @@ export default function RootLayout({
       </head>
       <body className="gradient-orbit min-h-screen antialiased">
         <ServiceWorkerRegistration />
-        <div className="min-h-screen bg-slate-950/80">
-          <Navbar />
-          {children}
-        </div>
+        <AudioContextProvider>
+          <div className="min-h-screen bg-slate-950/80">
+            <Navbar />
+            {children}
+          </div>
+        </AudioContextProvider>
       </body>
     </html>
   );
