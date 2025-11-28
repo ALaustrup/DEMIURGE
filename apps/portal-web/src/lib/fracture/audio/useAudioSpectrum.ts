@@ -28,14 +28,17 @@ export function useAudioSpectrum() {
     }
 
     const bufferLength = analyser.frequencyBinCount;
-    if (!dataArrayRef.current) {
-      dataArrayRef.current = new Uint8Array(bufferLength);
+    if (!dataArrayRef.current || dataArrayRef.current.length !== bufferLength) {
+      dataArrayRef.current = new Uint8Array(new ArrayBuffer(bufferLength));
     }
 
     const updateSpectrum = () => {
       if (!analyser || !dataArrayRef.current) return;
 
-      analyser.getByteFrequencyData(dataArrayRef.current);
+      // Type assertion to satisfy strict TypeScript checking
+      const dataArray = dataArrayRef.current;
+      // @ts-expect-error - AnalyserNode.getByteFrequencyData accepts Uint8Array with ArrayBufferLike
+      analyser.getByteFrequencyData(dataArray);
 
       // Split frequency bands
       // Low: 0-30% of spectrum
@@ -49,13 +52,13 @@ export function useAudioSpectrum() {
       let highSum = 0;
 
       for (let i = 0; i < lowEnd; i++) {
-        lowSum += dataArrayRef.current[i];
+        lowSum += dataArray[i];
       }
       for (let i = lowEnd; i < midEnd; i++) {
-        midSum += dataArrayRef.current[i];
+        midSum += dataArray[i];
       }
       for (let i = midEnd; i < bufferLength; i++) {
-        highSum += dataArrayRef.current[i];
+        highSum += dataArray[i];
       }
 
       setLow(Math.floor(lowSum / lowEnd));

@@ -1,127 +1,123 @@
+"use client";
+
+import { useState, useCallback } from "react";
+import { generateKeys, type GeneratedAbyssIdentity } from "@/lib/fracture/crypto/generateKeys";
+
+export type AbyssState = "idle" | "checking" | "reject" | "accept" | "binding" | "confirm";
+
+export interface AbyssContext {
+  username: string;
+  seedPhrase?: string;
+  error?: string;
+}
+
 /**
- * AbyssStateMachine
+ * useAbyssStateMachine
  * 
- * State machine for the AbyssID ritual sequence.
+ * React hook for managing the AbyssID ritual state machine.
  * Controls the flow: idle → checking → reject|accept → binding → confirm
  */
+export function useAbyssStateMachine() {
+  const [state, setState] = useState<AbyssState>("idle");
+  const [context, setContext] = useState<AbyssContext>({
+    username: "",
+  });
 
-export type AbyssState =
-  | "idle"
-  | "checking"
-  | "reject"
-  | "accept"
-  | "binding"
-  | "confirm";
+  const setUsername = useCallback((value: string) => {
+    setContext((prev) => ({
+      ...prev,
+      username: value,
+      error: undefined,
+    }));
+    // Reset to idle if previously reject/accept
+    if (state === "reject" || state === "accept") {
+      setState("idle");
+    }
+  }, [state]);
 
-export interface AbyssStateContext {
-  state: AbyssState;
-  username: string;
-  publicKey?: string;
-  privateKey?: string;
-  seedPhrase?: string;
+  const startChecking = useCallback(async () => {
+    if (!context.username.trim()) {
+      return;
+    }
+
+    setState("checking");
+
+    // Simulate availability check
+    await new Promise((resolve) => setTimeout(resolve, 1200));
+
+    // TODO: Replace with real backend availability API
+    // TEMPORARY implementation:
+    const username = context.username.trim();
+    
+    if (username.length < 3) {
+      setState("reject");
+      setContext((prev) => ({
+        ...prev,
+        error: "Username too short",
+      }));
+      return;
+    }
+
+    // Deterministic coin flip for testing
+    if (username.toLowerCase().includes("test")) {
+      setState("reject");
+      setContext((prev) => ({
+        ...prev,
+        error: "Username contains 'test'",
+      }));
+      return;
+    }
+
+    // Accept
+    setState("accept");
+  }, [context.username]);
+
+  const triggerReject = useCallback((reason?: string) => {
+    setState("reject");
+    if (reason) {
+      setContext((prev) => ({
+        ...prev,
+        error: reason,
+      }));
+    }
+  }, []);
+
+  const triggerAccept = useCallback(() => {
+    setState("accept");
+  }, []);
+
+  const startBinding = useCallback(async () => {
+    setState("binding");
+
+    try {
+      const generated = await generateKeys(context.username);
+      setContext((prev) => ({
+        ...prev,
+        seedPhrase: generated.seedPhrase,
+      }));
+    } catch (error) {
+      console.error("Failed to generate keys:", error);
+      setState("reject");
+      setContext((prev) => ({
+        ...prev,
+        error: "Failed to generate keys",
+      }));
+    }
+  }, [context.username]);
+
+  const confirmAndProceed = useCallback(() => {
+    setState("confirm");
+    // Actual routing to /haven will be handled in the dialog component
+  }, []);
+
+  return {
+    state,
+    context,
+    setUsername,
+    startChecking,
+    triggerReject,
+    triggerAccept,
+    startBinding,
+    confirmAndProceed,
+  };
 }
-
-export class AbyssStateMachine {
-  private currentState: AbyssState = "idle";
-  private context: AbyssStateContext;
-  private listeners: Set<(state: AbyssState, context: AbyssStateContext) => void> = new Set();
-
-  constructor() {
-    this.context = {
-      state: "idle",
-      username: "",
-    };
-  }
-
-  /**
-   * Subscribe to state changes
-   */
-  subscribe(listener: (state: AbyssState, context: AbyssStateContext) => void): () => void {
-    this.listeners.add(listener);
-    return () => this.listeners.delete(listener);
-  }
-
-  /**
-   * Get current state
-   */
-  getState(): AbyssState {
-    return this.currentState;
-  }
-
-  /**
-   * Get context
-   */
-  getContext(): AbyssStateContext {
-    return { ...this.context };
-  }
-
-  /**
-   * Transition to new state
-   */
-  private transition(newState: AbyssState, updates?: Partial<AbyssStateContext>): void {
-    this.currentState = newState;
-    this.context = {
-      ...this.context,
-      state: newState,
-      ...updates,
-    };
-
-    // Notify all listeners
-    this.listeners.forEach((listener) => {
-      listener(newState, this.context);
-    });
-  }
-
-  /**
-   * Set username and start checking
-   */
-  checkUsername(username: string): void {
-    this.context.username = username;
-    this.transition("checking");
-  }
-
-  /**
-   * Username rejected
-   */
-  rejectUsername(): void {
-    this.transition("reject");
-  }
-
-  /**
-   * Username accepted
-   */
-  acceptUsername(): void {
-    this.transition("accept");
-  }
-
-  /**
-   * Start binding (key generation)
-   */
-  startBinding(publicKey: string, privateKey: string, seedPhrase: string): void {
-    this.transition("binding", {
-      publicKey,
-      privateKey,
-      seedPhrase,
-    });
-  }
-
-  /**
-   * Confirm and complete ritual
-   */
-  confirm(): void {
-    this.transition("confirm");
-  }
-
-  /**
-   * Reset to idle
-   */
-  reset(): void {
-    this.transition("idle", {
-      username: "",
-      publicKey: undefined,
-      privateKey: undefined,
-      seedPhrase: undefined,
-    });
-  }
-}
-

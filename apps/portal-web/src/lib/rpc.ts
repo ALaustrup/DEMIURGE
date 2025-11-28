@@ -424,6 +424,17 @@ export async function getProfileByUsername(
 }
 
 /**
+ * Get UrgeID profile by address.
+ */
+export async function getUrgeIdProfile(
+  address: string
+): Promise<UrgeIDProfile | null> {
+  return callRpc<UrgeIDProfile | null>("urgeid_get", {
+    address,
+  });
+}
+
+/**
  * Get UrgeID progression info (level, thresholds, progress).
  */
 export async function getUrgeIdProgress(
