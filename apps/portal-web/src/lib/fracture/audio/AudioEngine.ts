@@ -16,6 +16,13 @@ export class AudioEngine {
   private isPlaying = false;
 
   /**
+   * Get audio context (for external access if needed)
+   */
+  getAudioContext(): AudioContext | null {
+    return this.audioContext;
+  }
+
+  /**
    * Initialize the audio context (lazy)
    */
   private getContext(): AudioContext | null {
@@ -40,10 +47,10 @@ export class AudioEngine {
     this.audioElement = audioElement;
 
     try {
-      // Create analyser node
+      // Create analyser node with better resolution for subtle reactivity
       this.analyser = ctx.createAnalyser();
-      this.analyser.fftSize = 256;
-      this.analyser.smoothingTimeConstant = 0.8;
+      this.analyser.fftSize = 2048; // Higher resolution for better frequency analysis
+      this.analyser.smoothingTimeConstant = 0.8; // Smooth transitions
 
       // Create source from audio element
       this.source = ctx.createMediaElementSource(audioElement);

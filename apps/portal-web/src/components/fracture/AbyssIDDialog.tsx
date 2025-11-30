@@ -5,6 +5,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAbyssStateMachine } from "./AbyssStateMachine";
+import { ShaderPlane } from "./ShaderPlane";
+import { useAbyssReactive } from "@/lib/fracture/audio/AbyssReactive";
+import { useAbyssID } from "@/lib/fracture/identity/AbyssIDContext";
 
 interface AbyssIDDialogProps {
   open: boolean;
@@ -13,6 +16,7 @@ interface AbyssIDDialogProps {
 
 export function AbyssIDDialog({ open, onClose }: AbyssIDDialogProps) {
   const router = useRouter();
+  const { identity } = useAbyssID();
   const {
     state,
     context,
@@ -23,6 +27,9 @@ export function AbyssIDDialog({ open, onClose }: AbyssIDDialogProps) {
     startBinding,
     confirmAndProceed,
   } = useAbyssStateMachine();
+
+  // Get audio-reactive values for shader
+  const reactive = useAbyssReactive(state);
 
   // Reset state when dialog closes
   useEffect(() => {
@@ -60,23 +67,46 @@ export function AbyssIDDialog({ open, onClose }: AbyssIDDialogProps) {
         {/* Dialog Card */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
+          animate={{ 
+            opacity: 1, 
+            scale: reactive.modalScale, 
+            y: 0 
+          }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-          className="relative w-full max-w-lg mx-auto rounded-2xl border border-white/10 bg-white/5 p-6 sm:p-8 shadow-2xl"
+          className="relative w-full max-w-lg mx-auto rounded-2xl border border-white/10 bg-white/5 p-6 sm:p-8 shadow-2xl overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
+          {/* ShaderPlane backdrop with audio-reactive effects */}
+          <ShaderPlane 
+            state={state} 
+            reactive={{
+              low: reactive.low,
+              mid: reactive.mid,
+              high: reactive.high,
+              glitchAmplification: reactive.glitchAmplification,
+              pulseEvent: reactive.pulseEvent,
+              silenceDecay: reactive.silenceDecay,
+            }}
+          />
           {/* Close Button */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 rounded-lg text-zinc-400 hover:text-zinc-200 hover:bg-white/5 transition-colors"
+            className="absolute top-4 right-4 z-10 p-2 rounded-lg text-zinc-400 hover:text-zinc-200 hover:bg-white/5 transition-colors"
           >
             <X className="h-5 w-5" />
           </button>
 
           {/* Header */}
-          <div className="mb-6">
-            <p className="text-sm text-zinc-400 mb-2">THE ABYSS DOES NOT ASK.</p>
+          <div className="mb-6 relative z-10">
+            <motion.p 
+              className="text-sm text-zinc-400 mb-2"
+              style={{
+                textShadow: `0 0 ${reactive.textShimmer * 20}px rgba(139, 92, 246, ${reactive.textShimmer})`,
+              }}
+            >
+              THE ABYSS DOES NOT ASK.
+            </motion.p>
             <p className="text-sm text-zinc-500">It waits. For you.</p>
           </div>
 
@@ -85,7 +115,7 @@ export function AbyssIDDialog({ open, onClose }: AbyssIDDialogProps) {
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="space-y-6"
+              className="space-y-6 relative z-10"
             >
               <div>
                 <label className="block text-sm font-medium text-zinc-300 mb-3">
@@ -120,7 +150,7 @@ export function AbyssIDDialog({ open, onClose }: AbyssIDDialogProps) {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="space-y-6 text-center"
+              className="space-y-6 text-center relative z-10"
             >
               <div className="py-8">
                 <motion.div
@@ -162,8 +192,11 @@ export function AbyssIDDialog({ open, onClose }: AbyssIDDialogProps) {
           {state === "reject" && (
             <motion.div
               initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="space-y-6"
+              animate={{ 
+                opacity: 1, 
+                x: reactive.glitchAmplification * 5 
+              }}
+              className="space-y-6 relative z-10"
             >
               <div className="text-red-400 space-y-2">
                 <p className="text-lg font-semibold">Another carried this name.</p>
@@ -194,9 +227,12 @@ export function AbyssIDDialog({ open, onClose }: AbyssIDDialogProps) {
           {state === "accept" && (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
+              animate={{ 
+                opacity: 1, 
+                scale: reactive.pulseEvent ? 1.05 : 1 
+              }}
               transition={{ duration: 0.5 }}
-              className="space-y-6 text-center"
+              className="space-y-6 text-center relative z-10"
             >
               <div className="space-y-2">
                 <p className="text-lg font-semibold text-green-400">
@@ -220,7 +256,7 @@ export function AbyssIDDialog({ open, onClose }: AbyssIDDialogProps) {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="space-y-6"
+              className="space-y-6 relative z-10"
             >
               <div className="text-center">
                 <h2 className="text-2xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-purple-500">
@@ -265,9 +301,12 @@ export function AbyssIDDialog({ open, onClose }: AbyssIDDialogProps) {
           {state === "confirm" && (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
+              animate={{ 
+                opacity: 1, 
+                scale: reactive.pulseEvent ? 1.05 : 1 
+              }}
               transition={{ duration: 0.5 }}
-              className="space-y-6 text-center"
+              className="space-y-6 text-center relative z-10"
             >
               <div>
                 <h2 className="text-2xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-purple-500">
@@ -286,8 +325,7 @@ export function AbyssIDDialog({ open, onClose }: AbyssIDDialogProps) {
             </motion.div>
           )}
 
-          {/* TODO: Integrate ShaderPlane backdrop reacting to abyssState */}
-          {/* TODO: Integrate audio-reactive layer tied to AbyssReactive */}
+
         </motion.div>
       </div>
     </AnimatePresence>

@@ -2,14 +2,25 @@
 
 import { useState, useCallback } from "react";
 import { generateKeys, type GeneratedAbyssIdentity } from "@/lib/fracture/crypto/generateKeys";
+import { useAbyssID } from "@/lib/fracture/identity/AbyssIDContext";
 
 export type AbyssState = "idle" | "checking" | "reject" | "accept" | "binding" | "confirm";
 
 export interface AbyssContext {
   username: string;
   seedPhrase?: string;
+  publicKey?: string;
+  address?: string;
   error?: string;
 }
+
+// Get API URL from environment or use default
+const getApiUrl = () => {
+  if (typeof window !== 'undefined') {
+    return process.env.NEXT_PUBLIC_ABYSSID_API_URL || 'http://localhost:3001';
+  }
+  return 'http://localhost:3001';
+};
 
 /**
  * useAbyssStateMachine
@@ -18,6 +29,7 @@ export interface AbyssContext {
  * Controls the flow: idle → checking → reject|accept → binding → confirm
  */
 export function useAbyssStateMachine() {
+  const { setIdentity } = useAbyssID();
   const [state, setState] = useState<AbyssState>("idle");
   const [context, setContext] = useState<AbyssContext>({
     username: "",
@@ -42,34 +54,50 @@ export function useAbyssStateMachine() {
 
     setState("checking");
 
-    // Simulate availability check
-    await new Promise((resolve) => setTimeout(resolve, 1200));
+    try {
+      const API_URL = getApiUrl();
+      const username = context.username.trim();
 
-    // TODO: Replace with real backend availability API
-    // TEMPORARY implementation:
-    const username = context.username.trim();
-    
-    if (username.length < 3) {
+      // Validate username length client-side first
+      if (username.length < 3) {
+        setState("reject");
+        setContext((prev) => ({
+          ...prev,
+          error: "Username must be at least 3 characters",
+        }));
+        return;
+      }
+
+      // Call real backend API
+      const response = await fetch(`${API_URL}/api/abyssid/check`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (!data.available) {
+        setState("reject");
+        setContext((prev) => ({
+          ...prev,
+          error: data.error || "Username already taken",
+        }));
+      } else {
+        setState("accept");
+      }
+    } catch (error: any) {
+      console.error("Username check failed:", error);
       setState("reject");
       setContext((prev) => ({
         ...prev,
-        error: "Username too short",
+        error: error.message || "Failed to check username availability. Is the backend running?",
       }));
-      return;
     }
-
-    // Deterministic coin flip for testing
-    if (username.toLowerCase().includes("test")) {
-      setState("reject");
-      setContext((prev) => ({
-        ...prev,
-        error: "Username contains 'test'",
-      }));
-      return;
-    }
-
-    // Accept
-    setState("accept");
   }, [context.username]);
 
   const triggerReject = useCallback((reason?: string) => {
@@ -90,20 +118,59 @@ export function useAbyssStateMachine() {
     setState("binding");
 
     try {
-      const generated = await generateKeys(context.username);
+      const API_URL = getApiUrl();
+      const username = context.username.trim();
+
+      // Generate keys
+      const generated = await generateKeys(username);
+      
+      // Derive address from public key (simplified - in production use proper address derivation)
+      // For now, use a hex representation of the public key
+      const address = "0x" + generated.publicKey.replace(/[^0-9a-f]/gi, '').substring(0, 40).padEnd(40, '0');
+
+      // Register with backend
+      const response = await fetch(`${API_URL}/api/abyssid/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username,
+          publicKey: generated.publicKey,
+          address: address,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Registration failed' }));
+        throw new Error(errorData.error || `Registration failed: ${response.status}`);
+      }
+
+      const registrationData = await response.json();
+
+      // Update context with generated keys
       setContext((prev) => ({
         ...prev,
         seedPhrase: generated.seedPhrase,
+        publicKey: generated.publicKey,
+        address: address,
       }));
-    } catch (error) {
-      console.error("Failed to generate keys:", error);
+
+      // Store identity in global context
+      setIdentity({
+        username,
+        address,
+        publicKey: generated.publicKey,
+        seedPhrase: generated.seedPhrase,
+        createdAt: registrationData.createdAt || Date.now(),
+      });
+    } catch (error: any) {
+      console.error("Key generation/registration failed:", error);
       setState("reject");
       setContext((prev) => ({
         ...prev,
-        error: "Failed to generate keys",
+        error: error.message || "Failed to generate keys or register identity",
       }));
     }
-  }, [context.username]);
+  }, [context.username, setIdentity]);
 
   const confirmAndProceed = useCallback(() => {
     setState("confirm");

@@ -6,6 +6,15 @@ import type { AbyssState } from "./AbyssStateMachine";
 interface ShaderPlaneProps {
   state: AbyssState;
   className?: string;
+  // Audio-reactive values (optional - falls back to state-based if not provided)
+  reactive?: {
+    low: number;
+    mid: number;
+    high: number;
+    glitchAmplification?: number;
+    pulseEvent?: boolean;
+    silenceDecay?: number;
+  };
 }
 
 /**
@@ -16,7 +25,7 @@ interface ShaderPlaneProps {
  * 
  * TODO: Milestone 4.1 – upgrade to WebGL/GLSL for true fragment shader
  */
-export function ShaderPlane({ state, className = "" }: ShaderPlaneProps) {
+export function ShaderPlane({ state, className = "", reactive }: ShaderPlaneProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameRef = useRef<number | null>(null);
   const timeRef = useRef(0);
@@ -38,11 +47,21 @@ export function ShaderPlane({ state, className = "" }: ShaderPlaneProps) {
     resize();
     window.addEventListener("resize", resize);
 
-    // Shader parameters based on state
+    // Shader parameters based on state + audio-reactive values
     const getShaderParams = () => {
+      // Base parameters from state
+      let baseParams: {
+        turbulence: number;
+        viscosity: number;
+        chromaShift: number;
+        glitch: number;
+        bloom: number;
+        vignette: number;
+      };
+
       switch (state) {
         case "idle":
-          return {
+          baseParams = {
             turbulence: 0.3,
             viscosity: 0.5,
             chromaShift: 0.1,
@@ -50,8 +69,9 @@ export function ShaderPlane({ state, className = "" }: ShaderPlaneProps) {
             bloom: 0,
             vignette: 0,
           };
+          break;
         case "checking":
-          return {
+          baseParams = {
             turbulence: 0.5,
             viscosity: 0.6,
             chromaShift: 0.15,
@@ -59,8 +79,9 @@ export function ShaderPlane({ state, className = "" }: ShaderPlaneProps) {
             bloom: 0.2,
             vignette: 0.3,
           };
+          break;
         case "reject":
-          return {
+          baseParams = {
             turbulence: 1.0,
             viscosity: 0.8,
             chromaShift: 0.5,
@@ -68,8 +89,9 @@ export function ShaderPlane({ state, className = "" }: ShaderPlaneProps) {
             bloom: 0,
             vignette: 0,
           };
+          break;
         case "accept":
-          return {
+          baseParams = {
             turbulence: 0.4,
             viscosity: 0.4,
             chromaShift: 0.2,
@@ -77,8 +99,9 @@ export function ShaderPlane({ state, className = "" }: ShaderPlaneProps) {
             bloom: 0.8,
             vignette: 0.5,
           };
+          break;
         case "binding":
-          return {
+          baseParams = {
             turbulence: 0.6,
             viscosity: 0.7,
             chromaShift: 0.3,
@@ -86,8 +109,9 @@ export function ShaderPlane({ state, className = "" }: ShaderPlaneProps) {
             bloom: 0.4,
             vignette: 0.9,
           };
+          break;
         case "confirm":
-          return {
+          baseParams = {
             turbulence: 0.2,
             viscosity: 0.3,
             chromaShift: 0.1,
@@ -95,8 +119,9 @@ export function ShaderPlane({ state, className = "" }: ShaderPlaneProps) {
             bloom: 1.0,
             vignette: 0.2,
           };
+          break;
         default:
-          return {
+          baseParams = {
             turbulence: 0.3,
             viscosity: 0.5,
             chromaShift: 0.1,
@@ -105,6 +130,37 @@ export function ShaderPlane({ state, className = "" }: ShaderPlaneProps) {
             vignette: 0,
           };
       }
+
+      // Apply audio-reactive modifications if provided
+      if (reactive) {
+        const { low, mid, high, glitchAmplification = 0, pulseEvent = false, silenceDecay = 1 } = reactive;
+        
+        // Enhance turbulence with low frequencies
+        baseParams.turbulence = baseParams.turbulence * (1 + low * 0.3);
+        
+        // Enhance chroma shift with mid frequencies
+        baseParams.chromaShift = baseParams.chromaShift * (1 + mid * 0.4);
+        
+        // Add glitch from reactive values or state
+        if (glitchAmplification > 0) {
+          baseParams.glitch = Math.max(baseParams.glitch, glitchAmplification);
+        }
+        
+        // Pulse bloom on pulse events
+        if (pulseEvent) {
+          baseParams.bloom = Math.min(1.0, baseParams.bloom + 0.3);
+        }
+        
+        // Enhance bloom with high frequencies
+        baseParams.bloom = baseParams.bloom * (1 + high * 0.2);
+        
+        // Apply silence decay (fade when no audio)
+        baseParams.turbulence *= silenceDecay;
+        baseParams.chromaShift *= silenceDecay;
+        baseParams.bloom *= silenceDecay;
+      }
+
+      return baseParams;
     };
 
     // Simple noise function
@@ -212,7 +268,7 @@ export function ShaderPlane({ state, className = "" }: ShaderPlaneProps) {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [state]);
+  }, [state, reactive]);
 
   if (!isVisible) return null;
 

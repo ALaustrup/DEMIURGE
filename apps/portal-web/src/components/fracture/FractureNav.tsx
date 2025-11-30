@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Home, Code, Network, BookOpen, Sparkles, Fingerprint } from "lucide-react";
 import { useState } from "react";
 import { AbyssIDDialog } from "./AbyssIDDialog";
+import { AudioToggle } from "./AudioToggle";
 
 const navItems = [
   { href: "/haven", label: "Haven", icon: Home, description: "User home & profile" },
@@ -20,13 +21,18 @@ export function FractureNav() {
 
   return (
     <>
-      <nav className="sticky top-0 z-50 border-b border-white/10 bg-black/40 backdrop-blur-xl shadow-lg">
+      <nav className="sticky top-0 z-50 border-b border-white/10 bg-black/60 backdrop-blur-xl shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
-            {/* Logo / Brand */}
+            {/* Logo / Brand - FRACTURE (update name) */}
             <Link
               href="/"
-              className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-purple-500 hover:from-cyan-300 hover:via-fuchsia-400 hover:to-purple-400 transition-all duration-300"
+              className="text-2xl sm:text-3xl font-[family-name:var(--font-unifraktur)] font-bold text-zinc-200 hover:text-cyan-300 transition-all duration-300 tracking-wider"
+              style={{ 
+                textShadow: "0 0 8px rgba(0,0,0,0.8), 0 2px 4px rgba(0,0,0,0.5)",
+                letterSpacing: "0.1em",
+                fontFamily: "var(--font-unifraktur), serif",
+              }}
             >
               FRACTURE
             </Link>
@@ -45,8 +51,8 @@ export function FractureNav() {
                       relative flex items-center gap-2 px-4 py-2 rounded-lg
                       transition-all duration-200 ease-in-out
                       ${isActive
-                        ? "text-cyan-400 bg-white/10"
-                        : "text-zinc-400 hover:text-cyan-300 hover:bg-white/5"
+                        ? "text-cyan-300 bg-white/5 border border-white/10"
+                        : "text-zinc-500 hover:text-zinc-300 hover:bg-white/5"
                       }
                       group
                     `}
@@ -55,21 +61,24 @@ export function FractureNav() {
                     <Icon className="h-5 w-5" />
                     <span className="font-medium">{item.label}</span>
                     {isActive && (
-                      <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-cyan-400 to-fuchsia-500" />
+                      <span className="absolute bottom-0 left-0 w-full h-0.5 bg-cyan-500/50" />
                     )}
                   </Link>
                 );
               })}
             </div>
 
-            {/* AbyssID Button */}
-            <button
-              onClick={() => setShowAbyssID(true)}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-cyan-500/20 to-fuchsia-500/20 border border-cyan-500/30 text-cyan-300 hover:from-cyan-500/30 hover:to-fuchsia-500/30 hover:text-cyan-200 transition-all duration-200"
-            >
-              <Fingerprint className="h-5 w-5" />
-              <span className="hidden sm:inline font-medium">AbyssID</span>
-            </button>
+            {/* Right side: Audio Toggle + AbyssID */}
+            <div className="flex items-center gap-3">
+              <AudioToggle />
+              <button
+                onClick={() => setShowAbyssID(true)}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-zinc-300 hover:bg-white/10 hover:border-cyan-500/30 hover:text-cyan-300 transition-all duration-200"
+              >
+                <Fingerprint className="h-4 w-4" />
+                <span className="hidden sm:inline font-medium text-sm">AbyssID</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -88,8 +97,8 @@ export function FractureNav() {
                     flex flex-col items-center justify-center px-3 py-2 rounded-lg min-w-[60px]
                     transition-all duration-200
                     ${isActive
-                      ? "text-cyan-400 bg-white/10"
-                      : "text-zinc-400"
+                      ? "text-cyan-300 bg-white/5"
+                      : "text-zinc-500"
                     }
                   `}
                   title={item.description}

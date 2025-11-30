@@ -1,33 +1,33 @@
 "use client";
 
-import { useState } from "react";
-import { Volume2, VolumeX } from "lucide-react";
 import { useAudioEngine } from "@/lib/fracture/audio/AudioContextProvider";
+import { useReactiveMotion } from "@/lib/fracture/motion/useReactiveMotion";
 
+/**
+ * AudioToggle
+ * 
+ * Minimal glyph-based toggle for audio reactivity.
+ * Uses :: for active, [] for silent.
+ */
 export function AudioToggle() {
-  const { isPlaying, startAudio, stopAudio } = useAudioEngine();
-  const [isEnabled, setIsEnabled] = useState(false);
-
-  const handleToggle = () => {
-    if (isEnabled) {
-      stopAudio();
-      setIsEnabled(false);
-    } else {
-      startAudio();
-      setIsEnabled(true);
-    }
-  };
+  const { isPlaying, togglePlay } = useAudioEngine();
+  const { glowIntensity } = useReactiveMotion();
 
   return (
     <button
-      onClick={handleToggle}
-      className="fixed bottom-4 right-4 z-50 p-3 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 text-zinc-300 hover:text-cyan-400 hover:border-cyan-500/30 transition-all duration-200"
-      title={isEnabled ? "Disable audio reactivity" : "Enable audio reactivity"}
+      onClick={togglePlay}
+      className="relative px-3 py-1.5 rounded border border-white/10 bg-black/20 backdrop-blur-sm text-zinc-400 hover:text-cyan-300 hover:border-cyan-500/30 transition-all duration-300 text-sm font-mono"
+      title={isPlaying ? "Silent" : "Awake"}
+      style={{
+        boxShadow: isPlaying && glowIntensity > 0
+          ? `0 0 ${8 + glowIntensity * 12}px rgba(6, 182, 212, ${glowIntensity * 0.3})`
+          : "none",
+      }}
     >
-      {isEnabled ? (
-        <Volume2 className="h-5 w-5" />
+      {isPlaying ? (
+        <span className="tracking-wider">::</span>
       ) : (
-        <VolumeX className="h-5 w-5" />
+        <span className="tracking-wider">[]</span>
       )}
     </button>
   );
