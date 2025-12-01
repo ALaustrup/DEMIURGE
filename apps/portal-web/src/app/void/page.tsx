@@ -8,7 +8,7 @@ import { useAbyssID } from "@/lib/fracture/identity/AbyssIDContext";
 import { useState, useEffect } from "react";
 import { graphqlRequest, getChatHeaders, MUTATIONS } from "@/lib/graphql";
 import { motion } from "framer-motion";
-import { devClaimDevNft, getNftsByOwner, isDevBadgeNft, callRpc, normalizeAddressForChain, type NftMetadata } from "@/lib/rpc";
+import { devClaimDevNft, getNftsByOwner, isDevBadgeNft, callRpc, normalizeAddressForChain, type NftMetadata, devCapsuleListByOwner, devCapsuleCreate, devCapsuleUpdateStatus, type DevCapsule, type CapsuleStatus } from "@/lib/rpc";
 
 export default function VoidPage() {
   const { identity, setIdentity } = useAbyssID();
@@ -25,6 +25,15 @@ export default function VoidPage() {
   const [mintError, setMintError] = useState<string | null>(null);
   const [developerProfile, setDeveloperProfile] = useState<any>(null);
   const [projects, setProjects] = useState<Array<{ slug: string; name: string; description: string | null; createdAt: string }>>([]);
+  
+  // Dev Capsules state
+  const [capsules, setCapsules] = useState<DevCapsule[]>([]);
+  const [loadingCapsules, setLoadingCapsules] = useState(false);
+  const [creatingCapsule, setCreatingCapsule] = useState(false);
+  const [showCreateCapsule, setShowCreateCapsule] = useState(false);
+  const [newCapsuleProject, setNewCapsuleProject] = useState("");
+  const [newCapsuleNotes, setNewCapsuleNotes] = useState("");
+  const [capsuleError, setCapsuleError] = useState<string | null>(null);
 
   useEffect(() => {
     if (identity?.address) {
@@ -39,6 +48,7 @@ export default function VoidPage() {
     // Check badge status whenever developer status changes or identity is available
     if (identity?.address && isDeveloper) {
       checkDevBadgeStatus();
+      loadCapsules();
     } else {
       setHasDevBadge(false);
     }
@@ -342,6 +352,76 @@ export default function VoidPage() {
       } else {
         console.error("Failed to load projects:", err);
       }
+    }
+  };
+
+  const loadCapsules = async () => {
+    if (!identity?.address || !isDeveloper) return;
+
+    try {
+      setLoadingCapsules(true);
+      setCapsuleError(null);
+      const normalizedAddr = normalizeAddress(identity.address);
+      const loadedCapsules = await devCapsuleListByOwner(normalizedAddr);
+      setCapsules(loadedCapsules || []);
+    } catch (err: any) {
+      if (err.message?.includes("Connection failed") || err.message?.includes("Unable to reach")) {
+        setCapsuleError("Chain node not available. Dev Capsules require the chain node to be running.");
+      } else {
+        console.error("Failed to load capsules:", err);
+        setCapsuleError("Failed to load Dev Capsules");
+      }
+    } finally {
+      setLoadingCapsules(false);
+    }
+  };
+
+  const handleCreateCapsule = async () => {
+    if (!identity?.address || !newCapsuleProject.trim() || !newCapsuleNotes.trim()) {
+      setCapsuleError("Please select a project and enter notes");
+      return;
+    }
+
+    try {
+      setCreatingCapsule(true);
+      setCapsuleError(null);
+      const normalizedAddr = normalizeAddress(identity.address);
+      await devCapsuleCreate(normalizedAddr, newCapsuleProject.trim(), newCapsuleNotes.trim());
+      setNewCapsuleProject("");
+      setNewCapsuleNotes("");
+      setShowCreateCapsule(false);
+      await loadCapsules();
+    } catch (err: any) {
+      if (err.message?.includes("Connection failed") || err.message?.includes("Unable to reach")) {
+        setCapsuleError("Chain node not available. Cannot create capsule.");
+      } else {
+        setCapsuleError(err.message || "Failed to create capsule");
+      }
+    } finally {
+      setCreatingCapsule(false);
+    }
+  };
+
+  const handleUpdateCapsuleStatus = async (id: number, status: CapsuleStatus) => {
+    try {
+      await devCapsuleUpdateStatus(id, status);
+      await loadCapsules();
+    } catch (err: any) {
+      console.error("Failed to update capsule status:", err);
+      setCapsuleError(err.message || "Failed to update capsule status");
+    }
+  };
+
+  const getStatusColor = (status: CapsuleStatus) => {
+    switch (status) {
+      case "live":
+        return "text-green-400 bg-green-500/20 border-green-500/30";
+      case "paused":
+        return "text-yellow-400 bg-yellow-500/20 border-yellow-500/30";
+      case "archived":
+        return "text-zinc-400 bg-zinc-500/20 border-zinc-500/30";
+      default:
+        return "text-cyan-400 bg-cyan-500/20 border-cyan-500/30";
     }
   };
 
@@ -669,25 +749,154 @@ export default function VoidPage() {
           </motion.div>
         )}
 
-        <div className="grid md:grid-cols-2 gap-6">
-          {/* Dev Capsules */}
-          <div className="p-6 bg-white/5 border border-white/10 rounded-xl">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="p-3 rounded-lg bg-fuchsia-500/20 border border-fuchsia-500/30">
-                <FolderKanban className="h-6 w-6 text-fuchsia-400" />
+        {/* Dev Capsules Section */}
+        {identity && isDeveloper && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="p-6 bg-white/5 border border-white/10 rounded-xl"
+          >
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-4">
+                <div className="p-3 rounded-lg bg-fuchsia-500/20 border border-fuchsia-500/30">
+                  <FolderKanban className="h-6 w-6 text-fuchsia-400" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-zinc-100">
+                    Dev Capsules
+                  </h3>
+                  <p className="text-xs text-zinc-400">
+                    Project-bound execution environments tracked on-chain
+                  </p>
+                </div>
               </div>
-              <h3 className="text-lg font-semibold text-zinc-100">
-                Dev Capsules
-              </h3>
+              {projects.length > 0 && (
+                <button
+                  onClick={() => setShowCreateCapsule(!showCreateCapsule)}
+                  className="px-4 py-2 bg-fuchsia-500/20 border border-fuchsia-500/30 text-fuchsia-300 rounded-lg hover:bg-fuchsia-500/30 transition-all text-sm font-medium flex items-center gap-2"
+                >
+                  <Plus className="h-4 w-4" />
+                  {showCreateCapsule ? "Cancel" : "Create Capsule"}
+                </button>
+              )}
             </div>
-            <p className="text-sm text-zinc-400 mb-4">
-              TODO: Milestone 4.1 – integrate Dev Capsules management interface
-            </p>
-            <p className="text-xs text-zinc-500">
-              Create and manage project-bound execution environments tracked on-chain.
-            </p>
-          </div>
-        </div>
+
+            {capsuleError && (
+              <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                <p className="text-xs text-red-400">{capsuleError}</p>
+              </div>
+            )}
+
+            {/* Create Capsule Form */}
+            {showCreateCapsule && projects.length > 0 && (
+              <div className="mb-6 p-4 bg-black/20 border border-white/10 rounded-lg">
+                <h4 className="text-sm font-semibold text-zinc-300 mb-3">Create New Capsule</h4>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs text-zinc-400 mb-1">Project</label>
+                    <select
+                      value={newCapsuleProject}
+                      onChange={(e) => setNewCapsuleProject(e.target.value)}
+                      className="w-full px-3 py-2 bg-black/20 border border-white/10 rounded-lg text-zinc-100 text-sm outline-none focus:border-fuchsia-500/50"
+                    >
+                      <option value="">Select a project...</option>
+                      {projects.map((project) => (
+                        <option key={project.slug} value={project.slug}>
+                          {project.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs text-zinc-400 mb-1">Notes</label>
+                    <textarea
+                      value={newCapsuleNotes}
+                      onChange={(e) => setNewCapsuleNotes(e.target.value)}
+                      placeholder="Describe the capsule's purpose..."
+                      rows={3}
+                      className="w-full px-3 py-2 bg-black/20 border border-white/10 rounded-lg text-zinc-100 text-sm outline-none focus:border-fuchsia-500/50 resize-none"
+                    />
+                  </div>
+                  <button
+                    onClick={handleCreateCapsule}
+                    disabled={creatingCapsule || !newCapsuleProject.trim() || !newCapsuleNotes.trim()}
+                    className="w-full px-4 py-2 bg-gradient-to-r from-fuchsia-500 to-purple-500 text-white font-semibold rounded-lg hover:from-fuchsia-400 hover:to-purple-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                  >
+                    {creatingCapsule ? "Creating..." : "Create Capsule"}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Capsules List */}
+            {loadingCapsules ? (
+              <div className="text-center py-8">
+                <div className="inline-block animate-spin rounded-full h-6 w-6 border-2 border-fuchsia-400 border-t-transparent"></div>
+                <p className="mt-2 text-xs text-zinc-400">Loading capsules...</p>
+              </div>
+            ) : capsules.length === 0 ? (
+              <div className="text-center py-8">
+                <FolderKanban className="h-12 w-12 text-zinc-600 mx-auto mb-3" />
+                <p className="text-sm text-zinc-400 mb-2">No Dev Capsules yet</p>
+                {projects.length === 0 ? (
+                  <p className="text-xs text-zinc-500">
+                    Create a project first to manage Dev Capsules
+                  </p>
+                ) : (
+                  <p className="text-xs text-zinc-500">
+                    Create your first capsule to track execution environments
+                  </p>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {capsules.map((capsule) => {
+                  const project = projects.find((p) => p.slug === capsule.project_slug);
+                  return (
+                    <div
+                      key={capsule.id}
+                      className="p-4 bg-black/20 border border-white/10 rounded-lg"
+                    >
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-sm font-semibold text-zinc-200">
+                              Capsule #{capsule.id}
+                            </span>
+                            <span className={`px-2 py-0.5 text-[10px] font-semibold rounded-full border ${getStatusColor(capsule.status)}`}>
+                              {capsule.status.toUpperCase()}
+                            </span>
+                          </div>
+                          {project && (
+                            <p className="text-xs text-zinc-400 mb-1">
+                              Project: <span className="text-zinc-300">{project.name}</span>
+                            </p>
+                          )}
+                          {capsule.notes && (
+                            <p className="text-xs text-zinc-400 mt-2">{capsule.notes}</p>
+                          )}
+                        </div>
+                        <select
+                          value={capsule.status}
+                          onChange={(e) => handleUpdateCapsuleStatus(capsule.id, e.target.value as CapsuleStatus)}
+                          className={`px-2 py-1 text-[10px] font-semibold rounded border ${getStatusColor(capsule.status)} bg-transparent outline-none cursor-pointer`}
+                        >
+                          <option value="draft">DRAFT</option>
+                          <option value="live">LIVE</option>
+                          <option value="paused">PAUSED</option>
+                          <option value="archived">ARCHIVED</option>
+                        </select>
+                      </div>
+                      <div className="mt-2 text-[10px] text-zinc-500">
+                        Created: {new Date(capsule.created_at * 1000).toLocaleDateString()}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </motion.div>
+        )}
 
         {/* Recursion Engine */}
         <div className="p-6 bg-white/5 border border-white/10 rounded-xl">
