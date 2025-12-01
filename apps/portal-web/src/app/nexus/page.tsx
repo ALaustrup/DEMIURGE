@@ -4,6 +4,7 @@ import { FractureShell } from "@/components/fracture/FractureShell";
 import { HeroPanel } from "@/components/fracture/HeroPanel";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { MessageSquare, Send, Sparkles, MoreVertical, MessageCircle, VolumeX, Flag, Image as ImageIcon, X, EyeOff, Plus, Settings, Users, Music, Shield, Network, Activity, Upload, Download, Server } from "lucide-react";
+import { FabricTopology } from "@/components/fracture/FabricTopology";
 import {
   graphqlRequest,
   getChatHeaders,
@@ -1000,7 +1001,7 @@ export default function NexusPage() {
                 )}
               </div>
 
-              {/* Network Topology Placeholder */}
+              {/* Network Topology */}
               <div className="p-6 bg-white/5 border border-white/10 rounded-xl">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="p-2 rounded-lg bg-purple-500/20 border border-purple-500/30">
@@ -1008,16 +1009,15 @@ export default function NexusPage() {
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-zinc-100">Fabric Network Topology</h3>
-                    <p className="text-xs text-zinc-400">Visual representation of P2P connections</p>
+                    <p className="text-xs text-zinc-400">Interactive visualization of P2P connections</p>
                   </div>
                 </div>
-                <div className="p-8 bg-black/20 rounded-lg border border-white/10 text-center">
-                  <Network className="h-12 w-12 text-zinc-600 mx-auto mb-3" />
-                  <p className="text-sm text-zinc-400 mb-2">Network Topology Visualization</p>
-                  <p className="text-xs text-zinc-500">
-                    TODO: Milestone 4.1 – integrate Fabric network topology visualization
-                  </p>
+                <div className="p-4 bg-black/20 rounded-lg border border-white/10 min-h-[400px]">
+                  <FabricTopology connectedPeers={p2pStats.connectedPeers} />
                 </div>
+                <p className="text-xs text-zinc-500 mt-3">
+                  Click nodes to view details. Hover to highlight connections.
+                </p>
               </div>
 
               {/* Info Section */}
