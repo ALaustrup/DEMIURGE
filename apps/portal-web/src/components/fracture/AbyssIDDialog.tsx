@@ -8,6 +8,7 @@ import { useAbyssStateMachine } from "./AbyssStateMachine";
 import { ShaderPlane } from "./ShaderPlane";
 import { useAbyssReactive } from "@/lib/fracture/audio/AbyssReactive";
 import { useAbyssID } from "@/lib/fracture/identity/AbyssIDContext";
+import { useAudioEngine } from "@/lib/fracture/audio/AudioContextProvider";
 
 interface AbyssIDDialogProps {
   open: boolean;
@@ -28,8 +29,22 @@ export function AbyssIDDialog({ open, onClose }: AbyssIDDialogProps) {
     confirmAndProceed,
   } = useAbyssStateMachine();
 
+  // Get audio engine for background ambience
+  const { startAudio, isPlaying } = useAudioEngine();
+
   // Get audio-reactive values for shader
   const reactive = useAbyssReactive(state);
+
+  // Start audio when dialog opens (if not already playing)
+  useEffect(() => {
+    if (open && !isPlaying) {
+      // Small delay to ensure dialog is rendered before starting audio
+      const timer = setTimeout(() => {
+        startAudio();
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [open, isPlaying, startAudio]);
 
   // Reset state when dialog closes
   useEffect(() => {
