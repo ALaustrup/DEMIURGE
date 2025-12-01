@@ -4,6 +4,12 @@ import { NavbarWrapper } from "@/components/layout/NavbarWrapper";
 import { ServiceWorkerRegistration } from "@/components/pwa/ServiceWorkerRegistration";
 import { AudioContextProvider } from "@/lib/fracture/audio/AudioContextProvider";
 import { AbyssIDProvider } from "@/lib/fracture/identity/AbyssIDContext";
+import { RitualContextProvider } from "@/lib/rituals/RitualContextProvider";
+import { ArchonContextProvider } from "@/lib/archon/ArchonContextProvider";
+import { GenesisContextProvider } from "@/lib/genesis/GenesisContextProvider";
+import { GENESIS_CONFIG } from "@/config/genesis";
+import { OperatorContextProvider } from "@/lib/operator/OperatorContextProvider";
+import { FabricServiceProvider } from "@/lib/fabric/FabricServiceSelector";
 import { Bebas_Neue, Oswald, Rajdhani } from "next/font/google";
 
 const bebasNeue = Bebas_Neue({
@@ -70,9 +76,25 @@ export default function RootLayout({
         <ServiceWorkerRegistration />
         <AbyssIDProvider>
           <AudioContextProvider>
-            <NavbarWrapper>
-              {children}
-            </NavbarWrapper>
+            <OperatorContextProvider>
+              <FabricServiceProvider>
+                <RitualContextProvider>
+                  <ArchonContextProvider>
+                    {GENESIS_CONFIG.enabled ? (
+                      <GenesisContextProvider>
+                        <NavbarWrapper>
+                          {children}
+                        </NavbarWrapper>
+                      </GenesisContextProvider>
+                    ) : (
+                      <NavbarWrapper>
+                        {children}
+                      </NavbarWrapper>
+                    )}
+                  </ArchonContextProvider>
+                </RitualContextProvider>
+              </FabricServiceProvider>
+            </OperatorContextProvider>
           </AudioContextProvider>
         </AbyssIDProvider>
       </body>

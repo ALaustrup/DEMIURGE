@@ -6,6 +6,7 @@ import { Sparkles, MessageSquare, Zap, BookOpen, Send, Loader2, X } from "lucide
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAbyssID } from "@/lib/fracture/identity/AbyssIDContext";
+import { ArchonProposalPanel } from "@/components/archon/ArchonProposalPanel";
 
 interface Message {
   id: string;
@@ -274,6 +275,9 @@ export default function ConspirePage() {
           </div>
         </div>
 
+        {/* ArchonAI Proposals */}
+        <ArchonProposalPanel />
+
         {/* Info Section */}
         <div className="p-6 bg-gradient-to-r from-cyan-500/10 to-fuchsia-500/10 border border-cyan-500/20 rounded-xl">
           <h3 className="text-lg font-semibold text-zinc-100 mb-2">
@@ -284,9 +288,6 @@ export default function ConspirePage() {
             Use it to get help with development tasks, understand documentation, explore creation workflows,
             and receive guidance on building within the Demiurge ecosystem. This is where human creativity
             meets artificial intelligence in service of sovereign creation.
-          </p>
-          <p className="text-xs text-zinc-500 mt-3">
-            Note: ArchonAI backend integration is pending. Currently showing placeholder responses.
           </p>
         </div>
       </div>

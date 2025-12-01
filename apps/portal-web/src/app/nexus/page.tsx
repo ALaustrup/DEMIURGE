@@ -5,6 +5,12 @@ import { HeroPanel } from "@/components/fracture/HeroPanel";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { MessageSquare, Send, Sparkles, MoreVertical, MessageCircle, VolumeX, Flag, Image as ImageIcon, X, EyeOff, Plus, Settings, Users, Music, Shield, Network, Activity, Upload, Download, Server } from "lucide-react";
 import { FabricTopology } from "@/components/fracture/FabricTopology";
+import { HealthPanel } from "@/components/observability/HealthPanel";
+import { useRitual } from "@/lib/rituals/RitualContextProvider";
+import { GENESIS_CONFIG } from "@/config/genesis";
+import { useGenesis } from "@/lib/genesis/GenesisContextProvider";
+import { useFabricService } from "@/lib/fabric/FabricServiceSelector";
+import { OpsLogView } from "@/components/ops/OpsLogView";
 import {
   graphqlRequest,
   getChatHeaders,
@@ -31,10 +37,24 @@ interface ContextMenu {
   message: ChatMessage;
 }
 
-type NexusTab = "chat" | "analytics";
+type NexusTab = "chat" | "analytics" | "ops";
 
 export default function NexusPage() {
   const { identity } = useAbyssID();
+  const { fabricRitualEffects } = useRitual();
+  
+  // Use FabricServiceProvider for unified Fabric data
+  const fabricService = useFabricService();
+  
+  // Genesis mode: use synthetic Fabric data (fallback)
+  let genesisContext: ReturnType<typeof useGenesis> | null = null;
+  try {
+    if (GENESIS_CONFIG.enabled) {
+      genesisContext = useGenesis();
+    }
+  } catch {
+    // Genesis context not available
+  }
   const [activeTab, setActiveTab] = useState<NexusTab>("chat");
   const [currentAddress, setCurrentAddress] = useState<string>("");
   const [currentUsername, setCurrentUsername] = useState<string>("");
@@ -860,6 +880,19 @@ export default function NexusPage() {
             P2P Analytics
           </div>
         </button>
+        <button
+          onClick={() => setActiveTab("ops")}
+          className={`px-6 py-3 font-semibold transition-all ${
+            activeTab === "ops"
+              ? "border-b-2 border-cyan-500 text-cyan-300"
+              : "text-zinc-400 hover:text-zinc-200"
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            <Activity className="h-4 w-4" />
+            Ops Log
+          </div>
+        </button>
       </div>
 
       {/* P2P Analytics View */}
@@ -1001,6 +1034,9 @@ export default function NexusPage() {
                 )}
               </div>
 
+              {/* Health Panel */}
+              <HealthPanel />
+
               {/* Network Topology */}
               <div className="p-6 bg-white/5 border border-white/10 rounded-xl">
                 <div className="flex items-center gap-3 mb-4">
@@ -1013,7 +1049,12 @@ export default function NexusPage() {
                   </div>
                 </div>
                 <div className="p-4 bg-black/20 rounded-lg border border-white/10 min-h-[400px]">
-                  <FabricTopology connectedPeers={p2pStats.connectedPeers} />
+                  <FabricTopology 
+                    connectedPeers={fabricService.state.nodes.length || genesisContext?.fabricState?.nodes.length || p2pStats.connectedPeers}
+                    ritualEffects={fabricRitualEffects || undefined}
+                    genesisNodes={fabricService.state.nodes.length > 0 ? fabricService.state.nodes : genesisContext?.fabricState?.nodes}
+                    genesisEdges={fabricService.state.edges.length > 0 ? fabricService.state.edges : genesisContext?.fabricState?.edges}
+                  />
                 </div>
                 <p className="text-xs text-zinc-500 mt-3">
                   Click nodes to view details. Hover to highlight connections.
@@ -1033,6 +1074,17 @@ export default function NexusPage() {
               </div>
             </>
           )}
+        </div>
+      )}
+
+      {/* Ops Log View */}
+      {activeTab === "ops" && (
+        <div className="space-y-6">
+          <HeroPanel
+            title="Operations Log"
+            subtitle="System events, ArchonAI actions, and operator activities"
+          />
+          <OpsLogView />
         </div>
       )}
 

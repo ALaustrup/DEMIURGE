@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { AbyssState } from "./AbyssStateMachine";
+import type { RitualEffects } from "@/lib/rituals/ritualTypes";
 
 interface ShaderPlaneProps {
   state: AbyssState;
@@ -15,6 +16,8 @@ interface ShaderPlaneProps {
     pulseEvent?: boolean;
     silenceDecay?: number;
   };
+  // Ritual effects (optional - overrides state-based params if provided)
+  ritualEffects?: RitualEffects;
 }
 
 /**
@@ -25,7 +28,7 @@ interface ShaderPlaneProps {
  * 
  * Upgraded from Canvas 2D to WebGL for true fragment shader effects.
  */
-export function ShaderPlane({ state, className = "", reactive }: ShaderPlaneProps) {
+export function ShaderPlane({ state, className = "", reactive, ritualEffects }: ShaderPlaneProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const glRef = useRef<WebGLRenderingContext | null>(null);
   const programRef = useRef<WebGLProgram | null>(null);
@@ -287,6 +290,16 @@ export function ShaderPlane({ state, className = "", reactive }: ShaderPlaneProp
             bloom: 0,
             vignette: 0,
           };
+      }
+
+      // Apply ritual effects if provided (overrides state-based params)
+      if (ritualEffects?.shaderUniforms) {
+        const ritual = ritualEffects.shaderUniforms;
+        if (ritual.turbulence !== undefined) baseParams.turbulence = ritual.turbulence;
+        if (ritual.chromaShift !== undefined) baseParams.chromaShift = ritual.chromaShift;
+        if (ritual.glitchAmount !== undefined) baseParams.glitch = ritual.glitchAmount;
+        if (ritual.bloomIntensity !== undefined) baseParams.bloom = ritual.bloomIntensity;
+        if (ritual.vignetteIntensity !== undefined) baseParams.vignette = ritual.vignetteIntensity;
       }
 
       // Apply audio-reactive modifications if provided

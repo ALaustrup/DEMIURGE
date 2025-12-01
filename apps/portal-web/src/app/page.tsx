@@ -2,6 +2,7 @@
 
 import { FractureShell } from "@/components/fracture/FractureShell";
 import { HeroPanel } from "@/components/fracture/HeroPanel";
+import { GenesisOnboarding } from "@/components/genesis/GenesisOnboarding";
 
 /**
  * Fracture Landing Page
@@ -15,7 +16,9 @@ import { HeroPanel } from "@/components/fracture/HeroPanel";
  */
 export default function HomePage() {
   return (
-    <FractureShell>
+    <>
+      <GenesisOnboarding />
+      <FractureShell>
       <div className="flex flex-col items-center justify-center min-h-[80vh] py-12">
         <HeroPanel 
           showCTAs={true}
@@ -44,5 +47,6 @@ export default function HomePage() {
         </div>
       </div>
     </FractureShell>
+    </>
   );
 }

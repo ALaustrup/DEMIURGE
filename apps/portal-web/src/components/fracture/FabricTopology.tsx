@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Network, Activity } from "lucide-react";
+import type { FabricRitualEffects } from "@/lib/rituals/RitualContextProvider";
+import type { GenesisNode, GenesisEdge } from "@/lib/genesis/GenesisFabricService";
 
 interface NetworkNode {
   id: string;
@@ -20,10 +22,14 @@ interface NetworkEdge {
   strength: number;
   active: boolean;
 }
+import type { GenesisNode, GenesisEdge } from "@/lib/genesis/GenesisFabricService";
 
 interface FabricTopologyProps {
   connectedPeers?: number;
   className?: string;
+  ritualEffects?: FabricRitualEffects;
+  genesisNodes?: GenesisNode[];
+  genesisEdges?: GenesisEdge[];
 }
 
 /**
@@ -32,7 +38,7 @@ interface FabricTopologyProps {
  * Interactive network topology visualization showing P2P node connections.
  * Displays nodes (peers) and edges (connections) with real-time updates.
  */
-export function FabricTopology({ connectedPeers = 0, className = "" }: FabricTopologyProps) {
+export function FabricTopology({ connectedPeers = 0, className = "", ritualEffects, genesisNodes, genesisEdges }: FabricTopologyProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameRef = useRef<number | null>(null);
   const [nodes, setNodes] = useState<NetworkNode[]>([]);
@@ -41,8 +47,31 @@ export function FabricTopology({ connectedPeers = 0, className = "" }: FabricTop
   const [selectedNode, setSelectedNode] = useState<string | null>(null);
   const timeRef = useRef(0);
 
-  // Generate mock network data (replace with real API data)
+  // Use Genesis data if provided, otherwise generate mock data
   useEffect(() => {
+    if (genesisNodes && genesisEdges) {
+      // Convert Genesis nodes/edges to NetworkNode/NetworkEdge format
+      const convertedNodes: NetworkNode[] = genesisNodes.map((n) => ({
+        id: n.id,
+        x: n.x,
+        y: n.y,
+        address: n.address,
+        isActive: n.isActive,
+        bandwidth: n.bandwidth,
+        latency: n.latency,
+      }));
+      const convertedEdges: NetworkEdge[] = genesisEdges.map((e) => ({
+        from: e.from,
+        to: e.to,
+        strength: e.strength,
+        active: e.active,
+      }));
+      setNodes(convertedNodes);
+      setEdges(convertedEdges);
+      return;
+    }
+
+    // Generate mock network data (replace with real API data)
     if (connectedPeers === 0) {
       setNodes([]);
       setEdges([]);
@@ -98,7 +127,7 @@ export function FabricTopology({ connectedPeers = 0, className = "" }: FabricTop
 
     setNodes(newNodes);
     setEdges(newEdges);
-  }, [connectedPeers]);
+  }, [connectedPeers, genesisNodes, genesisEdges]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -125,6 +154,11 @@ export function FabricTopology({ connectedPeers = 0, className = "" }: FabricTop
       ctx.fillStyle = "#000000";
       ctx.fillRect(0, 0, width, height);
 
+      // Apply ritual effects
+      const pulseSpeed = ritualEffects?.pulseSpeed || 1.0;
+      const edgePulse = ritualEffects?.edgePulse ?? false;
+      const glowIntensity = ritualEffects?.glowIntensity ?? 0.0;
+
       // Draw edges
       edges.forEach((edge) => {
         const fromNode = nodes.find((n) => n.id === edge.from);
@@ -136,8 +170,13 @@ export function FabricTopology({ connectedPeers = 0, className = "" }: FabricTop
         const x2 = toNode.x * width;
         const y2 = toNode.y * height;
 
-        // Animate active connections
-        const alpha = edge.active ? 0.3 + Math.sin(timeRef.current * 2) * 0.1 : 0.1;
+        // Animate active connections with ritual pulse if enabled
+        const baseAlpha = edge.active ? 0.3 : 0.1;
+        const pulseAlpha = edgePulse && edge.active
+          ? Math.sin(timeRef.current * 2 * pulseSpeed) * 0.2
+          : 0;
+        const alpha = baseAlpha + pulseAlpha;
+        
         ctx.strokeStyle = edge.active
           ? `rgba(139, 92, 246, ${alpha})`
           : `rgba(100, 100, 100, ${alpha})`;
@@ -154,11 +193,25 @@ export function FabricTopology({ connectedPeers = 0, className = "" }: FabricTop
         const y = node.y * height;
         const isHovered = hoveredNode === node.id;
         const isSelected = selectedNode === node.id;
+        const isHighlighted = ritualEffects?.highlightNodes?.includes(node.id) ?? false;
+        const shouldGlow = ritualEffects?.nodeGlow ?? false;
 
-        // Node glow
-        if (isHovered || isSelected) {
+        // Ritual-based node glow
+        if (shouldGlow && node.isActive) {
+          const gradient = ctx.createRadialGradient(x, y, 0, x, y, 25);
+          const glowAlpha = 0.2 + Math.sin(timeRef.current * pulseSpeed * 2) * 0.1;
+          gradient.addColorStop(0, `rgba(139, 92, 246, ${glowAlpha * glowIntensity})`);
+          gradient.addColorStop(0.5, `rgba(139, 92, 246, ${glowAlpha * glowIntensity * 0.5})`);
+          gradient.addColorStop(1, "transparent");
+          ctx.fillStyle = gradient;
+          ctx.fillRect(x - 25, y - 25, 50, 50);
+        }
+
+        // Node glow (hover/select)
+        if (isHovered || isSelected || isHighlighted) {
           const gradient = ctx.createRadialGradient(x, y, 0, x, y, 20);
-          gradient.addColorStop(0, isSelected ? "rgba(139, 92, 246, 0.5)" : "rgba(139, 92, 246, 0.3)");
+          const baseAlpha = isSelected ? 0.5 : isHighlighted ? 0.4 : 0.3;
+          gradient.addColorStop(0, `rgba(139, 92, 246, ${baseAlpha})`);
           gradient.addColorStop(1, "transparent");
           ctx.fillStyle = gradient;
           ctx.fillRect(x - 20, y - 20, 40, 40);
@@ -167,20 +220,23 @@ export function FabricTopology({ connectedPeers = 0, className = "" }: FabricTop
         // Node circle
         ctx.beginPath();
         ctx.arc(x, y, node.isActive ? 8 : 6, 0, Math.PI * 2);
-        ctx.fillStyle = node.isActive
+        const nodeColor = isHighlighted
+          ? "#fbbf24" // Yellow for highlighted
+          : node.isActive
           ? isSelected
             ? "#8b5cf6"
             : isHovered
             ? "#a78bfa"
             : "#6366f1"
           : "#4b5563";
+        ctx.fillStyle = nodeColor;
         ctx.fill();
 
-        // Active pulse
+        // Active pulse (with ritual speed modifier)
         if (node.isActive) {
           ctx.beginPath();
-          ctx.arc(x, y, 8 + Math.sin(timeRef.current * 3 + node.id.charCodeAt(0)) * 2, 0, Math.PI * 2);
-          ctx.strokeStyle = `rgba(139, 92, 246, ${0.3 + Math.sin(timeRef.current * 3) * 0.2})`;
+          ctx.arc(x, y, 8 + Math.sin(timeRef.current * 3 * pulseSpeed + node.id.charCodeAt(0)) * 2, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(139, 92, 246, ${0.3 + Math.sin(timeRef.current * 3 * pulseSpeed) * 0.2})`;
           ctx.lineWidth = 1;
           ctx.stroke();
         }

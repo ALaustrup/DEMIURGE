@@ -6,6 +6,8 @@ import { Home, Code, Network, BookOpen, Sparkles, Fingerprint } from "lucide-rea
 import { useState } from "react";
 import { AbyssIDDialog } from "./AbyssIDDialog";
 import { AudioToggle } from "./AudioToggle";
+import { GENESIS_CONFIG } from "@/config/genesis";
+import { useOperator } from "@/lib/operator/OperatorContextProvider";
 
 const navItems = [
   { href: "/haven", label: "Haven", icon: Home, description: "User home & profile" },
@@ -18,6 +20,7 @@ const navItems = [
 export function FractureNav() {
   const pathname = usePathname();
   const [showAbyssID, setShowAbyssID] = useState(false);
+  const { operator } = useOperator();
 
   return (
     <>
@@ -68,8 +71,22 @@ export function FractureNav() {
               })}
             </div>
 
-            {/* Right side: Audio Toggle + AbyssID */}
+            {/* Right side: Operator Role + Genesis Mode Indicator + Audio Toggle + AbyssID */}
             <div className="flex items-center gap-3">
+              {operator && (
+                <span className={`text-xs font-medium ${
+                  operator.role === "OBSERVER" ? "text-gray-400" :
+                  operator.role === "OPERATOR" ? "text-blue-400" :
+                  "text-purple-400"
+                }`}>
+                  {operator.role}
+                </span>
+              )}
+              {GENESIS_CONFIG.enabled && (
+                <span className="px-2 py-1 rounded bg-gradient-to-r from-purple-500/20 to-cyan-500/20 border border-purple-500/30 text-purple-300 text-xs font-medium">
+                  GENESIS MODE
+                </span>
+              )}
               <AudioToggle />
               <button
                 onClick={() => setShowAbyssID(true)}

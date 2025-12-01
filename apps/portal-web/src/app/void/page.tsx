@@ -9,6 +9,9 @@ import { useState, useEffect } from "react";
 import { graphqlRequest, getChatHeaders, MUTATIONS } from "@/lib/graphql";
 import { motion } from "framer-motion";
 import { devClaimDevNft, getNftsByOwner, isDevBadgeNft, callRpc, normalizeAddressForChain, type NftMetadata, devCapsuleListByOwner, devCapsuleCreate, devCapsuleUpdateStatus, type DevCapsule, type CapsuleStatus } from "@/lib/rpc";
+import { RitualControlPanel } from "@/components/rituals/RitualControlPanel";
+import { ShaderPlane } from "@/components/fracture/ShaderPlane";
+import { useRitual } from "@/lib/rituals/RitualContextProvider";
 
 export default function VoidPage() {
   const { identity, setIdentity } = useAbyssID();
@@ -897,6 +900,20 @@ export default function VoidPage() {
             )}
           </motion.div>
         )}
+
+        {/* Ritual Engine */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div>
+            <RitualControlPanel />
+          </div>
+          <div className="relative rounded-lg overflow-hidden border border-white/10" style={{ minHeight: "300px" }}>
+            <ShaderPlane
+              state="idle"
+              ritualEffects={effects || undefined}
+              className="absolute inset-0"
+            />
+          </div>
+        </div>
 
         {/* Recursion Engine */}
         <div className="p-6 bg-white/5 border border-white/10 rounded-xl">
