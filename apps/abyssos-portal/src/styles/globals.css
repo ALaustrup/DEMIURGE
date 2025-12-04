@@ -6,9 +6,32 @@
   body {
     @apply bg-abyss-dark text-white overflow-hidden;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    /* Prevent mobile address bar collapse issues */
+    height: 100dvh;
+    min-height: 100vh;
+    position: fixed;
+    width: 100%;
+    overscroll-behavior: none;
   }
   #root {
-    @apply w-screen h-screen;
+    @apply w-screen;
+    height: 100dvh;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+  
+  /* Mobile optimizations */
+  @media (max-width: 768px) {
+    body {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      user-select: none;
+    }
+    
+    /* Ensure smooth scrolling on mobile */
+    * {
+      -webkit-overflow-scrolling: touch;
+    }
   }
 }
 
@@ -64,6 +87,42 @@
     60% { clip: rect(12px, 9999px, 79px, 0); }
     80% { clip: rect(52px, 9999px, 97px, 0); }
     100% { clip: rect(18px, 9999px, 83px, 0); }
+  }
+
+  .abyss-pill {
+    @apply flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-medium backdrop-blur-sm border;
+  }
+
+  .abyss-pill--connecting {
+    @apply bg-abyss-navy/40 border-abyss-cyan/30 text-gray-300;
+  }
+
+  .abyss-pill--online {
+    @apply bg-green-500/20 border-green-400/50 text-green-300;
+  }
+
+  .abyss-pill--offline {
+    @apply bg-red-500/20 border-red-400/50 text-red-300;
+  }
+
+  .abyss-pill-dot {
+    @apply w-2 h-2 rounded-full;
+  }
+
+  .abyss-pill--connecting .abyss-pill-dot {
+    @apply bg-abyss-cyan animate-pulse;
+  }
+
+  .abyss-pill--online .abyss-pill-dot {
+    @apply bg-green-400;
+  }
+
+  .abyss-pill--offline .abyss-pill-dot {
+    @apply bg-red-400;
+  }
+
+  .abyss-pill-text {
+    @apply text-xs;
   }
 }
 

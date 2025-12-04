@@ -7,7 +7,13 @@ interface FullscreenContainerProps {
 
 export function FullscreenContainer({ children, className = '' }: FullscreenContainerProps) {
   return (
-    <div className={`w-screen h-screen overflow-hidden ${className}`}>
+    <div 
+      className={`w-screen overflow-hidden ${className}`}
+      style={{
+        height: '100dvh', // Dynamic viewport height for mobile
+        minHeight: '100vh', // Fallback for older browsers
+      }}
+    >
       {children}
     </div>
   );

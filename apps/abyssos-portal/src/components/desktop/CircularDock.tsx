@@ -6,6 +6,9 @@ const apps = [
   { id: 'chainOps' as const, label: 'Chain Ops', icon: '⚡' },
   { id: 'miner' as const, label: 'Miner', icon: '🔷' },
   { id: 'wallet' as const, label: 'Wallet', icon: '💎' },
+  { id: 'abyssBrowser' as const, label: 'Browser', icon: '🌐' },
+  { id: 'abyssTorrent' as const, label: 'Torrent', icon: '📤' },
+  { id: 'onChainFiles' as const, label: 'Files', icon: '📁' },
 ];
 
 export function CircularDock() {

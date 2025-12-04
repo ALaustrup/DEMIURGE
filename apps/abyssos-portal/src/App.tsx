@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuthStore } from './state/authStore';
+import { AbyssIDProvider } from './context/AbyssIDContext';
+import { ThemeProvider } from './context/ThemeContext';
 import { BootScreen } from './routes/BootScreen';
 import { LoginScreen } from './routes/LoginScreen';
 import { Desktop } from './routes/Desktop';
@@ -43,14 +45,32 @@ function App() {
   }
 
   if (showBoot && screen === 'boot') {
-    return <BootScreen onComplete={handleBootComplete} />;
+    return (
+      <ThemeProvider>
+        <AbyssIDProvider>
+          <BootScreen onComplete={handleBootComplete} />
+        </AbyssIDProvider>
+      </ThemeProvider>
+    );
   }
 
   if (screen === 'login') {
-    return <LoginScreen onLogin={handleLogin} />;
+    return (
+      <ThemeProvider>
+        <AbyssIDProvider>
+          <LoginScreen onLogin={handleLogin} />
+        </AbyssIDProvider>
+      </ThemeProvider>
+    );
   }
 
-  return <Desktop />;
+  return (
+    <ThemeProvider>
+      <AbyssIDProvider>
+        <Desktop />
+      </AbyssIDProvider>
+    </ThemeProvider>
+  );
 }
 
 export default App;

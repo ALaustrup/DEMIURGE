@@ -239,11 +239,15 @@ export default function HavenPage() {
 
 
   // Resolve recipient (username or address)
-  const resolveRecipient = async (input: string) => {
+  const resolveRecipient = async (input: string): Promise<{
+    address: string;
+    username?: string;
+    isDeveloper: boolean;
+  } | null> => {
     if (!input.trim()) {
       setResolvedRecipient(null);
       setRecipientError(null);
-      return;
+      return null;
     }
 
     const trimmed = input.trim();
@@ -276,9 +280,10 @@ export default function HavenPage() {
       } catch (err) {
         // Silently fail - not a developer
       }
-      setResolvedRecipient({ address: normalizedAddr, isDeveloper: isDev });
+      const recipient = { address: normalizedAddr, isDeveloper: isDev };
+      setResolvedRecipient(recipient);
       setRecipientError(null);
-      return;
+      return recipient;
     }
 
     // Check if it's a username (starts with @)
@@ -311,20 +316,25 @@ export default function HavenPage() {
           } catch (err) {
             // Silently fail - not a developer
           }
-          setResolvedRecipient({ address: resolved.address, username, isDeveloper: isDev });
+          const recipient = { address: resolved.address, username, isDeveloper: isDev };
+          setResolvedRecipient(recipient);
+          return recipient;
         } else {
           setRecipientError("Username not found");
           setResolvedRecipient(null);
+          return null;
         }
       } catch (err: any) {
         setRecipientError(err.message || "Failed to resolve username");
         setResolvedRecipient(null);
+        return null;
       } finally {
         setResolvingRecipient(false);
       }
     } else {
       setRecipientError("Invalid format. Use @username or a 64-character address");
       setResolvedRecipient(null);
+      return null;
     }
   };
 
@@ -336,8 +346,7 @@ export default function HavenPage() {
 
     let recipient = resolvedRecipient;
     if (!recipient) {
-      await resolveRecipient(sendTo);
-      recipient = resolvedRecipient;
+      recipient = await resolveRecipient(sendTo);
       if (!recipient) {
         setSendStatus("Please enter a valid recipient (username or address)");
         return;
