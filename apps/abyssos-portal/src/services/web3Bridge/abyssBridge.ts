@@ -96,7 +96,7 @@ export class AbyssBridge {
 
     // Send response back to iframe
     if (event.source && 'postMessage' in event.source) {
-      (event.source as Window).postMessage(response, { targetOrigin: event.origin });
+      (event.source as Window).postMessage(response, event.origin);
     }
   }
 

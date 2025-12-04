@@ -32,8 +32,11 @@ function generateSecret(): string {
 
 export const abyssIdClient = {
   async signup(username: string): Promise<AbyssAccount> {
+    // Normalize username to lowercase for consistent storage
+    const normalizedUsername = username.toLowerCase();
+
     // Check if username is taken
-    if (username.toLowerCase() === 'taken') {
+    if (normalizedUsername === 'taken') {
       throw new Error('Username is already taken');
     }
 
@@ -42,14 +45,14 @@ export const abyssIdClient = {
     const publicKey = derivePublicKey(secret);
 
     const account: AbyssAccount = {
-      username,
+      username, // Store original case for display
       publicKey,
       abyssIdSecret: secret,
     };
 
-    // Store account
+    // Store account with normalized (lowercase) key
     const accounts = this.getAllAccounts();
-    accounts[username] = account;
+    accounts[normalizedUsername] = account;
     localStorage.setItem(STORAGE_KEY_ACCOUNTS, JSON.stringify(accounts));
 
     // Auto-login
@@ -59,8 +62,10 @@ export const abyssIdClient = {
   },
 
   async login(username: string, publicKey: string): Promise<AbyssAccount | null> {
+    // Normalize username to lowercase for consistent lookup
+    const normalizedUsername = username.toLowerCase();
     const accounts = this.getAllAccounts();
-    const account = accounts[username];
+    const account = accounts[normalizedUsername];
 
     if (!account) {
       return null;
@@ -107,8 +112,10 @@ export const abyssIdClient = {
   },
 
   checkUsernameAvailability(username: string): boolean {
+    // Normalize username to lowercase for consistent checking
+    const normalizedUsername = username.toLowerCase();
     const accounts = this.getAllAccounts();
-    return !accounts[username.toLowerCase()];
+    return !accounts[normalizedUsername];
   },
 };
 
