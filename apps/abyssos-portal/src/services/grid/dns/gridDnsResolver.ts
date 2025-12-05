@@ -43,7 +43,6 @@ class GridDNSResolver {
       
       // Broadcast query to all peers
       const localPeerId = getLocalPeerId();
-      const { peerDiscovery } = await import('../discovery');
       for (const peer of peers.slice(0, 3)) { // Query up to 3 peers
         peerDiscovery.sendMessage(peer.peerId, {
           type: 'DNS_QUERY',
