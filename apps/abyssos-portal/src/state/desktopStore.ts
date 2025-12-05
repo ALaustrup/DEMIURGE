@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
-export type AppId = 'chainOps' | 'miner' | 'wallet' | 'abyssBrowser' | 'abyssTorrent' | 'onChainFiles';
+export type AppId = 'chainOps' | 'miner' | 'wallet' | 'abyssBrowser' | 'abyssTorrent' | 'onChainFiles' | 'drc369Studio' | 'blockExplorer' | 'abyssShell' | 'abyssRuntime' | 'systemMonitor' | 'abyssGridMonitor' | 'abyssSpiritConsole' | 'cogFabricConsole' | 'cogSingularity' | 'genesisConsole' | 'temporalObservatory' | 'dnsConsole' | 'aweConsole' | 'aweAtlas';
 
 export interface Window {
   id: string;
@@ -26,6 +26,20 @@ export const APP_INFOS: AppInfo[] = [
   { id: 'abyssBrowser', label: 'Browser', icon: '🌐' },
   { id: 'abyssTorrent', label: 'Torrent', icon: '📤' },
   { id: 'onChainFiles', label: 'Files', icon: '📁' },
+  { id: 'drc369Studio', label: 'DRC-369 Studio', icon: '🎨' },
+  { id: 'blockExplorer', label: 'Explorer', icon: '🔍' },
+  { id: 'abyssShell', label: 'Shell', icon: '💻' },
+  { id: 'abyssRuntime', label: 'Runtime', icon: '⚙️' },
+  { id: 'systemMonitor', label: 'Monitor', icon: '📊' },
+  { id: 'abyssGridMonitor', label: 'Grid', icon: '🌐' },
+  { id: 'abyssSpiritConsole', label: 'Spirits', icon: '👻' },
+  { id: 'cogFabricConsole', label: 'Cognition', icon: '🧠' },
+  { id: 'cogSingularity', label: 'Singularity', icon: '🌀' },
+  { id: 'genesisConsole', label: 'Genesis', icon: '🌱' },
+  { id: 'temporalObservatory', label: 'Time', icon: '⏳' },
+  { id: 'dnsConsole', label: 'DNS', icon: '🌐' },
+  { id: 'aweConsole', label: 'AWE', icon: '🌍' },
+  { id: 'aweAtlas', label: 'Atlas', icon: '🗺️' },
 ];
 
 interface DesktopState {
@@ -42,10 +56,24 @@ interface DesktopState {
 const appTitles: Record<AppId, string> = {
   chainOps: 'Chain Ops',
   miner: 'Mandelbrot Miner',
-  wallet: 'Accounts / Wallet',
+  wallet: 'AbyssID Wallet',
   abyssBrowser: 'AbyssBrowser',
   abyssTorrent: 'AbyssTorrent',
   onChainFiles: 'OnChain Files',
+  drc369Studio: 'DRC-369 Studio',
+  blockExplorer: 'Block Explorer',
+  abyssShell: 'AbyssOS Shell',
+  abyssRuntime: 'Abyss Runtime',
+  systemMonitor: 'System Monitor',
+  abyssGridMonitor: 'Abyss Grid Monitor',
+  abyssSpiritConsole: 'Abyss Spirit Console',
+  cogFabricConsole: 'Cognitive Fabric Console',
+  cogSingularity: 'Cognitive Singularity Console',
+  genesisConsole: 'Genesis Console',
+  temporalObservatory: 'Temporal Observatory',
+  dnsConsole: 'Abyss DNS Console',
+  aweConsole: 'AWE Console',
+  aweAtlas: 'World Atlas',
 };
 
 // Default launcher order

@@ -7,8 +7,9 @@
 
 export interface AbyssRequest {
   type: 'ABYSS_REQUEST';
-  action: 'IDENTITY' | 'SIGN_MESSAGE' | 'CHAIN_STATUS';
+  action: 'IDENTITY' | 'SIGN_MESSAGE' | 'CHAIN_STATUS' | 'REQUEST_PERMISSIONS' | 'SEND_TRANSACTION' | 'GET_DRC369_OWNED' | 'MINT_DRC369';
   payload?: any;
+  requestId?: number | string;
 }
 
 export interface AbyssResponse {
@@ -17,6 +18,7 @@ export interface AbyssResponse {
   payload?: any;
   error?: string;
   devMode?: boolean;
+  requestId?: number | string;
 }
 
 export interface AbyssIdentity {
@@ -77,7 +79,19 @@ export class AbyssBridge {
           response = await this.handleSignMessageRequest(request.payload);
           break;
         case 'CHAIN_STATUS':
-          response = await this.handleChainStatusRequest();
+          response = this.handleChainStatusRequest();
+          break;
+        case 'REQUEST_PERMISSIONS':
+          response = await this.handleRequestPermissions(event.origin, request.payload);
+          break;
+        case 'SEND_TRANSACTION':
+          response = await this.handleSendTransaction(request.payload);
+          break;
+        case 'GET_DRC369_OWNED':
+          response = await this.handleGetDrc369Owned();
+          break;
+        case 'MINT_DRC369':
+          response = await this.handleMintDrc369(request.payload);
           break;
         default:
           response = {
@@ -93,6 +107,9 @@ export class AbyssBridge {
         error: error instanceof Error ? error.message : 'Unknown error',
       };
     }
+
+    // Include requestId in response
+    response.requestId = request.requestId;
 
     // Send response back to iframe
     if (event.source && 'postMessage' in event.source) {
@@ -169,6 +186,129 @@ export class AbyssBridge {
     };
   }
 
+  private async handleRequestPermissions(origin: string, payload: any): Promise<AbyssResponse> {
+    const { permissions } = payload || {};
+    
+    // Import permissions system
+    const { grantPermissions, hasPermission, extractDomain } = await import('./permissions');
+    const domain = extractDomain(origin);
+    
+    // Check if already has permissions
+    const hasAll = Array.isArray(permissions) && permissions.every((p: string) => hasPermission(domain, p as any));
+    
+    if (hasAll) {
+      return {
+        type: 'ABYSS_RESPONSE',
+        action: 'REQUEST_PERMISSIONS',
+        payload: { granted: true, permissions },
+      };
+    }
+    
+    // In a real implementation, show a permission modal
+    // For now, auto-grant in dev mode
+    if (Array.isArray(permissions)) {
+      grantPermissions(domain, permissions);
+    }
+    
+    return {
+      type: 'ABYSS_RESPONSE',
+      action: 'REQUEST_PERMISSIONS',
+      payload: { granted: true, permissions },
+    };
+  }
+  
+  private async handleSendTransaction(payload: any): Promise<AbyssResponse> {
+    if (!this.session || !this.signMessageFn) {
+      return {
+        type: 'ABYSS_RESPONSE',
+        action: 'SEND_TRANSACTION',
+        error: 'Not authenticated',
+      };
+    }
+    
+    // Import wallet service
+    const { sendCgt } = await import('../wallet/demiurgeWallet');
+    
+    try {
+      const { to, amount } = payload?.transaction || {};
+      if (!to || !amount) {
+        throw new Error('Invalid transaction: to and amount required');
+      }
+      
+      const result = await sendCgt({
+        from: this.session.publicKey,
+        to,
+        amount: parseFloat(amount),
+      });
+      
+      return {
+        type: 'ABYSS_RESPONSE',
+        action: 'SEND_TRANSACTION',
+        payload: { txHash: result.txHash },
+      };
+    } catch (error: any) {
+      return {
+        type: 'ABYSS_RESPONSE',
+        action: 'SEND_TRANSACTION',
+        error: error.message || 'Transaction failed',
+      };
+    }
+  }
+  
+  private async handleGetDrc369Owned(): Promise<AbyssResponse> {
+    if (!this.session) {
+      return {
+        type: 'ABYSS_RESPONSE',
+        action: 'GET_DRC369_OWNED',
+        payload: [],
+      };
+    }
+    
+    const { abyssIdSDK } = await import('../abyssid/sdk');
+    const assets = await abyssIdSDK.drc369.getOwned({ owner: this.session.publicKey });
+    
+    return {
+      type: 'ABYSS_RESPONSE',
+      action: 'GET_DRC369_OWNED',
+      payload: assets,
+    };
+  }
+  
+  private async handleMintDrc369(payload: any): Promise<AbyssResponse> {
+    if (!this.session) {
+      return {
+        type: 'ABYSS_RESPONSE',
+        action: 'MINT_DRC369',
+        error: 'Not authenticated',
+      };
+    }
+    
+    const { abyssIdSDK } = await import('../abyssid/sdk');
+    
+    try {
+      const asset = await abyssIdSDK.drc369.publishNative({
+        uri: payload?.asset?.uri || '',
+        contentType: payload?.asset?.contentType || 'other',
+        owner: this.session.publicKey,
+        name: payload?.asset?.name,
+        description: payload?.asset?.description,
+        attributes: payload?.asset?.attributes || {},
+      });
+      
+      return {
+        type: 'ABYSS_RESPONSE',
+        action: 'MINT_DRC369',
+        payload: asset,
+      };
+    } catch (error: any) {
+      return {
+        type: 'ABYSS_RESPONSE',
+        action: 'MINT_DRC369',
+        error: error.message || 'Mint failed',
+      };
+    }
+  }
+  
   destroy() {
     if (typeof window !== 'undefined') {
       window.removeEventListener('message', this.handleMessage.bind(this));

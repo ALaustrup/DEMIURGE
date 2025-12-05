@@ -1,0 +1,19 @@
+[Unit]
+Description=Demiurge DNS Service
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/opt/demiurge/apps/dns-service
+Environment="DNS_SERVICE_PORT=8083"
+Environment="DNS_DB_PATH=/var/lib/demiurge/dns-cache.db"
+Environment="DEMIURGE_RPC_URL=https://rpc.demiurge.cloud/rpc"
+Environment="CORS_ORIGIN=https://demiurge.cloud"
+ExecStart=/usr/bin/node dist/index.js
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+

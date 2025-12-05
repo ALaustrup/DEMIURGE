@@ -83,7 +83,7 @@ export function GlassDock() {
     }
   }, [isEditMode, draggedIndex]);
 
-  const handlePointerUp = useCallback((index: number) => {
+  const handlePointerUp = useCallback((index: number, e?: React.PointerEvent) => {
     if (longPressTimerRef.current) {
       window.clearTimeout(longPressTimerRef.current);
       longPressTimerRef.current = null;
@@ -97,30 +97,69 @@ export function GlassDock() {
       }
       setDraggedIndex(null);
       setDragOffset(0);
-    } else if (!isEditMode && longPressTimerRef.current === null) {
-      // Normal tap - open app (only if long press was cancelled)
+    } else if (!isEditMode) {
+      // Normal tap - open app
       const appId = launcherApps[index];
-      if (appId) {
-        openApp(appId);
+      if (appId && touchStartRef.current) {
+        const dx = e ? Math.abs(e.clientX - touchStartRef.current.x) : 0;
+        const dy = e ? Math.abs(e.clientY - touchStartRef.current.y) : 0;
+        
+        // Only open if it was a tap (not a drag)
+        if (dx < DRAG_THRESHOLD && dy < DRAG_THRESHOLD) {
+          openApp(appId);
+        }
       }
     }
+    
+    // Reset touch tracking
+    touchStartRef.current = null;
   }, [isEditMode, draggedIndex, dragOffset, launcherApps, openApp, reorderLauncher]);
 
-  // Momentum scrolling on release
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
+  // Enhanced physics-based momentum scrolling with snap-to-icon
   useEffect(() => {
-    if (!isEditMode && scrollRef.current && Math.abs(velocityRef.current) > 0.1) {
+    if (!isEditMode && isMobile && scrollRef.current) {
+      const container = scrollRef.current;
+      const itemWidth = 80; // Icon width + gap
+      const snapThreshold = itemWidth * 0.3;
+      
       const applyMomentum = () => {
-        if (scrollRef.current) {
-          const currentScroll = scrollRef.current.scrollLeft;
-          scrollRef.current.scrollLeft = currentScroll - velocityRef.current * 16;
-          velocityRef.current *= 0.92; // Deceleration
+        if (!container) return;
+        
+        const currentScroll = container.scrollLeft;
+        const newScroll = currentScroll - velocityRef.current * 16;
+        container.scrollLeft = newScroll;
+        
+        // Apply friction
+        velocityRef.current *= 0.92;
+        
+        // Snap to nearest icon when velocity is low
+        if (Math.abs(velocityRef.current) < 0.5) {
+          const nearestIndex = Math.round(newScroll / itemWidth);
+          const targetScroll = nearestIndex * itemWidth;
           
-          if (Math.abs(velocityRef.current) > 0.1) {
-            animationFrameRef.current = requestAnimationFrame(applyMomentum);
+          // Smooth snap animation
+          const distance = targetScroll - newScroll;
+          if (Math.abs(distance) > snapThreshold) {
+            container.scrollTo({
+              left: targetScroll,
+              behavior: 'smooth',
+            });
           }
+          
+          velocityRef.current = 0;
+          return;
+        }
+        
+        if (Math.abs(velocityRef.current) > 0.1) {
+          animationFrameRef.current = requestAnimationFrame(applyMomentum);
         }
       };
-      animationFrameRef.current = requestAnimationFrame(applyMomentum);
+      
+      if (Math.abs(velocityRef.current) > 0.1) {
+        animationFrameRef.current = requestAnimationFrame(applyMomentum);
+      }
     }
 
     return () => {
@@ -128,7 +167,7 @@ export function GlassDock() {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [isEditMode]);
+  }, [isEditMode, isMobile]);
 
   const calculateDropIndex = (fromIndex: number, offset: number): number => {
     const itemWidth = 80; // Approximate icon width + spacing
@@ -150,8 +189,6 @@ export function GlassDock() {
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }
   }, [isEditMode]);
-
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
   return (
     <div className="fixed bottom-4 left-0 right-0 z-10 flex justify-center">
@@ -200,7 +237,7 @@ export function GlassDock() {
               animate={dragStyle}
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
               onPointerDown={(e) => handlePointerDown(index, e)}
-              onPointerUp={() => handlePointerUp(index)}
+              onPointerUp={(e) => handlePointerUp(index, e)}
             >
               <div className={isEditMode ? 'cursor-grab active:cursor-grabbing' : ''}>
                 <AppIcon

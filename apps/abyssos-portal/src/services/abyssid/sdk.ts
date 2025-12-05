@@ -3,7 +3,11 @@
  * 
  * High-level API for AbyssID identity management.
  * Provides a clean interface for creating, loading, and managing AbyssID sessions.
+ * 
+ * Includes DRC-369 asset management extensions.
  */
+
+import { drc369Api, migrateOldDemiNFTData, type DRC369Query } from "./drc369";
 
 export interface AbyssSession {
   username: string;
@@ -129,5 +133,42 @@ async function generateMockSignature(username: string, message: string): Promise
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
   return `mock_sig_${hashHex.substring(0, 32)}`;
+}
+
+/**
+ * AbyssID SDK with DRC-369 extensions
+ */
+export const abyssIdSDK = {
+  // Identity methods
+  createAbyssId,
+  loadSession,
+  clearSession,
+  signMessage,
+  
+  // DRC-369 methods
+  drc369: {
+    getOwned: (query?: DRC369Query) => drc369Api.getOwned(query),
+    getPublic: (query?: { chain?: string; standard?: string; limit?: number }) => drc369Api.getPublic(query),
+    importExternal: (input: {
+      chain: string;
+      contractOrMint: string;
+      tokenId?: string;
+      owner?: string;
+    }) => drc369Api.importExternal(input),
+    publishNative: (input: {
+      uri: string;
+      contentType: string;
+      attributes?: Record<string, string | number>;
+      owner?: string;
+      name?: string;
+      description?: string;
+      priceCgt?: number;
+    }) => drc369Api.publishNative(input),
+  },
+};
+
+// Run migration on module load
+if (typeof window !== "undefined") {
+  migrateOldDemiNFTData();
 }
 

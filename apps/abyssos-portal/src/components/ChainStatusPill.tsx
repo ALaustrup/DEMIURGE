@@ -1,24 +1,25 @@
 import { useChainStatus } from '../hooks/useChainStatus';
 
 export function ChainStatusPill() {
-  const { status, info } = useChainStatus();
+  const { status, retry } = useChainStatus();
 
   let label = 'Connecting to Demiurge…';
   let className = 'abyss-pill abyss-pill--connecting';
+  let onClick: (() => void) | undefined = undefined;
 
-  if (status === 'online') {
-    label = `Connected · Height ${info?.height ?? 0}`;
+  if (status.state === 'connected') {
+    label = `Demiurge · height ${status.height}`;
     className = 'abyss-pill abyss-pill--online';
-  } else if (status === 'offline') {
-    label = 'Offline · Retry in a moment';
+  } else if (status.state === 'error') {
+    label = 'RPC Error (tap to retry)';
     className = 'abyss-pill abyss-pill--offline';
+    onClick = retry;
   }
 
   return (
-    <div className={className}>
+    <div className={className} onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default' }}>
       <span className="abyss-pill-dot" />
       <span className="abyss-pill-text">{label}</span>
     </div>
   );
 }
-

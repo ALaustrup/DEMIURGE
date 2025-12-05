@@ -1,54 +1,90 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
-type ChainInfo = {
-  height: number;
-};
+/**
+ * Get RPC URL from environment or fallback
+ */
+function getRpcUrl(): string {
+  if (typeof window === 'undefined') {
+    return 'https://rpc.demiurge.cloud/rpc';
+  }
+  
+  return (
+    import.meta.env.VITE_DEMIURGE_RPC_URL ||
+    (window as any).ABYSS_RPC_URL ||
+    'https://rpc.demiurge.cloud/rpc'
+  );
+}
+
+export type ChainStatus =
+  | { state: 'connecting' }
+  | { state: 'connected'; height: number }
+  | { state: 'error'; message?: string };
 
 export function useChainStatus(pollIntervalMs = 5000) {
-  const [status, setStatus] = useState<'connecting' | 'online' | 'offline'>('connecting');
-  const [info, setInfo] = useState<ChainInfo | null>(null);
-  const [lastError, setLastError] = useState<string | null>(null);
+  const [status, setStatus] = useState<ChainStatus>({ state: 'connecting' });
+  const [retryTrigger, setRetryTrigger] = useState(0);
+
+  const fetchStatus = useCallback(async () => {
+    const rpcUrl = getRpcUrl();
+    
+    try {
+      const res = await fetch(rpcUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          method: 'cgt_getChainInfo',
+          params: [],
+          id: 1,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
+
+      const json = await res.json();
+      
+      // Check for JSON-RPC error
+      if (json.error) {
+        throw new Error(json.error.message || 'RPC error');
+      }
+
+      // Treat ANY successful response with numeric height (including 0) as connected
+      const height = typeof json.result?.height === 'number' ? json.result.height : 0;
+      
+      setStatus({ state: 'connected', height });
+    } catch (e: any) {
+      const message = e?.message ?? 'Unknown error';
+      setStatus({ state: 'error', message });
+    }
+  }, []);
+
+  // Manual retry function
+  const retry = useCallback(() => {
+    setStatus({ state: 'connecting' });
+    setRetryTrigger((prev) => prev + 1);
+    fetchStatus();
+  }, [fetchStatus]);
 
   useEffect(() => {
     let cancelled = false;
 
-    async function fetchStatus() {
-      try {
-        const res = await fetch('https://rpc.demiurge.cloud/rpc', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            jsonrpc: '2.0',
-            method: 'cgt_getChainInfo',
-            params: [],
-            id: 1,
-          }),
-        });
-
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-        const json = await res.json();
-        if (!cancelled) {
-          setInfo(json.result);
-          setStatus('online');
-          setLastError(null);
-        }
-      } catch (e: any) {
-        if (!cancelled) {
-          setStatus(info ? 'offline' : 'connecting');
-          setLastError(e?.message ?? 'Unknown error');
-        }
-      }
-    }
-
+    // Initial fetch
     fetchStatus();
-    const id = setInterval(fetchStatus, pollIntervalMs);
+
+    // Set up polling interval
+    const intervalId = setInterval(() => {
+      if (!cancelled) {
+        fetchStatus();
+      }
+    }, pollIntervalMs);
+
     return () => {
       cancelled = true;
-      clearInterval(id);
+      clearInterval(intervalId);
     };
-  }, [pollIntervalMs]);
+  }, [fetchStatus, pollIntervalMs, retryTrigger]);
 
-  return { status, info, lastError };
+  return { status, retry };
 }
-

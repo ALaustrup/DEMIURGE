@@ -1,6 +1,7 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, ReactNode, useMemo } from 'react';
 import type { AbyssIDSession, AbyssIDProvider } from '../services/abyssid/types';
 import { localAbyssIDProvider } from '../services/abyssid/localProvider';
+import { remoteAbyssIDProvider } from '../services/abyssid/remoteProvider';
 
 interface AbyssIDContextValue {
   session: AbyssIDSession | null;
@@ -8,6 +9,7 @@ interface AbyssIDContextValue {
   login: (username?: string) => Promise<void>;
   logout: () => Promise<void>;
   signMessage: (message: Uint8Array | string) => Promise<string>;
+  mode: 'local' | 'remote';
 }
 
 const AbyssIDContext = createContext<AbyssIDContextValue | undefined>(undefined);
@@ -17,12 +19,25 @@ interface AbyssIDProviderProps {
   provider?: AbyssIDProvider;
 }
 
-export function AbyssIDProvider({ children, provider = localAbyssIDProvider }: AbyssIDProviderProps) {
+// Determine mode from environment
+const getMode = (): 'local' | 'remote' => {
+  return (import.meta.env.VITE_ABYSSID_MODE === 'remote' ? 'remote' : 'local') as 'local' | 'remote';
+};
+
+// Get the appropriate provider based on mode
+const getProvider = (): AbyssIDProvider => {
+  const mode = getMode();
+  return mode === 'remote' ? remoteAbyssIDProvider : localAbyssIDProvider;
+};
+
+export function AbyssIDProvider({ children, provider }: AbyssIDProviderProps) {
+  const mode = useMemo(() => getMode(), []);
+  const activeProvider = useMemo(() => provider || getProvider(), [provider]);
   const [session, setSession] = useState<AbyssIDSession | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    provider
+    activeProvider
       .getSession()
       .then((s) => {
         setSession(s);
@@ -31,24 +46,24 @@ export function AbyssIDProvider({ children, provider = localAbyssIDProvider }: A
       .catch(() => {
         setIsLoading(false);
       });
-  }, [provider]);
+  }, [activeProvider]);
 
   const login = async (username?: string) => {
-    const newSession = await provider.login(username);
+    const newSession = await activeProvider.login(username);
     setSession(newSession);
   };
 
   const logout = async () => {
-    await provider.logout();
+    await activeProvider.logout();
     setSession(null);
   };
 
   const signMessage = async (message: Uint8Array | string) => {
-    return provider.signMessage(message);
+    return activeProvider.signMessage(message);
   };
 
   return (
-    <AbyssIDContext.Provider value={{ session, isLoading, login, logout, signMessage }}>
+    <AbyssIDContext.Provider value={{ session, isLoading, login, logout, signMessage, mode }}>
       {children}
     </AbyssIDContext.Provider>
   );

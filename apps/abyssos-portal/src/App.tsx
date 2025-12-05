@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import { useAuthStore } from './state/authStore';
 import { AbyssIDProvider } from './context/AbyssIDContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { BlockListenerProvider } from './context/BlockListenerContext';
 import { BootScreen } from './routes/BootScreen';
 import { LoginScreen } from './routes/LoginScreen';
 import { Desktop } from './routes/Desktop';
+import { migrateOldDemiNFTData } from './services/abyssid/drc369';
 import './styles/globals.css';
 
 type Screen = 'boot' | 'login' | 'desktop';
@@ -15,6 +17,9 @@ function App() {
   const { isAuthenticated, isLoading, initialize } = useAuthStore();
 
   useEffect(() => {
+    // Migrate old DemiNFT data to DRC-369 on app startup
+    migrateOldDemiNFTData();
+    
     initialize().then(() => {
       // After auth init, check if we should skip boot
       if (isAuthenticated) {
@@ -67,7 +72,9 @@ function App() {
   return (
     <ThemeProvider>
       <AbyssIDProvider>
-        <Desktop />
+        <BlockListenerProvider>
+          <Desktop />
+        </BlockListenerProvider>
       </AbyssIDProvider>
     </ThemeProvider>
   );

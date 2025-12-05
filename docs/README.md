@@ -73,7 +73,7 @@ Operational guides for node operators.
 Design specifications and implementation details.
 
 - [Economy & CGT Design](design/ECONOMY_DESIGN.md)
-- [DGEN-NFT Architecture](design/NFT_ARCHITECTURE_DGEN.md)
+- [DRC-369 Architecture](design/NFT_ARCHITECTURE_DGEN.md) *(DRC-369 standard)*
 - [Fracture V1 Implementation](design/FRACTURE_V1_IMPLEMENTATION.md)
 
 ### [Development](development/)

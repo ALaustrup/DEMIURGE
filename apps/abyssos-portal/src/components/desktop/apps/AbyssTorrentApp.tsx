@@ -1,6 +1,7 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useAbyssID } from '../../../hooks/useAbyssID';
 import { Button } from '../../shared/Button';
+import { abyssIdSDK } from '../../../services/abyssid/sdk';
 
 interface PublishedFile {
   fileId: string;
@@ -11,22 +12,8 @@ interface PublishedFile {
   timestamp: number;
 }
 
-const STORAGE_KEY_PUBLISHED = 'abyssos_published_files';
-
-function getPublishedFiles(): PublishedFile[] {
-  try {
-    const data = localStorage.getItem(STORAGE_KEY_PUBLISHED);
-    return data ? JSON.parse(data) : [];
-  } catch {
-    return [];
-  }
-}
-
-function savePublishedFile(file: PublishedFile) {
-  const files = getPublishedFiles();
-  files.push(file);
-  localStorage.setItem(STORAGE_KEY_PUBLISHED, JSON.stringify(files));
-}
+// Legacy storage key - now using centralized SDK (abyssIdSDK.drc369)
+// All file operations go through abyssIdSDK.drc369.publishNative()
 
 async function computeFileHash(file: File): Promise<string> {
   const buffer = await file.arrayBuffer();
@@ -48,8 +35,35 @@ export function AbyssTorrentApp() {
   const [description, setDescription] = useState('');
   const [priceCgt, setPriceCgt] = useState(0);
   const [isPublishing, setIsPublishing] = useState(false);
-  const [publishedFiles, setPublishedFiles] = useState<PublishedFile[]>(getPublishedFiles());
+  const [publishedFiles, setPublishedFiles] = useState<PublishedFile[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Load published files from SDK on mount and when session changes
+  useEffect(() => {
+    async function loadFiles() {
+      if (!session) {
+        setPublishedFiles([]);
+        return;
+      }
+      try {
+        const owned = await abyssIdSDK.drc369.getOwned({ owner: session.publicKey });
+        const publishedFilesList = owned
+          .filter((a) => a.attributes?.fileId)
+          .map((a) => ({
+            fileId: a.attributes?.fileId as string,
+            title: a.name || (a.attributes?.name as string) || 'Untitled',
+            description: a.description || (a.attributes?.description as string) || '',
+            priceCgt: a.priceCgt || 0,
+            ownerPubKey: a.owner,
+            timestamp: a.createdAt ? new Date(a.createdAt).getTime() : Date.now(),
+          }));
+        setPublishedFiles(publishedFilesList);
+      } catch (error) {
+        console.error('Failed to load published files:', error);
+      }
+    }
+    loadFiles();
+  }, [session]);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -79,22 +93,38 @@ export function AbyssTorrentApp() {
       // Upload file (placeholder for now)
       await uploadFile(selectedFile);
 
-      // Create published file record
-      const publishedFile: PublishedFile = {
-        fileId,
-        title: title.trim(),
+      // Create DRC-369 asset using centralized SDK
+      await abyssIdSDK.drc369.publishNative({
+        uri: await uploadFile(selectedFile), // Placeholder URL for now
+        contentType: 'binary', // Default for uploaded files
+        owner: session.publicKey,
+        name: title.trim(),
         description: description.trim(),
         priceCgt,
-        ownerPubKey: session.publicKey,
-        timestamp: Date.now(),
-      };
+        attributes: {
+          fileId,
+          originalFileName: selectedFile.name,
+          fileSize: selectedFile.size,
+        },
+      });
 
-      // Save locally
-      savePublishedFile(publishedFile);
-      setPublishedFiles(getPublishedFiles());
+      // Reload published files from SDK
+      const owned = await abyssIdSDK.drc369.getOwned({ owner: session.publicKey });
+      // Convert DRC369 to PublishedFile format for display compatibility
+      const publishedFilesList = owned
+        .filter((a) => a.attributes?.fileId)
+        .map((a) => ({
+          fileId: a.attributes?.fileId as string,
+          title: a.name || (a.attributes?.name as string) || 'Untitled',
+          description: a.description || (a.attributes?.description as string) || '',
+          priceCgt: a.priceCgt || 0,
+          ownerPubKey: a.owner,
+          timestamp: a.createdAt ? new Date(a.createdAt).getTime() : Date.now(),
+        }));
+      setPublishedFiles(publishedFilesList);
 
       // TODO: Send FilePublished transaction to Demiurge chain via RPC
-      console.log('FilePublished payload:', publishedFile);
+      console.log('FilePublished via SDK - DRC-369 asset created:', { fileId, title: title.trim() });
 
       // Reset form
       setSelectedFile(null);

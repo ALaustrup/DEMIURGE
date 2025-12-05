@@ -7,18 +7,46 @@ import { WindowFrame } from '../components/desktop/WindowFrame';
 import { useDesktopStore } from '../state/desktopStore';
 import { ChainOpsApp } from '../components/desktop/apps/ChainOpsApp';
 import { MinerApp } from '../components/desktop/apps/MinerApp';
-import { WalletApp } from '../components/desktop/apps/WalletApp';
+import { AbyssWalletApp } from '../components/desktop/apps/AbyssWalletApp';
 import { AbyssBrowserApp } from '../components/desktop/apps/AbyssBrowserApp';
 import { AbyssTorrentApp } from '../components/desktop/apps/AbyssTorrentApp';
 import { OnChainFilesApp } from '../components/desktop/apps/OnChainFilesApp';
+import { DRC369StudioApp } from '../components/desktop/apps/DRC369StudioApp';
+import { BlockExplorerApp } from '../components/desktop/apps/BlockExplorerApp';
+import { AbyssShellApp } from '../components/desktop/apps/AbyssShellApp';
+import { AbyssRuntimeApp } from '../components/desktop/apps/AbyssRuntimeApp';
+import { SystemMonitorApp } from '../components/desktop/apps/SystemMonitorApp';
+import { AbyssGridMonitorApp } from '../components/desktop/apps/AbyssGridMonitorApp';
+import { AbyssSpiritConsoleApp } from '../components/desktop/apps/AbyssSpiritConsoleApp';
+import { CogFabricConsoleApp } from '../components/desktop/apps/CogFabricConsoleApp';
+import { CogSingularityApp } from '../components/desktop/apps/CogSingularityApp';
+import { GenesisConsoleApp } from '../components/desktop/apps/GenesisConsoleApp';
+import { TemporalObservatoryApp } from '../components/desktop/apps/TemporalObservatoryApp';
+import { AbyssDNSApp } from '../components/desktop/apps/AbyssDNSApp';
+import { AWEConsoleApp } from '../components/desktop/apps/AWEConsoleApp';
+import { AWEAtlasApp } from '../components/desktop/apps/AWEAtlasApp';
 
 const appComponents: Record<string, React.ComponentType> = {
   chainOps: ChainOpsApp,
   miner: MinerApp,
-  wallet: WalletApp,
+  wallet: AbyssWalletApp,
   abyssBrowser: AbyssBrowserApp,
   abyssTorrent: AbyssTorrentApp,
   onChainFiles: OnChainFilesApp,
+  drc369Studio: DRC369StudioApp,
+  blockExplorer: BlockExplorerApp,
+  abyssShell: AbyssShellApp,
+  abyssRuntime: AbyssRuntimeApp,
+  systemMonitor: SystemMonitorApp,
+  abyssGridMonitor: AbyssGridMonitorApp,
+  abyssSpiritConsole: AbyssSpiritConsoleApp,
+  cogFabricConsole: CogFabricConsoleApp,
+  cogSingularity: CogSingularityApp,
+  genesisConsole: GenesisConsoleApp,
+  temporalObservatory: TemporalObservatoryApp,
+  dnsConsole: AbyssDNSApp,
+  aweConsole: AWEConsoleApp,
+  aweAtlas: AWEAtlasApp,
 };
 
 export function Desktop() {
