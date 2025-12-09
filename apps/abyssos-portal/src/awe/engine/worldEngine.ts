@@ -167,9 +167,8 @@ export class WorldEngine {
     // Update Merkle root (async, but we'll do it periodically)
     if (this.state.tick % 10 === 0) {
       import('../utils').then(({ calculateWorldMerkleRoot }) => {
-        calculateWorldMerkleRoot(this.state).then(root => {
-          this.state.merkleRoot = root;
-        });
+        const root = calculateWorldMerkleRoot(this.state);
+        this.state.merkleRoot = root;
       });
     }
     

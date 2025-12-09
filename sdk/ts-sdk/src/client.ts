@@ -52,7 +52,7 @@ export class DemiurgeClient {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
 
-        const json: RpcResponse<T> = await response.json();
+        const json = await response.json() as RpcResponse<T>;
 
         if (json.error) {
           throw new RpcErrorImpl(json.error.code, json.error.message, json.error.data);

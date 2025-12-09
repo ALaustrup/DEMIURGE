@@ -4,7 +4,7 @@
  * Load worlds from JSON, DVFS, DRC-369
  */
 
-import type { WorldState } from '../types';
+import type { WorldState, Entity, Species, EntityID, SpeciesID } from '../types';
 import { StateManager } from '../engine/stateManager';
 
 const stateManager = new StateManager();
@@ -15,9 +15,9 @@ const stateManager = new StateManager();
 export function importFromJSON(json: string): WorldState {
   const data = JSON.parse(json);
   
-  // Reconstruct Maps from arrays
-  const entities = new Map(data.entities || []);
-  const species = new Map(data.species || []);
+  // Reconstruct Maps from arrays with proper typing
+  const entities = new Map<EntityID, Entity>((data.entities || []) as [EntityID, Entity][]);
+  const species = new Map<SpeciesID, Species>((data.species || []) as [SpeciesID, Species][]);
   
   return {
     id: data.id,

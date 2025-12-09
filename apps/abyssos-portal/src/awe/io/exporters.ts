@@ -4,7 +4,7 @@
  * Export worlds to JSON, DVFS, DRC-369
  */
 
-import type { WorldState, WorldSnapshot } from '../types';
+import type { WorldState } from '../types';
 import { hashString } from '../utils';
 
 /**
@@ -57,21 +57,6 @@ export function exportWorldSnapshot(state: WorldState): {
 }
 
 /**
- * Hash string (browser-compatible)
- */
-function hashString(str: string): string {
-  // Simplified hash for now
-  // In production, use proper crypto
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash = hash & hash; // Convert to 32-bit integer
-  }
-  return Math.abs(hash).toString(16);
-}
-
-/**
  * Export to DVFS path
  */
 export async function exportToDVFS(state: WorldState, path: string): Promise<void> {
@@ -99,7 +84,7 @@ export async function exportToDRC369(state: WorldState, owner?: string): Promise
       worldId: state.id,
       seed: state.seed,
       tick: state.tick,
-      snapshot,
+      snapshot: JSON.stringify(snapshot),
       worldData: json, // Full world state
     },
   });

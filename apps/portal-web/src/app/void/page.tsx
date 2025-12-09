@@ -15,6 +15,7 @@ import { useRitual } from "@/lib/rituals/RitualContextProvider";
 
 export default function VoidPage() {
   const { identity, setIdentity } = useAbyssID();
+  const { effects: ritualEffects } = useRitual();
   const [isDeveloper, setIsDeveloper] = useState(false);
   const [registering, setRegistering] = useState(false);
   const [checking, setChecking] = useState(true);
@@ -909,7 +910,7 @@ export default function VoidPage() {
           <div className="relative rounded-lg overflow-hidden border border-white/10" style={{ minHeight: "300px" }}>
             <ShaderPlane
               state="idle"
-              ritualEffects={effects || undefined}
+              ritualEffects={ritualEffects || undefined}
               className="absolute inset-0"
             />
           </div>

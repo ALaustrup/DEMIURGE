@@ -14,8 +14,8 @@ export class NftApi {
   async mintDgenNft(
     owner: Address,
     fabricRootHash: string,
-    royaltyBps?: number,
-    signedTxHex: string
+    signedTxHex: string,
+    royaltyBps?: number
   ): Promise<DGenMetadata> {
     if (!/^0x[0-9a-f]{64}$/i.test(fabricRootHash)) {
       throw new Error('Invalid fabric_root_hash: must be 64-char hex string');

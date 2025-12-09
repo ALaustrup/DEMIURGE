@@ -22,6 +22,7 @@ use tower_http::cors::{Any, CorsLayer};
 use crate::config::DEV_FAUCET_AMOUNT;
 use crate::core::transaction::{Address, Transaction};
 use crate::node::Node;
+use crate::archon::ArchonStateVector;
 use crate::runtime::{
     create_urgeid_profile, get_address_by_handle, get_address_by_username, get_urgeid_profile,
     record_syzygy, set_handle, set_username, BankCgtModule, CGT_DECIMALS,
@@ -1784,7 +1785,7 @@ async fn handle_rpc(
             // Dev-only: unsafe transfer without signature verification
             #[cfg(not(debug_assertions))]
             {
-                return Json(JsonRpcResponse {
+                Json(JsonRpcResponse {
                     jsonrpc: "2.0".to_string(),
                     result: None,
                     error: Some(JsonRpcError {
@@ -1792,10 +1793,11 @@ async fn handle_rpc(
                         message: "cgt_devUnsafeTransfer is only available in debug builds".to_string(),
                     }),
                     id,
-                });
+                })
             }
-
-            let params: DevTransferParams = match req.params.as_ref() {
+            #[cfg(debug_assertions)]
+            {
+                let params: DevTransferParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
                     .unwrap_or(DevTransferParams {
@@ -1909,6 +1911,7 @@ async fn handle_rpc(
                     }),
                     id,
                 }),
+            }
             }
         }
         "cgt_buildTransferTx" => {
@@ -2561,6 +2564,21 @@ async fn handle_rpc(
             Json(JsonRpcResponse {
                 jsonrpc: "2.0".to_string(),
                 result: Some(json!(maintainers.iter().map(|addr| hex::encode(addr)).collect::<Vec<_>>())),
+                error: None,
+                id,
+            })
+        }
+        "archon_state" => {
+            let asv = node.archon_last_state.read().unwrap_or_else(|_| {
+                log::error!("archon_last_state rwlock poisoned");
+                panic!("archon_last_state rwlock poisoned - this should never happen");
+            }).clone();
+            Json(JsonRpcResponse {
+                jsonrpc: "2.0".to_string(),
+                result: Some(serde_json::to_value(asv).unwrap_or_else(|e| {
+                    log::error!("Failed to serialize ASV: {}", e);
+                    json!({"error": "Failed to serialize Archon state"})
+                })),
                 error: None,
                 id,
             })

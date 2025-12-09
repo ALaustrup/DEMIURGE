@@ -2,7 +2,9 @@
  * DNS Record Validation
  */
 
-import type { DNSRecordType } from '../../../apps/dns-service/src/types';
+// TODO: PHASE OMEGA - Replace with workspace alias @demiurge/dns-service
+// Temporary fix: Define type locally until workspace aliases are configured
+export type DNSRecordType = 'A' | 'AAAA' | 'CNAME' | 'TXT' | 'NS' | 'MX' | 'SOA';
 
 export interface DNSRecord {
   domain: string;

@@ -2,8 +2,7 @@
  * AWE Utilities
  */
 
-import { createHash } from 'crypto';
-import type { WorldState, Entity, Vec3 } from './types';
+import type { WorldState, Vec3 } from './types';
 
 /**
  * Calculate Merkle root of world state

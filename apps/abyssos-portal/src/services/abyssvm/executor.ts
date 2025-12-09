@@ -33,7 +33,21 @@ export async function executeLocally(
       dnsABI = createDNSABI();
     }
     
-    // Create enhanced ABI with logging and DNS
+    // Create AWE ABI if not provided
+    let aweABI = (abi as any).awe;
+    if (!aweABI) {
+      // Create stub AWE ABI
+      aweABI = {
+        getState: async () => ({}),
+        setState: async () => false,
+        spawn: async () => null,
+        applyForce: async () => false,
+        runEvolutionCycle: async () => false,
+        exportWorld: async () => null,
+      };
+    }
+    
+    // Create enhanced ABI with logging, DNS, and AWE
     const enhancedABI = {
       ...abi,
       log: (message: string) => {
@@ -41,6 +55,7 @@ export async function executeLocally(
         abi.log(message);
       },
       dns: dnsABI,
+      awe: aweABI,
     };
     
     // Execute WASM

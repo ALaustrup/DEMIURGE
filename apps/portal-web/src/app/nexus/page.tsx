@@ -1052,8 +1052,24 @@ export default function NexusPage() {
                   <FabricTopology 
                     connectedPeers={fabricService.state.nodes.length || genesisContext?.fabricState?.nodes.length || p2pStats.connectedPeers}
                     ritualEffects={fabricRitualEffects || undefined}
-                    genesisNodes={fabricService.state.nodes.length > 0 ? fabricService.state.nodes : genesisContext?.fabricState?.nodes}
-                    genesisEdges={fabricService.state.edges.length > 0 ? fabricService.state.edges : genesisContext?.fabricState?.edges}
+                    genesisNodes={fabricService.state.nodes.length > 0 ? fabricService.state.nodes.map(n => ({ 
+                      id: n.id, 
+                      x: n.x, 
+                      y: n.y, 
+                      address: n.address,
+                      role: n.role as "GATE" | "BEACON" | "RELAY" | "ARCHON",
+                      isActive: n.isActive,
+                      bandwidth: n.bandwidth,
+                      latency: n.latency,
+                      stability: n.stability ?? 1.0
+                    })) : genesisContext?.fabricState?.nodes}
+                    genesisEdges={fabricService.state.edges.length > 0 ? fabricService.state.edges.map(e => ({ 
+                      from: e.from, 
+                      to: e.to, 
+                      strength: e.strength,
+                      active: e.active,
+                      latency: e.latency
+                    })) : genesisContext?.fabricState?.edges}
                   />
                 </div>
                 <p className="text-xs text-zinc-500 mt-3">

@@ -31,7 +31,7 @@ export async function publishDnsRecord(
     description: `DNS records for ${record.domain}`,
     attributes: {
       domain: record.domain,
-      records: record.records,
+      records: JSON.stringify(record.records),
     },
   });
   
@@ -45,7 +45,7 @@ export async function publishDnsRecord(
  * Check if DRC-369 asset is a DNS record
  */
 export function isDnsRecord(asset: DRC369): boolean {
-  return asset.contentType === 'dns-record' || asset.type === 'dns-record';
+  return asset.contentType === 'dns-record';
 }
 
 /**

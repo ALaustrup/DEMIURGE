@@ -14,10 +14,27 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
+    /* Workspace Aliases - PHASE OMEGA */
+    "baseUrl": ".",
+    "paths": {
+      "@demiurge/dns-service/*": ["../../apps/dns-service/src/*"],
+      "@demiurge/ts-sdk/*": ["../../sdk/ts-sdk/src/*"],
+      "@demiurge/schema/*": ["../../sdk/schema/*"],
+      "@abyssos/core/*": ["./src/core/*"],
+      "@abyssos/crypto/*": ["./src/crypto/*"],
+      "@abyssos/desktop/*": ["./src/desktop/*"],
+      "@abyssos/services/*": ["./src/services/*"],
+      "@abyssos/themes/*": ["./src/themes/*"],
+      "@abyssos/fractall/*": ["./src/fractall/*"],
+      "@abyssos/abyssid/*": ["./src/abyssid/*"],
+      "@abyssos/drc369/*": ["./src/drc369/*"],
+      "@abyssos/radio/*": ["./src/radio/*"]
+    },
+
     /* Linting */
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src"],

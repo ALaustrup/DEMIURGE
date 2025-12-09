@@ -77,6 +77,19 @@ export interface ImportExternalInput {
   owner?: string;
 }
 
+export interface MusicMetadata {
+  trackNumber?: number;
+  trackName: string;
+  albumName?: string;
+  artistName: string;
+  genre?: string;
+  releaseDate?: string;
+  duration: number;
+  fractal1Hash?: string;
+  beatmapHash?: string;
+  segmentRoot?: string;
+}
+
 const STORAGE_KEY_PUBLISHED = "abyssos.drc369.published";
 const STORAGE_KEY_IMPORTED = "abyssos.drc369.imported";
 // const STORAGE_KEY_DRAFTS = "abyssos.drc369.drafts"; // Reserved for future drafts feature
@@ -394,6 +407,59 @@ export const drc369Api = {
     }
     
     return filtered;
+  },
+
+  /**
+   * Mint a Music NFT with Fractal-1 encoded audio
+   */
+  async mintMusicNFT(metadata: MusicMetadata, fractal1Data: Uint8Array): Promise<DRC369> {
+    // Calculate hashes
+    const fractal1Hash = await this.hashUint8Array(fractal1Data);
+    
+    // Extract beatmap hash from fractal1 data if available
+    const beatmapHash = metadata.beatmapHash || '';
+    const segmentRoot = metadata.segmentRoot || '';
+    
+    const musicInput: PublishNativeInput = {
+      uri: `fractal1://${fractal1Hash}`,
+      contentType: 'audio',
+      name: metadata.trackName,
+      description: `${metadata.artistName} - ${metadata.albumName || 'Single'}`,
+      attributes: {
+        ...metadata,
+        fractal1Hash,
+        beatmapHash,
+        segmentRoot,
+      },
+    };
+    
+    const asset = await this.publishNative(musicInput);
+    
+    // Add music-specific fields
+    return {
+      ...asset,
+      music: {
+        trackNumber: metadata.trackNumber,
+        trackName: metadata.trackName,
+        albumName: metadata.albumName,
+        artistName: metadata.artistName,
+        genre: metadata.genre,
+        releaseDate: metadata.releaseDate,
+        duration: metadata.duration,
+        fractal1Hash,
+        beatmapHash,
+        segmentRoot,
+      },
+    };
+  },
+
+  /**
+   * Hash Uint8Array using SHA-256
+   */
+  async hashUint8Array(data: Uint8Array): Promise<string> {
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data as BufferSource);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
   },
 };
 

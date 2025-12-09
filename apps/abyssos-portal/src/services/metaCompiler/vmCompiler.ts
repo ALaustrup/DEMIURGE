@@ -33,7 +33,7 @@ export async function compileToWASM(module: GeneratedModule): Promise<Uint8Array
 export async function validateWASM(wasmBytes: Uint8Array): Promise<{ valid: boolean; error?: string }> {
   try {
     // Try to instantiate WASM module
-    const module = await WebAssembly.compile(wasmBytes);
+    const module = await WebAssembly.compile(wasmBytes as BufferSource);
     
     // Check exports
     const exports = WebAssembly.Module.exports(module);
