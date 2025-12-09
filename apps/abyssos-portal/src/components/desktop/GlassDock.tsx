@@ -115,14 +115,20 @@ export function GlassDock() {
     touchStartRef.current = null;
   }, [isEditMode, draggedIndex, dragOffset, launcherApps, openApp, reorderLauncher]);
 
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const ITEM_WIDTH = 80; // Icon width + gap
+  const [scrollPosition, setScrollPosition] = useState(0);
 
-  // Enhanced physics-based momentum scrolling with snap-to-icon
+  // Enhanced physics-based momentum scrolling
   useEffect(() => {
-    if (!isEditMode && isMobile && scrollRef.current) {
+    if (!isEditMode && scrollRef.current) {
       const container = scrollRef.current;
-      const itemWidth = 80; // Icon width + gap
-      const snapThreshold = itemWidth * 0.3;
+      
+      const handleScroll = () => {
+        if (!container) return;
+        setScrollPosition(container.scrollLeft);
+      };
+
+      container.addEventListener('scroll', handleScroll);
       
       const applyMomentum = () => {
         if (!container) return;
@@ -134,20 +140,7 @@ export function GlassDock() {
         // Apply friction
         velocityRef.current *= 0.92;
         
-        // Snap to nearest icon when velocity is low
-        if (Math.abs(velocityRef.current) < 0.5) {
-          const nearestIndex = Math.round(newScroll / itemWidth);
-          const targetScroll = nearestIndex * itemWidth;
-          
-          // Smooth snap animation
-          const distance = targetScroll - newScroll;
-          if (Math.abs(distance) > snapThreshold) {
-            container.scrollTo({
-              left: targetScroll,
-              behavior: 'smooth',
-            });
-          }
-          
+        if (Math.abs(velocityRef.current) < 0.1) {
           velocityRef.current = 0;
           return;
         }
@@ -160,14 +153,15 @@ export function GlassDock() {
       if (Math.abs(velocityRef.current) > 0.1) {
         animationFrameRef.current = requestAnimationFrame(applyMomentum);
       }
-    }
 
-    return () => {
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
-    };
-  }, [isEditMode, isMobile]);
+      return () => {
+        container.removeEventListener('scroll', handleScroll);
+        if (animationFrameRef.current) {
+          cancelAnimationFrame(animationFrameRef.current);
+        }
+      };
+    }
+  }, [isEditMode]);
 
   const calculateDropIndex = (fromIndex: number, offset: number): number => {
     const itemWidth = 80; // Approximate icon width + spacing
@@ -190,33 +184,85 @@ export function GlassDock() {
     }
   }, [isEditMode]);
 
+  const handleScroll = (direction: 'left' | 'right') => {
+    if (scrollRef.current) {
+      const scrollAmount = ITEM_WIDTH * 5; // Scroll 5 apps at a time
+      const newScroll = scrollRef.current.scrollLeft + (direction === 'left' ? -scrollAmount : scrollAmount);
+      scrollRef.current.scrollTo({
+        left: newScroll,
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  const canScrollLeft = scrollPosition > 0;
+  const canScrollRight = scrollRef.current 
+    ? scrollPosition < scrollRef.current.scrollWidth - scrollRef.current.clientWidth - 10
+    : false;
+
   return (
     <div className="fixed bottom-4 left-0 right-0 z-10 flex justify-center">
-      <motion.div
-        ref={scrollRef}
-        className={`flex items-center gap-4 px-6 py-4 rounded-3xl ${
-          isMobile ? 'overflow-x-auto overflow-y-hidden' : 'overflow-visible'
-        }`}
-        style={{
-          background: themeConfig.dock.background,
-          border: `1px solid ${themeConfig.dock.border}`,
-          backdropFilter: themeConfig.dock.backdropBlur,
-          WebkitBackdropFilter: themeConfig.dock.backdropBlur,
-          boxShadow: themeConfig.dock.shadow,
-          scrollSnapType: isMobile ? 'x mandatory' : 'none',
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
-        }}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-        onPointerMove={handlePointerMove}
-      >
-        <style>{`
-          ${scrollRef.current ? scrollRef.current.constructor.name : ''}::-webkit-scrollbar {
-            display: none;
-          }
-        `}</style>
+      <div className="relative">
+        {/* Left arrow */}
+        {canScrollLeft && (
+          <button
+            onClick={() => handleScroll('left')}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-full mr-2 w-8 h-8 rounded-full bg-abyss-navy/80 border border-abyss-cyan/30 text-abyss-cyan flex items-center justify-center hover:bg-abyss-cyan/20 z-20"
+          >
+            ‹
+          </button>
+        )}
+        
+        <motion.div
+          ref={scrollRef}
+          className="flex items-center gap-4 px-6 py-4 rounded-3xl overflow-x-auto overflow-y-hidden"
+          style={{
+            background: themeConfig.dock.background,
+            border: `1px solid ${themeConfig.dock.border}`,
+            backdropFilter: themeConfig.dock.backdropBlur,
+            WebkitBackdropFilter: themeConfig.dock.backdropBlur,
+            boxShadow: themeConfig.dock.shadow,
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none',
+            maxWidth: '90vw',
+          }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          onPointerMove={handlePointerMove}
+          onWheel={(e) => {
+            if (scrollRef.current && !isEditMode) {
+              e.preventDefault();
+              scrollRef.current.scrollLeft += e.deltaY;
+            }
+          }}
+          onPointerDown={(e) => {
+            if (!isEditMode && e.pointerType === 'mouse') {
+              const startX = e.clientX;
+              const startScroll = scrollRef.current?.scrollLeft || 0;
+              
+              const handleMove = (moveEvent: PointerEvent) => {
+                if (scrollRef.current) {
+                  const deltaX = startX - moveEvent.clientX;
+                  scrollRef.current.scrollLeft = startScroll + deltaX;
+                }
+              };
+              
+              const handleUp = () => {
+                document.removeEventListener('pointermove', handleMove);
+                document.removeEventListener('pointerup', handleUp);
+              };
+              
+              document.addEventListener('pointermove', handleMove);
+              document.addEventListener('pointerup', handleUp);
+            }
+          }}
+        >
+          <style>{`
+            ${scrollRef.current ? scrollRef.current.constructor.name : ''}::-webkit-scrollbar {
+              display: none;
+            }
+          `}</style>
         
         {launcherApps.map((appId, index) => {
           const appInfo = getAppInfo(appId);
@@ -231,7 +277,9 @@ export function GlassDock() {
             <motion.div
               key={`${appId}-${index}`}
               style={{
-                scrollSnapAlign: isMobile ? 'center' : 'none',
+                scrollSnapAlign: 'center',
+                flexShrink: 0,
+                width: `${ITEM_WIDTH}px`,
                 ...dragStyle,
               }}
               animate={dragStyle}
@@ -267,7 +315,18 @@ export function GlassDock() {
             Done
           </motion.button>
         )}
-      </motion.div>
+        </motion.div>
+
+        {/* Right arrow */}
+        {canScrollRight && (
+          <button
+            onClick={() => handleScroll('right')}
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-full ml-2 w-8 h-8 rounded-full bg-abyss-navy/80 border border-abyss-cyan/30 text-abyss-cyan flex items-center justify-center hover:bg-abyss-cyan/20 z-20"
+          >
+            ›
+          </button>
+        )}
+      </div>
     </div>
   );
 }

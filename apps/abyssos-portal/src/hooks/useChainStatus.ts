@@ -28,6 +28,9 @@ export function useChainStatus(pollIntervalMs = 5000) {
     const rpcUrl = getRpcUrl();
     
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+      
       const res = await fetch(rpcUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -37,7 +40,10 @@ export function useChainStatus(pollIntervalMs = 5000) {
           params: [],
           id: 1,
         }),
+        signal: controller.signal,
       });
+      
+      clearTimeout(timeoutId);
 
       if (!res.ok) {
         throw new Error(`HTTP ${res.status}`);

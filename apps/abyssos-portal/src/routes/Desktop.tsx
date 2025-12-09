@@ -5,6 +5,7 @@ import { StatusBar } from '../components/desktop/StatusBar';
 import { GlassDock } from '../components/desktop/GlassDock';
 import { WindowFrame } from '../components/desktop/WindowFrame';
 import { useDesktopStore } from '../state/desktopStore';
+import { WalletInitializer } from '../components/WalletInitializer';
 import { ChainOpsApp } from '../components/desktop/apps/ChainOpsApp';
 import { MinerApp } from '../components/desktop/apps/MinerApp';
 import { AbyssWalletApp } from '../components/desktop/apps/AbyssWalletApp';
@@ -25,6 +26,8 @@ import { TemporalObservatoryApp } from '../components/desktop/apps/TemporalObser
 import { AbyssDNSApp } from '../components/desktop/apps/AbyssDNSApp';
 import { AWEConsoleApp } from '../components/desktop/apps/AWEConsoleApp';
 import { AWEAtlasApp } from '../components/desktop/apps/AWEAtlasApp';
+import { NeonPlayerApp } from '../components/desktop/apps/NeonPlayerApp';
+import { NeonRadioApp } from '../components/desktop/apps/NeonRadioApp';
 
 const appComponents: Record<string, React.ComponentType> = {
   chainOps: ChainOpsApp,
@@ -47,6 +50,8 @@ const appComponents: Record<string, React.ComponentType> = {
   dnsConsole: AbyssDNSApp,
   aweConsole: AWEConsoleApp,
   aweAtlas: AWEAtlasApp,
+  neonPlayer: NeonPlayerApp,
+  neonRadio: NeonRadioApp,
 };
 
 export function Desktop() {
@@ -54,6 +59,7 @@ export function Desktop() {
 
   return (
     <FullscreenContainer>
+      <WalletInitializer />
       <AbyssBackground />
       <StatusBar />
 

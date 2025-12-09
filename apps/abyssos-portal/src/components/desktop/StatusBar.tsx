@@ -1,10 +1,64 @@
+import { useState, useEffect } from 'react';
 import { useAbyssID } from '../../hooks/useAbyssID';
 import { ChainStatusPill } from '../ChainStatusPill';
 import { useTheme } from '../../context/ThemeContext';
+import { useMusicPlayerStore } from '../../state/musicPlayerStore';
+import { useDesktopStore } from '../../state/desktopStore';
+import { useWalletStore } from '../../state/walletStore';
 
 export function StatusBar() {
-  const { session } = useAbyssID();
+  const { session, logout } = useAbyssID();
   const { themeConfig } = useTheme();
+  const { currentTrack, isPlaying, togglePlayPause, nextTrack, isBackgroundMode } = useMusicPlayerStore();
+  const { openApp } = useDesktopStore();
+  const { refreshBalance } = useWalletStore();
+  const [showMenu, setShowMenu] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString('en-US', { 
+      hour: '2-digit', 
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false 
+    });
+  };
+
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString('en-US', { 
+      weekday: 'short',
+      month: 'short', 
+      day: 'numeric',
+      year: 'numeric'
+    });
+  };
+
+  const handleDisengage = async () => {
+    await logout();
+    setShowMenu(false);
+    window.location.reload(); // Reload to show login screen
+  };
+
+  const getInitials = (username: string) => {
+    return username.substring(0, 2).toUpperCase();
+  };
+
+  const getAvatarColor = (username: string) => {
+    // Generate a consistent color based on username
+    let hash = 0;
+    for (let i = 0; i < username.length; i++) {
+      hash = username.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const hue = hash % 360;
+    return `hsl(${hue}, 70%, 50%)`;
+  };
 
   return (
     <div
@@ -19,13 +73,119 @@ export function StatusBar() {
       <div className="text-abyss-cyan">AbyssOS – Demiurge Devnet</div>
       
       <div className="flex items-center space-x-4">
+        {/* Date and Time */}
+        <div className="flex items-center gap-2 text-gray-300">
+          <span>{formatDate(currentTime)}</span>
+          <span className="text-abyss-cyan">{formatTime(currentTime)}</span>
+        </div>
+
+        {/* Music Player Widget */}
+        {(currentTrack && isBackgroundMode) && (
+          <div className="flex items-center gap-2 px-2 py-1 rounded bg-abyss-navy/60 border border-abyss-cyan/20">
+            <span className="text-abyss-cyan text-[10px] truncate max-w-[120px]">
+              {currentTrack.music?.trackName || currentTrack.name || 'Unknown Track'}
+            </span>
+            <button
+              onClick={togglePlayPause}
+              className="w-5 h-5 rounded bg-abyss-cyan/20 hover:bg-abyss-cyan/40 text-abyss-cyan flex items-center justify-center text-[10px]"
+            >
+              {isPlaying ? '⏸' : '▶'}
+            </button>
+            <button
+              onClick={nextTrack}
+              className="w-5 h-5 rounded bg-abyss-cyan/20 hover:bg-abyss-cyan/40 text-abyss-cyan flex items-center justify-center text-[10px]"
+            >
+              ⏭
+            </button>
+            <button
+              onClick={() => openApp('neonPlayer')}
+              className="w-5 h-5 rounded bg-abyss-cyan/20 hover:bg-abyss-cyan/40 text-abyss-cyan flex items-center justify-center text-[10px]"
+              title="Open NEON Player"
+            >
+              🎵
+            </button>
+          </div>
+        )}
         <ChainStatusPill />
       </div>
 
-      <div className="flex items-center space-x-2">
-        <span className="text-gray-300">{session?.username || 'Guest'}</span>
+      <div className="flex items-center space-x-2 relative">
+        {/* Avatar Button */}
+        <button
+          onClick={() => setShowMenu(!showMenu)}
+          className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold text-white transition-all hover:ring-2 hover:ring-abyss-cyan/50"
+          style={{
+            backgroundColor: session?.username ? getAvatarColor(session.username) : '#666',
+          }}
+          title={session?.username || 'Guest'}
+        >
+          {session?.username ? getInitials(session.username) : 'G'}
+        </button>
+
+        {/* Dropdown Menu */}
+        {showMenu && (
+          <div className="absolute right-0 top-full mt-2 w-48 bg-abyss-navy/95 backdrop-blur-md border border-abyss-cyan/30 rounded-lg shadow-xl z-50">
+            <div className="p-2">
+              {/* Account Info */}
+              <div className="px-3 py-2 border-b border-abyss-cyan/20">
+                <div className="text-sm font-medium text-abyss-cyan">{session?.username || 'Guest'}</div>
+                <div className="text-xs text-gray-400 mt-1">
+                  {session?.username ? 'AbyssID Account' : 'Not logged in'}
+                </div>
+              </div>
+
+              {/* Menu Items */}
+              <div className="py-1">
+                <button
+                  onClick={() => {
+                    openApp('wallet');
+                    setShowMenu(false);
+                  }}
+                  className="w-full text-left px-3 py-2 text-sm text-gray-300 hover:bg-abyss-cyan/10 hover:text-abyss-cyan rounded transition-colors"
+                >
+                  💎 Abyss Wallet
+                </button>
+                <button
+                  onClick={() => {
+                    // TODO: Open account settings
+                    setShowMenu(false);
+                  }}
+                  className="w-full text-left px-3 py-2 text-sm text-gray-300 hover:bg-abyss-cyan/10 hover:text-abyss-cyan rounded transition-colors"
+                >
+                  ⚙️ Account Settings
+                </button>
+                <button
+                  onClick={() => {
+                    refreshBalance();
+                    setShowMenu(false);
+                  }}
+                  className="w-full text-left px-3 py-2 text-sm text-gray-300 hover:bg-abyss-cyan/10 hover:text-abyss-cyan rounded transition-colors"
+                >
+                  🔄 Refresh Balance
+                </button>
+              </div>
+
+              {/* Disengage/Logout */}
+              <div className="pt-1 border-t border-abyss-cyan/20">
+                <button
+                  onClick={handleDisengage}
+                  className="w-full text-left px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded transition-colors"
+                >
+                  Disengage
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
+
+      {/* Click outside to close menu */}
+      {showMenu && (
+        <div
+          className="fixed inset-0 z-40"
+          onClick={() => setShowMenu(false)}
+        />
+      )}
     </div>
   );
 }
-

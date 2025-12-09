@@ -7,6 +7,9 @@ import { BootScreen } from './routes/BootScreen';
 import { LoginScreen } from './routes/LoginScreen';
 import { Desktop } from './routes/Desktop';
 import { migrateOldDemiNFTData } from './services/abyssid/drc369';
+import { useWalletStore } from './state/walletStore';
+import { deriveDemiurgePublicKey } from './services/wallet/demiurgeWallet';
+import { useAbyssID } from './hooks/useAbyssID';
 import './styles/globals.css';
 
 type Screen = 'boot' | 'login' | 'desktop';
@@ -18,7 +21,11 @@ function App() {
 
   useEffect(() => {
     // Migrate old DemiNFT data to DRC-369 on app startup
-    migrateOldDemiNFTData();
+    try {
+      migrateOldDemiNFTData();
+    } catch (error) {
+      console.error('Migration error:', error);
+    }
     
     initialize().then(() => {
       // After auth init, check if we should skip boot
@@ -26,6 +33,9 @@ function App() {
         setShowBoot(false);
         setScreen('desktop');
       }
+    }).catch((error) => {
+      console.error('Initialization error:', error);
+      // Continue even if initialization fails
     });
   }, [initialize, isAuthenticated]);
 

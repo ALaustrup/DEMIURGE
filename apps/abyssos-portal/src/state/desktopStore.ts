@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
-export type AppId = 'chainOps' | 'miner' | 'wallet' | 'abyssBrowser' | 'abyssTorrent' | 'onChainFiles' | 'drc369Studio' | 'blockExplorer' | 'abyssShell' | 'abyssRuntime' | 'systemMonitor' | 'abyssGridMonitor' | 'abyssSpiritConsole' | 'cogFabricConsole' | 'cogSingularity' | 'genesisConsole' | 'temporalObservatory' | 'dnsConsole' | 'aweConsole' | 'aweAtlas';
+export type AppId = 'chainOps' | 'miner' | 'wallet' | 'abyssBrowser' | 'abyssTorrent' | 'onChainFiles' | 'drc369Studio' | 'blockExplorer' | 'abyssShell' | 'abyssRuntime' | 'systemMonitor' | 'abyssGridMonitor' | 'abyssSpiritConsole' | 'cogFabricConsole' | 'cogSingularity' | 'genesisConsole' | 'temporalObservatory' | 'dnsConsole' | 'aweConsole' | 'aweAtlas' | 'neonPlayer' | 'neonRadio';
 
 export interface Window {
   id: string;
@@ -11,6 +11,9 @@ export interface Window {
   y?: number;
   width?: number;
   height?: number;
+  isMinimized?: boolean;
+  isMaximized?: boolean;
+  originalSize?: { width: number; height: number; x: number; y: number };
 }
 
 export interface AppInfo {
@@ -40,6 +43,8 @@ export const APP_INFOS: AppInfo[] = [
   { id: 'dnsConsole', label: 'DNS', icon: '🌐' },
   { id: 'aweConsole', label: 'AWE', icon: '🌍' },
   { id: 'aweAtlas', label: 'Atlas', icon: '🗺️' },
+  { id: 'neonPlayer', label: 'NEON Player', icon: '🎵' },
+  { id: 'neonRadio', label: 'Abyss Radio', icon: '📻' },
 ];
 
 interface DesktopState {
@@ -49,6 +54,11 @@ interface DesktopState {
   openApp: (appId: AppId) => void;
   closeWindow: (windowId: string) => void;
   focusWindow: (windowId: string) => void;
+  minimizeWindow: (windowId: string) => void;
+  maximizeWindow: (windowId: string) => void;
+  restoreWindow: (windowId: string) => void;
+  updateWindowSize: (windowId: string, width: number, height: number) => void;
+  updateWindowPosition: (windowId: string, x: number, y: number) => void;
   reorderLauncher: (fromIndex: number, toIndex: number) => void;
   setLauncherApps: (appIds: AppId[]) => void;
 }
@@ -74,6 +84,8 @@ const appTitles: Record<AppId, string> = {
   dnsConsole: 'Abyss DNS Console',
   aweConsole: 'AWE Console',
   aweAtlas: 'World Atlas',
+  neonPlayer: 'NEON Player',
+  neonRadio: 'Abyss Radio',
 };
 
 // Default launcher order
@@ -131,6 +143,84 @@ export const useDesktopStore = create<DesktopState>()(
 
       focusWindow: (windowId: string) => {
         set({ activeWindowId: windowId });
+      },
+
+      minimizeWindow: (windowId: string) => {
+        set((state) => ({
+          openWindows: state.openWindows.map((w) =>
+            w.id === windowId ? { ...w, isMinimized: true } : w
+          ),
+        }));
+      },
+
+      maximizeWindow: (windowId: string) => {
+        set((state) => {
+          const win = state.openWindows.find((w) => w.id === windowId);
+          if (!win || win.isMaximized) return state;
+
+          const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 1920;
+          const screenHeight = typeof window !== 'undefined' ? window.innerHeight - 32 : 1080;
+
+          return {
+            openWindows: state.openWindows.map((w) =>
+              w.id === windowId
+                ? {
+                    ...w,
+                    isMaximized: true,
+                    originalSize: {
+                      width: w.width || 800,
+                      height: w.height || 600,
+                      x: w.x || 100,
+                      y: w.y || 100,
+                    },
+                    x: 0,
+                    y: 0,
+                    width: screenWidth,
+                    height: screenHeight,
+                  }
+                : w
+            ),
+          };
+        });
+      },
+
+      restoreWindow: (windowId: string) => {
+        set((state) => {
+          const window = state.openWindows.find((w) => w.id === windowId);
+          if (!window) return state;
+
+          return {
+            openWindows: state.openWindows.map((w) =>
+              w.id === windowId && w.originalSize
+                ? {
+                    ...w,
+                    isMaximized: false,
+                    isMinimized: false,
+                    ...w.originalSize,
+                    originalSize: undefined,
+                  }
+                : w.id === windowId
+                ? { ...w, isMaximized: false, isMinimized: false }
+                : w
+            ),
+          };
+        });
+      },
+
+      updateWindowSize: (windowId: string, width: number, height: number) => {
+        set((state) => ({
+          openWindows: state.openWindows.map((w) =>
+            w.id === windowId ? { ...w, width, height } : w
+          ),
+        }));
+      },
+
+      updateWindowPosition: (windowId: string, x: number, y: number) => {
+        set((state) => ({
+          openWindows: state.openWindows.map((w) =>
+            w.id === windowId ? { ...w, x, y } : w
+          ),
+        }));
       },
 
       reorderLauncher: (fromIndex: number, toIndex: number) => {
