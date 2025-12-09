@@ -10,12 +10,17 @@ export class NftApi {
 
   /**
    * Mint a D-GEN NFT (Archon-only)
+   * 
+   * @param owner - Address of the NFT owner
+   * @param fabricRootHash - 64-character hex string (0x prefix optional)
+   * @param royaltyBps - Royalty in basis points (0-10000), optional
+   * @param signedTxHex - Signed transaction hex string, optional (may be omitted in dev mode)
    */
   async mintDgenNft(
     owner: Address,
     fabricRootHash: string,
-    signedTxHex: string,
-    royaltyBps?: number
+    royaltyBps?: number,
+    signedTxHex?: string
   ): Promise<DGenMetadata> {
     if (!/^0x[0-9a-f]{64}$/i.test(fabricRootHash)) {
       throw new Error('Invalid fabric_root_hash: must be 64-char hex string');
@@ -25,7 +30,7 @@ export class NftApi {
       owner,
       fabric_root_hash: fabricRootHash,
       royalty_bps: royaltyBps ?? 0,
-      signed_tx_hex: signedTxHex,
+      signed_tx_hex: signedTxHex ?? '',
     });
   }
 

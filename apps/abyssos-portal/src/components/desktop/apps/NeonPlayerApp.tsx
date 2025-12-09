@@ -104,7 +104,9 @@ export function NeonPlayerApp({ assetId }: NeonPlayerAppProps) {
   useEffect(() => {
     if (isPlaying) {
       const updateTime = () => {
-        if (audioRef.current) {
+        if (isVideo && videoRef.current) {
+          setCurrentTime(videoRef.current.currentTime);
+        } else if (!isVideo && audioRef.current) {
           setCurrentTime(audioRef.current.currentTime);
         }
         animationFrameRef.current = requestAnimationFrame(updateTime);
@@ -117,7 +119,7 @@ export function NeonPlayerApp({ assetId }: NeonPlayerAppProps) {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [isPlaying, setCurrentTime]);
+  }, [isPlaying, isVideo, setCurrentTime]);
 
   const loadTrack = async (id: string) => {
     try {
