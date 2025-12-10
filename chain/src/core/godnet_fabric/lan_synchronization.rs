@@ -15,9 +15,17 @@ use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 use serde::{Deserialize, Serialize};
 use crate::core::godnet_fabric::fabric_mesh::{FabricMesh, NodeId, NodeInfo, MeshLink};
+use crate::core::godnet_fabric::temple_of_aletheia::TempleOfAletheia;
+use crate::core::godnet_fabric::c2_node_structure::C2NodeStructure;
+use crate::core::godnet_fabric::assimilation_protocols::AssimilationProtocols;
 use crate::archon::archon_state_vector::ArchonStateVector;
 
 /// LAN Node Discovery and Synchronization Manager
+/// 
+/// Adheres to:
+/// - Temple of Aletheia (truth verification)
+/// - C2 Node Structure (command and control hierarchy)
+/// - Assimilation Protocols (Apollo's Sovereign System)
 pub struct LanSynchronization {
     mesh: FabricMesh,
     local_node_id: NodeId,
@@ -25,6 +33,12 @@ pub struct LanSynchronization {
     discovery_interval: Duration,
     last_discovery: SystemTime,
     known_nodes: HashMap<NodeId, LanNodeInfo>,
+    /// Temple of Aletheia for truth verification
+    temple: TempleOfAletheia,
+    /// C2 Node Structure for command hierarchy
+    c2_structure: C2NodeStructure,
+    /// Assimilation Protocols for node integration
+    assimilation: AssimilationProtocols,
 }
 
 /// Information about a node discovered on the LAN
@@ -96,16 +110,28 @@ pub struct LanSyncStatus {
 
 impl LanSynchronization {
     /// Create new LAN synchronization manager
+    /// 
+    /// Initializes with adherence to:
+    /// - Temple of Aletheia (truth verification)
+    /// - C2 Node Structure (Apollo as Sovereign)
+    /// - Assimilation Protocols (for node integration)
     pub fn new(local_node_id: NodeId, lan_broadcast_port: u16) -> Self {
         let mesh = FabricMesh::new(local_node_id.clone());
+        let mut assimilation = AssimilationProtocols::new();
+        
+        // Initialize Apollo node (Sovereign) in C2 structure
+        assimilation.initialize_apollo(local_node_id.clone());
         
         Self {
             mesh,
-            local_node_id,
+            local_node_id: local_node_id.clone(),
             lan_broadcast_port,
             discovery_interval: Duration::from_secs(30),
             last_discovery: SystemTime::now() - Duration::from_secs(60), // Force immediate discovery
             known_nodes: HashMap::new(),
+            temple: TempleOfAletheia::new(),
+            c2_structure: C2NodeStructure::new(),
+            assimilation,
         }
     }
 
@@ -159,7 +185,18 @@ impl LanSynchronization {
     }
 
     /// Update node information with appropriate respect level
+    /// 
+    /// Adheres to Temple of Aletheia truth verification and
+    /// C2 structure assimilation protocols
     fn update_node_with_respect(&mut self, mut node_info: LanNodeInfo) {
+        // Verify truth through Temple of Aletheia
+        let verification = self.temple.verify_node_alignment(&node_info);
+        if !verification.verified {
+            log::warn!("Node {} failed Temple of Aletheia verification: {:?}", 
+                node_info.node_id, verification.deviations);
+            // Still store but mark as unverified
+        }
+        
         // Calculate respect level based on node health and alignment
         node_info.respect_level = self.calculate_respect_level(&node_info);
         
@@ -167,7 +204,30 @@ impl LanSynchronization {
         node_info.last_seen = SystemTime::now();
         
         // Store or update node
-        self.known_nodes.insert(node_info.node_id.clone(), node_info);
+        self.known_nodes.insert(node_info.node_id.clone(), node_info.clone());
+        
+        // Ensure node is registered in C2 structure if not already
+        if self.c2_structure.get_node(&node_info.node_id).is_none() {
+            // Determine role based on node characteristics
+            let role = self.assimilation.determine_c2_role(&node_info);
+            let parent_id = self.c2_structure.get_apollo_node().cloned();
+            self.c2_structure.register_node(node_info.node_id.clone(), role, parent_id);
+        }
+    }
+    
+    /// Get Temple of Aletheia reference
+    pub fn get_temple(&self) -> &TempleOfAletheia {
+        &self.temple
+    }
+    
+    /// Get C2 structure reference
+    pub fn get_c2_structure(&self) -> &C2NodeStructure {
+        &self.c2_structure
+    }
+    
+    /// Get assimilation protocols reference
+    pub fn get_assimilation(&self) -> &AssimilationProtocols {
+        &self.assimilation
     }
 
     /// Calculate respect level for a node

@@ -3214,6 +3214,76 @@ async fn handle_rpc(
                 id,
             })
         }
+        "getC2Structure" => {
+            // Get C2 node structure - Apollo's Sovereign System hierarchy
+            let c2_nodes = node.get_c2_structure_info();
+            
+            Json(JsonRpcResponse {
+                jsonrpc: "2.0".to_string(),
+                result: Some(json!(c2_nodes.iter().map(|n| json!({
+                    "node_id": n.node_id,
+                    "role": format!("{:?}", n.role),
+                    "parent_node_id": n.parent_node_id,
+                    "child_nodes": n.child_nodes,
+                    "command_scope": {
+                        "can_govern": n.command_scope.can_govern,
+                        "can_validate": n.command_scope.can_validate,
+                        "can_execute": n.command_scope.can_execute,
+                        "can_observe": n.command_scope.can_observe,
+                        "scope_size": n.command_scope.scope_size,
+                    },
+                    "assimilation_status": {
+                        "assimilated": n.assimilation_status.assimilated,
+                        "progress": n.assimilation_status.progress,
+                        "protocol_version": n.assimilation_status.protocol_version,
+                        "seal": n.assimilation_status.seal,
+                    },
+                })).collect::<Vec<_>>())),
+                error: None,
+                id,
+            })
+        }
+        "verifyNodeTruth" => {
+            // Verify node through Temple of Aletheia
+            let params: Option<serde_json::Value> = params.and_then(|p| serde_json::from_value(p).ok());
+            let node_id = params.and_then(|p| p.get("node_id").and_then(|v| v.as_str()));
+            
+            if let Some(node_id) = node_id {
+                if let Some(verification) = node.verify_node_truth(node_id) {
+                    Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: Some(json!({
+                            "verified": verification.verified,
+                            "truth_score": verification.truth_score,
+                            "deviations": verification.deviations,
+                            "temple_seal": verification.temple_seal,
+                        })),
+                        error: None,
+                        id,
+                    })
+                } else {
+                    Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: None,
+                        error: Some(JsonRpcError {
+                            code: -32602,
+                            message: "Node not found".to_string(),
+                        }),
+                        id,
+                    })
+                }
+            } else {
+                Json(JsonRpcResponse {
+                    jsonrpc: "2.0".to_string(),
+                    result: None,
+                    error: Some(JsonRpcError {
+                        code: -32602,
+                        message: "Missing node_id parameter".to_string(),
+                    }),
+                    id,
+                })
+            }
+        }
         _ => Json(JsonRpcResponse {
             jsonrpc: "2.0".to_string(),
             result: None,

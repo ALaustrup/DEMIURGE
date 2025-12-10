@@ -460,6 +460,30 @@ impl Node {
             .expect("lan_sync mutex poisoned")
             .identify_event_horizon_nodes()
     }
+    
+    /// Get Temple of Aletheia reference for truth verification
+    pub fn get_temple_of_aletheia(&self) -> crate::core::godnet_fabric::TempleOfAletheia {
+        // Return a copy/clone of the temple (it's stateless for verification)
+        crate::core::godnet_fabric::TempleOfAletheia::new()
+    }
+    
+    /// Get C2 node structure information
+    pub fn get_c2_structure_info(&self) -> Vec<crate::core::godnet_fabric::C2Node> {
+        let lan_sync = self.lan_sync.lock().expect("lan_sync mutex poisoned");
+        let c2_structure = lan_sync.get_c2_structure();
+        c2_structure.get_all_nodes().into_iter().cloned().collect()
+    }
+    
+    /// Verify node through Temple of Aletheia
+    pub fn verify_node_truth(&self, node_id: &str) -> Option<crate::core::godnet_fabric::AletheiaVerification> {
+        let lan_sync = self.lan_sync.lock().expect("lan_sync mutex poisoned");
+        if let Some(node_info) = lan_sync.get_known_nodes().iter().find(|n| n.node_id == node_id) {
+            let temple = lan_sync.get_temple();
+            Some(temple.verify_node_alignment(node_info))
+        } else {
+            None
+        }
+    }
 }
 
 /// Initialize genesis state if not already initialized.
