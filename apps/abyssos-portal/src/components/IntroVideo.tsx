@@ -24,10 +24,57 @@ export function IntroVideo({ onComplete, onSkip }: IntroVideoProps) {
     const video = videoRef.current;
     if (!video) return;
 
+    let skipTimer: ReturnType<typeof setTimeout> | null = null;
+    let hasCompleted = false;
+
     // Show skip button after 2 seconds
-    const skipTimer = setTimeout(() => {
+    skipTimer = setTimeout(() => {
       setShowSkip(true);
     }, 2000);
+
+    // Handle video end - ONLY call onComplete when video actually ends
+    const handleEnded = () => {
+      if (hasCompleted) return; // Prevent multiple calls
+      hasCompleted = true;
+      console.log('Intro video ended naturally');
+      localStorage.setItem('abyssos_intro_seen', 'true');
+      onComplete();
+    };
+
+    // Handle video errors - log but don't auto-complete
+    const handleError = (e: Event) => {
+      console.error('Video error:', e);
+      const error = video.error;
+      if (error) {
+        console.error('Video error details:', {
+          code: error.code,
+          message: error.message,
+        });
+      }
+      // Don't auto-complete on error - let user skip manually
+    };
+
+    // Handle video canplay - ensure video is ready
+    const handleCanPlay = () => {
+      console.log('Video can play');
+    };
+
+    // Handle video loadedmetadata
+    const handleLoadedMetadata = () => {
+      console.log('Video metadata loaded, duration:', video.duration);
+    };
+
+    // Handle video stalled - don't auto-complete
+    const handleStalled = () => {
+      console.warn('Video stalled - buffering');
+    };
+
+    // Add event listeners
+    video.addEventListener('ended', handleEnded);
+    video.addEventListener('error', handleError);
+    video.addEventListener('canplay', handleCanPlay);
+    video.addEventListener('loadedmetadata', handleLoadedMetadata);
+    video.addEventListener('stalled', handleStalled);
 
     // Attempt to play
     const playPromise = video.play();
@@ -35,6 +82,7 @@ export function IntroVideo({ onComplete, onSkip }: IntroVideoProps) {
     if (playPromise !== undefined) {
       playPromise
         .then(() => {
+          console.log('Video playback started');
           setIsPlaying(true);
           setHasPlayed(true);
         })
@@ -44,17 +92,15 @@ export function IntroVideo({ onComplete, onSkip }: IntroVideoProps) {
         });
     }
 
-    // Handle video end
-    const handleEnded = () => {
-      localStorage.setItem('abyssos_intro_seen', 'true');
-      onComplete();
-    };
-
-    video.addEventListener('ended', handleEnded);
-
     return () => {
-      clearTimeout(skipTimer);
+      if (skipTimer) {
+        clearTimeout(skipTimer);
+      }
       video.removeEventListener('ended', handleEnded);
+      video.removeEventListener('error', handleError);
+      video.removeEventListener('canplay', handleCanPlay);
+      video.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      video.removeEventListener('stalled', handleStalled);
     };
   }, [onComplete]);
 
@@ -95,6 +141,18 @@ export function IntroVideo({ onComplete, onSkip }: IntroVideoProps) {
             muted={false}
             preload="auto"
             onClick={handleClickToPlay}
+            onError={(e) => {
+              console.error('Video element error:', e);
+            }}
+            onLoadStart={() => {
+              console.log('Video load started');
+            }}
+            onLoadedData={() => {
+              console.log('Video data loaded');
+            }}
+            onCanPlay={() => {
+              console.log('Video can play');
+            }}
           >
             <source src="/video/intro.mp4" type="video/mp4" />
             Your browser does not support the video tag.
