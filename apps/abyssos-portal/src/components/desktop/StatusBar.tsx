@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useAbyssID } from '../../hooks/useAbyssID';
-import { ChainStatusPill } from '../ChainStatusPill';
 import { useTheme } from '../../context/ThemeContext';
 import { useMusicPlayerStore } from '../../state/musicPlayerStore';
 import { useDesktopStore } from '../../state/desktopStore';
@@ -115,13 +114,7 @@ export function StatusBar() {
         {/* Widgetized Right Side - Render widgets in order */}
         <div className="flex items-center space-x-4">
           {visibleWidgets.map((widget) => {
-            if (widget.id === 'rpc-status') {
-              return (
-                <div key={widget.id} className="ml-4">
-                  <ChainStatusPill />
-                </div>
-              );
-            }
+            // RPC status removed from toolbar - now in Settings window
             
             if (widget.id === 'music-player' && currentTrack && isBackgroundMode) {
               return (

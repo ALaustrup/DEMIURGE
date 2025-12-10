@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useCustomizationStore, type ColorScheme } from '../../state/customizationStore';
 import { Button } from '../shared/Button';
 import { Card } from '../shared/Card';
+import { ChainStatusPill } from '../ChainStatusPill';
 
 interface CustomizationPanelProps {
   isOpen: boolean;
@@ -36,7 +37,7 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
       text: '#e4e4e7',
     }
   );
-  const [activeTab, setActiveTab] = useState<'colors' | 'toolbar'>('colors');
+  const [activeTab, setActiveTab] = useState<'colors' | 'toolbar' | 'settings'>('colors');
 
   const handleColorChange = (key: keyof ColorScheme, value: string) => {
     const updated = { ...localColors, [key]: value };
@@ -126,6 +127,16 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
                   }`}
                 >
                   Toolbar
+                </button>
+                <button
+                  onClick={() => setActiveTab('settings')}
+                  className={`px-4 py-2 rounded ${
+                    activeTab === 'settings'
+                      ? 'bg-abyss-cyan/20 text-abyss-cyan'
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  Settings
                 </button>
               </div>
 
@@ -263,6 +274,19 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
                   <Button onClick={resetToolbarWidgets} variant="secondary" className="w-full">
                     Reset Toolbar
                   </Button>
+                </div>
+              )}
+
+              {/* Settings Tab */}
+              {activeTab === 'settings' && (
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-abyss-cyan mb-4">System Status</h3>
+                    <div className="p-4 bg-abyss-dark border border-abyss-cyan/30 rounded">
+                      <div className="mb-2 text-sm text-gray-300">RPC Connection Status</div>
+                      <ChainStatusPill />
+                    </div>
+                  </div>
                 </div>
               )}
             </Card>
