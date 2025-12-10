@@ -10,6 +10,18 @@ cargo install --path cli
 
 ## Usage
 
+### AbyssOS Operations
+
+```bash
+# Initialize AbyssOS development environment (full setup)
+demiurge abyss init
+
+# Initialize specific components
+demiurge abyss init --abyssid        # Initialize AbyssID database
+demiurge abyss init --install        # Install all dependencies
+demiurge abyss init --directories    # Create necessary directories
+```
+
 ### UrgeID Operations
 
 ```bash

@@ -55,6 +55,11 @@ enum Commands {
         #[arg(long, default_value = "/opt/demiurge/keys/validator.key")]
         output: String,
     },
+    /// AbyssOS operations
+    Abyss {
+        #[command(subcommand)]
+        command: AbyssCommands,
+    },
 }
 
 #[derive(Subcommand)]
@@ -150,6 +155,22 @@ enum DevCommands {
     Capsule {
         #[command(subcommand)]
         command: CapsuleCommands,
+    },
+}
+
+#[derive(Subcommand)]
+enum AbyssCommands {
+    /// Initialize AbyssOS development environment
+    Init {
+        /// Initialize AbyssID backend database
+        #[arg(long)]
+        abyssid: bool,
+        /// Install dependencies for all apps
+        #[arg(long)]
+        install: bool,
+        /// Create necessary directories
+        #[arg(long)]
+        directories: bool,
     },
 }
 
@@ -481,6 +502,198 @@ async fn main() -> anyhow::Result<()> {
             println!("  Key path: {}", key_path.display());
             println!("  Validator address: {}", address);
             println!("\n⚠️  Keep your validator key secure! Never share it.");
+        }
+        Commands::Abyss { command } => {
+            match command {
+                AbyssCommands::Init { abyssid, install, directories } => {
+                    println!("🌊 Initializing AbyssOS environment...\n");
+                    
+                    // Get the repository root (assuming we're in the repo)
+                    let repo_root = std::env::current_dir()?;
+                    
+                    if directories {
+                        println!("📁 Creating necessary directories...");
+                        let dirs = vec![
+                            "apps/abyssid-backend/data",
+                            "apps/abyssos-portal/dist",
+                            "indexer/abyss-gateway/data",
+                        ];
+                        
+                        for dir in dirs {
+                            let path = repo_root.join(dir);
+                            std::fs::create_dir_all(&path)?;
+                            println!("  ✓ Created: {}", dir);
+                        }
+                    }
+                    
+                    if abyssid {
+                        println!("\n🔐 Initializing AbyssID backend database...");
+                        let abyssid_path = repo_root.join("apps/abyssid-backend");
+                        if abyssid_path.exists() {
+                            // Check if db-init.js exists
+                            let db_init = abyssid_path.join("src/db-init.js");
+                            if db_init.exists() {
+                                println!("  Running: node src/db-init.js");
+                                let output = std::process::Command::new("node")
+                                    .arg("src/db-init.js")
+                                    .current_dir(&abyssid_path)
+                                    .output()?;
+                                
+                                if output.status.success() {
+                                    println!("  ✓ AbyssID database initialized");
+                                } else {
+                                    eprintln!("  ✗ Failed to initialize database");
+                                    eprintln!("  {}", String::from_utf8_lossy(&output.stderr));
+                                }
+                            } else {
+                                eprintln!("  ✗ db-init.js not found at {}", db_init.display());
+                            }
+                        } else {
+                            eprintln!("  ✗ AbyssID backend directory not found");
+                        }
+                    }
+                    
+                    if install {
+                        println!("\n📦 Installing dependencies...");
+                        println!("  This may take a few minutes...\n");
+                        
+                        // Install root dependencies
+                        println!("  Installing root dependencies (pnpm)...");
+                        let root_output = std::process::Command::new("pnpm")
+                            .arg("install")
+                            .current_dir(&repo_root)
+                            .output()?;
+                        
+                        if root_output.status.success() {
+                            println!("  ✓ Root dependencies installed");
+                        } else {
+                            eprintln!("  ✗ Failed to install root dependencies");
+                        }
+                        
+                        // Install AbyssOS Portal dependencies
+                        let portal_path = repo_root.join("apps/abyssos-portal");
+                        if portal_path.exists() {
+                            println!("  Installing AbyssOS Portal dependencies...");
+                            let portal_output = std::process::Command::new("pnpm")
+                                .arg("install")
+                                .current_dir(&portal_path)
+                                .output()?;
+                            
+                            if portal_output.status.success() {
+                                println!("  ✓ AbyssOS Portal dependencies installed");
+                            } else {
+                                eprintln!("  ✗ Failed to install AbyssOS Portal dependencies");
+                            }
+                        }
+                        
+                        // Install AbyssID Backend dependencies
+                        let abyssid_path = repo_root.join("apps/abyssid-backend");
+                        if abyssid_path.exists() {
+                            println!("  Installing AbyssID Backend dependencies...");
+                            let abyssid_output = std::process::Command::new("npm")
+                                .arg("install")
+                                .current_dir(&abyssid_path)
+                                .output()?;
+                            
+                            if abyssid_output.status.success() {
+                                println!("  ✓ AbyssID Backend dependencies installed");
+                            } else {
+                                eprintln!("  ✗ Failed to install AbyssID Backend dependencies");
+                            }
+                        }
+                    }
+                    
+                    if !abyssid && !install && !directories {
+                        // Default: do everything
+                        println!("Running full initialization (all steps)...\n");
+                        
+                        // Create directories
+                        println!("📁 Creating necessary directories...");
+                        let dirs = vec![
+                            "apps/abyssid-backend/data",
+                            "apps/abyssos-portal/dist",
+                            "indexer/abyss-gateway/data",
+                        ];
+                        
+                        for dir in dirs {
+                            let path = repo_root.join(dir);
+                            std::fs::create_dir_all(&path)?;
+                            println!("  ✓ Created: {}", dir);
+                        }
+                        
+                        // Initialize AbyssID database
+                        println!("\n🔐 Initializing AbyssID backend database...");
+                        let abyssid_path = repo_root.join("apps/abyssid-backend");
+                        if abyssid_path.exists() {
+                            let db_init = abyssid_path.join("src/db-init.js");
+                            if db_init.exists() {
+                                println!("  Running: node src/db-init.js");
+                                let output = std::process::Command::new("node")
+                                    .arg("src/db-init.js")
+                                    .current_dir(&abyssid_path)
+                                    .output()?;
+                                
+                                if output.status.success() {
+                                    println!("  ✓ AbyssID database initialized");
+                                } else {
+                                    eprintln!("  ✗ Failed to initialize database");
+                                    eprintln!("  {}", String::from_utf8_lossy(&output.stderr));
+                                }
+                            } else {
+                                eprintln!("  ✗ db-init.js not found");
+                            }
+                        }
+                        
+                        // Install dependencies
+                        println!("\n📦 Installing dependencies...");
+                        println!("  This may take a few minutes...\n");
+                        
+                        println!("  Installing root dependencies (pnpm)...");
+                        let root_output = std::process::Command::new("pnpm")
+                            .arg("install")
+                            .current_dir(&repo_root)
+                            .output()?;
+                        
+                        if root_output.status.success() {
+                            println!("  ✓ Root dependencies installed");
+                        } else {
+                            eprintln!("  ✗ Failed to install root dependencies");
+                        }
+                        
+                        let portal_path = repo_root.join("apps/abyssos-portal");
+                        if portal_path.exists() {
+                            println!("  Installing AbyssOS Portal dependencies...");
+                            let portal_output = std::process::Command::new("pnpm")
+                                .arg("install")
+                                .current_dir(&portal_path)
+                                .output()?;
+                            
+                            if portal_output.status.success() {
+                                println!("  ✓ AbyssOS Portal dependencies installed");
+                            }
+                        }
+                        
+                        let abyssid_path = repo_root.join("apps/abyssid-backend");
+                        if abyssid_path.exists() {
+                            println!("  Installing AbyssID Backend dependencies...");
+                            let abyssid_output = std::process::Command::new("npm")
+                                .arg("install")
+                                .current_dir(&abyssid_path)
+                                .output()?;
+                            
+                            if abyssid_output.status.success() {
+                                println!("  ✓ AbyssID Backend dependencies installed");
+                            }
+                        }
+                    }
+                    
+                    println!("\n✨ AbyssOS initialization complete!");
+                    println!("\nNext steps:");
+                    println!("  • Start AbyssID backend: cd apps/abyssid-backend && node src/server.js");
+                    println!("  • Start AbyssOS Portal: cd apps/abyssos-portal && pnpm dev");
+                    println!("  • Visit: http://localhost:5173");
+                }
+            }
         }
     }
 
