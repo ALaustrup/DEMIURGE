@@ -6,7 +6,7 @@ import { remoteAbyssIDProvider } from '../services/abyssid/remoteProvider';
 interface AbyssIDContextValue {
   session: AbyssIDSession | null;
   isLoading: boolean;
-  login: (username?: string) => Promise<void>;
+  login: (username?: string, secret?: string) => Promise<void>;
   logout: () => Promise<void>;
   signMessage: (message: Uint8Array | string) => Promise<string>;
   mode: 'local' | 'remote';
@@ -48,8 +48,8 @@ export function AbyssIDProvider({ children, provider }: AbyssIDProviderProps) {
       });
   }, [activeProvider]);
 
-  const login = async (username?: string) => {
-    const newSession = await activeProvider.login(username);
+  const login = async (username?: string, secret?: string) => {
+    const newSession = await activeProvider.login(username, secret);
     setSession(newSession);
   };
 

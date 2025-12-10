@@ -26,25 +26,44 @@ class LoginVoiceService {
       this.audio.volume = this.volume;
       this.audio.preload = 'auto';
 
-      // Play the voice
-      await this.audio.play();
-      this.hasPlayed = true;
+      // Set up error handler before attempting to play
+      this.audio.addEventListener('error', (e) => {
+        console.warn('Login voice file not found or failed to load. Place your audio file at: public/audio/login-voice.wav');
+        this.audio = null;
+      });
 
-      // Clean up after playback completes
+      // Set up ended handler
       this.audio.addEventListener('ended', () => {
         if (this.audio) {
           this.audio = null;
         }
       });
 
-      // Handle errors gracefully
-      this.audio.addEventListener('error', (e) => {
-        console.warn('Login voice file not found or failed to load. Place your audio file at: public/audio/login-voice.wav');
-        this.audio = null;
+      // Set up loadeddata handler to ensure file is ready
+      this.audio.addEventListener('loadeddata', () => {
+        // File is loaded, try to play
+        this.audio?.play().then(() => {
+          this.hasPlayed = true;
+        }).catch((error) => {
+          console.warn('Failed to play login voice (autoplay may be blocked):', error);
+          // Don't mark as played if autoplay fails, so user can try again
+        });
       });
+
+      // Load the audio file
+      this.audio.load();
+
+      // Also try immediate play (in case loadeddata already fired)
+      try {
+        await this.audio.play();
+        this.hasPlayed = true;
+      } catch (error) {
+        // Autoplay might be blocked, that's okay - loadeddata handler will try again
+        console.warn('Immediate play failed (may be blocked by browser):', error);
+      }
     } catch (error) {
-      console.warn('Failed to play login voice:', error);
-      // Auto-play might be blocked by browser, that's okay
+      console.warn('Failed to initialize login voice:', error);
+      this.audio = null;
     }
   }
 

@@ -61,7 +61,7 @@ export const abyssIdClient = {
     return account;
   },
 
-  async login(username: string, publicKey: string): Promise<AbyssAccount | null> {
+  async login(username: string, publicKey?: string): Promise<AbyssAccount | null> {
     // Normalize username to lowercase for consistent lookup
     const normalizedUsername = username.toLowerCase();
     const accounts = this.getAllAccounts();
@@ -71,19 +71,32 @@ export const abyssIdClient = {
       return null;
     }
 
-    // For now, just check username exists
-    // In production, would verify publicKey matches
-    if (account.publicKey !== publicKey && publicKey) {
-      // Allow login if publicKey is provided and matches, or if not provided (for demo)
-      if (publicKey && account.publicKey !== publicKey) {
-        return null;
-      }
+    // If publicKey is provided, verify it matches
+    if (publicKey && account.publicKey !== publicKey) {
+      return null;
     }
 
     // Set as authenticated
     localStorage.setItem(STORAGE_KEY_AUTH, JSON.stringify(account));
 
     return account;
+  },
+
+  async loginWithSecret(secret: string): Promise<AbyssAccount | null> {
+    // Derive public key from secret
+    const publicKey = derivePublicKey(secret);
+    
+    // Search all accounts for matching public key
+    const accounts = this.getAllAccounts();
+    for (const [username, account] of Object.entries(accounts)) {
+      if (account.publicKey === publicKey) {
+        // Set as authenticated
+        localStorage.setItem(STORAGE_KEY_AUTH, JSON.stringify(account));
+        return account;
+      }
+    }
+
+    return null;
   },
 
   async getCurrentAccount(): Promise<AbyssAccount | null> {

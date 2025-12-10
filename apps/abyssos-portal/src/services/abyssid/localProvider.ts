@@ -38,11 +38,27 @@ export const localAbyssIDProvider: AbyssIDProvider = {
     }
   },
 
-  async login(username?: string): Promise<AbyssIDSession> {
+  async login(username?: string, secret?: string): Promise<AbyssIDSession> {
+    // If secret is provided, try to login with secret
+    if (secret) {
+      const account = await abyssIdClient.loginWithSecret(secret);
+      if (account) {
+        const session: AbyssIDSession = {
+          username: account.username,
+          publicKey: account.publicKey,
+        };
+        localStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(session));
+        return session;
+      }
+      throw new Error('Invalid secret code');
+    }
+
     if (username) {
+      // Normalize username to lowercase
+      const normalizedUsername = username.toLowerCase();
       // Try to get existing account
       const accounts = abyssIdClient.getAllAccounts();
-      const account = accounts[username];
+      const account = accounts[normalizedUsername];
 
       if (account) {
         const session: AbyssIDSession = {
@@ -53,14 +69,7 @@ export const localAbyssIDProvider: AbyssIDProvider = {
         return session;
       }
 
-      // Create new account if doesn't exist
-      const newAccount = await abyssIdClient.signup(username);
-      const session: AbyssIDSession = {
-        username: newAccount.username,
-        publicKey: newAccount.publicKey,
-      };
-      localStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(session));
-      return session;
+      throw new Error('Account not found. Please sign up first.');
     }
 
     // If no username, try to get existing session
@@ -69,7 +78,7 @@ export const localAbyssIDProvider: AbyssIDProvider = {
       return existing;
     }
 
-    throw new Error('No username provided and no existing session');
+    throw new Error('No username or secret provided and no existing session');
   },
 
   async logout(): Promise<void> {

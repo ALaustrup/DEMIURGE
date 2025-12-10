@@ -91,7 +91,7 @@ export const remoteAbyssIDProvider: AbyssIDProvider = {
     }
   },
 
-  async login(username?: string): Promise<AbyssIDSession> {
+  async login(username?: string, secret?: string): Promise<AbyssIDSession> {
     if (!username) {
       // Try to restore existing session
       const existing = await this.getSession();

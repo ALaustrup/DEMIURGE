@@ -98,8 +98,14 @@ export function AbyssIDSignupModal({ isOpen, onClose, onSuccess }: AbyssIDSignup
     try {
       // Use the stored account from signup
       if (createdAccount) {
-        // Login with unified AbyssID system - this will automatically initialize identity service
-        await abyssIDLogin(createdAccount.username);
+        // Login with unified AbyssID system using the secret code
+        // This ensures the account is properly authenticated
+        if (createdAccount.abyssIdSecret) {
+          await abyssIDLogin(undefined, createdAccount.abyssIdSecret);
+        } else {
+          // Fallback to username login
+          await abyssIDLogin(createdAccount.username);
+        }
         // Start background music after successful signup
         backgroundMusicService.play();
         onSuccess(createdAccount.username, createdAccount.publicKey);
@@ -110,7 +116,11 @@ export function AbyssIDSignupModal({ isOpen, onClose, onSuccess }: AbyssIDSignup
         const accounts = abyssIdClient.getAllAccounts();
         const account = accounts[normalizedUsername];
         if (account) {
-          await abyssIDLogin(account.username);
+          if (account.abyssIdSecret) {
+            await abyssIDLogin(undefined, account.abyssIdSecret);
+          } else {
+            await abyssIDLogin(account.username);
+          }
           onSuccess(account.username, account.publicKey);
           handleClose();
         } else {
@@ -128,6 +138,8 @@ export function AbyssIDSignupModal({ isOpen, onClose, onSuccess }: AbyssIDSignup
       }
     } catch (error) {
       console.error('Error during backup confirmation:', error);
+      // Show error to user
+      alert('Failed to complete signup. Please try again.');
     }
   };
 

@@ -5,7 +5,7 @@ export interface AbyssIDSession {
 
 export interface AbyssIDProvider {
   getSession(): Promise<AbyssIDSession | null>;
-  login(username?: string): Promise<AbyssIDSession>;
+  login(username?: string, secret?: string): Promise<AbyssIDSession>;
   logout(): Promise<void>;
   signMessage(message: Uint8Array | string): Promise<string>;
 }
