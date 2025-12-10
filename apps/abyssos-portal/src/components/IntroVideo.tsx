@@ -19,15 +19,6 @@ export function IntroVideo({ onComplete, onSkip }: IntroVideoProps) {
   const [showSkip, setShowSkip] = useState(false);
   const [hasPlayed, setHasPlayed] = useState(false);
 
-  // Check if user has seen intro before
-  useEffect(() => {
-    const hasSeenIntro = localStorage.getItem('abyssos_intro_seen') === 'true';
-    if (hasSeenIntro && onSkip) {
-      // Auto-skip if already seen (optional - remove if you want it to always play)
-      // onSkip();
-    }
-  }, [onSkip]);
-
   // Auto-play video on mount
   useEffect(() => {
     const video = videoRef.current;

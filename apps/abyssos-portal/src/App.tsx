@@ -3,7 +3,6 @@ import { useAuthStore } from './state/authStore';
 import { AbyssIDProvider } from './context/AbyssIDContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { BlockListenerProvider } from './context/BlockListenerContext';
-import { BootScreen } from './routes/BootScreen';
 import { IntroVideo } from './components/IntroVideo';
 import { LoginScreen } from './routes/LoginScreen';
 import { Desktop } from './routes/Desktop';
@@ -11,13 +10,13 @@ import { WalletInitializer } from './components/WalletInitializer';
 import { migrateOldDemiNFTData } from './services/abyssid/drc369';
 import './styles/globals.css';
 
-type Screen = 'boot' | 'intro' | 'login' | 'desktop';
+type Screen = 'intro' | 'login' | 'desktop';
 
 function App() {
-  const [screen, setScreen] = useState<Screen>('boot');
-  const [showBoot, setShowBoot] = useState(true);
+  const [screen, setScreen] = useState<Screen>('intro');
   const [showIntro, setShowIntro] = useState(true);
   const { isAuthenticated, isLoading, initialize } = useAuthStore();
+  const hasInitialized = useRef(false);
 
   useEffect(() => {
     // Migrate old DemiNFT data to DRC-369 on app startup
@@ -27,26 +26,19 @@ function App() {
       console.error('Migration error:', error);
     }
     
-    initialize().then(() => {
-      // After auth init, check if we should skip boot
-      if (isAuthenticated) {
-        setShowBoot(false);
-        setScreen('desktop');
-      }
-    }).catch((error) => {
-      console.error('Initialization error:', error);
-      // Continue even if initialization fails
-    });
-  }, [initialize, isAuthenticated]);
-
-  const handleBootComplete = () => {
-    // After boot, show intro video
-    setShowBoot(false);
-    setScreen('intro');
-  };
+    // Initialize auth only once
+    if (!hasInitialized.current) {
+      hasInitialized.current = true;
+      initialize().catch((error) => {
+        console.error('Initialization error:', error);
+        // Continue even if initialization fails
+      });
+    }
+  }, [initialize]);
 
   const handleIntroComplete = () => {
     setShowIntro(false);
+    // After intro video, show login/signup (or desktop if already authenticated)
     if (isAuthenticated) {
       setScreen('desktop');
     } else {
@@ -66,16 +58,7 @@ function App() {
     );
   }
 
-  if (showBoot && screen === 'boot') {
-    return (
-      <ThemeProvider>
-        <AbyssIDProvider>
-          <BootScreen onComplete={handleBootComplete} />
-        </AbyssIDProvider>
-      </ThemeProvider>
-    );
-  }
-
+  // Show intro video first (unless already authenticated and intro was skipped)
   if (showIntro && screen === 'intro') {
     return (
       <ThemeProvider>
@@ -86,7 +69,8 @@ function App() {
     );
   }
 
-  if (screen === 'login') {
+  // Show login/signup screen after intro (or if already authenticated, skip to desktop)
+  if (screen === 'login' || (!isAuthenticated && !showIntro)) {
     return (
       <ThemeProvider>
         <AbyssIDProvider>
@@ -96,16 +80,17 @@ function App() {
     );
   }
 
-        return (
-          <ThemeProvider>
-            <AbyssIDProvider>
-              <BlockListenerProvider>
-                <WalletInitializer />
-                <Desktop />
-              </BlockListenerProvider>
-            </AbyssIDProvider>
-          </ThemeProvider>
-        );
+  // Show desktop for authenticated users
+  return (
+    <ThemeProvider>
+      <AbyssIDProvider>
+        <BlockListenerProvider>
+          <WalletInitializer />
+          <Desktop />
+        </BlockListenerProvider>
+      </AbyssIDProvider>
+    </ThemeProvider>
+  );
 }
 
 export default App;
