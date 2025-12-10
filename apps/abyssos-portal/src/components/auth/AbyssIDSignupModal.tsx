@@ -98,13 +98,17 @@ export function AbyssIDSignupModal({ isOpen, onClose, onSuccess }: AbyssIDSignup
     try {
       // Use the stored account from signup
       if (createdAccount) {
-        // Login with unified AbyssID system using the secret code
-        // This ensures the account is properly authenticated
-        if (createdAccount.abyssIdSecret) {
-          await abyssIDLogin(undefined, createdAccount.abyssIdSecret);
-        } else {
-          // Fallback to username login
+        // Account is already created and stored in localStorage
+        // Just need to set up the session - try login with username first (simpler)
+        try {
           await abyssIDLogin(createdAccount.username);
+        } catch (loginError) {
+          // If username login fails, try with secret
+          if (createdAccount.abyssIdSecret) {
+            await abyssIDLogin(undefined, createdAccount.abyssIdSecret);
+          } else {
+            throw loginError;
+          }
         }
         // Start background music after successful signup
         backgroundMusicService.play();
@@ -116,10 +120,14 @@ export function AbyssIDSignupModal({ isOpen, onClose, onSuccess }: AbyssIDSignup
         const accounts = abyssIdClient.getAllAccounts();
         const account = accounts[normalizedUsername];
         if (account) {
-          if (account.abyssIdSecret) {
-            await abyssIDLogin(undefined, account.abyssIdSecret);
-          } else {
+          try {
             await abyssIDLogin(account.username);
+          } catch (loginError) {
+            if (account.abyssIdSecret) {
+              await abyssIDLogin(undefined, account.abyssIdSecret);
+            } else {
+              throw loginError;
+            }
           }
           onSuccess(account.username, account.publicKey);
           handleClose();
@@ -132,14 +140,15 @@ export function AbyssIDSignupModal({ isOpen, onClose, onSuccess }: AbyssIDSignup
             onSuccess(account.username, account.publicKey);
             handleClose();
           } else {
-            console.error('Failed to find account after signup');
+            throw new Error('Account not found after signup');
           }
         }
       }
     } catch (error) {
       console.error('Error during backup confirmation:', error);
-      // Show error to user
-      alert('Failed to complete signup. Please try again.');
+      // Show error to user with more details
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      alert(`Failed to complete signup: ${errorMessage}. Please try again.`);
     }
   };
 
