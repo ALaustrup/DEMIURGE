@@ -559,30 +559,55 @@ async fn main() -> anyhow::Result<()> {
                         
                         // Install root dependencies
                         println!("  Installing root dependencies (pnpm)...");
-                        let root_output = std::process::Command::new("pnpm")
+                        let pnpm_cmd = if cfg!(windows) { "pnpm.cmd" } else { "pnpm" };
+                        let root_output = std::process::Command::new(pnpm_cmd)
                             .arg("install")
                             .current_dir(&repo_root)
-                            .output()?;
+                            .output();
                         
-                        if root_output.status.success() {
-                            println!("  ✓ Root dependencies installed");
-                        } else {
-                            eprintln!("  ✗ Failed to install root dependencies");
+                        match root_output {
+                            Ok(output) if output.status.success() => {
+                                println!("  ✓ Root dependencies installed");
+                            }
+                            Ok(_) => {
+                                eprintln!("  ✗ Failed to install root dependencies");
+                                // Try without .cmd extension as fallback
+                                if cfg!(windows) {
+                                    if let Ok(fallback_output) = std::process::Command::new("pnpm")
+                                        .arg("install")
+                                        .current_dir(&repo_root)
+                                        .output() {
+                                        if fallback_output.status.success() {
+                                            println!("  ✓ Root dependencies installed (fallback)");
+                                        }
+                                    }
+                                }
+                            }
+                            Err(e) => {
+                                eprintln!("  ✗ Failed to run pnpm: {}", e);
+                                eprintln!("  Note: Make sure pnpm is installed and in your PATH");
+                            }
                         }
                         
                         // Install AbyssOS Portal dependencies
                         let portal_path = repo_root.join("apps/abyssos-portal");
                         if portal_path.exists() {
                             println!("  Installing AbyssOS Portal dependencies...");
-                            let portal_output = std::process::Command::new("pnpm")
+                            let portal_output = std::process::Command::new(pnpm_cmd)
                                 .arg("install")
                                 .current_dir(&portal_path)
-                                .output()?;
+                                .output();
                             
-                            if portal_output.status.success() {
-                                println!("  ✓ AbyssOS Portal dependencies installed");
-                            } else {
-                                eprintln!("  ✗ Failed to install AbyssOS Portal dependencies");
+                            match portal_output {
+                                Ok(output) if output.status.success() => {
+                                    println!("  ✓ AbyssOS Portal dependencies installed");
+                                }
+                                Ok(_) => {
+                                    eprintln!("  ✗ Failed to install AbyssOS Portal dependencies");
+                                }
+                                Err(e) => {
+                                    eprintln!("  ✗ Failed to run pnpm: {}", e);
+                                }
                             }
                         }
                         
@@ -590,15 +615,22 @@ async fn main() -> anyhow::Result<()> {
                         let abyssid_path = repo_root.join("apps/abyssid-backend");
                         if abyssid_path.exists() {
                             println!("  Installing AbyssID Backend dependencies...");
-                            let abyssid_output = std::process::Command::new("npm")
+                            let npm_cmd = if cfg!(windows) { "npm.cmd" } else { "npm" };
+                            let abyssid_output = std::process::Command::new(npm_cmd)
                                 .arg("install")
                                 .current_dir(&abyssid_path)
-                                .output()?;
+                                .output();
                             
-                            if abyssid_output.status.success() {
-                                println!("  ✓ AbyssID Backend dependencies installed");
-                            } else {
-                                eprintln!("  ✗ Failed to install AbyssID Backend dependencies");
+                            match abyssid_output {
+                                Ok(output) if output.status.success() => {
+                                    println!("  ✓ AbyssID Backend dependencies installed");
+                                }
+                                Ok(_) => {
+                                    eprintln!("  ✗ Failed to install AbyssID Backend dependencies");
+                                }
+                                Err(e) => {
+                                    eprintln!("  ✗ Failed to run npm: {}", e);
+                                }
                             }
                         }
                     }
@@ -649,40 +681,76 @@ async fn main() -> anyhow::Result<()> {
                         println!("  This may take a few minutes...\n");
                         
                         println!("  Installing root dependencies (pnpm)...");
-                        let root_output = std::process::Command::new("pnpm")
+                        let pnpm_cmd = if cfg!(windows) { "pnpm.cmd" } else { "pnpm" };
+                        let root_output = std::process::Command::new(pnpm_cmd)
                             .arg("install")
                             .current_dir(&repo_root)
-                            .output()?;
+                            .output();
                         
-                        if root_output.status.success() {
-                            println!("  ✓ Root dependencies installed");
-                        } else {
-                            eprintln!("  ✗ Failed to install root dependencies");
+                        match root_output {
+                            Ok(output) if output.status.success() => {
+                                println!("  ✓ Root dependencies installed");
+                            }
+                            Ok(_) => {
+                                eprintln!("  ✗ Failed to install root dependencies");
+                                // Try without .cmd extension as fallback
+                                if cfg!(windows) {
+                                    if let Ok(fallback_output) = std::process::Command::new("pnpm")
+                                        .arg("install")
+                                        .current_dir(&repo_root)
+                                        .output() {
+                                        if fallback_output.status.success() {
+                                            println!("  ✓ Root dependencies installed (fallback)");
+                                        }
+                                    }
+                                }
+                            }
+                            Err(e) => {
+                                eprintln!("  ✗ Failed to run pnpm: {}", e);
+                                eprintln!("  Note: Make sure pnpm is installed and in your PATH");
+                            }
                         }
                         
                         let portal_path = repo_root.join("apps/abyssos-portal");
                         if portal_path.exists() {
                             println!("  Installing AbyssOS Portal dependencies...");
-                            let portal_output = std::process::Command::new("pnpm")
+                            let portal_output = std::process::Command::new(pnpm_cmd)
                                 .arg("install")
                                 .current_dir(&portal_path)
-                                .output()?;
+                                .output();
                             
-                            if portal_output.status.success() {
-                                println!("  ✓ AbyssOS Portal dependencies installed");
+                            match portal_output {
+                                Ok(output) if output.status.success() => {
+                                    println!("  ✓ AbyssOS Portal dependencies installed");
+                                }
+                                Ok(_) => {
+                                    eprintln!("  ✗ Failed to install AbyssOS Portal dependencies");
+                                }
+                                Err(e) => {
+                                    eprintln!("  ✗ Failed to run pnpm: {}", e);
+                                }
                             }
                         }
                         
                         let abyssid_path = repo_root.join("apps/abyssid-backend");
                         if abyssid_path.exists() {
                             println!("  Installing AbyssID Backend dependencies...");
-                            let abyssid_output = std::process::Command::new("npm")
+                            let npm_cmd = if cfg!(windows) { "npm.cmd" } else { "npm" };
+                            let abyssid_output = std::process::Command::new(npm_cmd)
                                 .arg("install")
                                 .current_dir(&abyssid_path)
-                                .output()?;
+                                .output();
                             
-                            if abyssid_output.status.success() {
-                                println!("  ✓ AbyssID Backend dependencies installed");
+                            match abyssid_output {
+                                Ok(output) if output.status.success() => {
+                                    println!("  ✓ AbyssID Backend dependencies installed");
+                                }
+                                Ok(_) => {
+                                    eprintln!("  ✗ Failed to install AbyssID Backend dependencies");
+                                }
+                                Err(e) => {
+                                    eprintln!("  ✗ Failed to run npm: {}", e);
+                                }
                             }
                         }
                     }
