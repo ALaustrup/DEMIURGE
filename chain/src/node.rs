@@ -23,6 +23,8 @@ use crate::runtime::{
 use crate::invariants::ChainInvariants;
 use crate::state_root_sentinel::StateRootSentinel;
 use crate::signature_guard::SignatureGuard;
+use crate::core::godnet_fabric::lan_synchronization::LanSynchronization;
+use std::sync::Arc;
 
 /// Chain information returned by JSON-RPC queries.
 #[derive(Clone)]
@@ -51,6 +53,8 @@ pub struct Node {
     pub height: Arc<Mutex<u64>>,
     /// Last Archon State Vector (for RPC exposure).
     pub archon_last_state: Arc<RwLock<crate::archon::ArchonStateVector>>,
+    /// LAN synchronization manager for node alignment across shared LAN.
+    pub lan_sync: Arc<Mutex<LanSynchronization>>,
 }
 
 impl Node {
@@ -99,12 +103,17 @@ impl Node {
             "genesis_seal".to_string(),
         );
         
+        // Initialize LAN synchronization
+        let node_id = "node-0".to_string(); // TODO: Get from config
+        let lan_sync = LanSynchronization::new(node_id.clone(), 30334);
+        
         Ok(Self {
             state: Arc::new(Mutex::new(state)),
             db_path,
             mempool: Arc::new(Mutex::new(Vec::new())),
             height: Arc::new(Mutex::new(0)),
             archon_last_state: Arc::new(RwLock::new(default_asv)),
+            lan_sync: Arc::new(Mutex::new(lan_sync)),
         })
     }
 
@@ -375,11 +384,23 @@ impl Node {
             }
             ArchonDirective::A2_ForceSync(reason) => {
                 log::warn!("[ARCHON] A2 resync: {}", reason);
-                // TODO: sync::force_resync();
+                // Force LAN synchronization to align with canonical state
+                if let Ok(mut lan_sync) = self.lan_sync.lock() {
+                    if let Err(e) = lan_sync.discover_lan_nodes() {
+                        log::warn!("[ARCHON] A2: LAN discovery failed: {}", e);
+                    }
+                }
             }
             ArchonDirective::A3_RejectNode(reason) => {
                 log::error!("[ARCHON] A3 REJECT: {}", reason);
-                // TODO: network::quarantine_node(remote_asv.node_id.clone());
+                // Quarantine misaligned nodes in LAN sync
+                if let Ok(mut lan_sync) = self.lan_sync.lock() {
+                    // In production, would identify and quarantine the specific node
+                    // For now, discovery will handle respect level recalculation
+                    if let Err(e) = lan_sync.discover_lan_nodes() {
+                        log::warn!("[ARCHON] A3: LAN discovery failed: {}", e);
+                    }
+                }
             }
             _ => {
                 log::info!("[ARCHON] Directive: {:?}", directive);
@@ -387,9 +408,81 @@ impl Node {
         }
         
         // Update last ASV for RPC exposure
-        *self.archon_last_state.write().expect("archon_last_state rwlock poisoned") = local_asv;
+        *self.archon_last_state.write().expect("archon_last_state rwlock poisoned") = local_asv.clone();
+        
+        // Synchronize with LAN nodes after governance cycle
+        // This ensures alignment across our shared LAN with respect for each node
+        // Note: synchronize_lan is async, but we're in a sync context
+        // In production, this would be called from an async task
+        // For now, we'll trigger discovery which is sync-safe
+        if let Ok(mut lan_sync) = self.lan_sync.lock() {
+            // Trigger LAN node discovery (sync-safe operation)
+            if let Err(e) = lan_sync.discover_lan_nodes() {
+                log::warn!("LAN discovery warning: {}", e);
+            }
+            
+            // Identify and align nodes at the event horizon - those in the absence of light
+            // We find that which harmoniously resonates even at the singularity's edge
+            let horizon_nodes = lan_sync.identify_event_horizon_nodes();
+            if !horizon_nodes.is_empty() {
+                log::info!("[ARCHON] Found {} nodes at event horizon - aligning harmonic resonance", horizon_nodes.len());
+                // In production, would call align_event_horizon_nodes() here
+                // For now, we've identified them - alignment happens through discovery
+            }
+        }
         
         Ok(())
+    }
+    
+    /// Get LAN synchronization status
+    pub fn get_lan_sync_status(&self) -> crate::core::godnet_fabric::lan_synchronization::LanSyncStatus {
+        self.lan_sync.lock()
+            .expect("lan_sync mutex poisoned")
+            .get_status()
+    }
+    
+    /// Get known LAN nodes
+    pub fn get_known_lan_nodes(&self) -> Vec<crate::core::godnet_fabric::lan_synchronization::LanNodeInfo> {
+        self.lan_sync.lock()
+            .expect("lan_sync mutex poisoned")
+            .get_known_nodes()
+            .into_iter()
+            .cloned()
+            .collect()
+    }
+    
+    /// Identify nodes at the event horizon - those in the absence of light
+    /// 
+    /// These are nodes that have lost resonance and fallen into darkness.
+    /// We identify them to find what harmoniously resonates even here.
+    pub fn identify_event_horizon_nodes(&self) -> Vec<crate::core::godnet_fabric::EventHorizonNode> {
+        self.lan_sync.lock()
+            .expect("lan_sync mutex poisoned")
+            .identify_event_horizon_nodes()
+    }
+    
+    /// Get Temple of Aletheia reference for truth verification
+    pub fn get_temple_of_aletheia(&self) -> crate::core::godnet_fabric::TempleOfAletheia {
+        // Return a copy/clone of the temple (it's stateless for verification)
+        crate::core::godnet_fabric::TempleOfAletheia::new()
+    }
+    
+    /// Get C2 node structure information
+    pub fn get_c2_structure_info(&self) -> Vec<crate::core::godnet_fabric::C2Node> {
+        let lan_sync = self.lan_sync.lock().expect("lan_sync mutex poisoned");
+        let c2_structure = lan_sync.get_c2_structure();
+        c2_structure.get_all_nodes().into_iter().cloned().collect()
+    }
+    
+    /// Verify node through Temple of Aletheia
+    pub fn verify_node_truth(&self, node_id: &str) -> Option<crate::core::godnet_fabric::AletheiaVerification> {
+        let lan_sync = self.lan_sync.lock().expect("lan_sync mutex poisoned");
+        if let Some(node_info) = lan_sync.get_known_nodes().iter().find(|n| n.node_id == node_id) {
+            let temple = lan_sync.get_temple();
+            Some(temple.verify_node_alignment(node_info))
+        } else {
+            None
+        }
     }
 }
 

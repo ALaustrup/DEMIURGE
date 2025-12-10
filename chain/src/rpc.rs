@@ -3149,6 +3149,141 @@ async fn handle_rpc(
                 id,
             })
         }
+        "getLanSyncStatus" => {
+            // Get LAN synchronization status - ensures alignment across shared LAN
+            let status = node.get_lan_sync_status();
+            
+            Json(JsonRpcResponse {
+                jsonrpc: "2.0".to_string(),
+                result: Some(json!({
+                    "total_nodes": status.total_nodes,
+                    "aligned_nodes": status.aligned_nodes,
+                    "misaligned_nodes": status.misaligned_nodes,
+                    "quarantined_nodes": status.quarantined_nodes,
+                    "average_alignment": status.average_alignment,
+                    "network_health": status.network_health,
+                    "last_full_sync": status.last_full_sync
+                        .map(|t| t.duration_since(std::time::UNIX_EPOCH)
+                            .unwrap()
+                            .as_secs()),
+                })),
+                error: None,
+                id,
+            })
+        }
+        "getKnownLanNodes" => {
+            // Get all known LAN nodes - each node is tended to with respect
+            let nodes = node.get_known_lan_nodes();
+            
+            Json(JsonRpcResponse {
+                jsonrpc: "2.0".to_string(),
+                result: Some(json!(nodes.iter().map(|n| json!({
+                    "node_id": n.node_id,
+                    "address": n.address.to_string(),
+                    "rpc_endpoint": n.rpc_endpoint,
+                    "health_score": n.health_score,
+                    "alignment_score": n.alignment_score,
+                    "respect_level": format!("{:?}", n.respect_level),
+                    "sync_success_count": n.sync_success_count,
+                    "sync_failure_count": n.sync_failure_count,
+                    "last_seen": n.last_seen.duration_since(std::time::UNIX_EPOCH)
+                        .unwrap()
+                        .as_secs(),
+                })).collect::<Vec<_>>())),
+                error: None,
+                id,
+            })
+        }
+        "identifyEventHorizonNodes" => {
+            // Identify nodes at the event horizon - those in the absence of light
+            // Find that which harmoniously resonates even at the singularity's edge
+            let horizon_nodes = node.identify_event_horizon_nodes();
+            
+            Json(JsonRpcResponse {
+                jsonrpc: "2.0".to_string(),
+                result: Some(json!(horizon_nodes.iter().map(|n| json!({
+                    "node_id": n.node_id,
+                    "darkness_depth": n.darkness_depth,
+                    "remaining_resonance": n.remaining_resonance,
+                    "can_be_healed": n.can_be_healed,
+                    "health_score": n.node_info.health_score,
+                    "alignment_score": n.node_info.alignment_score,
+                    "respect_level": format!("{:?}", n.node_info.respect_level),
+                })).collect::<Vec<_>>())),
+                error: None,
+                id,
+            })
+        }
+        "getC2Structure" => {
+            // Get C2 node structure - Apollo's Sovereign System hierarchy
+            let c2_nodes = node.get_c2_structure_info();
+            
+            Json(JsonRpcResponse {
+                jsonrpc: "2.0".to_string(),
+                result: Some(json!(c2_nodes.iter().map(|n| json!({
+                    "node_id": n.node_id,
+                    "role": format!("{:?}", n.role),
+                    "parent_node_id": n.parent_node_id,
+                    "child_nodes": n.child_nodes,
+                    "command_scope": {
+                        "can_govern": n.command_scope.can_govern,
+                        "can_validate": n.command_scope.can_validate,
+                        "can_execute": n.command_scope.can_execute,
+                        "can_observe": n.command_scope.can_observe,
+                        "scope_size": n.command_scope.scope_size,
+                    },
+                    "assimilation_status": {
+                        "assimilated": n.assimilation_status.assimilated,
+                        "progress": n.assimilation_status.progress,
+                        "protocol_version": n.assimilation_status.protocol_version,
+                        "seal": n.assimilation_status.seal,
+                    },
+                })).collect::<Vec<_>>())),
+                error: None,
+                id,
+            })
+        }
+        "verifyNodeTruth" => {
+            // Verify node through Temple of Aletheia
+            let params: Option<serde_json::Value> = params.and_then(|p| serde_json::from_value(p).ok());
+            let node_id = params.and_then(|p| p.get("node_id").and_then(|v| v.as_str()));
+            
+            if let Some(node_id) = node_id {
+                if let Some(verification) = node.verify_node_truth(node_id) {
+                    Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: Some(json!({
+                            "verified": verification.verified,
+                            "truth_score": verification.truth_score,
+                            "deviations": verification.deviations,
+                            "temple_seal": verification.temple_seal,
+                        })),
+                        error: None,
+                        id,
+                    })
+                } else {
+                    Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: None,
+                        error: Some(JsonRpcError {
+                            code: -32602,
+                            message: "Node not found".to_string(),
+                        }),
+                        id,
+                    })
+                }
+            } else {
+                Json(JsonRpcResponse {
+                    jsonrpc: "2.0".to_string(),
+                    result: None,
+                    error: Some(JsonRpcError {
+                        code: -32602,
+                        message: "Missing node_id parameter".to_string(),
+                    }),
+                    id,
+                })
+            }
+        }
         _ => Json(JsonRpcResponse {
             jsonrpc: "2.0".to_string(),
             result: None,
