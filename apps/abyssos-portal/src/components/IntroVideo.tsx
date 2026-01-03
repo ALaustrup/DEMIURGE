@@ -243,35 +243,23 @@ export function IntroVideo({ onComplete, onSkip }: IntroVideoProps) {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm cursor-pointer"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleClickToPlay();
-            }}
-            onMouseDown={(e) => {
-              e.stopPropagation();
-            }}
+            className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm"
             style={{ 
               pointerEvents: 'auto',
-              zIndex: 9999
+              zIndex: 9999,
+              cursor: 'pointer'
             }}
           >
             <div className="text-center pointer-events-none">
-              <motion.button
-                className="text-6xl mb-4 text-white hover:text-abyss-cyan transition-colors pointer-events-auto cursor-pointer bg-transparent border-none p-0"
-                animate={{ scale: [1, 1.1, 1] }}
+              <motion.div
+                className="text-6xl mb-4 text-white"
+                animate={{ scale: [1, 1.2, 1] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleClickToPlay();
-                }}
-                onMouseDown={(e) => {
-                  e.stopPropagation();
-                }}
               >
                 ▶
-              </motion.button>
-              <div className="text-white text-lg">Click to play intro</div>
+              </motion.div>
+              <div className="text-white text-lg mb-2">Click anywhere to play intro</div>
+              <div className="text-white/70 text-sm">(Video will start muted, then unmute automatically)</div>
             </div>
           </motion.div>
         )}
