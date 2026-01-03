@@ -147,7 +147,7 @@ if ! grep -q "^AllowUsers" "$SSH_CONFIG"; then
     echo "AllowUsers $CURRENT_USER" | sudo tee -a "$SSH_CONFIG" > /dev/null
 fi
 
-sudo systemctl restart sshd
+sudo systemctl restart ssh
 log "INFO" "SSH hardened (restart required for full effect)"
 
 # Firewall configuration
