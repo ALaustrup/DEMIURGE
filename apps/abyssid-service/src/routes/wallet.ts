@@ -1,9 +1,9 @@
-import { Router } from 'express';
+import express, { type Request, type Response } from 'express';
 import { getDb } from '../db';
 import { getSessionId, getUserIdFromSession } from './abyssid';
 import { deriveDemiurgeKeypair } from '../crypto/keyDerivation';
 
-const router = Router();
+const router: express.Router = express.Router();
 
 const RPC_URL = process.env.DEMIURGE_RPC_URL || 'https://rpc.demiurge.cloud/rpc';
 
