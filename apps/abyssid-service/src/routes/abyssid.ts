@@ -115,8 +115,9 @@ router.post('/register', async (req, res) => {
       });
       
       if (mintResponse.ok) {
-        const mintResult = (await mintResponse.json()) as { result?: string | number };
-        if (mintResult && mintResult.result !== undefined) {
+        const jsonResponse = await mintResponse.json();
+        const mintResult = jsonResponse as { result?: string | number };
+        if (mintResult && typeof mintResult === 'object' && mintResult.result !== undefined) {
           // Update wallet record
           const balance = Number(mintResult.result) / 100000000; // Convert from smallest units
           db.prepare(`

@@ -2,7 +2,7 @@ import express, { type Request, type Response } from 'express';
 import { z } from 'zod';
 import { getDb } from '../db';
 import { getSessionId, getUserIdFromSession } from './abyssid';
-import { mintDrc369OnChain } from '../crypto/chainSigner';
+import { mintDrc369OnChain } from '../crypto/chainSigner.js';
 import { getChainInfo } from '../rpc.js';
 
 const router: express.Router = express.Router();

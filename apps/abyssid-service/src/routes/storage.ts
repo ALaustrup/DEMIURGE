@@ -7,7 +7,7 @@ import { createHash } from 'crypto';
 import { promises as fs } from 'fs';
 import { join } from 'path';
 import { randomUUID } from 'crypto';
-import { mintDrc369OnChain } from '../crypto/chainSigner';
+import { mintDrc369OnChain } from '../crypto/chainSigner.js';
 import { getChainInfo } from '../rpc.js';
 
 const router: express.Router = express.Router();
