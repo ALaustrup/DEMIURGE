@@ -141,13 +141,26 @@ export function IntroVideo({ onComplete, onSkip }: IntroVideoProps) {
     onComplete();
   };
 
-  const handleClickToPlay = () => {
+  const handleClickToPlay = async () => {
     const video = videoRef.current;
     if (video && !isPlaying) {
-      video.play().then(() => {
+      try {
+        await video.play();
         setIsPlaying(true);
         setHasPlayed(true);
-      });
+        console.log('Video playback started via click');
+      } catch (error) {
+        console.error('Failed to play video on click:', error);
+        // Try unmuting and playing again (some browsers require user interaction + unmute)
+        video.muted = false;
+        try {
+          await video.play();
+          setIsPlaying(true);
+          setHasPlayed(true);
+        } catch (err2) {
+          console.error('Failed to play video even after unmuting:', err2);
+        }
+      }
     }
   };
 
@@ -161,7 +174,10 @@ export function IntroVideo({ onComplete, onSkip }: IntroVideoProps) {
         transition={{ duration: 0.5 }}
       >
         {/* Video Container */}
-        <div className="absolute inset-0 flex items-center justify-center">
+        <div 
+          className="absolute inset-0 flex items-center justify-center"
+          style={{ pointerEvents: isPlaying ? 'auto' : 'none' }}
+        >
           <video
             ref={videoRef}
             className="w-full h-full object-contain"
@@ -205,18 +221,34 @@ export function IntroVideo({ onComplete, onSkip }: IntroVideoProps) {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-20 cursor-pointer"
-            onClick={handleClickToPlay}
-            style={{ pointerEvents: 'auto' }}
+            className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleClickToPlay();
+            }}
+            onMouseDown={(e) => {
+              e.stopPropagation();
+            }}
+            style={{ 
+              pointerEvents: 'auto',
+              zIndex: 9999
+            }}
           >
             <div className="text-center pointer-events-none">
-              <motion.div 
-                className="text-6xl mb-4 text-white"
+              <motion.button
+                className="text-6xl mb-4 text-white hover:text-abyss-cyan transition-colors pointer-events-auto cursor-pointer bg-transparent border-none p-0"
                 animate={{ scale: [1, 1.1, 1] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleClickToPlay();
+                }}
+                onMouseDown={(e) => {
+                  e.stopPropagation();
+                }}
               >
                 ▶
-              </motion.div>
+              </motion.button>
               <div className="text-white text-lg">Click to play intro</div>
             </div>
           </motion.div>
