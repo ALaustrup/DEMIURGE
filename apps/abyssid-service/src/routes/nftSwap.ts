@@ -1,11 +1,11 @@
-import { Router } from 'express';
+import express, { type Request, type Response } from 'express';
 import { z } from 'zod';
 import { getDb } from '../db';
 import { getSessionId, getUserIdFromSession } from './abyssid';
 import { mintDrc369OnChain } from '../crypto/chainSigner';
 import { getChainInfo } from '../rpc.js';
 
-const router = Router();
+const router: express.Router = express.Router();
 
 const NFTSwapRequestSchema = z.object({
   originChain: z.enum(['ETH', 'POLYGON', 'BSC', 'SOL']), // Focus on Ethereum, Solana, Polygon

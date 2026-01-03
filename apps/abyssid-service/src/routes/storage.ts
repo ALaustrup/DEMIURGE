@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import express, { type Request, type Response } from 'express';
 import multer from 'multer';
 import { z } from 'zod';
 import { getDb } from '../db';
@@ -10,7 +10,7 @@ import { randomUUID } from 'crypto';
 import { mintDrc369OnChain } from '../crypto/chainSigner';
 import { getChainInfo } from '../rpc.js';
 
-const router = Router();
+const router: express.Router = express.Router();
 
 const STORAGE_BASE_PATH = process.env.STORAGE_PATH || join(process.cwd(), 'data', 'user-storage');
 const STORAGE_QUOTA_BYTES = 536870912000; // 500GB in bytes
