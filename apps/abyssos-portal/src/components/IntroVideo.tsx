@@ -205,11 +205,18 @@ export function IntroVideo({ onComplete, onSkip }: IntroVideoProps) {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-20"
+            className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-20 cursor-pointer"
             onClick={handleClickToPlay}
+            style={{ pointerEvents: 'auto' }}
           >
-            <div className="text-center">
-              <div className="text-4xl mb-4">▶</div>
+            <div className="text-center pointer-events-none">
+              <motion.div 
+                className="text-6xl mb-4 text-white"
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              >
+                ▶
+              </motion.div>
               <div className="text-white text-lg">Click to play intro</div>
             </div>
           </motion.div>
