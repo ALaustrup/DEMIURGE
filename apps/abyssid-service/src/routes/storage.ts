@@ -1,8 +1,8 @@
 import express, { type Request, type Response } from 'express';
 import multer from 'multer';
 import { z } from 'zod';
-import { getDb } from '../db';
-import { getSessionId, getUserIdFromSession } from './abyssid';
+import { getDb } from '../db.js';
+import { getSessionId, getUserIdFromSession } from './abyssid.js';
 import { createHash } from 'crypto';
 import { promises as fs } from 'fs';
 import { join } from 'path';

@@ -1,6 +1,6 @@
 import express, { type Request, type Response } from 'express';
-import { getDb } from '../db';
-import { getSessionId, getUserIdFromSession } from './abyssid';
+import { getDb } from '../db.js';
+import { getSessionId, getUserIdFromSession } from './abyssid.js';
 import { deriveDemiurgeKeypair } from '../crypto/keyDerivation.js';
 
 const router: express.Router = express.Router();
