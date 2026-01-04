@@ -243,7 +243,7 @@ export function AppMarketplaceApp() {
             {session && (
               <div className="mt-6 pt-6 border-t border-abyss-cyan/20">
                 <button
-                  onClick={() => openApp('onChainIDE')}
+                  onClick={() => openApp('craft')}
                   className="w-full px-4 py-2 bg-abyss-cyan/20 hover:bg-abyss-cyan/30 rounded text-sm"
                 >
                   Create Your Own App

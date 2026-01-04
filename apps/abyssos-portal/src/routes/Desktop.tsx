@@ -32,7 +32,7 @@ import { DocumentEditorApp } from '../components/desktop/apps/DocumentEditorApp'
 import { VYBSocialApp } from '../components/desktop/apps/VYBSocialApp';
 import { AbyssWriterApp } from '../components/desktop/apps/AbyssWriterApp';
 import { AbyssCalcApp } from '../components/desktop/apps/AbyssCalcApp';
-import { OnChainIDEApp } from '../components/desktop/apps/OnChainIDEApp';
+import { CraftApp } from '../components/desktop/apps/CraftApp';
 import { AppMarketplaceApp } from '../components/desktop/apps/AppMarketplaceApp';
 import { ArchonAIAssistantApp } from '../components/desktop/apps/ArchonAIAssistantApp';
 import { MiningAccountingApp } from '../components/desktop/apps/MiningAccountingApp';
@@ -64,7 +64,7 @@ const appComponents: Record<string, React.ComponentType> = {
   vybSocial: VYBSocialApp,
   abyssWriter: AbyssWriterApp,
   abyssCalc: AbyssCalcApp,
-  onChainIDE: OnChainIDEApp,
+  craft: CraftApp,
   appMarketplace: AppMarketplaceApp,
   archonAI: ArchonAIAssistantApp,
   miningAccounting: MiningAccountingApp,

@@ -66,6 +66,26 @@ export class DemiurgeRPC {
       return { height: 0 };
     }
   }
+
+  async submitWorkClaim(params: {
+    address: string;
+    game_id: string;
+    session_id: string;
+    depth_metric: number;
+    active_ms: number;
+    extra?: string | null;
+  }): Promise<{ tx_hash: string; reward_estimate: string }> {
+    try {
+      const result = await this.request<{ tx_hash: string; reward_estimate: string }>(
+        'submitWorkClaim',
+        [params]
+      );
+      return result;
+    } catch (error) {
+      console.error('Failed to submit work claim:', error);
+      throw error;
+    }
+  }
 }
 
 // Export singleton instance

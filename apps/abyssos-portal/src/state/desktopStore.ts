@@ -28,7 +28,7 @@ export type AppId =
   | 'vybSocial'
   | 'abyssWriter'
   | 'abyssCalc'
-  | 'onChainIDE'
+  | 'craft'
   | 'appMarketplace'
   | 'archonAI'
   | 'miningAccounting';
@@ -127,7 +127,7 @@ const appTitles: Record<AppId, string> = {
   vybSocial: 'VYB Social',
   abyssWriter: 'Abyss Writer',
   abyssCalc: 'Abyss Calc',
-  onChainIDE: 'On-Chain IDE',
+  craft: 'CRAFT',
   appMarketplace: 'App Marketplace',
   archonAI: 'ArchonAI Assistant',
   miningAccounting: 'Mining Accounting',
