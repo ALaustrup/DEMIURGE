@@ -9,6 +9,7 @@ use demiurge_rust_sdk::DemiurgeSDK;
 use reqwest;
 
 mod keygen;
+mod help;
 
 #[derive(Parser)]
 #[command(name = "demiurge")]
@@ -59,6 +60,21 @@ enum Commands {
     Abyss {
         #[command(subcommand)]
         command: AbyssCommands,
+    },
+    /// Help and documentation system
+    Help {
+        /// Topic to get help for (leave empty for list)
+        topic: Option<String>,
+    },
+    /// Show lore and stories
+    Lore {
+        /// Specific lore topic (leave empty for list)
+        topic: Option<String>,
+    },
+    /// Interactive documentation browser
+    Docs {
+        /// Open specific documentation page
+        page: Option<String>,
     },
 }
 
@@ -762,6 +778,82 @@ async fn main() -> anyhow::Result<()> {
                     println!("  • Visit: http://localhost:5173");
                 }
             }
+        }
+        Commands::Help { topic } => {
+            let help_system = help::HelpSystem::new();
+            if let Some(t) = topic {
+                help_system.show_topic(&t);
+            } else {
+                help_system.list_topics();
+            }
+        }
+        Commands::Lore { topic } => {
+            let help_system = help::HelpSystem::new();
+            if let Some(t) = topic {
+                if let Some(help) = help_system.topics.get(&t) {
+                    if let Some(lore) = &help.lore {
+                        println!("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                        println!("📖 Lore: {}", help.title);
+                        println!("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+                        println!("{}", lore);
+                        println!("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+                    } else {
+                        println!("No lore available for topic: {}", t);
+                    }
+                } else {
+                    println!("Topic '{}' not found. Use 'demiurge lore' to see all topics.", t);
+                }
+            } else {
+                println!("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                println!("📖 Demiurge Lore - Available Stories");
+                println!("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+                let help_system = help::HelpSystem::new();
+                for (key, topic) in &help_system.topics {
+                    if topic.lore.is_some() {
+                        println!("  • demiurge lore {}", key);
+                        println!("    {}", topic.title);
+                        println!();
+                    }
+                }
+                println!("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+            }
+        }
+        Commands::Docs { page } => {
+            println!("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            println!("📚 Demiurge Documentation");
+            println!("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+            
+            if let Some(p) = page {
+                println!("Opening documentation page: {}\n", p);
+                println!("Documentation is available in the docs/ directory:");
+                println!("  • docs/README.md - Main documentation index");
+                println!("  • docs/overview/ - Architecture and core concepts");
+                println!("  • docs/api/ - API documentation");
+                println!("  • docs/development/ - Development guides");
+                println!("  • docs/lore/ - Lore and stories");
+                println!("\nFor web documentation, visit: https://demiurge.guru/docs");
+            } else {
+                println!("Available Documentation Categories:\n");
+                println!("  📖 Overview:");
+                println!("    • docs/overview/ARCHITECTURE_DEMIURGE_CURRENT.md");
+                println!("    • docs/overview/RUNTIME.md");
+                println!("    • docs/overview/CONSENSUS.md");
+                println!();
+                println!("  🔌 API:");
+                println!("    • docs/api/RPC.md");
+                println!("    • docs/api/WORK_CLAIM.md");
+                println!();
+                println!("  🛠️  Development:");
+                println!("    • docs/development/COMPREHENSIVE_DEVELOPMENT_ROADMAP.md");
+                println!("    • docs/development/DEVELOPER_INTEGRATION.md");
+                println!();
+                println!("  📖 Lore:");
+                println!("    • docs/lore/ - All lore stories");
+                println!();
+                println!("Usage: demiurge docs <page>");
+                println!("Example: demiurge docs overview/ARCHITECTURE_DEMIURGE_CURRENT.md");
+            }
+            println!("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
         }
     }
 
