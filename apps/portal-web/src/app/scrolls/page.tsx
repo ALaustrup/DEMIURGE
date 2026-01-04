@@ -17,7 +17,7 @@ import { ChatDoc } from "@/components/docs/ChatDoc";
 export default function ScrollsPage() {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
 
-  const toggleSection = (section: string) => {
+  const toggleSection = (section: string | null) => {
     setExpandedSection(expandedSection === section ? null : section);
   };
 
