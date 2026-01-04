@@ -88,10 +88,7 @@ export function StatusBar() {
         
         {/* Widgetized Right Side - Render widgets in order */}
         <div className="flex items-center space-x-2 sm:space-x-4 pr-2 sm:pr-8">
-          {/* RPC Status Indicator - Always visible */}
-          <div className="hidden sm:block">
-            <ChainStatusPill />
-          </div>
+          {/* RPC Status removed from status bar - now in Chain Ops app */}
           
           {visibleWidgets.map((widget) => {
             if (widget.id === 'music-player' && currentTrack && isBackgroundMode) {

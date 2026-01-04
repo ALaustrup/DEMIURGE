@@ -35,6 +35,7 @@ import { AbyssCalcApp } from '../components/desktop/apps/AbyssCalcApp';
 import { OnChainIDEApp } from '../components/desktop/apps/OnChainIDEApp';
 import { AppMarketplaceApp } from '../components/desktop/apps/AppMarketplaceApp';
 import { ArchonAIAssistantApp } from '../components/desktop/apps/ArchonAIAssistantApp';
+import { MiningAccountingApp } from '../components/desktop/apps/MiningAccountingApp';
 
 const appComponents: Record<string, React.ComponentType> = {
   chainOps: ChainOpsApp,
@@ -66,6 +67,7 @@ const appComponents: Record<string, React.ComponentType> = {
   onChainIDE: OnChainIDEApp,
   appMarketplace: AppMarketplaceApp,
   archonAI: ArchonAIAssistantApp,
+  miningAccounting: MiningAccountingApp,
 };
 
 export function Desktop() {

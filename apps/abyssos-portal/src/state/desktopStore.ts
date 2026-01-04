@@ -30,7 +30,8 @@ export type AppId =
   | 'abyssCalc'
   | 'onChainIDE'
   | 'appMarketplace'
-  | 'archonAI';
+  | 'archonAI'
+  | 'miningAccounting';
 
 export interface Window {
   id: string;
@@ -129,6 +130,7 @@ const appTitles: Record<AppId, string> = {
   onChainIDE: 'On-Chain IDE',
   appMarketplace: 'App Marketplace',
   archonAI: 'ArchonAI Assistant',
+  miningAccounting: 'Mining Accounting',
 };
 
 // Default launcher order

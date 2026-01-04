@@ -49,7 +49,7 @@ const CATEGORIES: Category[] = [
     id: 'development',
     label: 'Development',
     icon: '💻',
-    apps: ['onChainIDE', 'appMarketplace', 'archonAI', 'abyssRuntime', 'abyssShell', 'systemMonitor'],
+    apps: ['onChainIDE', 'appMarketplace', 'archonAI', 'miningAccounting', 'abyssRuntime', 'abyssShell', 'systemMonitor'],
   },
   {
     id: 'network',
@@ -124,9 +124,13 @@ export function AppStoreMenu({ isOpen, onClose }: AppStoreMenuProps) {
             onClick={onClose}
           />
 
-          {/* Menu Container - Centered on screen, responsive */}
+          {/* Menu Container - Attached to taskbar, full width */}
           <motion.div
-            className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[95vw] max-w-6xl h-[85vh] max-h-[700px] z-50 flex flex-col sm:flex-row overflow-hidden"
+            className="fixed top-8 left-0 right-0 w-full h-[calc(100vh-2rem)] max-h-[calc(100vh-2rem)] z-50 flex flex-col sm:flex-row overflow-hidden"
+            style={{
+              margin: '0',
+              maxWidth: '100vw',
+            }}
             style={{
               background: `
                 linear-gradient(135deg,
@@ -230,7 +234,7 @@ export function AppStoreMenu({ isOpen, onClose }: AppStoreMenuProps) {
                   >
                     <div className="text-xs text-gray-400 mb-2">CGT Balance</div>
                     <div className="text-2xl font-mono font-bold text-abyss-cyan">
-                      {balance.toFixed(4)}
+                      {typeof balance === 'number' ? balance.toFixed(8) : String(balance)}
                       <span className="text-sm text-gray-400 ml-1">CGT</span>
                     </div>
                   </div>
@@ -357,37 +361,25 @@ export function AppStoreMenu({ isOpen, onClose }: AppStoreMenuProps) {
                         if (!appInfo) return null;
 
                         return (
-                          <motion.button
+                          <button
                             key={appId}
                             onClick={() => handleAppClick(appId)}
-                            className="flex flex-col items-center gap-1 sm:gap-2 p-2 sm:p-4 rounded-lg border border-abyss-cyan/10 hover:border-abyss-cyan/40 transition-all group relative overflow-hidden"
-                            style={{
-                              background: `
-                                linear-gradient(135deg,
-                                  rgba(0, 0, 0, 0.4) 0%,
-                                  rgba(10, 5, 30, 0.3) 100%
-                                )
-                              `,
-                            }}
-                            whileHover={{ scale: 1.05, y: -2 }}
-                            whileTap={{ scale: 0.95 }}
+                            className="flex flex-col items-center gap-1 sm:gap-2 p-2 sm:p-4 rounded-lg border border-abyss-cyan/20 bg-black/40 hover:border-abyss-cyan/60 hover:bg-abyss-cyan/10 hover:shadow-[0_0_15px_rgba(0,255,255,0.3)] transition-all group relative overflow-hidden"
                           >
-                            {/* Hover glow */}
-                            <motion.div
-                              className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100"
+                            {/* Subtle hover glow */}
+                            <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                               style={{
-                                background: 'radial-gradient(circle, rgba(0, 255, 255, 0.1), transparent)',
+                                background: 'radial-gradient(circle, rgba(0, 255, 255, 0.15), transparent)',
                               }}
-                              transition={{ duration: 0.2 }}
                             />
 
-                            <div className="text-2xl sm:text-3xl md:text-4xl group-hover:scale-110 transition-transform relative z-10">
+                            <div className="text-2xl sm:text-3xl md:text-4xl relative z-10">
                               {appInfo.icon}
                             </div>
-                            <span className="text-[10px] sm:text-xs text-gray-300 group-hover:text-abyss-cyan text-center font-medium relative z-10 leading-tight">
+                            <span className="text-[10px] sm:text-xs text-gray-300 group-hover:text-abyss-cyan text-center font-medium relative z-10 leading-tight transition-colors">
                               {appInfo.label}
                             </span>
-                          </motion.button>
+                          </button>
                         );
                       })}
                     </motion.div>

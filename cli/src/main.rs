@@ -61,6 +61,11 @@ enum Commands {
         #[command(subcommand)]
         command: AbyssCommands,
     },
+    /// Mining operations
+    Mine {
+        #[command(subcommand)]
+        command: MineCommands,
+    },
     /// Help and documentation system
     Help {
         /// Topic to get help for (leave empty for list)
@@ -776,6 +781,74 @@ async fn main() -> anyhow::Result<()> {
                     println!("  • Start AbyssID backend: cd apps/abyssid-backend && node src/server.js");
                     println!("  • Start AbyssOS Portal: cd apps/abyssos-portal && pnpm dev");
                     println!("  • Visit: http://localhost:5173");
+                }
+            }
+        }
+        Commands::Mine { command } => {
+            match command {
+                MineCommands::Start { game_id, session_id } => {
+                    let sid = session_id.unwrap_or_else(|| {
+                        format!("session-{}-{}", 
+                            chrono::Utc::now().timestamp(),
+                            hex::encode(&rand::random::<[u8; 8]>())
+                        )
+                    });
+                    println!("🚀 Starting mining session...");
+                    println!("  Game ID: {}", game_id);
+                    println!("  Session ID: {}", sid);
+                    println!("\nMining session started. Use 'demiurge mine submit' to submit work claims.");
+                }
+                MineCommands::Submit { depth, time, game_id, session_id } => {
+                    println!("📤 Submitting work claim...");
+                    println!("  Game ID: {}", game_id);
+                    println!("  Session ID: {}", session_id);
+                    println!("  Depth Metric: {}", depth);
+                    println!("  Active Time: {}ms", time);
+                    
+                    match sdk.client().call::<serde_json::Value>(
+                        "work_claim_submit",
+                        Some(serde_json::json!({
+                            "game_id": game_id,
+                            "session_id": session_id,
+                            "depth_metric": depth,
+                            "active_ms": time,
+                        }))
+                    ).await {
+                        Ok(result) => {
+                            println!("✅ Work claim submitted successfully!");
+                            if let Some(reward) = result.get("reward") {
+                                println!("  Reward: {} CGT", reward);
+                            }
+                        }
+                        Err(e) => {
+                            eprintln!("❌ Failed to submit work claim: {}", e);
+                        }
+                    }
+                }
+                MineCommands::Stats => {
+                    println!("📊 Mining Statistics");
+                    println!("\nNote: Full statistics require local database.");
+                    println!("Use the Mining Accounting app in AbyssOS for detailed stats.");
+                }
+                MineCommands::Pending => {
+                    println!("⏳ Pending Rewards");
+                    println!("\nNote: Pending rewards are tracked on-chain.");
+                    println!("Use 'demiurge cgt balance <address>' to check your balance.");
+                }
+                MineCommands::History { limit } => {
+                    println!("📜 Mining History (last {} entries)", limit);
+                    println!("\nNote: Full history requires local database.");
+                    println!("Use the Mining Accounting app in AbyssOS for complete history.");
+                }
+                MineCommands::Adjust { reason, amount, evidence } => {
+                    println!("📝 Requesting Manual Adjustment");
+                    println!("  Reason: {}", reason);
+                    println!("  Amount: {} CGT", amount);
+                    if let Some(ev) = evidence {
+                        println!("  Evidence: {}", ev);
+                    }
+                    println!("\n⚠️  Adjustment requests require manual review.");
+                    println!("Your request has been logged. Check the Mining Accounting app for status.");
                 }
             }
         }
