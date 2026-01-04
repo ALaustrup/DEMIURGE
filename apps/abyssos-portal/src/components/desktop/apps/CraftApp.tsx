@@ -531,9 +531,14 @@ export function CraftApp() {
         timestamp: rigEntry.timestamp,
       };
 
+      // Get user's Demiurge address
+      if (!demiurgePublicKey) {
+        throw new Error('No Demiurge address found. Please ensure your AbyssID is properly configured.');
+      }
+
       // Store rig hash on-chain
       const result = await demiurgeRpc.submitWorkClaim({
-        address: userAddress,
+        address: demiurgePublicKey,
         game_id: 'craft',
         session_id: `rig-${currentProject.id}`,
         depth_metric: changes,
