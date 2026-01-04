@@ -16,7 +16,10 @@ export class DemiurgeRPC {
   private rpcUrl: string;
 
   constructor(rpcUrl?: string) {
-    this.rpcUrl = rpcUrl || import.meta.env.VITE_DEMIURGE_RPC_URL || 'https://rpc.demiurge.cloud/rpc';
+    const envUrl = rpcUrl || import.meta.env.VITE_DEMIURGE_RPC_URL || 'https://rpc.demiurge.cloud';
+    // Ensure URL ends with /rpc
+    const cleanUrl = envUrl.replace(/\/rpc$/, '');
+    this.rpcUrl = `${cleanUrl}/rpc`;
   }
 
   async request<T = any>(method: string, params: any[] = []): Promise<T> {
