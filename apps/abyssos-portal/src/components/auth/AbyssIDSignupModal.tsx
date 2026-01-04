@@ -194,9 +194,10 @@ export function AbyssIDSignupModal({ isOpen, onClose, onSuccess }: AbyssIDSignup
   };
 
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       {isOpen && (
         <motion.div
+          key="signup-modal"
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -204,6 +205,7 @@ export function AbyssIDSignupModal({ isOpen, onClose, onSuccess }: AbyssIDSignup
           onClick={handleClose}
         >
           <motion.div
+            key="signup-content"
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
