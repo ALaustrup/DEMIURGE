@@ -533,14 +533,15 @@ export function CraftApp() {
 
       // Store rig hash on-chain
       const result = await demiurgeRpc.submitWorkClaim({
+        address: userAddress,
         game_id: 'craft',
         session_id: `rig-${currentProject.id}`,
         depth_metric: changes,
-        active_ms: Date.now() - currentProject.updatedAt,
+        active_ms: Math.max(1000, Date.now() - currentProject.updatedAt),
         extra: JSON.stringify(rigData),
       });
 
-      rigEntry.onChainHash = result.hash || `rig-${rigEntry.id}`;
+      rigEntry.onChainHash = result.tx_hash || `rig-${rigEntry.id}`;
 
       // Update project with rig
       const updatedProject = {
