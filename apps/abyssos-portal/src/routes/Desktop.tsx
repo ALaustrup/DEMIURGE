@@ -32,6 +32,9 @@ import { DocumentEditorApp } from '../components/desktop/apps/DocumentEditorApp'
 import { VYBSocialApp } from '../components/desktop/apps/VYBSocialApp';
 import { AbyssWriterApp } from '../components/desktop/apps/AbyssWriterApp';
 import { AbyssCalcApp } from '../components/desktop/apps/AbyssCalcApp';
+import { OnChainIDEApp } from '../components/desktop/apps/OnChainIDEApp';
+import { AppMarketplaceApp } from '../components/desktop/apps/AppMarketplaceApp';
+import { ArchonAIAssistantApp } from '../components/desktop/apps/ArchonAIAssistantApp';
 
 const appComponents: Record<string, React.ComponentType> = {
   chainOps: ChainOpsApp,
