@@ -1,6 +1,6 @@
 # Creator God Token (CGT) - Tokenomics V2
 
-**Last Updated**: January 2025  
+**Last Updated**: January 5, 2026  
 **Version**: 2.0  
 **Total Supply**: 369,000,000,000 CGT (369 Billion)
 

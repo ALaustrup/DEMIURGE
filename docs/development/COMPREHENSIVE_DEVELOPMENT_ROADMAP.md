@@ -1,7 +1,7 @@
 # Comprehensive Development Roadmap
 ## Finishing All On-Chain Applications
 
-**Last Updated**: January 2025  
+**Last Updated**: January 5, 2026  
 **Status**: Active Development
 
 ---
@@ -357,7 +357,7 @@ This document outlines the complete development plan to finish all on-chain appl
 - GitHub workflow
 - App submission system
 - Review process
-- On-chain IDE
+- CRAFT IDE
 - Template library
 
 **Priority**: HIGH  

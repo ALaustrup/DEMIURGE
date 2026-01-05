@@ -1,6 +1,6 @@
 # Developer Integration System
 
-**Last Updated**: January 2025  
+**Last Updated**: January 5, 2026  
 **Status**: Design Phase
 
 ---
@@ -148,9 +148,9 @@ pnpm dev
 
 ---
 
-### 5. On-Chain IDE
+### 5. CRAFT IDE
 
-**Location**: `apps/abyssos-portal/src/components/desktop/apps/OnChainIDEApp.tsx`
+**Location**: `apps/abyssos-portal/src/components/desktop/apps/CraftApp.tsx`
 
 #### Features
 
@@ -299,7 +299,7 @@ Developer
     │
     ├─→ Use Template (or start from scratch)
     │
-    ├─→ Develop in On-Chain IDE
+    ├─→ Develop in CRAFT IDE
     │   │
     │   ├─→ Write Code
     │   ├─→ Test Locally

@@ -1,6 +1,6 @@
 # Creator God Token (CGT) - Complete Implementation Guide
 
-**Last Updated**: January 2025
+**Last Updated**: January 5, 2026
 
 ## Overview
 
@@ -15,7 +15,7 @@ Creator God Token (CGT) is the native currency of the Demiurge blockchain. It se
 - **Name**: Creator God Token
 - **Symbol**: CGT
 - **Decimals**: 8 (smallest unit: 10^-8 CGT)
-- **Max Supply**: 1,000,000,000 CGT (1 billion)
+- **Max Supply**: 369,000,000,000 CGT (369 billion)
 - **Storage Format**: All amounts stored as `u128` in smallest units
 - **Total Supply Formula**: `1,000,000,000 * 10^8 = 100,000,000,000,000,000` smallest units
 
@@ -212,7 +212,7 @@ Only the following modules can mint CGT (enforced in `cgt_mint_to()`):
 
 ### Max Supply Enforcement
 
-**Policy**: Total CGT supply cannot exceed 1 billion CGT
+**Policy**: Total CGT supply cannot exceed 369 billion CGT
 
 **Enforcement**:
 - Checked at mint time in `cgt_mint_to()`
@@ -801,7 +801,7 @@ Get transaction by hash.
    - Flag set automatically on file upload
 
 4. **"CGT_MAX_SUPPLY exceeded"**:
-   - Max supply reached (1 billion CGT)
+   - Max supply reached (369 billion CGT)
    - No more CGT can be minted
    - Consider implementing burning
 

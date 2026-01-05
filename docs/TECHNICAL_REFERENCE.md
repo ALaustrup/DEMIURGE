@@ -3,7 +3,7 @@
 > **For LLM Development Assistance**  
 > This document provides comprehensive technical information about the Demiurge codebase to assist LLMs in understanding and developing the system.
 
-**Last Updated**: January 2025  
+**Last Updated**: January 5, 2026  
 **Repository**: DEMIURGE  
 **Status**: Production (Live at https://demiurge.cloud)
 
@@ -642,7 +642,7 @@ pnpm test                      # Run all tests
 - **Name**: Creator God Token
 - **Symbol**: CGT
 - **Decimals**: 8
-- **Max Supply**: 1,000,000,000 CGT (1 billion)
+- **Max Supply**: 369,000,000,000 CGT (369 billion)
 - **Storage**: `u128` in smallest units (10^-8 precision)
 - **RPC Returns**: String to avoid JavaScript number overflow
 

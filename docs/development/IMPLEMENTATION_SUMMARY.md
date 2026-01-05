@@ -1,6 +1,6 @@
 # Implementation Summary
 
-**Date**: January 2025  
+**Date**: January 5, 2026  
 **Branch**: D1
 
 ---
@@ -49,7 +49,7 @@
 - App manifest system
 - Review process
 - Template library
-- On-chain IDE design
+- CRAFT IDE design
 - App marketplace design
 
 ### 5. On-Chain IDE
@@ -117,7 +117,7 @@
 
 3. **Test IDE and Marketplace**
    - Build AbyssOS
-   - Open On-Chain IDE app
+   - Open CRAFT IDE app
    - Create test project
    - Test build/deploy flow
 

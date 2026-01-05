@@ -1,13 +1,13 @@
 # CGT Exchange System Setup Guide
 
-**Last Updated**: January 2025
+**Last Updated**: January 5, 2026
 
 ## Current CGT Implementation Summary
 
 ### ✅ Fully Implemented
 
 1. **Token Core**:
-   - Max supply: 1 billion CGT (enforced)
+   - Max supply: 369 billion CGT (enforced)
    - 8 decimals (smallest unit: 10^-8)
    - On-chain balance tracking
    - Total supply tracking

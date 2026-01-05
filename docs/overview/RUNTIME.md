@@ -2,7 +2,7 @@
 
 This document describes all runtime modules available in the Demiurge chain. The runtime system uses a modular architecture where each module handles a specific domain of functionality.
 
-**Last Updated**: January 2025  
+**Last Updated**: January 5, 2026  
 **Runtime Version**: 1  
 **Total Modules**: 9
 
@@ -33,7 +33,7 @@ Modules are registered in a deterministic order (defined in `chain/src/runtime/m
 - `CGT_NAME`: "Creator God Token"
 - `CGT_SYMBOL`: "CGT"
 - `CGT_DECIMALS`: 8 (smallest unit: 10^-8 CGT)
-- `CGT_MAX_SUPPLY`: 1,000,000,000 CGT * 10^8 = 100,000,000,000,000,000 smallest units
+- `CGT_MAX_SUPPLY`: 369,000,000,000 CGT * 10^8 = 36,900,000,000,000,000,000 smallest units
 
 #### Public Functions
 

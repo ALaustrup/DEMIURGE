@@ -1,6 +1,6 @@
 # Demiurge Blockchain - Current State
 
-**Last Updated**: January 2025
+**Last Updated**: January 5, 2026
 
 ## Production Deployment
 
@@ -106,7 +106,7 @@ DEMIURGE/
 - ✅ Custom Proof-of-Work (Forge) - Memory-hard PoW using Argon2id + SHA-256
 - ✅ Modular runtime system - 9 runtime modules with versioned registration
 - ✅ JSON-RPC 2.0 API - 40+ RPC methods
-- ✅ CGT token (Creator God Token) - 8 decimals, 1B max supply
+- ✅ CGT token (Creator God Token) - 8 decimals, 369B max supply
 - ✅ Transaction signing (Ed25519) - Client-side signing support
 - ✅ State management (RocksDB) - Production-ready persistent storage
 - ✅ Transaction nonce management - Replay protection
@@ -147,6 +147,7 @@ See [Runtime Modules Documentation](overview/RUNTIME.md) for complete details.
   - Desktop environment with circular dock
   - Window management (drag, resize, minimize, maximize)
   - Chain Ops app (real-time blockchain status)
+  - CRAFT IDE (Creator's Advanced Framework & Tools) - Monaco Editor, AI integration, templates, drag-and-drop, GitHub integration, Rig system
   - Abyss Wallet integration
   - File storage (500GB per user)
   - NFT minting and swapping
@@ -209,7 +210,7 @@ See [RPC API Documentation](api/RPC.md) and [GraphQL API Documentation](api/GRAP
 
 ## Recent Milestones
 
-### Current Version (January 2025)
+### Current Version (January 5, 2026)
 
 - ✅ Complete runtime module system (9 modules)
 - ✅ Comprehensive RPC API (40+ methods)

@@ -1,6 +1,6 @@
 # Documentation Index
 
-**Last Updated**: January 2025
+**Last Updated**: January 5, 2026
 
 ## Quick Start
 
@@ -78,7 +78,7 @@
 - **RPC Endpoint**: https://rpc.demiurge.cloud/rpc
 - **AbyssID API**: https://demiurge.cloud/api/abyssid (production) or http://localhost:3001/api/abyssid (dev)
 
-## Recent Updates (January 2025)
+## Recent Updates (January 5, 2026)
 
 ### Documentation Improvements
 - ✅ Complete runtime module documentation (all 9 modules)
