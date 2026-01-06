@@ -18,7 +18,7 @@ use crate::core::transaction::{Address, Transaction};
 use crate::runtime::{
     get_all_active_listings, get_balance_cgt, get_cgt_total_supply, get_fabric_asset, get_listing, get_nft,
     get_nfts_by_owner, is_archon,
-    BankCgtModule, FabricRootHash, ListingId, NftId, Runtime, RuntimeModule, UrgeIDRegistryModule,
+    BankCgtModule, FabricRootHash, ListingId, NftId, Runtime, RuntimeModule, AbyssIDRegistryModule,
 };
 use crate::invariants::ChainInvariants;
 use crate::state_root_sentinel::StateRootSentinel;
@@ -431,17 +431,17 @@ fn init_genesis_state(state: &mut State) -> Result<()> {
         .map_err(|e| anyhow::anyhow!("Failed to mint genesis CGT: {}", e))?;
 
     // Mark Genesis Archon as Archon
-    let urgeid_module = UrgeIDRegistryModule::new();
+    let abyssid_module = AbyssIDRegistryModule::new();
     let claim_tx = Transaction {
         from: genesis_addr,
         nonce: 0,
-        module_id: "urgeid_registry".to_string(),
+        module_id: "abyssid_registry".to_string(),
         call_id: "claim_archon".to_string(),
         payload: vec![],
         fee: 0,
         signature: vec![],
     };
-    urgeid_module
+    abyssid_module
         .dispatch("claim_archon", &claim_tx, state)
         .map_err(|e| anyhow::anyhow!("Failed to claim genesis Archon: {}", e))?;
 

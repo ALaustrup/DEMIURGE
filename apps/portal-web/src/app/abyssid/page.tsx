@@ -18,16 +18,16 @@ import {
   signTransactionRpc,
   setUsername,
   resolveUsername,
-  getUrgeIdProgress,
+  getAbyssIdProgress,
   devClaimDevNft,
   isDevBadgeNft,
-  type UrgeIDProfile,
-  type UrgeIDProgress,
+  type AbyssIDProfile,
+  type AbyssIDProgress,
   type NftMetadata,
 } from "@/lib/rpc";
 import { graphqlQuery } from "@/lib/graphql";
 import { signTransaction } from "@/lib/signing";
-import { formatUrgeId } from "@/lib/urgeid";
+import { formatAbyssId } from "@/lib/abyssid";
 import { exportVault, importVault } from "@/lib/vault";
 import {
   saveTransaction,
@@ -37,7 +37,7 @@ import {
   type TransactionRecord,
 } from "@/lib/transactions";
 
-type UrgeIdViewMode = "landing" | "login" | "dashboard";
+type AbyssIdViewMode = "landing" | "login" | "dashboard";
 
 type Nft = {
   id: number;
@@ -47,20 +47,20 @@ type Nft = {
   royalty_bps?: number;
 };
 
-export default function UrgeIDPage() {
+export default function AbyssIDPage() {
   const router = useRouter();
-  const [mode, setMode] = useState<UrgeIdViewMode>("landing");
+  const [mode, setMode] = useState<AbyssIdViewMode>("landing");
   const [address, setAddress] = useState<string>("");
   const [privateKey, setPrivateKey] = useState<string>("");
   const [loginAddressInput, setLoginAddressInput] = useState<string>("");
-  const [profile, setProfile] = useState<UrgeIDProfile | null>(null);
+  const [profile, setProfile] = useState<AbyssIDProfile | null>(null);
   const [balance, setBalance] = useState<number | null>(null);
   const [nfts, setNfts] = useState<Nft[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [usernameInput, setUsernameInput] = useState("");
   const [usernameStatus, setUsernameStatus] = useState<string | null>(null);
-  const [progress, setProgress] = useState<UrgeIDProgress | null>(null);
+  const [progress, setProgress] = useState<AbyssIDProgress | null>(null);
   const [vaultStatus, setVaultStatus] = useState<string | null>(null);
   const [sendTo, setSendTo] = useState("");
   const [sendAmount, setSendAmount] = useState("");
@@ -87,8 +87,8 @@ export default function UrgeIDPage() {
 
   // Check if user already has a wallet on mount
   useEffect(() => {
-    const storedAddress = localStorage.getItem("demiurge_urgeid_wallet_address");
-    const storedKey = localStorage.getItem("demiurge_urgeid_wallet_key");
+    const storedAddress = localStorage.getItem("demiurge_abyssid_wallet_address");
+    const storedKey = localStorage.getItem("demiurge_abyssid_wallet_key");
     if (storedAddress && storedKey) {
       setAddress(storedAddress);
       setPrivateKey(storedKey);
@@ -114,7 +114,7 @@ export default function UrgeIDPage() {
     return { address: addrHex, privateKey: keyHex };
   };
 
-  const createUrgeID = async (addr?: string, key?: string) => {
+  const createAbyssID = async (addr?: string, key?: string) => {
     // Use provided address/key or fall back to state
     const finalAddress = addr || address;
     const finalKey = key || privateKey;
@@ -129,17 +129,17 @@ export default function UrgeIDPage() {
 
     try {
       // Auto-set display_name to a default (we'll use username later)
-      const displayName = `UrgeID ${address.slice(0, 8)}`;
+      const displayName = `AbyssID ${address.slice(0, 8)}`;
       
-      const profile = await callRpc<UrgeIDProfile>("urgeid_create", {
+      const profile = await callRpc<AbyssIDProfile>("abyssid_create", {
         address: finalAddress,
         display_name: displayName,
         bio: null,
       });
 
       // Store wallet locally
-      localStorage.setItem("demiurge_urgeid_wallet_address", finalAddress);
-      localStorage.setItem("demiurge_urgeid_wallet_key", finalKey);
+      localStorage.setItem("demiurge_abyssid_wallet_address", finalAddress);
+      localStorage.setItem("demiurge_abyssid_wallet_key", finalKey);
       
       // Update state
       setAddress(finalAddress);
@@ -150,7 +150,7 @@ export default function UrgeIDPage() {
       setShowSecurityModal(true);
       await loadDashboard(finalAddress);
     } catch (err: any) {
-      setError(err.message || "Failed to create UrgeID profile");
+      setError(err.message || "Failed to create AbyssID profile");
     } finally {
       setLoading(false);
     }
@@ -159,7 +159,7 @@ export default function UrgeIDPage() {
   const loadDashboard = async (addr: string) => {
     try {
       // Load profile
-      const profile = await callRpc<UrgeIDProfile | null>("urgeid_get", {
+      const profile = await callRpc<AbyssIDProfile | null>("abyssid_get", {
         address: addr,
       });
       if (profile) {
@@ -239,7 +239,7 @@ export default function UrgeIDPage() {
 
       // Load progression data
       try {
-        const progressData = await getUrgeIdProgress(addr);
+        const progressData = await getAbyssIdProgress(addr);
         setProgress(progressData);
       } catch (err) {
         console.error("Failed to load progression:", err);
@@ -279,7 +279,7 @@ export default function UrgeIDPage() {
 
   const handleLogin = async () => {
     if (!loginAddressInput.trim()) {
-      setError("Please enter an UrgeID address");
+      setError("Please enter an AbyssID address");
       return;
     }
 
@@ -305,12 +305,12 @@ export default function UrgeIDPage() {
 
     try {
       // Try to load profile
-      const profile = await callRpc<UrgeIDProfile | null>("urgeid_get", {
+      const profile = await callRpc<AbyssIDProfile | null>("abyssid_get", {
         address: normalizedAddr,
       });
 
       if (!profile) {
-        setError("No UrgeID found for this address. Check the address or generate a new one.");
+        setError("No AbyssID found for this address. Check the address or generate a new one.");
         setLoading(false);
         return;
       }
@@ -326,8 +326,8 @@ export default function UrgeIDPage() {
       setMode("dashboard");
       
       // Check if we have a private key for this address
-      const storedKey = localStorage.getItem("demiurge_urgeid_wallet_key");
-      const storedAddr = localStorage.getItem("demiurge_urgeid_wallet_address");
+      const storedKey = localStorage.getItem("demiurge_abyssid_wallet_key");
+      const storedAddr = localStorage.getItem("demiurge_abyssid_wallet_address");
       if (storedKey && storedAddr === normalizedAddr) {
         setPrivateKey(storedKey);
       } else {
@@ -336,7 +336,7 @@ export default function UrgeIDPage() {
 
       await loadDashboard(normalizedAddr);
     } catch (err: any) {
-      setError(err.message || "Failed to load UrgeID");
+      setError(err.message || "Failed to load AbyssID");
     } finally {
       setLoading(false);
     }
@@ -478,7 +478,7 @@ export default function UrgeIDPage() {
       });
       setRecipientError(null);
     } catch (err: any) {
-      setRecipientError(err.message || "No UrgeID found for this username");
+      setRecipientError(err.message || "No AbyssID found for this username");
       setResolvedRecipient(null);
     } finally {
       setResolvingRecipient(false);
@@ -526,7 +526,7 @@ export default function UrgeIDPage() {
       );
 
       // Get private key
-      const storedKey = localStorage.getItem("demiurge_urgeid_wallet_key");
+      const storedKey = localStorage.getItem("demiurge_abyssid_wallet_key");
       if (!storedKey) {
         throw new Error("Private key not available. Cannot sign transaction.");
       }
@@ -634,7 +634,7 @@ export default function UrgeIDPage() {
         >
           <h1 className="text-3xl font-semibold text-slate-50">My Void</h1>
           <p className="text-sm text-slate-300">
-            Your Void (UrgeID) is your sovereign identity on the Demiurge blockchain. It's your wallet address, your username, and your profile—all in one. Use it to earn CGT, level up through Syzygy contributions, interact with the network, and engage in World Chat and Direct Messages.
+            Your Void (AbyssID) is your sovereign identity on the Demiurge blockchain. It's your wallet address, your username, and your profile—all in one. Use it to earn CGT, level up through Syzygy contributions, interact with the network, and engage in World Chat and Direct Messages.
           </p>
 
           <div className="grid gap-4 md:grid-cols-2">
@@ -644,14 +644,14 @@ export default function UrgeIDPage() {
             >
               <h3 className="text-lg font-semibold text-slate-50 mb-2">Access Your Void</h3>
               <p className="text-sm text-slate-400">
-                Access an existing Void (UrgeID) by entering your address
+                Access an existing Void (AbyssID) by entering your address
               </p>
             </button>
 
             <button
               onClick={async () => {
                 const { address: newAddr, privateKey: newKey } = generateKeypair();
-                await createUrgeID(newAddr, newKey);
+                await createAbyssID(newAddr, newKey);
               }}
               disabled={loading}
               className="rounded-xl border border-violet-700 bg-violet-900/20 px-6 py-4 text-left transition-colors hover:border-violet-500 hover:bg-violet-900/30 disabled:opacity-50"
@@ -715,13 +715,13 @@ export default function UrgeIDPage() {
         >
           <h1 className="text-3xl font-semibold text-slate-50">Access Your Void</h1>
           <p className="text-sm text-slate-300">
-            Enter your UrgeID address to access your Void (profile and dashboard).
+            Enter your AbyssID address to access your Void (profile and dashboard).
           </p>
 
           <div className="space-y-4">
             <div>
               <label className="mb-2 block text-sm font-medium text-slate-300">
-                UrgeID Address
+                AbyssID Address
               </label>
               <input
                 type="text"
@@ -807,7 +807,7 @@ export default function UrgeIDPage() {
             >
               <h2 className="text-xl font-semibold text-slate-50 mb-4">Protect Your Void</h2>
               <div className="space-y-3 text-sm text-slate-300 mb-6">
-                <p>This Void (UrgeID) is your identity on the Demiurge blockchain.</p>
+                <p>This Void (AbyssID) is your identity on the Demiurge blockchain.</p>
                 <p>Whoever controls the private key controls your CGT, your NFTs, and your chat identity.</p>
                 <p>Store your key and backup info somewhere safe and offline.</p>
               </div>
@@ -846,8 +846,8 @@ export default function UrgeIDPage() {
         </button>
         <button
           onClick={() => {
-            localStorage.removeItem("demiurge_urgeid_wallet_address");
-            localStorage.removeItem("demiurge_urgeid_wallet_key");
+            localStorage.removeItem("demiurge_abyssid_wallet_address");
+            localStorage.removeItem("demiurge_abyssid_wallet_key");
             setMode("landing");
             setAddress("");
             setProfile(null);
@@ -1243,7 +1243,7 @@ export default function UrgeIDPage() {
                 <div className="space-y-3">
                   <div className="rounded-lg border border-rose-800 bg-rose-950/30 p-3">
                     <p className="text-xs text-rose-400 mb-2">
-                      ⚠️ Anyone with this key can control your UrgeID. Do not share this with anyone.
+                      ⚠️ Anyone with this key can control your AbyssID. Do not share this with anyone.
                     </p>
                     <div className="flex items-center gap-2">
                       <code className="font-mono text-xs break-all text-rose-300 flex-1">
@@ -1283,7 +1283,7 @@ export default function UrgeIDPage() {
                         const url = URL.createObjectURL(blob);
                         const a = document.createElement("a");
                         a.href = url;
-                        a.download = `urgeid-vault-${address.slice(0, 8)}.json`;
+                        a.download = `abyssid-vault-${address.slice(0, 8)}.json`;
                         a.click();
                         URL.revokeObjectURL(url);
                         setVaultStatus("Vault exported successfully.");
@@ -1351,7 +1351,7 @@ export default function UrgeIDPage() {
                 )}
                 {!resolvedRecipient && !recipientError && sendTo.trim() && (
                   <p className="mt-1 text-xs text-slate-500">
-                    Enter a valid username (e.g. @oracle) or a 64-character UrgeID address
+                    Enter a valid username (e.g. @oracle) or a 64-character AbyssID address
                   </p>
                 )}
               </div>

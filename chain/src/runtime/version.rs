@@ -14,7 +14,7 @@ pub const EXPECTED_MODULE_COUNT: usize = 9;
 /// Expected module IDs in registration order
 pub const EXPECTED_MODULE_IDS: &[&str] = &[
     "bank_cgt",
-    "urgeid_registry",
+    "abyssid_registry",
     "nft_dgen",
     "fabric_manager",
     "abyss_registry",

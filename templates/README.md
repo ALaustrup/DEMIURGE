@@ -8,7 +8,7 @@ Production-ready starter templates for building on the Demiurge Blockchain.
 **Location:** `templates/web-app/`
 
 Full-featured Next.js + TypeScript dApp with:
-- UrgeID generation/login
+- AbyssID generation/login
 - CGT balance & transfers
 - NFT viewer
 - Marketplace integration
@@ -28,7 +28,7 @@ pnpm dev
 **Location:** `templates/mobile-app/`
 
 React Native + Expo mobile app with:
-- UrgeID wallet
+- AbyssID wallet
 - CGT transfers
 - NFT gallery
 - Chat (world channel)
@@ -45,7 +45,7 @@ npx expo start
 **Location:** `templates/rust-service/`
 
 Axum-based server backend with:
-- UrgeID profile fetching
+- AbyssID profile fetching
 - NFT operations
 - CGT transaction handling
 - Fabric metadata integration
@@ -63,7 +63,7 @@ Archon-like microservice with:
 - GraphQL chat integration
 - Auto-responses
 - CGT microrewards
-- UrgeID username resolution
+- AbyssID username resolution
 - On-chain triggers
 
 **Quick Start:**
@@ -77,7 +77,7 @@ pnpm start
 **Location:** `templates/game-engine/`
 
 Lightweight game client with:
-- UrgeID login
+- AbyssID login
 - NFT fetching & rendering
 - CGT microtransactions
 - 3D scene integration

@@ -1,18 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { useUrgeID } from "@/hooks/useUrgeID";
+import { useAbyssID } from "@/hooks/useAbyssID";
 import { Wallet, Key, User } from "lucide-react";
 
-export default function UrgeIDPage() {
-  const { address, profile, loading, error, generateNew, loadExisting } = useUrgeID();
+export default function AbyssIDPage() {
+  const { address, profile, loading, error, generateNew, loadExisting } = useAbyssID();
   const [inputAddress, setInputAddress] = useState("");
 
   if (!address) {
     return (
       <div className="min-h-screen p-8">
         <div className="max-w-2xl mx-auto">
-          <h1 className="text-3xl font-bold mb-8">Create or Load UrgeID</h1>
+          <h1 className="text-3xl font-bold mb-8">Create or Load AbyssID</h1>
           
           <div className="space-y-4">
             <button
@@ -22,7 +22,7 @@ export default function UrgeIDPage() {
             >
               <Wallet className="h-6 w-6 text-rose-400" />
               <div className="text-left">
-                <h2 className="text-xl font-semibold">Generate New UrgeID</h2>
+                <h2 className="text-xl font-semibold">Generate New AbyssID</h2>
                 <p className="text-sm text-zinc-400">Create a new identity</p>
               </div>
             </button>
@@ -30,7 +30,7 @@ export default function UrgeIDPage() {
             <div className="p-6 rounded-lg border border-zinc-800 bg-zinc-900">
               <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
                 <Key className="h-5 w-5" />
-                Load Existing UrgeID
+                Load Existing AbyssID
               </h2>
               <div className="flex gap-2">
                 <input
@@ -64,7 +64,7 @@ export default function UrgeIDPage() {
   return (
     <div className="min-h-screen p-8">
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8">UrgeID Profile</h1>
+        <h1 className="text-3xl font-bold mb-8">AbyssID Profile</h1>
         
         {loading ? (
           <div className="text-zinc-400">Loading...</div>
@@ -110,4 +110,3 @@ export default function UrgeIDPage() {
     </div>
   );
 }
-

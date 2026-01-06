@@ -16,7 +16,7 @@ export type CgtBalance = {
   balance: string; // u128 as string
 };
 
-export type UrgeIDProfile = {
+export type AbyssIDProfile = {
   address: string;
   display_name: string;
   bio?: string | null;
@@ -29,7 +29,7 @@ export type UrgeIDProfile = {
   created_at_height?: number | null;
 };
 
-export type UrgeIDProgress = {
+export type AbyssIDProgress = {
   address: string;
   level: number;
   syzygyScore: number;
@@ -38,6 +38,12 @@ export type UrgeIDProgress = {
   progressRatio: number;
   totalCgtEarnedFromRewards: string;
 };
+
+// Legacy aliases for backward compatibility
+/** @deprecated Use AbyssIDProfile instead */
+export type UrgeIDProfile = AbyssIDProfile;
+/** @deprecated Use AbyssIDProgress instead */
+export type UrgeIDProgress = AbyssIDProgress;
 
 export type UserAnalytics = {
   totalTransactions: number;

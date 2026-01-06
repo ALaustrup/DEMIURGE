@@ -1,25 +1,25 @@
 /*!
- * UrgeID operations
+ * AbyssID operations
  */
 
 use crate::client::DemiurgeClient;
 use crate::error::Result;
-use crate::types::{Address, UrgeIdProfile, UrgeIdProgress};
+use crate::types::{Address, AbyssIdProfile, AbyssIdProgress};
 use serde_json::json;
 
-pub struct UrgeIdApi<'a> {
+pub struct AbyssIdApi<'a> {
     client: &'a DemiurgeClient,
 }
 
-impl<'a> UrgeIdApi<'a> {
+impl<'a> AbyssIdApi<'a> {
     pub fn new(client: &'a DemiurgeClient) -> Self {
         Self { client }
     }
 
-    /// Get UrgeID profile for an address
-    pub async fn get_profile(&self, address: &str) -> Result<UrgeIdProfile> {
+    /// Get AbyssID profile for an address
+    pub async fn get_profile(&self, address: &str) -> Result<AbyssIdProfile> {
         self.client
-            .call("urgeid_getProfile", Some(json!({ "address": address })))
+            .call("abyssid_get", Some(json!({ "address": address })))
             .await
     }
 
@@ -31,15 +31,15 @@ impl<'a> UrgeIdApi<'a> {
         }
         let result: Response = self
             .client
-            .call("urgeid_resolveUsername", Some(json!({ "username": username })))
+            .call("abyssid_resolveUsername", Some(json!({ "username": username })))
             .await?;
         Ok(result.address)
     }
 
-    /// Get UrgeID progress
-    pub async fn get_progress(&self, address: &str) -> Result<UrgeIdProgress> {
+    /// Get AbyssID progress
+    pub async fn get_progress(&self, address: &str) -> Result<AbyssIdProgress> {
         self.client
-            .call("urgeid_getProgress", Some(json!({ "address": address })))
+            .call("abyssid_getProgress", Some(json!({ "address": address })))
             .await
     }
 
@@ -50,4 +50,3 @@ impl<'a> UrgeIdApi<'a> {
             .await
     }
 }
-

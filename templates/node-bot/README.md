@@ -7,7 +7,7 @@ Node.js TypeScript bot template for creating Archon-like services on Demiurge.
 - ✅ GraphQL chat integration
 - ✅ Auto-responses
 - ✅ CGT microrewards
-- ✅ UrgeID username resolution
+- ✅ AbyssID username resolution
 - ✅ Event loop with polling
 
 ## Quick Start

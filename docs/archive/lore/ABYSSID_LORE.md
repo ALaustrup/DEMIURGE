@@ -1,14 +1,14 @@
-# The UrgeID - Sovereign Identity
+# The AbyssID - Sovereign Identity
 
 In the depths of the Abyss, identity is not given—it is forged.
 
 ## The Genesis
 
-When the first Archons emerged from the void, they carried with them a fundamental truth: **identity is sovereignty**. The UrgeID system was born from this principle, allowing every being in the Demiurge to claim their own digital existence.
+When the first Archons emerged from the void, they carried with them a fundamental truth: **identity is sovereignty**. The AbyssID system was born from this principle, allowing every being in the Demiurge to claim their own digital existence.
 
-## What is an UrgeID?
+## What is an AbyssID?
 
-An UrgeID is more than an address. It is:
+An AbyssID is more than an address. It is:
 - **Your Wallet**: The key to your CGT and assets
 - **Your Identity**: Your profile, username, and presence
 - **Your Legacy**: Your Syzygy score, badges, and contributions
@@ -28,7 +28,7 @@ Those who reach sufficient Syzygy may ascend to Archon status, gaining the power
 
 ## The Philosophy
 
-*"In the Abyss, you are not a user—you are an entity. Your UrgeID is your proof of existence, your claim to sovereignty, your path to becoming."*
+*"In the Abyss, you are not a user—you are an entity. Your AbyssID is your proof of existence, your claim to sovereignty, your path to becoming."*
 
 ---
 

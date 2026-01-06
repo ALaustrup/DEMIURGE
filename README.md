@@ -6,9 +6,9 @@ DEMIURGE is a sovereign L1 blockchain ecosystem designed for creators, gamers, m
 
 ## Core Universe Model
 
-### Identity: UrgeID
+### Identity: AbyssID
 
-**UrgeID** is the sovereign identity system on Demiurge. Every user has an UrgeID that serves as:
+**AbyssID** is the sovereign identity system on Demiurge. Every user has an AbyssID that serves as:
 - **Wallet Address**: Receive and send CGT
 - **Identity Profile**: Display name, bio, handle (@username)
 - **Syzygy Tracking**: Contribution score for seeding/serving other creators' content
@@ -16,15 +16,15 @@ DEMIURGE is a sovereign L1 blockchain ecosystem designed for creators, gamers, m
 
 ### Roles
 
-**UrgeID Users**
-- All users have an UrgeID identity
+**AbyssID Users**
+- All users have an AbyssID identity
 - Can browse Fabric, buy NFTs, explore worlds, hold CGT and assets
 - Can send and receive CGT transfers
 - Track Syzygy contributions
 
 **Archons (Creators)**
-- UrgeID users who have "ascended" to creator status
-- Have all UrgeID abilities plus:
+- AbyssID users who have "ascended" to creator status
+- Have all AbyssID abilities plus:
   - Upload to Fabric with revenue hooks
   - Mint D-GEN NFTs
   - List and sell in the Abyss
@@ -51,7 +51,7 @@ DEMIURGE is a sovereign L1 blockchain ecosystem designed for creators, gamers, m
   - Pays Forge compute workers
   - Denominates Abyss marketplace prices
   - Routes royalties to creators
-  - Transferable between UrgeIDs
+  - Transferable between AbyssIDs
 
 All CGT amounts are stored as `u128` in smallest units (10^-8 precision). RPC methods return amounts as strings to avoid JavaScript number overflow.
 
@@ -73,7 +73,7 @@ Other tokens (e.g., ETH, USDC) can exist later via bridges/swap modules, but the
 DEMIURGE/
 ├── docs/                    # Documentation
 ├── chain/                   # Rust L1 node (Archon node), Forge PoW, RPC
-│   └── src/runtime/         # Runtime modules (bank_cgt, urgeid_registry, etc.)
+│   └── src/runtime/         # Runtime modules (bank_cgt, abyssid_registry, etc.)
 ├── indexer/                 # Block ingestor + GraphQL gateway
 ├── sdk/                     # TypeScript & Rust SDKs
 ├── apps/

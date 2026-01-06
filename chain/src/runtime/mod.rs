@@ -13,7 +13,7 @@ use crate::core::transaction::Transaction;
 pub mod version;
 
 pub mod abyss_registry;
-pub mod urgeid_registry;
+pub mod abyssid_registry;
 pub mod bank_cgt;
 pub mod fabric_manager;
 pub mod nft_dgen;
@@ -23,10 +23,10 @@ pub mod recursion_registry;
 pub mod work_claim;
 
 pub use abyss_registry::{get_all_active_listings, get_listing, AbyssRegistryModule, ListingId};
-pub use urgeid_registry::{
-    create_urgeid_profile, get_address_by_handle, get_address_by_username, get_urgeid_profile,
+pub use abyssid_registry::{
+    create_abyssid_profile, get_address_by_handle, get_address_by_username, get_abyssid_profile,
     is_archon, record_syzygy, set_handle, set_username,
-    UrgeIDRegistryModule,
+    AbyssIDRegistryModule, AbyssIDProfile,
 };
 pub use bank_cgt::{
     cgt_mint_to, get_balance_cgt, get_cgt_total_supply, get_nonce_cgt, CGT_DECIMALS,
@@ -101,7 +101,7 @@ impl Runtime {
     pub fn with_default_modules() -> Self {
         let runtime = Self::new()
             .with_module(Box::new(BankCgtModule::new()))
-            .with_module(Box::new(UrgeIDRegistryModule::new()))
+            .with_module(Box::new(AbyssIDRegistryModule::new()))
             .with_module(Box::new(NftDgenModule::new()))
             .with_module(Box::new(FabricManagerModule::new()))
             .with_module(Box::new(AbyssRegistryModule::new()))

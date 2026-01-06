@@ -7,7 +7,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 interface IntroVideoProps {
   onComplete: () => void;
@@ -101,14 +101,12 @@ export function IntroVideo({ onComplete, onSkip }: IntroVideoProps) {
   };
 
   return (
-    <AnimatePresence>
-      <motion.div
-        className="fixed inset-0 z-[200] bg-black"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.5 }}
-      >
+    <motion.div
+      className="fixed inset-0 z-[200] bg-black"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
         {/* Video Container - best effort, non-blocking */}
         <div 
           className="absolute inset-0 flex items-center justify-center"
@@ -171,8 +169,7 @@ export function IntroVideo({ onComplete, onSkip }: IntroVideoProps) {
             </div>
           </motion.div>
         )}
-      </motion.div>
-    </AnimatePresence>
+    </motion.div>
   );
 }
 

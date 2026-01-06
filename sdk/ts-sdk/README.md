@@ -23,8 +23,8 @@ const sdk = new DemiurgeSDK({
 // Get CGT balance
 const balance = await sdk.cgt.getBalanceFormatted('0x...');
 
-// Get UrgeID profile
-const profile = await sdk.urgeid.getProfile('0x...');
+// Get AbyssID profile
+const profile = await sdk.abyssid.getProfile('0x...');
 
 // Get NFTs
 const nfts = await sdk.nft.getNftsByOwner('0x...');

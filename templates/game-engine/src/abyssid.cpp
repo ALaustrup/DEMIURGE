@@ -1,14 +1,14 @@
-#include "urgeid.h"
+#include "abyssid.h"
 #include "rpc.h"
 #include <iostream>
 
-UrgeIDProfile loadUrgeIDProfile(const char* rpc_url, const std::string& address) {
-    UrgeIDProfile profile;
+AbyssIDProfile loadAbyssIDProfile(const char* rpc_url, const std::string& address) {
+    AbyssIDProfile profile;
     profile.address = address;
     
     // Call RPC to get profile
     // This is a placeholder - implement actual RPC call
-    std::string response = callRpc(rpc_url, "urgeid_getProfile", 
+    std::string response = callRpc(rpc_url, "abyssid_get", 
         "{\"address\":\"" + address + "\"}");
     
     // Parse response (simplified)
@@ -18,4 +18,3 @@ UrgeIDProfile loadUrgeIDProfile(const char* rpc_url, const std::string& address)
     
     return profile;
 }
-

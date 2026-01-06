@@ -22,20 +22,20 @@ demiurge abyss init --install        # Install all dependencies
 demiurge abyss init --directories    # Create necessary directories
 ```
 
-### UrgeID Operations
+### AbyssID Operations
 
 ```bash
-# Generate a new UrgeID
-demiurge urgeid generate
+# Generate a new AbyssID
+demiurge abyssid generate
 
-# Get UrgeID profile
-demiurge urgeid profile 0x...
+# Get AbyssID profile
+demiurge abyssid profile 0x...
 
 # Resolve username
-demiurge urgeid resolve username
+demiurge abyssid resolve username
 
 # Get progress
-demiurge urgeid progress 0x...
+demiurge abyssid progress 0x...
 ```
 
 ### CGT Operations

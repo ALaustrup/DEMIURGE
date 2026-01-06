@@ -1,7 +1,7 @@
-//! UrgeID Registry module for user profiles and Syzygy tracking.
+//! AbyssID Registry module for user profiles and Syzygy tracking.
 //!
 //! This module handles:
-//! - UrgeID profiles (display name, bio, Syzygy Score)
+//! - AbyssID profiles (display name, bio, Syzygy Score)
 //! - Badge management (e.g., Luminary)
 //! - Legacy Archon flag support (for backward compatibility with nft_dgen)
 
@@ -12,16 +12,16 @@ use crate::core::state::State;
 use crate::core::transaction::{Address, Transaction};
 
 const PREFIX_ARCHON_FLAG: &[u8] = b"avatars:archon:";
-const PREFIX_URGEID_PROFILE: &[u8] = b"urgeid/profile:";
-const PREFIX_URGEID_HANDLE: &[u8] = b"urgeid/handle/";
+const PREFIX_ABYSSID_PROFILE: &[u8] = b"abyssid/profile:";
+const PREFIX_ABYSSID_HANDLE: &[u8] = b"abyssid/handle/";
 const PREFIX_USERNAME: &[u8] = b"username/";
 
 // Badge threshold
 const LUMINARY_SYZYGY_THRESHOLD: u64 = 10_000;
 
-/// UrgeID profile with Syzygy tracking.
+/// AbyssID profile with Syzygy tracking.
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct UrgeIDProfile {
+pub struct AbyssIDProfile {
     pub address: Address,
     pub display_name: String,
     pub bio: Option<String>,
@@ -64,33 +64,33 @@ fn set_archon_flag(state: &mut State, addr: &Address, value: bool) -> Result<(),
         .map_err(|e| e.to_string())
 }
 
-/// UrgeID profile management
+/// AbyssID profile management
 
-fn urgeid_profile_key(address: &Address) -> Vec<u8> {
-    let mut key = Vec::with_capacity(PREFIX_URGEID_PROFILE.len() + address.len());
-    key.extend_from_slice(PREFIX_URGEID_PROFILE);
+fn abyssid_profile_key(address: &Address) -> Vec<u8> {
+    let mut key = Vec::with_capacity(PREFIX_ABYSSID_PROFILE.len() + address.len());
+    key.extend_from_slice(PREFIX_ABYSSID_PROFILE);
     key.extend_from_slice(address);
     key
 }
 
-fn load_urgeid_profile(state: &State, address: &Address) -> Option<UrgeIDProfile> {
+fn load_abyssid_profile(state: &State, address: &Address) -> Option<AbyssIDProfile> {
     state
-        .get_raw(&urgeid_profile_key(address))
-        .and_then(|bytes| bincode::deserialize::<UrgeIDProfile>(&bytes).ok())
+        .get_raw(&abyssid_profile_key(address))
+        .and_then(|bytes| bincode::deserialize::<AbyssIDProfile>(&bytes).ok())
 }
 
-fn store_urgeid_profile(state: &mut State, profile: &UrgeIDProfile) -> Result<(), String> {
+fn store_abyssid_profile(state: &mut State, profile: &AbyssIDProfile) -> Result<(), String> {
     let bytes = bincode::serialize(profile).map_err(|e| e.to_string())?;
     state
-        .put_raw(urgeid_profile_key(&profile.address), bytes)
+        .put_raw(abyssid_profile_key(&profile.address), bytes)
         .map_err(|e| e.to_string())
 }
 
 /// Handle mapping management
 
 fn handle_key(handle: &str) -> Vec<u8> {
-    let mut key = Vec::with_capacity(PREFIX_URGEID_HANDLE.len() + handle.len());
-    key.extend_from_slice(PREFIX_URGEID_HANDLE);
+    let mut key = Vec::with_capacity(PREFIX_ABYSSID_HANDLE.len() + handle.len());
+    key.extend_from_slice(PREFIX_ABYSSID_HANDLE);
     key.extend_from_slice(handle.as_bytes());
     key
 }
@@ -197,7 +197,7 @@ fn clear_username_mapping(_state: &mut State, _username: &str) -> Result<(), Str
     Ok(())
 }
 
-/// Set username for an UrgeID.
+/// Set username for an AbyssID.
 pub fn set_username(
     state: &mut State,
     caller: &Address,
@@ -215,8 +215,8 @@ pub fn set_username(
     }
     
     // Load profile for caller
-    let mut profile = load_urgeid_profile(state, caller)
-        .ok_or_else(|| "UrgeID profile not found".to_string())?;
+    let mut profile = load_abyssid_profile(state, caller)
+        .ok_or_else(|| "AbyssID profile not found".to_string())?;
     
     // If profile.username == Some(normalized.clone()), do nothing
     if profile.username.as_ref() == Some(&normalized) {
@@ -234,27 +234,27 @@ pub fn set_username(
     profile.username = Some(normalized.clone());
     
     // Write both: updated profile and username mapping
-    store_urgeid_profile(state, &profile)?;
+    store_abyssid_profile(state, &profile)?;
     set_username_mapping(state, &normalized, caller)?;
     
     Ok(())
 }
 
-/// Create a new UrgeID profile.
+/// Create a new AbyssID profile.
 ///
 /// Returns an error if a profile already exists for this address.
-pub fn create_urgeid_profile(
+pub fn create_abyssid_profile(
     state: &mut State,
     address: Address,
     display_name: String,
     bio: Option<String>,
     current_height: u64,
-) -> Result<UrgeIDProfile, String> {
-    if load_urgeid_profile(state, &address).is_some() {
-        return Err("UrgeID profile already exists for this address".into());
+) -> Result<AbyssIDProfile, String> {
+    if load_abyssid_profile(state, &address).is_some() {
+        return Err("AbyssID profile already exists for this address".into());
     }
 
-    let profile = UrgeIDProfile {
+    let profile = AbyssIDProfile {
         address,
         display_name,
         bio,
@@ -267,18 +267,18 @@ pub fn create_urgeid_profile(
         created_at_height: current_height,
     };
 
-    store_urgeid_profile(state, &profile)?;
+    store_abyssid_profile(state, &profile)?;
     Ok(profile)
 }
 
-/// Set or update an UrgeID's handle.
+/// Set or update an AbyssID's handle.
 ///
 /// Validates handle format, enforces uniqueness, and updates the profile.
 pub fn set_handle(
     state: &mut State,
     address: Address,
     new_handle: String,
-) -> Result<UrgeIDProfile, String> {
+) -> Result<AbyssIDProfile, String> {
     // Normalize handle: lowercase, trim
     let normalized = new_handle.trim().to_lowercase();
 
@@ -300,8 +300,8 @@ pub fn set_handle(
     }
 
     // Load current profile
-    let mut profile = load_urgeid_profile(state, &address)
-        .ok_or_else(|| "UrgeID profile not found".to_string())?;
+    let mut profile = load_abyssid_profile(state, &address)
+        .ok_or_else(|| "AbyssID profile not found".to_string())?;
 
     // Remove old handle mapping if exists
     if let Some(old_handle) = &profile.handle {
@@ -314,7 +314,7 @@ pub fn set_handle(
     profile.handle = Some(normalized.clone());
 
     // Store updated profile
-    store_urgeid_profile(state, &profile)?;
+    store_abyssid_profile(state, &profile)?;
 
     // Store new handle mapping
     set_handle_mapping(state, &normalized, address)?;
@@ -322,9 +322,9 @@ pub fn set_handle(
     Ok(profile)
 }
 
-/// Get an UrgeID profile by address.
-pub fn get_urgeid_profile(state: &State, address: &Address) -> Option<UrgeIDProfile> {
-    load_urgeid_profile(state, address)
+/// Get an AbyssID profile by address.
+pub fn get_abyssid_profile(state: &State, address: &Address) -> Option<AbyssIDProfile> {
+    load_abyssid_profile(state, address)
 }
 
 /// Compute level threshold for a given level.
@@ -341,11 +341,11 @@ pub fn record_syzygy(
     state: &mut State,
     address: Address,
     amount: u64,
-) -> Result<UrgeIDProfile, String> {
+) -> Result<AbyssIDProfile, String> {
     use crate::runtime::cgt_mint_to;
     
-    let mut profile = load_urgeid_profile(state, &address)
-        .ok_or_else(|| "UrgeID profile not found".to_string())?;
+    let mut profile = load_abyssid_profile(state, &address)
+        .ok_or_else(|| "AbyssID profile not found".to_string())?;
 
     // Increment Syzygy Score
     profile.syzygy_score = profile
@@ -360,7 +360,7 @@ pub fn record_syzygy(
         profile.level += 1;
         
         // Mint 10 CGT as level-up reward
-        cgt_mint_to(state, &address, REWARD_PER_LEVEL, "urgeid_level_rewards")
+        cgt_mint_to(state, &address, REWARD_PER_LEVEL, "abyssid_level_rewards")
             .map_err(|e| format!("Failed to mint level reward: {}", e))?;
         
         profile.total_cgt_earned_from_rewards = profile
@@ -374,28 +374,28 @@ pub fn record_syzygy(
         profile.badges.push("Luminary".to_string());
     }
 
-    store_urgeid_profile(state, &profile)?;
+    store_abyssid_profile(state, &profile)?;
     Ok(profile)
 }
 
-/// UrgeIDRegistryModule handles UrgeID profiles and Syzygy tracking
-pub struct UrgeIDRegistryModule;
+/// AbyssIDRegistryModule handles AbyssID profiles and Syzygy tracking
+pub struct AbyssIDRegistryModule;
 
-impl UrgeIDRegistryModule {
+impl AbyssIDRegistryModule {
     pub fn new() -> Self {
         Self
     }
 }
 
-impl RuntimeModule for UrgeIDRegistryModule {
+impl RuntimeModule for AbyssIDRegistryModule {
     fn module_id(&self) -> &'static str {
-        "urgeid_registry"
+        "abyssid_registry"
     }
 
     fn dispatch(&self, call_id: &str, tx: &Transaction, state: &mut State) -> Result<(), String> {
         match call_id {
             "claim_archon" => handle_claim_archon(tx, state),
-            other => Err(format!("urgeid_registry: unknown call_id '{}'", other)),
+            other => Err(format!("abyssid_registry: unknown call_id '{}'", other)),
         }
     }
 }
@@ -426,39 +426,39 @@ mod tests {
         let tx = Transaction {
             from: addr,
             nonce: 0,
-            module_id: "urgeid_registry".to_string(),
+            module_id: "abyssid_registry".to_string(),
             call_id: "claim_archon".to_string(),
             payload: vec![],
             fee: 0,
             signature: vec![],
         };
 
-        let module = UrgeIDRegistryModule::new();
+        let module = AbyssIDRegistryModule::new();
         module.dispatch("claim_archon", &tx, &mut state).unwrap();
 
         assert!(is_archon(&state, &addr));
     }
 
     #[test]
-    fn test_create_urgeid_profile() {
+    fn test_create_abyssid_profile() {
         let mut state = State::in_memory();
         let addr = [1u8; 32];
 
-        let profile = create_urgeid_profile(
+        let profile = create_abyssid_profile(
             &mut state,
             addr,
-            "Test UrgeID".to_string(),
+            "Test AbyssID".to_string(),
             Some("Test bio".to_string()),
             0,
         )
         .unwrap();
 
-        assert_eq!(profile.display_name, "Test UrgeID");
+        assert_eq!(profile.display_name, "Test AbyssID");
         assert_eq!(profile.syzygy_score, 0);
         assert_eq!(profile.badges, Vec::<String>::new());
 
         // Should fail on duplicate
-        assert!(create_urgeid_profile(
+        assert!(create_abyssid_profile(
             &mut state,
             addr,
             "Another".to_string(),
@@ -473,7 +473,7 @@ mod tests {
         let mut state = State::in_memory();
         let addr = [1u8; 32];
 
-        create_urgeid_profile(&mut state, addr, "Test".to_string(), None, 0).unwrap();
+        create_abyssid_profile(&mut state, addr, "Test".to_string(), None, 0).unwrap();
 
         let profile = record_syzygy(&mut state, addr, 300).unwrap();
         assert_eq!(profile.syzygy_score, 300);
@@ -487,10 +487,9 @@ mod tests {
         let mut state = State::in_memory();
         let addr = [1u8; 32];
 
-        create_urgeid_profile(&mut state, addr, "Test".to_string(), None, 0).unwrap();
+        create_abyssid_profile(&mut state, addr, "Test".to_string(), None, 0).unwrap();
 
         let profile = record_syzygy(&mut state, addr, LUMINARY_SYZYGY_THRESHOLD).unwrap();
         assert!(profile.badges.contains(&"Luminary".to_string()));
     }
 }
-

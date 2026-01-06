@@ -11,7 +11,7 @@ find_package(raylib REQUIRED)
 set(SOURCES
     src/main.cpp
     src/demo_scene.cpp
-    src/urgeid.cpp
+    src/abyssid.cpp
     src/rpc.cpp
 )
 

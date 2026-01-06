@@ -24,7 +24,7 @@ use crate::core::transaction::{Address, Transaction};
 use crate::node::Node;
 use crate::archon::ArchonStateVector;
 use crate::runtime::{
-    create_urgeid_profile, get_address_by_handle, get_address_by_username, get_urgeid_profile,
+    create_abyssid_profile, get_address_by_handle, get_address_by_username, get_abyssid_profile,
     record_syzygy, set_handle, set_username, BankCgtModule, CGT_DECIMALS,
     CGT_MAX_SUPPLY, CGT_NAME, CGT_SYMBOL, FabricRootHash, ListingId, NftDgenModule, NftId,
     RuntimeModule, get_all_developers, get_developer_by_username, get_developer_profile,
@@ -112,23 +112,23 @@ pub struct GetTxHistoryParams {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct UrgeIDSetUsernameParams {
+pub struct AbyssIDSetUsernameParams {
     pub address: String, // hex string
     pub username: String,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct UrgeIDResolveUsernameParams {
+pub struct AbyssIDResolveUsernameParams {
     pub username: String,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct UrgeIDGetProfileByUsernameParams {
+pub struct AbyssIDGetProfileByUsernameParams {
     pub username: String,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct UrgeIDGetProgressParams {
+pub struct AbyssIDGetProgressParams {
     pub address: String, // hex string
 }
 
@@ -277,31 +277,31 @@ pub struct MintDgenNftParams {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct UrgeIDCreateParams {
+pub struct AbyssIDCreateParams {
     pub address: String, // hex string
     pub display_name: String,
     pub bio: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct UrgeIDGetParams {
+pub struct AbyssIDGetParams {
     pub address: String, // hex string
 }
 
 #[derive(Debug, Deserialize)]
-pub struct UrgeIDRecordSyzygyParams {
+pub struct AbyssIDRecordSyzygyParams {
     pub address: String, // hex string
     pub amount: u64,     // Syzygy contribution amount
 }
 
 #[derive(Debug, Deserialize)]
-pub struct UrgeIDSetHandleParams {
+pub struct AbyssIDSetHandleParams {
     pub address: String, // hex string
     pub handle: String,  // handle without @
 }
 
 #[derive(Debug, Deserialize)]
-pub struct UrgeIDGetByHandleParams {
+pub struct AbyssIDGetByHandleParams {
     pub handle: String, // handle without @
 }
 
@@ -1041,7 +1041,7 @@ async fn handle_rpc(
             // Otherwise, we'll bypass signature checks and mint directly
             let result = node.with_state_mut(|state| {
                 // Check if owner is Archon (required for minting)
-                if !crate::runtime::urgeid_registry::is_archon(state, &owner_addr) {
+                if !crate::runtime::abyssid_registry::is_archon(state, &owner_addr) {
                     return Err("only Archons may mint D-GEN NFTs".to_string());
                 }
 
@@ -1102,16 +1102,16 @@ async fn handle_rpc(
                 }),
             }
         }
-        "urgeid_create" => {
-            let params: UrgeIDCreateParams = match req.params.as_ref() {
+        "abyssid_create" => {
+            let params: AbyssIDCreateParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
-                    .unwrap_or(UrgeIDCreateParams {
+                    .unwrap_or(AbyssIDCreateParams {
                         address: String::new(),
                         display_name: String::new(),
                         bio: None,
                     }),
-                None => UrgeIDCreateParams {
+                None => AbyssIDCreateParams {
                     address: String::new(),
                     display_name: String::new(),
                     bio: None,
@@ -1136,7 +1136,7 @@ async fn handle_rpc(
             let current_height = node.chain_info().height;
 
             let result = node.with_state_mut(|state| {
-                create_urgeid_profile(state, address, params.display_name, params.bio, current_height)
+                create_abyssid_profile(state, address, params.display_name, params.bio, current_height)
             });
 
             match result {
@@ -1187,20 +1187,20 @@ async fn handle_rpc(
                     result: None,
                     error: Some(JsonRpcError {
                         code: -32603,
-                        message: format!("Failed to create UrgeID profile: {}", msg),
+                        message: format!("Failed to create AbyssID profile: {}", msg),
                     }),
                     id,
                 }),
             }
         }
-        "urgeid_get" => {
-            let params: UrgeIDGetParams = match req.params.as_ref() {
+        "abyssid_get" => {
+            let params: AbyssIDGetParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
-                    .unwrap_or(UrgeIDGetParams {
+                    .unwrap_or(AbyssIDGetParams {
                         address: String::new(),
                     }),
-                None => UrgeIDGetParams {
+                None => AbyssIDGetParams {
                     address: String::new(),
                 },
             };
@@ -1220,7 +1220,7 @@ async fn handle_rpc(
                 }
             };
 
-            let profile_opt = node.with_state(|state| get_urgeid_profile(state, &address));
+            let profile_opt = node.with_state(|state| get_abyssid_profile(state, &address));
 
             Json(JsonRpcResponse {
                 jsonrpc: "2.0".to_string(),
@@ -1243,15 +1243,15 @@ async fn handle_rpc(
                 id,
             })
         }
-        "urgeid_recordSyzygy" => {
-            let params: UrgeIDRecordSyzygyParams = match req.params.as_ref() {
+        "abyssid_recordSyzygy" => {
+            let params: AbyssIDRecordSyzygyParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
-                    .unwrap_or(UrgeIDRecordSyzygyParams {
+                    .unwrap_or(AbyssIDRecordSyzygyParams {
                         address: String::new(),
                         amount: 0,
                     }),
-                None => UrgeIDRecordSyzygyParams {
+                None => AbyssIDRecordSyzygyParams {
                     address: String::new(),
                     amount: 0,
                 },
@@ -1300,15 +1300,15 @@ async fn handle_rpc(
                 }),
             }
         }
-        "urgeid_setHandle" => {
-            let params: UrgeIDSetHandleParams = match req.params.as_ref() {
+        "abyssid_setHandle" => {
+            let params: AbyssIDSetHandleParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
-                    .unwrap_or(UrgeIDSetHandleParams {
+                    .unwrap_or(AbyssIDSetHandleParams {
                         address: String::new(),
                         handle: String::new(),
                     }),
-                None => UrgeIDSetHandleParams {
+                None => AbyssIDSetHandleParams {
                     address: String::new(),
                     handle: String::new(),
                 },
@@ -1362,14 +1362,14 @@ async fn handle_rpc(
                 }),
             }
         }
-        "urgeid_getByHandle" => {
-            let params: UrgeIDGetByHandleParams = match req.params.as_ref() {
+        "abyssid_getByHandle" => {
+            let params: AbyssIDGetByHandleParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
-                    .unwrap_or(UrgeIDGetByHandleParams {
+                    .unwrap_or(AbyssIDGetByHandleParams {
                         handle: String::new(),
                     }),
-                None => UrgeIDGetByHandleParams {
+                None => AbyssIDGetByHandleParams {
                     handle: String::new(),
                 },
             };
@@ -1383,7 +1383,7 @@ async fn handle_rpc(
 
             match address_opt {
                 Some(addr) => {
-                    let profile_opt = node.with_state(|state| get_urgeid_profile(state, &addr));
+                    let profile_opt = node.with_state(|state| get_abyssid_profile(state, &addr));
                     match profile_opt {
                         Some(profile) => Json(JsonRpcResponse {
                             jsonrpc: "2.0".to_string(),
@@ -1418,15 +1418,15 @@ async fn handle_rpc(
                 }),
             }
         }
-        "urgeid_setUsername" => {
-            let params: UrgeIDSetUsernameParams = match req.params.as_ref() {
+        "abyssid_setUsername" => {
+            let params: AbyssIDSetUsernameParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
-                    .unwrap_or(UrgeIDSetUsernameParams {
+                    .unwrap_or(AbyssIDSetUsernameParams {
                         address: String::new(),
                         username: String::new(),
                     }),
-                None => UrgeIDSetUsernameParams {
+                None => AbyssIDSetUsernameParams {
                     address: String::new(),
                     username: String::new(),
                 },
@@ -1454,7 +1454,7 @@ async fn handle_rpc(
             match result {
                 Ok(()) => {
                     // Reload profile to return updated state
-                    let profile_opt = node.with_state(|state| get_urgeid_profile(state, &address));
+                    let profile_opt = node.with_state(|state| get_abyssid_profile(state, &address));
                     match profile_opt {
                         Some(profile) => Json(JsonRpcResponse {
                             jsonrpc: "2.0".to_string(),
@@ -1487,14 +1487,14 @@ async fn handle_rpc(
                 }),
             }
         }
-        "urgeid_resolveUsername" => {
-            let params: UrgeIDResolveUsernameParams = match req.params.as_ref() {
+        "abyssid_resolveUsername" => {
+            let params: AbyssIDResolveUsernameParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
-                    .unwrap_or(UrgeIDResolveUsernameParams {
+                    .unwrap_or(AbyssIDResolveUsernameParams {
                         username: String::new(),
                     }),
-                None => UrgeIDResolveUsernameParams {
+                None => AbyssIDResolveUsernameParams {
                     username: String::new(),
                 },
             };
@@ -1532,14 +1532,14 @@ async fn handle_rpc(
                 }),
             }
         }
-        "urgeid_getProfileByUsername" => {
-            let params: UrgeIDGetProfileByUsernameParams = match req.params.as_ref() {
+        "abyssid_getProfileByUsername" => {
+            let params: AbyssIDGetProfileByUsernameParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
-                    .unwrap_or(UrgeIDGetProfileByUsernameParams {
+                    .unwrap_or(AbyssIDGetProfileByUsernameParams {
                         username: String::new(),
                     }),
-                None => UrgeIDGetProfileByUsernameParams {
+                None => AbyssIDGetProfileByUsernameParams {
                     username: String::new(),
                 },
             };
@@ -1550,7 +1550,7 @@ async fn handle_rpc(
 
             match address_opt {
                 Ok(Some(addr)) => {
-                    let profile_opt = node.with_state(|state| get_urgeid_profile(state, &addr));
+                    let profile_opt = node.with_state(|state| get_abyssid_profile(state, &addr));
                     match profile_opt {
                         Some(profile) => Json(JsonRpcResponse {
                             jsonrpc: "2.0".to_string(),
@@ -1594,14 +1594,14 @@ async fn handle_rpc(
                 }),
             }
         }
-        "urgeid_getProgress" => {
-            let params: UrgeIDGetProgressParams = match req.params.as_ref() {
+        "abyssid_getProgress" => {
+            let params: AbyssIDGetProgressParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
-                    .unwrap_or(UrgeIDGetProgressParams {
+                    .unwrap_or(AbyssIDGetProgressParams {
                         address: String::new(),
                     }),
-                None => UrgeIDGetProgressParams {
+                None => AbyssIDGetProgressParams {
                     address: String::new(),
                 },
             };
@@ -1621,10 +1621,10 @@ async fn handle_rpc(
                 }
             };
 
-            let profile_opt = node.with_state(|state| get_urgeid_profile(state, &address));
+            let profile_opt = node.with_state(|state| get_abyssid_profile(state, &address));
             match profile_opt {
                 Some(profile) => {
-                    use crate::runtime::urgeid_registry::level_threshold;
+                    use crate::runtime::abyssid_registry::level_threshold;
                     
                     let current_level = profile.level;
                     let current_threshold = level_threshold(current_level);
@@ -1660,7 +1660,7 @@ async fn handle_rpc(
                     result: None,
                     error: Some(JsonRpcError {
                         code: -32602,
-                        message: "UrgeID profile not found".to_string(),
+                        message: "AbyssID profile not found".to_string(),
                     }),
                     id,
                 }),
@@ -2189,7 +2189,7 @@ async fn handle_rpc(
                 id,
             })
         }
-        "urgeid_getAnalytics" => {
+        "abyssid_getAnalytics" => {
             let params: GetUserAnalyticsParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
@@ -2217,7 +2217,7 @@ async fn handle_rpc(
             };
 
             // Get profile for basic stats
-            let profile_opt = node.with_state(|state| get_urgeid_profile(state, &address));
+            let profile_opt = node.with_state(|state| get_abyssid_profile(state, &address));
             
             // Get transaction history
             let tx_hashes = node.get_transactions_for_address(&address, 1000);

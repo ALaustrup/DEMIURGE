@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { sdk } from "@/lib/sdk";
 import { deriveAddress } from "@demiurge/ts-sdk";
 
-export function useUrgeID() {
+export function useAbyssID() {
   const [address, setAddress] = useState<string | null>(null);
   const [privateKey, setPrivateKey] = useState<string | null>(null);
   const [profile, setProfile] = useState<any>(null);
@@ -26,7 +26,7 @@ export function useUrgeID() {
   const loadProfile = async (addr: string) => {
     try {
       setLoading(true);
-      const prof = await sdk.urgeid.getProfile(addr);
+      const prof = await sdk.abyssid.getProfile(addr);
       setProfile(prof);
       setError(null);
     } catch (err: any) {
@@ -89,3 +89,6 @@ export function useUrgeID() {
   };
 }
 
+// Legacy export for backward compatibility
+/** @deprecated Use useAbyssID instead */
+export const useUrgeID = useAbyssID;
