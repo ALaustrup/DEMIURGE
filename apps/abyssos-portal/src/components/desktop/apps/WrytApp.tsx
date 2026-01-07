@@ -1,8 +1,10 @@
 /**
- * Abyss Docs - Document Editor Application
+ * WRYT - Document Creation Suite
  * 
- * A professional word processor with rich text editing,
- * multiple format support, and cloud sync via AbyssID.
+ * A professional document editor with rich text editing,
+ * multiple format support, templates, and cloud sync via AbyssID.
+ * 
+ * Write. Create. Publish.
  */
 
 import { useState, useCallback, useRef, useEffect } from 'react';
@@ -70,7 +72,7 @@ function ToolbarSeparator() {
 // Main Component
 // ============================================================================
 
-export function AbyssDocsApp() {
+export function WrytApp() {
   const { identity } = useAbyssIDIdentity();
   
   // Document state

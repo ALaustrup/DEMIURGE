@@ -37,7 +37,7 @@ import { CraftApp } from '../components/desktop/apps/CraftApp';
 import { AppMarketplaceApp } from '../components/desktop/apps/AppMarketplaceApp';
 import { ArchonAIAssistantApp } from '../components/desktop/apps/ArchonAIAssistantApp';
 import { MiningAccountingApp } from '../components/desktop/apps/MiningAccountingApp';
-import { AbyssDocsApp } from '../components/desktop/apps/AbyssDocsApp';
+import { WrytApp } from '../components/desktop/apps/WrytApp';
 
 const appComponents: Record<string, React.ComponentType> = {
   chainOps: ChainOpsApp,
@@ -72,7 +72,7 @@ const appComponents: Record<string, React.ComponentType> = {
   appMarketplace: AppMarketplaceApp,
   archonAI: ArchonAIAssistantApp,
   miningAccounting: MiningAccountingApp,
-  abyssDocs: AbyssDocsApp,
+  wryt: WrytApp,
 };
 
 export function Desktop() {
