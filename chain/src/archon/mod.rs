@@ -21,9 +21,6 @@ pub mod a0_directive;
 pub mod logging;
 
 pub use archon_state_vector::ArchonStateVector;
-pub use archon_consensus::{AscensionConsensus, SACDecision};
-pub use archon_commands::{ArchonCommandEngine, ArchonDirective};
-pub use archon_diagnostics::{ArchonDiagnosticMatrix, DiagnosticCategory, DiagnosticResult, DiagnosticTest};
+pub use archon_commands::ArchonDirective;
 pub use archon_daemon::ArchonDaemon;
-pub use a0_directive::{A0Directive, A0Obligations, activate_a0};
 pub use logging::{emit_archon_event, emit_archon_directive, emit_archon_heartbeat};

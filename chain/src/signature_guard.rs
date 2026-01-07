@@ -2,7 +2,7 @@
 //!
 //! PHASE OMEGA PART II: Protects against signature forgery and replay attacks.
 
-use crate::core::transaction::{Address, Signature, Transaction};
+use crate::core::transaction::{Address, Transaction};
 use sha2::{Digest, Sha256};
 use hex;
 

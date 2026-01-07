@@ -25,10 +25,10 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// UrgeID operations
-    Urgeid {
+    /// AbyssID operations
+    Abyssid {
         #[command(subcommand)]
-        command: UrgeidCommands,
+        command: AbyssidCommands,
     },
     /// CGT operations
     Cgt {
@@ -84,10 +84,10 @@ enum Commands {
 }
 
 #[derive(Subcommand)]
-enum UrgeidCommands {
-    /// Generate a new UrgeID (offline keygen)
+enum AbyssidCommands {
+    /// Generate a new AbyssID (offline keygen)
     Generate,
-    /// Get UrgeID profile
+    /// Get AbyssID profile
     Profile {
         address: String,
     },
@@ -95,7 +95,7 @@ enum UrgeidCommands {
     Resolve {
         username: String,
     },
-    /// Get UrgeID progress
+    /// Get AbyssID progress
     Progress {
         address: String,
     },
@@ -141,7 +141,7 @@ enum MarketplaceCommands {
 enum DevCommands {
     /// Register as a developer
     Register {
-        /// Username (must match UrgeID username)
+        /// Username (must match AbyssID username)
         #[arg(long)]
         username: String,
         /// Address (optional, uses default if not provided)
@@ -226,28 +226,78 @@ enum CapsuleCommands {
     },
 }
 
+#[derive(Subcommand)]
+enum MineCommands {
+    /// Start a mining session
+    Start {
+        /// Game ID
+        #[arg(long)]
+        game_id: String,
+        /// Optional session ID (auto-generated if not provided)
+        #[arg(long)]
+        session_id: Option<String>,
+    },
+    /// Submit work claim
+    Submit {
+        /// Depth metric
+        #[arg(long)]
+        depth: u64,
+        /// Active time in milliseconds
+        #[arg(long)]
+        time: u64,
+        /// Game ID
+        #[arg(long)]
+        game_id: String,
+        /// Session ID
+        #[arg(long)]
+        session_id: String,
+    },
+    /// View mining statistics
+    Stats,
+    /// View pending rewards
+    Pending,
+    /// View mining history
+    History {
+        /// Number of entries to show
+        #[arg(long, default_value = "10")]
+        limit: u32,
+    },
+    /// Request manual adjustment
+    Adjust {
+        /// Reason for adjustment
+        #[arg(long)]
+        reason: String,
+        /// Requested amount
+        #[arg(long)]
+        amount: String,
+        /// Evidence/reference
+        #[arg(long)]
+        evidence: Option<String>,
+    },
+}
+
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let cli = Cli::parse();
     let sdk = DemiurgeSDK::new(&cli.rpc_url);
 
     match cli.command {
-        Commands::Urgeid { command } => {
+        Commands::Abyssid { command } => {
             match command {
-                UrgeidCommands::Generate => {
+                AbyssidCommands::Generate => {
                     use demiurge_rust_sdk::signing;
                     let private_key = signing::hex_to_bytes_32(
                         &hex::encode(rand::random::<[u8; 32]>())
                     )?;
                     let address = signing::derive_address(&private_key)?;
-                    println!("New UrgeID generated:");
+                    println!("New AbyssID generated:");
                     println!("  Address: {}", address);
                     println!("  Private Key: 0x{}", hex::encode(private_key));
                     println!("\n⚠️  Keep your private key secure! Never share it.");
                 }
-                UrgeidCommands::Profile { address } => {
-                    let profile = sdk.urgeid().get_profile(&address).await?;
-                    println!("UrgeID Profile:");
+                AbyssidCommands::Profile { address } => {
+                    let profile = sdk.abyssid().get_profile(&address).await?;
+                    println!("AbyssID Profile:");
                     println!("  Address: {}", profile.address);
                     println!("  Display Name: {}", profile.display_name);
                     if let Some(username) = &profile.username {
@@ -257,15 +307,15 @@ async fn main() -> anyhow::Result<()> {
                     println!("  Syzygy Score: {}", profile.syzygy_score);
                     println!("  Badges: {:?}", profile.badges);
                 }
-                UrgeidCommands::Resolve { username } => {
-                    match sdk.urgeid().resolve_username(&username).await? {
+                AbyssidCommands::Resolve { username } => {
+                    match sdk.abyssid().resolve_username(&username).await? {
                         Some(address) => println!("@{} → {}", username, address),
                         None => println!("Username @{} not found", username),
                     }
                 }
-                UrgeidCommands::Progress { address } => {
-                    let progress = sdk.urgeid().get_progress(&address).await?;
-                    println!("UrgeID Progress:");
+                AbyssidCommands::Progress { address } => {
+                    let progress = sdk.abyssid().get_progress(&address).await?;
+                    println!("AbyssID Progress:");
                     println!("  Level: {}", progress.level);
                     println!("  Syzygy Score: {}", progress.syzygy_score);
                     println!("  Progress: {:.2}%", progress.progress_ratio * 100.0);

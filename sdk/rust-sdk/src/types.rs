@@ -21,7 +21,7 @@ pub struct CgtBalance {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct UrgeIdProfile {
+pub struct AbyssIdProfile {
     pub address: String,
     pub display_name: String,
     pub bio: Option<String>,
@@ -35,7 +35,7 @@ pub struct UrgeIdProfile {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct UrgeIdProgress {
+pub struct AbyssIdProgress {
     pub address: String,
     pub level: u32,
     pub syzygy_score: u64,
@@ -44,6 +44,14 @@ pub struct UrgeIdProgress {
     pub progress_ratio: f64,
     pub total_cgt_earned_from_rewards: String,
 }
+
+/// Legacy type alias
+#[deprecated(note = "Use AbyssIdProfile instead")]
+pub type UrgeIdProfile = AbyssIdProfile;
+
+/// Legacy type alias
+#[deprecated(note = "Use AbyssIdProgress instead")]
+pub type UrgeIdProgress = AbyssIdProgress;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DGenMetadata {

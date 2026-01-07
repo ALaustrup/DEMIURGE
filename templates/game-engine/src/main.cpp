@@ -6,7 +6,7 @@
 
 #include "raylib.h"
 #include "demo_scene.h"
-#include "urgeid.h"
+#include "abyssid.h"
 #include <iostream>
 
 int main() {
@@ -20,8 +20,8 @@ int main() {
     const char* rpc_url = "http://127.0.0.1:8545/rpc";
     std::string address = "0x" + std::string(64, 'a'); // Placeholder
 
-    // Load UrgeID profile
-    UrgeIDProfile profile = loadUrgeIDProfile(rpc_url, address);
+    // Load AbyssID profile
+    AbyssIDProfile profile = loadAbyssIDProfile(rpc_url, address);
 
     // Initialize demo scene
     DemoScene scene;

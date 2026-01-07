@@ -69,7 +69,7 @@ export type CgtBalance = {
   balance: string;
 };
 
-export type UrgeIDProfile = {
+export type AbyssIDProfile = {
   address: string;
   display_name: string;
   bio?: string | null;
@@ -82,7 +82,7 @@ export type UrgeIDProfile = {
   created_at_height?: number | null;
 };
 
-export type UrgeIDProgress = {
+export type AbyssIDProgress = {
   address: string;
   level: number;
   syzygyScore: number;
@@ -266,7 +266,7 @@ export type UserAnalytics = {
 };
 
 export async function getUserAnalytics(address: string): Promise<UserAnalytics> {
-  const response = await callRpc("urgeid_getAnalytics", { address }) as { error?: { message: string }, result?: UserAnalytics };
+  const response = await callRpc("abyssid_getAnalytics", { address }) as { error?: { message: string }, result?: UserAnalytics };
   if (response.error) {
     throw new Error(response.error.message || "Failed to get user analytics");
   }
@@ -406,13 +406,13 @@ export async function signTransactionRpc(
 }
 
 /**
- * Set username for an UrgeID.
+ * Set username for an AbyssID.
  */
 export async function setUsername(
   address: string,
   username: string
 ): Promise<{ address: string; username: string }> {
-  return callRpc<{ address: string; username: string }>("urgeid_setUsername", {
+  return callRpc<{ address: string; username: string }>("abyssid_setUsername", {
     address,
     username,
   });
@@ -430,34 +430,34 @@ export async function resolveUsername(
 }
 
 /**
- * Get UrgeID profile by username.
+ * Get AbyssID profile by username.
  */
 export async function getProfileByUsername(
   username: string
-): Promise<UrgeIDProfile | null> {
-  return callRpc<UrgeIDProfile | null>("urgeid_getProfileByUsername", {
+): Promise<AbyssIDProfile | null> {
+  return callRpc<AbyssIDProfile | null>("abyssid_getProfileByUsername", {
     username,
   });
 }
 
 /**
- * Get UrgeID profile by address.
+ * Get AbyssID profile by address.
  */
 export async function getUrgeIdProfile(
   address: string
-): Promise<UrgeIDProfile | null> {
-  return callRpc<UrgeIDProfile | null>("urgeid_get", {
+): Promise<AbyssIDProfile | null> {
+  return callRpc<AbyssIDProfile | null>("abyssid_get", {
     address,
   });
 }
 
 /**
- * Get UrgeID progression info (level, thresholds, progress).
+ * Get AbyssID progression info (level, thresholds, progress).
  */
-export async function getUrgeIdProgress(
+export async function getAbyssIdProgress(
   address: string
-): Promise<UrgeIDProgress> {
-  return callRpc<UrgeIDProgress>("urgeid_getProgress", {
+): Promise<AbyssIDProgress> {
+  return callRpc<AbyssIDProgress>("abyssid_getProgress", {
     address,
   });
 }

@@ -5,7 +5,7 @@ Lightweight game client template with Demiurge Blockchain integration.
 ## Features
 
 - ✅ C++ with Raylib
-- ✅ UrgeID login
+- ✅ AbyssID login
 - ✅ NFT fetching
 - ✅ CGT microtransactions
 - ✅ 3D scene integration

@@ -24,8 +24,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Get CGT balance
     let balance = sdk.cgt().get_balance("0x...").await?;
     
-    // Get UrgeID profile
-    let profile = sdk.urgeid().get_profile("0x...").await?;
+    // Get AbyssID profile
+    let profile = sdk.abyssid().get_profile("0x...").await?;
     
     // Get NFTs
     let nfts = sdk.nft().get_nfts_by_owner("0x...").await?;

@@ -11,7 +11,7 @@ use serde::{Deserialize, Serialize};
 use super::RuntimeModule;
 use crate::core::state::State;
 use crate::core::transaction::{Address, Transaction};
-use crate::runtime::urgeid_registry::is_archon;
+use crate::runtime::abyssid_registry::is_archon;
 
 const PREFIX_NFT: &[u8] = b"nft:token:";
 const KEY_NFT_COUNTER: &[u8] = b"nft:counter";
@@ -305,7 +305,7 @@ mod tests {
     use super::*;
     use crate::core::state::State;
     use crate::core::transaction::{Address, Transaction};
-    use crate::runtime::urgeid_registry::UrgeIDRegistryModule;
+    use crate::runtime::abyssid_registry::AbyssIDRegistryModule;
 
     #[test]
     fn test_mint_dgen_requires_archon() {
@@ -345,14 +345,14 @@ mod tests {
         let claim_tx = Transaction {
             from: addr,
             nonce: 0,
-            module_id: "urgeid_registry".to_string(),
+            module_id: "abyssid_registry".to_string(),
             call_id: "claim_archon".to_string(),
             payload: vec![],
             fee: 0,
             signature: vec![],
         };
-        let urgeid_module = UrgeIDRegistryModule::new();
-        avatars_module
+        let abyssid_module = AbyssIDRegistryModule::new();
+        abyssid_module
             .dispatch("claim_archon", &claim_tx, &mut state)
             .unwrap();
 
@@ -402,14 +402,14 @@ mod tests {
         let claim_tx = Transaction {
             from: creator,
             nonce: 0,
-            module_id: "urgeid_registry".to_string(),
+            module_id: "abyssid_registry".to_string(),
             call_id: "claim_archon".to_string(),
             payload: vec![],
             fee: 0,
             signature: vec![],
         };
-        let urgeid_module = UrgeIDRegistryModule::new();
-        avatars_module
+        let abyssid_module = AbyssIDRegistryModule::new();
+        abyssid_module
             .dispatch("claim_archon", &claim_tx, &mut state)
             .unwrap();
 

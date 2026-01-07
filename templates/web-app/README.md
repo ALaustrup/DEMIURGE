@@ -4,7 +4,7 @@ Full-featured Next.js + TypeScript dApp template for building on Demiurge Blockc
 
 ## Features
 
-- ✅ UrgeID generation and login
+- ✅ AbyssID generation and login
 - ✅ CGT balance viewing and transfers
 - ✅ NFT collection viewer
 - ✅ Marketplace integration
@@ -46,13 +46,13 @@ Full-featured Next.js + TypeScript dApp template for building on Demiurge Blockc
 src/
 ├── app/
 │   ├── page.tsx          # Home page
-│   ├── urgeid/            # UrgeID page
+│   ├── abyssid/           # AbyssID page
 │   ├── wallet/             # Wallet page
 │   ├── nfts/               # NFT gallery
 │   ├── marketplace/        # Marketplace
 │   └── chat/               # Chat interface
 ├── hooks/
-│   └── useUrgeID.ts        # UrgeID hook
+│   └── useAbyssID.ts       # AbyssID hook
 └── lib/
     └── sdk.ts              # SDK initialization
 ```

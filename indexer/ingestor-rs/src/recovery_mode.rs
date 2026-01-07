@@ -3,6 +3,8 @@
 //! PHASE OMEGA PART II: Auto-recover from missed heights
 //! and backfill historical blocks without race conditions
 
+#![allow(dead_code)]
+
 use crate::error::{IndexerError, IndexerResult};
 use std::collections::HashSet;
 

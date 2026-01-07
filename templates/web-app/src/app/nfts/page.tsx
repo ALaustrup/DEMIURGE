@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useUrgeID } from "@/hooks/useUrgeID";
+import { useAbyssID } from "@/hooks/useAbyssID";
 import { sdk } from "@/lib/sdk";
 import { Image } from "lucide-react";
 
 export default function NFTsPage() {
-  const { address } = useUrgeID();
+  const { address } = useAbyssID();
   const [nfts, setNfts] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -33,7 +33,7 @@ export default function NFTsPage() {
     return (
       <div className="min-h-screen p-8">
         <div className="max-w-2xl mx-auto">
-          <p className="text-zinc-400">Please create or load an UrgeID first.</p>
+          <p className="text-zinc-400">Please create or load an AbyssID first.</p>
         </div>
       </div>
     );

@@ -2,7 +2,7 @@
 //!
 //! PHASE OMEGA PART III: Heuristics for evaluating system improvements
 
-use crate::core::evolution::evolution_kernel::{SystemDelta, ImpactEstimate};
+use crate::core::evolution::evolution_kernel::SystemDelta;
 
 /// Heuristic weights for scoring
 #[derive(Debug, Clone)]

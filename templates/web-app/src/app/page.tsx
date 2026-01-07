@@ -11,10 +11,10 @@ export default function HomePage() {
         <h1 className="text-4xl font-bold mb-8">Demiurge dApp Template</h1>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Link href="/urgeid" className="p-6 rounded-lg border border-zinc-800 bg-zinc-900 hover:bg-zinc-800 transition-colors">
+          <Link href="/abyssid" className="p-6 rounded-lg border border-zinc-800 bg-zinc-900 hover:bg-zinc-800 transition-colors">
             <Wallet className="h-8 w-8 mb-4 text-rose-400" />
-            <h2 className="text-xl font-semibold mb-2">UrgeID</h2>
-            <p className="text-zinc-400">Generate or load your UrgeID identity</p>
+            <h2 className="text-xl font-semibold mb-2">AbyssID</h2>
+            <p className="text-zinc-400">Generate or load your AbyssID identity</p>
           </Link>
 
           <Link href="/wallet" className="p-6 rounded-lg border border-zinc-800 bg-zinc-900 hover:bg-zinc-800 transition-colors">

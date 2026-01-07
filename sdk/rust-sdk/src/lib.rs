@@ -6,7 +6,8 @@
 
 pub mod client;
 pub mod cgt;
-pub mod urgeid;
+pub mod abyssid;
+// Note: urgeid module was renamed to abyssid. Use abyssid instead.
 pub mod nft;
 pub mod marketplace;
 pub mod signing;
@@ -34,9 +35,9 @@ impl DemiurgeSDK {
         cgt::CgtApi::new(&self.client)
     }
 
-    /// Get the UrgeID API
-    pub fn urgeid(&self) -> urgeid::UrgeIdApi<'_> {
-        urgeid::UrgeIdApi::new(&self.client)
+    /// Get the AbyssID API
+    pub fn abyssid(&self) -> abyssid::AbyssIdApi<'_> {
+        abyssid::AbyssIdApi::new(&self.client)
     }
 
     /// Get the NFT API

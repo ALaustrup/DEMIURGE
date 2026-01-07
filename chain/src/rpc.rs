@@ -12,19 +12,21 @@
 //! - cgt_getFabricAsset: Get Fabric asset by root hash
 
 use std::sync::Arc;
+use std::time::Duration;
 
 use axum::{extract::Extension, routing::post, Json, Router};
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use tower_http::cors::{Any, CorsLayer};
+use tower_http::timeout::TimeoutLayer;
+use tower_http::limit::RequestBodyLimitLayer;
 
 #[cfg(debug_assertions)]
 use crate::config::DEV_FAUCET_AMOUNT;
 use crate::core::transaction::{Address, Transaction};
 use crate::node::Node;
-use crate::archon::ArchonStateVector;
 use crate::runtime::{
-    create_urgeid_profile, get_address_by_handle, get_address_by_username, get_urgeid_profile,
+    create_abyssid_profile, get_address_by_handle, get_address_by_username, get_abyssid_profile,
     record_syzygy, set_handle, set_username, BankCgtModule, CGT_DECIMALS,
     CGT_MAX_SUPPLY, CGT_NAME, CGT_SYMBOL, FabricRootHash, ListingId, NftDgenModule, NftId,
     RuntimeModule, get_all_developers, get_developer_by_username, get_developer_profile,
@@ -35,6 +37,26 @@ use crate::runtime::{
     create_world, get_world, list_worlds_by_owner,
 };
 use crate::runtime::work_claim::{calculate_reward, WorkClaimParams};
+use crate::runtime::activity_log::{
+    get_activity, get_activities_for_address, get_activity_stats, get_recent_activities,
+    ActivityType,
+};
+use crate::runtime::cgt_staking::{
+    get_stake_info, get_total_staked, get_staking_stats, calculate_pending_rewards,
+};
+use crate::runtime::treasury::{
+    get_treasury_balance, get_treasury_stats, get_total_fees_collected,
+    get_total_burned, get_total_validator_rewards, get_validator_rewards,
+    calculate_fee, FEE_RATE_BPS, MIN_FEE, MAX_FEE,
+    TREASURY_SHARE_BPS, BURN_SHARE_BPS, VALIDATOR_SHARE_BPS,
+};
+use crate::runtime::premium::{
+    get_effective_tier, get_premium_status, get_stake_tier, get_subscription,
+    can_use_storage, get_storage_used, PremiumTier,
+    FREE_STORAGE, ARCHON_STORAGE, GENESIS_STORAGE,
+    ARCHON_MONTHLY_COST, GENESIS_MONTHLY_COST,
+    ARCHON_STAKE_REQUIREMENT, GENESIS_STAKE_REQUIREMENT,
+};
 
 /// JSON-RPC request envelope.
 #[derive(Debug, Deserialize)]
@@ -112,23 +134,23 @@ pub struct GetTxHistoryParams {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct UrgeIDSetUsernameParams {
+pub struct AbyssIDSetUsernameParams {
     pub address: String, // hex string
     pub username: String,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct UrgeIDResolveUsernameParams {
+pub struct AbyssIDResolveUsernameParams {
     pub username: String,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct UrgeIDGetProfileByUsernameParams {
+pub struct AbyssIDGetProfileByUsernameParams {
     pub username: String,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct UrgeIDGetProgressParams {
+pub struct AbyssIDGetProgressParams {
     pub address: String, // hex string
 }
 
@@ -277,31 +299,31 @@ pub struct MintDgenNftParams {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct UrgeIDCreateParams {
+pub struct AbyssIDCreateParams {
     pub address: String, // hex string
     pub display_name: String,
     pub bio: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct UrgeIDGetParams {
+pub struct AbyssIDGetParams {
     pub address: String, // hex string
 }
 
 #[derive(Debug, Deserialize)]
-pub struct UrgeIDRecordSyzygyParams {
+pub struct AbyssIDRecordSyzygyParams {
     pub address: String, // hex string
     pub amount: u64,     // Syzygy contribution amount
 }
 
 #[derive(Debug, Deserialize)]
-pub struct UrgeIDSetHandleParams {
+pub struct AbyssIDSetHandleParams {
     pub address: String, // hex string
     pub handle: String,  // handle without @
 }
 
 #[derive(Debug, Deserialize)]
-pub struct UrgeIDGetByHandleParams {
+pub struct AbyssIDGetByHandleParams {
     pub handle: String, // handle without @
 }
 
@@ -338,12 +360,27 @@ pub fn rpc_router(node: Arc<Node>) -> Router {
     let cors = CorsLayer::new()
         .allow_origin(Any)
         .allow_methods(Any)
-        .allow_headers(Any);
+        .allow_headers(Any)
+        .max_age(Duration::from_secs(3600)); // Cache CORS preflight for 1 hour
+
+    // Request timeout - 30 seconds for most operations
+    let timeout = TimeoutLayer::new(Duration::from_secs(30));
+    
+    // Limit request body size to 1MB
+    let body_limit = RequestBodyLimitLayer::new(1024 * 1024);
 
     Router::new()
         .route("/rpc", post(handle_rpc))
+        .route("/health", axum::routing::get(health_check))
         .layer(cors)
+        .layer(timeout)
+        .layer(body_limit)
         .layer(Extension(node))
+}
+
+/// Health check endpoint for load balancers and monitoring
+async fn health_check() -> &'static str {
+    "OK"
 }
 
 /// Handle JSON-RPC requests.
@@ -1041,7 +1078,7 @@ async fn handle_rpc(
             // Otherwise, we'll bypass signature checks and mint directly
             let result = node.with_state_mut(|state| {
                 // Check if owner is Archon (required for minting)
-                if !crate::runtime::urgeid_registry::is_archon(state, &owner_addr) {
+                if !crate::runtime::abyssid_registry::is_archon(state, &owner_addr) {
                     return Err("only Archons may mint D-GEN NFTs".to_string());
                 }
 
@@ -1102,16 +1139,16 @@ async fn handle_rpc(
                 }),
             }
         }
-        "urgeid_create" => {
-            let params: UrgeIDCreateParams = match req.params.as_ref() {
+        "abyssid_create" => {
+            let params: AbyssIDCreateParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
-                    .unwrap_or(UrgeIDCreateParams {
+                    .unwrap_or(AbyssIDCreateParams {
                         address: String::new(),
                         display_name: String::new(),
                         bio: None,
                     }),
-                None => UrgeIDCreateParams {
+                None => AbyssIDCreateParams {
                     address: String::new(),
                     display_name: String::new(),
                     bio: None,
@@ -1136,7 +1173,7 @@ async fn handle_rpc(
             let current_height = node.chain_info().height;
 
             let result = node.with_state_mut(|state| {
-                create_urgeid_profile(state, address, params.display_name, params.bio, current_height)
+                create_abyssid_profile(state, address, params.display_name, params.bio, current_height)
             });
 
             match result {
@@ -1187,20 +1224,20 @@ async fn handle_rpc(
                     result: None,
                     error: Some(JsonRpcError {
                         code: -32603,
-                        message: format!("Failed to create UrgeID profile: {}", msg),
+                        message: format!("Failed to create AbyssID profile: {}", msg),
                     }),
                     id,
                 }),
             }
         }
-        "urgeid_get" => {
-            let params: UrgeIDGetParams = match req.params.as_ref() {
+        "abyssid_get" => {
+            let params: AbyssIDGetParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
-                    .unwrap_or(UrgeIDGetParams {
+                    .unwrap_or(AbyssIDGetParams {
                         address: String::new(),
                     }),
-                None => UrgeIDGetParams {
+                None => AbyssIDGetParams {
                     address: String::new(),
                 },
             };
@@ -1220,7 +1257,7 @@ async fn handle_rpc(
                 }
             };
 
-            let profile_opt = node.with_state(|state| get_urgeid_profile(state, &address));
+            let profile_opt = node.with_state(|state| get_abyssid_profile(state, &address));
 
             Json(JsonRpcResponse {
                 jsonrpc: "2.0".to_string(),
@@ -1243,15 +1280,15 @@ async fn handle_rpc(
                 id,
             })
         }
-        "urgeid_recordSyzygy" => {
-            let params: UrgeIDRecordSyzygyParams = match req.params.as_ref() {
+        "abyssid_recordSyzygy" => {
+            let params: AbyssIDRecordSyzygyParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
-                    .unwrap_or(UrgeIDRecordSyzygyParams {
+                    .unwrap_or(AbyssIDRecordSyzygyParams {
                         address: String::new(),
                         amount: 0,
                     }),
-                None => UrgeIDRecordSyzygyParams {
+                None => AbyssIDRecordSyzygyParams {
                     address: String::new(),
                     amount: 0,
                 },
@@ -1300,15 +1337,15 @@ async fn handle_rpc(
                 }),
             }
         }
-        "urgeid_setHandle" => {
-            let params: UrgeIDSetHandleParams = match req.params.as_ref() {
+        "abyssid_setHandle" => {
+            let params: AbyssIDSetHandleParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
-                    .unwrap_or(UrgeIDSetHandleParams {
+                    .unwrap_or(AbyssIDSetHandleParams {
                         address: String::new(),
                         handle: String::new(),
                     }),
-                None => UrgeIDSetHandleParams {
+                None => AbyssIDSetHandleParams {
                     address: String::new(),
                     handle: String::new(),
                 },
@@ -1362,14 +1399,14 @@ async fn handle_rpc(
                 }),
             }
         }
-        "urgeid_getByHandle" => {
-            let params: UrgeIDGetByHandleParams = match req.params.as_ref() {
+        "abyssid_getByHandle" => {
+            let params: AbyssIDGetByHandleParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
-                    .unwrap_or(UrgeIDGetByHandleParams {
+                    .unwrap_or(AbyssIDGetByHandleParams {
                         handle: String::new(),
                     }),
-                None => UrgeIDGetByHandleParams {
+                None => AbyssIDGetByHandleParams {
                     handle: String::new(),
                 },
             };
@@ -1383,7 +1420,7 @@ async fn handle_rpc(
 
             match address_opt {
                 Some(addr) => {
-                    let profile_opt = node.with_state(|state| get_urgeid_profile(state, &addr));
+                    let profile_opt = node.with_state(|state| get_abyssid_profile(state, &addr));
                     match profile_opt {
                         Some(profile) => Json(JsonRpcResponse {
                             jsonrpc: "2.0".to_string(),
@@ -1418,15 +1455,15 @@ async fn handle_rpc(
                 }),
             }
         }
-        "urgeid_setUsername" => {
-            let params: UrgeIDSetUsernameParams = match req.params.as_ref() {
+        "abyssid_setUsername" => {
+            let params: AbyssIDSetUsernameParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
-                    .unwrap_or(UrgeIDSetUsernameParams {
+                    .unwrap_or(AbyssIDSetUsernameParams {
                         address: String::new(),
                         username: String::new(),
                     }),
-                None => UrgeIDSetUsernameParams {
+                None => AbyssIDSetUsernameParams {
                     address: String::new(),
                     username: String::new(),
                 },
@@ -1454,7 +1491,7 @@ async fn handle_rpc(
             match result {
                 Ok(()) => {
                     // Reload profile to return updated state
-                    let profile_opt = node.with_state(|state| get_urgeid_profile(state, &address));
+                    let profile_opt = node.with_state(|state| get_abyssid_profile(state, &address));
                     match profile_opt {
                         Some(profile) => Json(JsonRpcResponse {
                             jsonrpc: "2.0".to_string(),
@@ -1487,14 +1524,14 @@ async fn handle_rpc(
                 }),
             }
         }
-        "urgeid_resolveUsername" => {
-            let params: UrgeIDResolveUsernameParams = match req.params.as_ref() {
+        "abyssid_resolveUsername" => {
+            let params: AbyssIDResolveUsernameParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
-                    .unwrap_or(UrgeIDResolveUsernameParams {
+                    .unwrap_or(AbyssIDResolveUsernameParams {
                         username: String::new(),
                     }),
-                None => UrgeIDResolveUsernameParams {
+                None => AbyssIDResolveUsernameParams {
                     username: String::new(),
                 },
             };
@@ -1532,14 +1569,14 @@ async fn handle_rpc(
                 }),
             }
         }
-        "urgeid_getProfileByUsername" => {
-            let params: UrgeIDGetProfileByUsernameParams = match req.params.as_ref() {
+        "abyssid_getProfileByUsername" => {
+            let params: AbyssIDGetProfileByUsernameParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
-                    .unwrap_or(UrgeIDGetProfileByUsernameParams {
+                    .unwrap_or(AbyssIDGetProfileByUsernameParams {
                         username: String::new(),
                     }),
-                None => UrgeIDGetProfileByUsernameParams {
+                None => AbyssIDGetProfileByUsernameParams {
                     username: String::new(),
                 },
             };
@@ -1550,7 +1587,7 @@ async fn handle_rpc(
 
             match address_opt {
                 Ok(Some(addr)) => {
-                    let profile_opt = node.with_state(|state| get_urgeid_profile(state, &addr));
+                    let profile_opt = node.with_state(|state| get_abyssid_profile(state, &addr));
                     match profile_opt {
                         Some(profile) => Json(JsonRpcResponse {
                             jsonrpc: "2.0".to_string(),
@@ -1594,14 +1631,14 @@ async fn handle_rpc(
                 }),
             }
         }
-        "urgeid_getProgress" => {
-            let params: UrgeIDGetProgressParams = match req.params.as_ref() {
+        "abyssid_getProgress" => {
+            let params: AbyssIDGetProgressParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
-                    .unwrap_or(UrgeIDGetProgressParams {
+                    .unwrap_or(AbyssIDGetProgressParams {
                         address: String::new(),
                     }),
-                None => UrgeIDGetProgressParams {
+                None => AbyssIDGetProgressParams {
                     address: String::new(),
                 },
             };
@@ -1621,10 +1658,10 @@ async fn handle_rpc(
                 }
             };
 
-            let profile_opt = node.with_state(|state| get_urgeid_profile(state, &address));
+            let profile_opt = node.with_state(|state| get_abyssid_profile(state, &address));
             match profile_opt {
                 Some(profile) => {
-                    use crate::runtime::urgeid_registry::level_threshold;
+                    use crate::runtime::abyssid_registry::level_threshold;
                     
                     let current_level = profile.level;
                     let current_threshold = level_threshold(current_level);
@@ -1660,7 +1697,7 @@ async fn handle_rpc(
                     result: None,
                     error: Some(JsonRpcError {
                         code: -32602,
-                        message: "UrgeID profile not found".to_string(),
+                        message: "AbyssID profile not found".to_string(),
                     }),
                     id,
                 }),
@@ -2189,7 +2226,7 @@ async fn handle_rpc(
                 id,
             })
         }
-        "urgeid_getAnalytics" => {
+        "abyssid_getAnalytics" => {
             let params: GetUserAnalyticsParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
@@ -2217,7 +2254,7 @@ async fn handle_rpc(
             };
 
             // Get profile for basic stats
-            let profile_opt = node.with_state(|state| get_urgeid_profile(state, &address));
+            let profile_opt = node.with_state(|state| get_abyssid_profile(state, &address));
             
             // Get transaction history
             let tx_hashes = node.get_transactions_for_address(&address, 1000);
@@ -3149,6 +3186,712 @@ async fn handle_rpc(
                 id,
             })
         }
+
+        // ============================================
+        // Activity Log RPC Methods
+        // ============================================
+        
+        "activity_getStats" => {
+            #[derive(Deserialize)]
+            struct Params {
+                address: String,
+            }
+            
+            let params: Params = match req.params.as_ref() {
+                Some(p) => match serde_json::from_value(p.clone()) {
+                    Ok(parsed) => parsed,
+                    Err(e) => {
+                        return Json(JsonRpcResponse {
+                            jsonrpc: "2.0".to_string(),
+                            result: None,
+                            error: Some(JsonRpcError {
+                                code: -32602,
+                                message: format!("Invalid params: {}", e),
+                            }),
+                            id,
+                        });
+                    }
+                },
+                None => {
+                    return Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: None,
+                        error: Some(JsonRpcError {
+                            code: -32602,
+                            message: "Missing params".to_string(),
+                        }),
+                        id,
+                    });
+                }
+            };
+            
+            let addr_hex = params.address.strip_prefix("0x").unwrap_or(&params.address);
+            let address = match hex::decode(addr_hex) {
+                Ok(bytes) if bytes.len() == 32 => {
+                    let mut arr = [0u8; 32];
+                    arr.copy_from_slice(&bytes);
+                    arr
+                }
+                _ => {
+                    return Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: None,
+                        error: Some(JsonRpcError {
+                            code: -32602,
+                            message: "Invalid address format".to_string(),
+                        }),
+                        id,
+                    });
+                }
+            };
+            
+            let stats = node.with_state(|state| get_activity_stats(state, &address));
+            
+            Json(JsonRpcResponse {
+                jsonrpc: "2.0".to_string(),
+                result: Some(json!({
+                    "total_activities": stats.total_activities,
+                    "transfers_sent": stats.transfers_sent,
+                    "transfers_received": stats.transfers_received,
+                    "total_cgt_sent": stats.total_cgt_sent.to_string(),
+                    "total_cgt_received": stats.total_cgt_received.to_string(),
+                    "nfts_minted": stats.nfts_minted,
+                    "nfts_transferred": stats.nfts_transferred,
+                    "work_claims": stats.work_claims,
+                    "total_work_rewards": stats.total_work_rewards.to_string(),
+                    "listings_created": stats.listings_created,
+                    "purchases_made": stats.purchases_made,
+                })),
+                error: None,
+                id,
+            })
+        }
+        
+        "activity_getHistory" => {
+            #[derive(Deserialize)]
+            struct Params {
+                address: String,
+                activity_type: Option<String>,
+                limit: Option<u64>,
+                offset: Option<u64>,
+            }
+            
+            let params: Params = match req.params.as_ref() {
+                Some(p) => match serde_json::from_value(p.clone()) {
+                    Ok(parsed) => parsed,
+                    Err(e) => {
+                        return Json(JsonRpcResponse {
+                            jsonrpc: "2.0".to_string(),
+                            result: None,
+                            error: Some(JsonRpcError {
+                                code: -32602,
+                                message: format!("Invalid params: {}", e),
+                            }),
+                            id,
+                        });
+                    }
+                },
+                None => {
+                    return Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: None,
+                        error: Some(JsonRpcError {
+                            code: -32602,
+                            message: "Missing params".to_string(),
+                        }),
+                        id,
+                    });
+                }
+            };
+            
+            let addr_hex = params.address.strip_prefix("0x").unwrap_or(&params.address);
+            let address = match hex::decode(addr_hex) {
+                Ok(bytes) if bytes.len() == 32 => {
+                    let mut arr = [0u8; 32];
+                    arr.copy_from_slice(&bytes);
+                    arr
+                }
+                _ => {
+                    return Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: None,
+                        error: Some(JsonRpcError {
+                            code: -32602,
+                            message: "Invalid address format".to_string(),
+                        }),
+                        id,
+                    });
+                }
+            };
+            
+            let activity_type = params.activity_type.map(|s| ActivityType::from_str(&s));
+            let limit = params.limit.unwrap_or(50).min(100);
+            let offset = params.offset.unwrap_or(0);
+            
+            let activities = node.with_state(|state| {
+                get_activities_for_address(state, &address, activity_type, limit, offset)
+            });
+            
+            let entries: Vec<_> = activities.iter().map(|a| {
+                json!({
+                    "id": a.id,
+                    "address": format!("0x{}", hex::encode(a.address)),
+                    "activity_type": a.activity_type.as_str(),
+                    "block_height": a.block_height,
+                    "timestamp": a.timestamp,
+                    "target": a.target.map(|t| format!("0x{}", hex::encode(t))),
+                    "amount": a.amount.map(|a| a.to_string()),
+                    "reference_id": a.reference_id.clone(),
+                    "metadata": a.metadata.clone(),
+                })
+            }).collect();
+            
+            Json(JsonRpcResponse {
+                jsonrpc: "2.0".to_string(),
+                result: Some(json!({
+                    "activities": entries,
+                    "count": entries.len(),
+                })),
+                error: None,
+                id,
+            })
+        }
+        
+        "activity_getRecent" => {
+            #[derive(Deserialize)]
+            struct Params {
+                limit: Option<u64>,
+            }
+            
+            let params: Params = req.params.as_ref()
+                .and_then(|p| serde_json::from_value(p.clone()).ok())
+                .unwrap_or(Params { limit: None });
+            
+            let limit = params.limit.unwrap_or(20).min(100);
+            
+            let activities = node.with_state(|state| get_recent_activities(state, limit));
+            
+            let entries: Vec<_> = activities.iter().map(|a| {
+                json!({
+                    "id": a.id,
+                    "address": format!("0x{}", hex::encode(a.address)),
+                    "activity_type": a.activity_type.as_str(),
+                    "block_height": a.block_height,
+                    "timestamp": a.timestamp,
+                    "target": a.target.map(|t| format!("0x{}", hex::encode(t))),
+                    "amount": a.amount.map(|a| a.to_string()),
+                    "reference_id": a.reference_id.clone(),
+                    "metadata": a.metadata.clone(),
+                })
+            }).collect();
+            
+            Json(JsonRpcResponse {
+                jsonrpc: "2.0".to_string(),
+                result: Some(json!({
+                    "activities": entries,
+                    "count": entries.len(),
+                })),
+                error: None,
+                id,
+            })
+        }
+        
+        "activity_get" => {
+            #[derive(Deserialize)]
+            struct Params {
+                id: u64,
+            }
+            
+            let params: Params = match req.params.as_ref() {
+                Some(p) => match serde_json::from_value(p.clone()) {
+                    Ok(parsed) => parsed,
+                    Err(e) => {
+                        return Json(JsonRpcResponse {
+                            jsonrpc: "2.0".to_string(),
+                            result: None,
+                            error: Some(JsonRpcError {
+                                code: -32602,
+                                message: format!("Invalid params: {}", e),
+                            }),
+                            id,
+                        });
+                    }
+                },
+                None => {
+                    return Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: None,
+                        error: Some(JsonRpcError {
+                            code: -32602,
+                            message: "Missing params".to_string(),
+                        }),
+                        id,
+                    });
+                }
+            };
+            
+            match node.with_state(|state| get_activity(state, params.id)) {
+                Some(a) => {
+                    Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: Some(json!({
+                            "id": a.id,
+                            "address": format!("0x{}", hex::encode(a.address)),
+                            "activity_type": a.activity_type.as_str(),
+                            "block_height": a.block_height,
+                            "timestamp": a.timestamp,
+                            "target": a.target.map(|t| format!("0x{}", hex::encode(t))),
+                            "amount": a.amount.map(|a| a.to_string()),
+                            "reference_id": a.reference_id.clone(),
+                            "metadata": a.metadata.clone(),
+                        })),
+                        error: None,
+                        id,
+                    })
+                }
+                None => {
+                    Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: None,
+                        error: Some(JsonRpcError {
+                            code: -32000,
+                            message: "Activity not found".to_string(),
+                        }),
+                        id,
+                    })
+                }
+            }
+        }
+
+        // ============================================
+        // CGT Staking RPC Methods
+        // ============================================
+        
+        "staking_getInfo" => {
+            #[derive(Deserialize)]
+            struct Params {
+                address: String,
+            }
+            
+            let params: Params = match req.params.as_ref() {
+                Some(p) => match serde_json::from_value(p.clone()) {
+                    Ok(parsed) => parsed,
+                    Err(e) => {
+                        return Json(JsonRpcResponse {
+                            jsonrpc: "2.0".to_string(),
+                            result: None,
+                            error: Some(JsonRpcError {
+                                code: -32602,
+                                message: format!("Invalid params: {}", e),
+                            }),
+                            id,
+                        });
+                    }
+                },
+                None => {
+                    return Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: None,
+                        error: Some(JsonRpcError {
+                            code: -32602,
+                            message: "Missing params".to_string(),
+                        }),
+                        id,
+                    });
+                }
+            };
+            
+            let address: Address = match hex::decode(params.address.strip_prefix("0x").unwrap_or(&params.address)) {
+                Ok(bytes) if bytes.len() == 32 => {
+                    let mut addr = [0u8; 32];
+                    addr.copy_from_slice(&bytes);
+                    addr
+                }
+                _ => {
+                    return Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: None,
+                        error: Some(JsonRpcError {
+                            code: -32602,
+                            message: "Invalid address format".to_string(),
+                        }),
+                        id,
+                    });
+                }
+            };
+            
+            let current_time = std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .map(|d| d.as_secs())
+                .unwrap_or(0);
+            
+            let stake_info = node.with_state(|state| get_stake_info(state, &address));
+            let pending_rewards = calculate_pending_rewards(&stake_info, current_time);
+            
+            Json(JsonRpcResponse {
+                jsonrpc: "2.0".to_string(),
+                result: Some(json!({
+                    "amount": stake_info.amount.to_string(),
+                    "stake_timestamp": stake_info.stake_timestamp,
+                    "pending_rewards": pending_rewards.to_string(),
+                    "last_reward_calculation": stake_info.last_reward_calculation,
+                    "unstake_requested_at": stake_info.unstake_requested_at,
+                    "unstake_amount": stake_info.unstake_amount.to_string(),
+                    "has_pending_unstake": stake_info.unstake_requested_at > 0,
+                })),
+                error: None,
+                id,
+            })
+        }
+        
+        "staking_getStats" => {
+            let stats = node.with_state(|state| get_staking_stats(state));
+            
+            Json(JsonRpcResponse {
+                jsonrpc: "2.0".to_string(),
+                result: Some(json!({
+                    "total_staked": stats.total_staked.to_string(),
+                    "apy_bps": stats.apy_bps,
+                    "apy_percent": stats.apy_bps as f64 / 100.0,
+                    "min_stake": stats.min_stake.to_string(),
+                    "lock_period_secs": stats.lock_period_secs,
+                    "lock_period_days": stats.lock_period_secs / (24 * 60 * 60),
+                })),
+                error: None,
+                id,
+            })
+        }
+        
+        "staking_getTotalStaked" => {
+            let total = node.with_state(|state| get_total_staked(state));
+            
+            Json(JsonRpcResponse {
+                jsonrpc: "2.0".to_string(),
+                result: Some(json!({
+                    "total_staked": total.to_string(),
+                })),
+                error: None,
+                id,
+            })
+        }
+
+        // ============================================
+        // Treasury RPC Methods
+        // ============================================
+        
+        "treasury_getStats" => {
+            let stats = node.with_state(|state| get_treasury_stats(state));
+            
+            Json(JsonRpcResponse {
+                jsonrpc: "2.0".to_string(),
+                result: Some(json!({
+                    "balance": stats.balance.to_string(),
+                    "total_fees_collected": stats.total_fees_collected.to_string(),
+                    "total_burned": stats.total_burned.to_string(),
+                    "total_validator_rewards": stats.total_validator_rewards.to_string(),
+                    "fee_rate_bps": stats.fee_rate_bps,
+                    "fee_rate_percent": stats.fee_rate_bps as f64 / 100.0,
+                    "treasury_share_bps": stats.treasury_share_bps,
+                    "treasury_share_percent": stats.treasury_share_bps as f64 / 100.0,
+                    "burn_share_bps": stats.burn_share_bps,
+                    "burn_share_percent": stats.burn_share_bps as f64 / 100.0,
+                    "validator_share_bps": stats.validator_share_bps,
+                    "validator_share_percent": stats.validator_share_bps as f64 / 100.0,
+                })),
+                error: None,
+                id,
+            })
+        }
+        
+        "treasury_getBalance" => {
+            let balance = node.with_state(|state| get_treasury_balance(state));
+            
+            Json(JsonRpcResponse {
+                jsonrpc: "2.0".to_string(),
+                result: Some(json!({
+                    "balance": balance.to_string(),
+                })),
+                error: None,
+                id,
+            })
+        }
+        
+        "treasury_calculateFee" => {
+            #[derive(Deserialize)]
+            struct Params {
+                amount: String,
+            }
+            
+            let params: Params = match req.params.as_ref() {
+                Some(p) => match serde_json::from_value(p.clone()) {
+                    Ok(parsed) => parsed,
+                    Err(e) => {
+                        return Json(JsonRpcResponse {
+                            jsonrpc: "2.0".to_string(),
+                            result: None,
+                            error: Some(JsonRpcError {
+                                code: -32602,
+                                message: format!("Invalid params: {}", e),
+                            }),
+                            id,
+                        });
+                    }
+                },
+                None => {
+                    return Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: None,
+                        error: Some(JsonRpcError {
+                            code: -32602,
+                            message: "Missing params".to_string(),
+                        }),
+                        id,
+                    });
+                }
+            };
+            
+            let amount: u128 = match params.amount.parse() {
+                Ok(a) => a,
+                Err(_) => {
+                    return Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: None,
+                        error: Some(JsonRpcError {
+                            code: -32602,
+                            message: "Invalid amount".to_string(),
+                        }),
+                        id,
+                    });
+                }
+            };
+            
+            let fee = calculate_fee(amount);
+            
+            Json(JsonRpcResponse {
+                jsonrpc: "2.0".to_string(),
+                result: Some(json!({
+                    "amount": amount.to_string(),
+                    "fee": fee.to_string(),
+                    "total": (amount + fee).to_string(),
+                })),
+                error: None,
+                id,
+            })
+        }
+        
+        // ============================================
+        // Premium Tier RPC Methods
+        // ============================================
+        
+        "premium_getStatus" => {
+            #[derive(Deserialize)]
+            struct Params {
+                address: String,
+            }
+            
+            let params: Params = match req.params.as_ref() {
+                Some(p) => match serde_json::from_value(p.clone()) {
+                    Ok(parsed) => parsed,
+                    Err(e) => {
+                        return Json(JsonRpcResponse {
+                            jsonrpc: "2.0".to_string(),
+                            result: None,
+                            error: Some(JsonRpcError {
+                                code: -32602,
+                                message: format!("Invalid params: {}", e),
+                            }),
+                            id,
+                        });
+                    }
+                },
+                None => {
+                    return Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: None,
+                        error: Some(JsonRpcError {
+                            code: -32602,
+                            message: "Missing params".to_string(),
+                        }),
+                        id,
+                    });
+                }
+            };
+            
+            let address: Address = match hex::decode(params.address.strip_prefix("0x").unwrap_or(&params.address)) {
+                Ok(bytes) if bytes.len() == 32 => {
+                    let mut addr = [0u8; 32];
+                    addr.copy_from_slice(&bytes);
+                    addr
+                }
+                _ => {
+                    return Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: None,
+                        error: Some(JsonRpcError {
+                            code: -32602,
+                            message: "Invalid address format".to_string(),
+                        }),
+                        id,
+                    });
+                }
+            };
+            
+            let current_time = std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .map(|d| d.as_secs())
+                .unwrap_or(0);
+            
+            let status = node.with_state(|state| get_premium_status(state, &address, current_time));
+            
+            let tier_name = match status.effective_tier {
+                PremiumTier::Free => "Free",
+                PremiumTier::Archon => "Archon",
+                PremiumTier::Genesis => "Genesis",
+            };
+            
+            Json(JsonRpcResponse {
+                jsonrpc: "2.0".to_string(),
+                result: Some(json!({
+                    "effective_tier": tier_name,
+                    "effective_tier_id": status.effective_tier as u8,
+                    "subscription_tier": match status.subscription_tier {
+                        PremiumTier::Free => "Free",
+                        PremiumTier::Archon => "Archon",
+                        PremiumTier::Genesis => "Genesis",
+                    },
+                    "stake_tier": match status.stake_tier {
+                        PremiumTier::Free => "Free",
+                        PremiumTier::Archon => "Archon",
+                        PremiumTier::Genesis => "Genesis",
+                    },
+                    "subscription_expires_at": status.subscription_expires_at,
+                    "staked_amount": status.staked_amount.to_string(),
+                    "storage_limit": status.storage_limit,
+                    "storage_limit_gb": status.storage_limit / (1024 * 1024 * 1024),
+                    "storage_used": status.storage_used,
+                    "storage_used_gb": status.storage_used as f64 / (1024.0 * 1024.0 * 1024.0),
+                    "storage_available": status.storage_limit.saturating_sub(status.storage_used),
+                })),
+                error: None,
+                id,
+            })
+        }
+        
+        "premium_getTiers" => {
+            Json(JsonRpcResponse {
+                jsonrpc: "2.0".to_string(),
+                result: Some(json!({
+                    "tiers": [
+                        {
+                            "id": 0,
+                            "name": "Free",
+                            "monthly_cost": "0",
+                            "stake_requirement": "0",
+                            "storage_limit": FREE_STORAGE,
+                            "storage_limit_gb": FREE_STORAGE / (1024 * 1024 * 1024),
+                            "features": ["basic_storage", "standard_processing"]
+                        },
+                        {
+                            "id": 1,
+                            "name": "Archon",
+                            "monthly_cost": ARCHON_MONTHLY_COST.to_string(),
+                            "stake_requirement": ARCHON_STAKE_REQUIREMENT.to_string(),
+                            "storage_limit": ARCHON_STORAGE,
+                            "storage_limit_gb": ARCHON_STORAGE / (1024 * 1024 * 1024),
+                            "features": ["extended_storage", "priority_processing", "profile_badge", "priority_support", "early_access"]
+                        },
+                        {
+                            "id": 2,
+                            "name": "Genesis",
+                            "monthly_cost": GENESIS_MONTHLY_COST.to_string(),
+                            "stake_requirement": GENESIS_STAKE_REQUIREMENT.to_string(),
+                            "storage_limit": GENESIS_STORAGE,
+                            "storage_limit_gb": GENESIS_STORAGE / (1024 * 1024 * 1024),
+                            "features": ["extended_storage", "priority_processing", "profile_badge", "priority_support", "early_access", "exclusive_themes", "governance_bonus", "custom_handle", "direct_support"]
+                        }
+                    ]
+                })),
+                error: None,
+                id,
+            })
+        }
+        
+        "premium_canUseStorage" => {
+            #[derive(Deserialize)]
+            struct Params {
+                address: String,
+                additional_bytes: u64,
+            }
+            
+            let params: Params = match req.params.as_ref() {
+                Some(p) => match serde_json::from_value(p.clone()) {
+                    Ok(parsed) => parsed,
+                    Err(e) => {
+                        return Json(JsonRpcResponse {
+                            jsonrpc: "2.0".to_string(),
+                            result: None,
+                            error: Some(JsonRpcError {
+                                code: -32602,
+                                message: format!("Invalid params: {}", e),
+                            }),
+                            id,
+                        });
+                    }
+                },
+                None => {
+                    return Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: None,
+                        error: Some(JsonRpcError {
+                            code: -32602,
+                            message: "Missing params".to_string(),
+                        }),
+                        id,
+                    });
+                }
+            };
+            
+            let address: Address = match hex::decode(params.address.strip_prefix("0x").unwrap_or(&params.address)) {
+                Ok(bytes) if bytes.len() == 32 => {
+                    let mut addr = [0u8; 32];
+                    addr.copy_from_slice(&bytes);
+                    addr
+                }
+                _ => {
+                    return Json(JsonRpcResponse {
+                        jsonrpc: "2.0".to_string(),
+                        result: None,
+                        error: Some(JsonRpcError {
+                            code: -32602,
+                            message: "Invalid address format".to_string(),
+                        }),
+                        id,
+                    });
+                }
+            };
+            
+            let current_time = std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .map(|d| d.as_secs())
+                .unwrap_or(0);
+            
+            let can_use = node.with_state(|state| can_use_storage(state, &address, params.additional_bytes, current_time));
+            let status = node.with_state(|state| get_premium_status(state, &address, current_time));
+            
+            Json(JsonRpcResponse {
+                jsonrpc: "2.0".to_string(),
+                result: Some(json!({
+                    "can_use": can_use,
+                    "current_used": status.storage_used,
+                    "limit": status.storage_limit,
+                    "requested": params.additional_bytes,
+                    "would_use": status.storage_used + params.additional_bytes,
+                })),
+                error: None,
+                id,
+            })
+        }
+
         _ => Json(JsonRpcResponse {
             jsonrpc: "2.0".to_string(),
             result: None,

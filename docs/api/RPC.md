@@ -1,161 +1,114 @@
-# Demiurge JSON-RPC API
+# JSON-RPC API Reference
 
-This document describes the JSON-RPC endpoints available on the Demiurge chain node.
+DEMIURGE Chain exposes a JSON-RPC 2.0 API on port 8545.
 
 ## Endpoint
 
-The RPC server runs on `http://localhost:8545/rpc` by default (configurable via node config).
+- **Local:** `http://localhost:8545/rpc`
+- **Production:** `https://rpc.demiurge.cloud/rpc`
 
 ## Request Format
-
-All requests use JSON-RPC 2.0 format:
 
 ```json
 {
   "jsonrpc": "2.0",
   "method": "method_name",
-  "params": { ... },
+  "params": {},
   "id": 1
 }
 ```
 
 ## Methods
 
-### getBalance
+### Chain Information
 
+#### `cgt_getChainInfo`
+Get current chain status.
+
+```bash
+curl -X POST http://localhost:8545/rpc \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","method":"cgt_getChainInfo","params":{},"id":1}'
+```
+
+Response:
+```json
+{"jsonrpc":"2.0","result":{"height":0},"id":1}
+```
+
+#### `getNetworkInfo`
+Get network information.
+
+### Balance & Transfers
+
+#### `cgt_getBalance`
 Get CGT balance for an address.
 
-**Parameters:**
-- `address` (string): Hex-encoded 32-byte address
-
-**Returns:**
 ```json
 {
-  "jsonrpc": "2.0",
-  "result": {
-    "balance": "100000000000000"
-  },
-  "id": 1
+  "method": "cgt_getBalance",
+  "params": {"address": "0x..."}
 }
 ```
 
-**Example:**
-```bash
-curl -X POST http://localhost:8545/rpc \
-  -H "Content-Type: application/json" \
-  -d '{
-    "jsonrpc": "2.0",
-    "method": "getBalance",
-    "params": {
-      "address": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-    },
-    "id": 1
-  }'
-```
+#### `cgt_sendRawTransaction`
+Submit a signed transaction.
 
-### submitWorkClaim
-
-Submit a work claim from an arcade miner to mint CGT rewards.
-
-**Parameters:**
-- `address` (string): Hex-encoded 32-byte address (claim recipient)
-- `game_id` (string): Game identifier (e.g., "mandelbrot")
-- `session_id` (string): Unique session identifier
-- `depth_metric` (number): Work depth metric (float)
-- `active_ms` (number): Active time in milliseconds (integer, minimum 1000)
-- `extra` (string, optional): Additional metadata
-
-**Returns:**
 ```json
 {
-  "jsonrpc": "2.0",
-  "result": {
-    "tx_hash": "abc123...",
-    "reward_estimate": "1000000000"
-  },
-  "id": 1
+  "method": "cgt_sendRawTransaction",
+  "params": {"tx_hex": "..."}
 }
 ```
 
-**Example:**
-```bash
-curl -X POST http://localhost:8545/rpc \
-  -H "Content-Type: application/json" \
-  -d '{
-    "jsonrpc": "2.0",
-    "method": "submitWorkClaim",
-    "params": {
-      "address": "1111111111111111111111111111111111111111111111111111111111111111",
-      "game_id": "mandelbrot",
-      "session_id": "session_123",
-      "depth_metric": 10.5,
-      "active_ms": 5000,
-      "extra": null
-    },
-    "id": 1
-  }'
-```
+### Identity
 
-### getNetworkInfo
+#### `cgt_isArchon`
+Check if address has Archon status.
 
-Get network information including chain ID and name.
+#### `abyssid_get`
+Get AbyssID profile for address.
 
-**Parameters:** None
+### NFTs
 
-**Returns:**
-```json
-{
-  "jsonrpc": "2.0",
-  "result": {
-    "chain_id": 77701,
-    "name": "Demiurge Devnet",
-    "height": 42
-  },
-  "id": 1
-}
-```
+#### `cgt_getNftsByOwner`
+Get all NFTs owned by address.
 
-**Example:**
-```bash
-curl -X POST http://localhost:8545/rpc \
-  -H "Content-Type: application/json" \
-  -d '{
-    "jsonrpc": "2.0",
-    "method": "getNetworkInfo",
-    "params": {},
-    "id": 1
-  }'
-```
+#### `cgt_getListing`
+Get marketplace listing by ID.
 
-### submitTransaction
+### Transactions
 
-Submit a raw transaction to the mempool (existing endpoint, now supports work-claim transactions).
+#### `cgt_getTransactionsByAddress`
+Get transaction history for address.
 
-**Parameters:**
-- `tx` (string): Hex-encoded transaction bytes
+#### `cgt_getTransactionByHash`
+Get transaction by hash.
 
-**Returns:**
-```json
-{
-  "jsonrpc": "2.0",
-  "result": {
-    "accepted": true,
-    "tx_hash": "abc123..."
-  },
-  "id": 1
-}
-```
+### Work Claims
 
-## Other Available Methods
+#### `submitWorkClaim`
+Submit mining work claim.
 
-- `cgt_getChainInfo`: Get chain height
-- `cgt_getBalance`: Get CGT balance (alias for `getBalance`)
-- `cgt_sendRawTransaction`: Submit raw transaction (alias for `submitTransaction`)
-- `cgt_isArchon`: Check Archon status
-- `cgt_getNftsByOwner`: Get NFTs by owner
-- `cgt_getListing`: Get marketplace listing
-- `cgt_getFabricAsset`: Get Fabric asset
-- Various UrgeID, Developer, DevCapsule, and Recursion endpoints
+## Error Codes
 
-See the codebase for the full list of available methods.
+| Code | Message |
+|------|---------|
+| -32600 | Invalid Request |
+| -32601 | Method not found |
+| -32602 | Invalid params |
+| -32603 | Internal error |
 
+## CORS
+
+Production endpoint has CORS enabled for:
+- `https://demiurge.cloud`
+- `https://demiurge.guru`
+
+## Rate Limiting
+
+Recommended: Implement rate limiting on public endpoints.
+
+---
+
+See [chain/src/rpc.rs](../../chain/src/rpc.rs) for full implementation.

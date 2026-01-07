@@ -2,8 +2,9 @@
 //!
 //! PHASE OMEGA: Production-grade error handling with retry logic support.
 
+#![allow(dead_code)]
+
 use thiserror::Error;
-use std::fmt;
 
 #[derive(Debug, Error)]
 pub enum IndexerError {

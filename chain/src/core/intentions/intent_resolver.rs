@@ -4,8 +4,7 @@
 //! and feeds decisions to the Evolution Kernel
 
 use std::collections::HashMap;
-use crate::core::intentions::intent_engine::{Intention, IntentionPriority, IntentionStatus};
-use crate::core::intentions::intent_classifier::IntentionCategory;
+use crate::core::intentions::intent_engine::{Intention, IntentionPriority};
 
 /// Conflict resolution strategy
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
