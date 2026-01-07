@@ -33,6 +33,8 @@ set(SOURCES
     src/WalletBridge.h
     src/UpdateManager.cpp
     src/UpdateManager.h
+    src/AppLauncher.cpp
+    src/AppLauncher.h
 )
 
 # Resources

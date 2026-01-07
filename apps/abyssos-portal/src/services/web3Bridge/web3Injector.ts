@@ -1,10 +1,14 @@
 /**
  * Web3 Injection Script
  * 
- * Injects window.abyss into iframe content
+ * Injects window.abyss and window.ethereum (EIP-1193) into iframe content
  */
 
-export const ABYSS_WEB3_INJECTION_SCRIPT = `
+// Re-export the combined injection for full EIP-1193 + Abyss support
+export { COMBINED_WEB3_INJECTION as ABYSS_WEB3_INJECTION_SCRIPT } from './eip1193Provider';
+
+// Legacy injection script (kept for reference)
+export const ABYSS_LEGACY_INJECTION_SCRIPT = `
 (function() {
   if (typeof window.abyss !== 'undefined') {
     return; // Already injected
