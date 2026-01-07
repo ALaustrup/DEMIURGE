@@ -3,6 +3,8 @@
 //! PHASE OMEGA PART II: Ensures only canonical chain blocks are indexed
 //! and rejects forks or invalid blocks
 
+#![allow(dead_code)]
+
 use crate::error::{IndexerError, IndexerResult};
 use sha2::{Digest, Sha256};
 

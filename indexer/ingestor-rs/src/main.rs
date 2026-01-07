@@ -11,12 +11,9 @@ mod recovery_mode;
 mod block_drift_detector;
 mod canonical_chain_enforcer;
 
-use error::{IndexerError, IndexerResult, RetryConfig, retry_with_backoff};
-use recovery_mode::{RecoveryMode, RecoveryConfig};
-use block_drift_detector::BlockDriftDetector;
-use canonical_chain_enforcer::CanonicalChainEnforcer;
+use error::{IndexerError, RetryConfig, retry_with_backoff};
 use anyhow::Result;
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 use serde_json::json;
 use tracing_subscriber::EnvFilter;
 
@@ -26,6 +23,7 @@ struct ChainInfoResult {
 }
 
 #[derive(Debug, Deserialize)]
+#[allow(dead_code)]
 struct JsonRpcResponse<R> {
     jsonrpc: String,
     result: Option<R>,

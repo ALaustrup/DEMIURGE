@@ -3,6 +3,8 @@
 //! PHASE OMEGA PART II: Detects drift in block ingestion
 //! and validates chain invariants before indexing
 
+#![allow(dead_code)]
+
 use crate::error::{IndexerError, IndexerResult};
 
 /// Block drift detector

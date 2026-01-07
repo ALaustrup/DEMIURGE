@@ -22,7 +22,6 @@ use tower_http::cors::{Any, CorsLayer};
 use crate::config::DEV_FAUCET_AMOUNT;
 use crate::core::transaction::{Address, Transaction};
 use crate::node::Node;
-use crate::archon::ArchonStateVector;
 use crate::runtime::{
     create_abyssid_profile, get_address_by_handle, get_address_by_username, get_abyssid_profile,
     record_syzygy, set_handle, set_username, BankCgtModule, CGT_DECIMALS,

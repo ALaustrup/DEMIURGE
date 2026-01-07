@@ -117,7 +117,7 @@ impl GenesisConfig {
 /// Load validator key and derive address.
 pub fn load_validator_key(key_path: &PathBuf) -> Result<([u8; 32], [u8; 32])> {
     use ed25519_dalek::{SigningKey, VerifyingKey};
-    use rand::rngs::OsRng;
+    
     
     // Check if key exists
     if !key_path.exists() {

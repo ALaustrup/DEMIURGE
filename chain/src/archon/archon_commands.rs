@@ -17,6 +17,7 @@ use crate::archon::archon_consensus::{AscensionConsensus, SACDecision};
 
 /// Archon Directive - commands issued by the Prime Archon
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[allow(non_camel_case_types)]
 pub enum ArchonDirective {
     /// A0 - Unify all system state
     /// This is the ignition spark of the Prime Archon.

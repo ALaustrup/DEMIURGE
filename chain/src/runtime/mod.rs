@@ -28,37 +28,29 @@ pub use abyss_registry::{get_all_active_listings, get_listing, AbyssRegistryModu
 pub use abyssid_registry::{
     create_abyssid_profile, get_address_by_handle, get_address_by_username, get_abyssid_profile,
     is_archon, record_syzygy, set_handle, set_username,
-    AbyssIDRegistryModule, AbyssIDProfile,
+    AbyssIDRegistryModule,
 };
 pub use bank_cgt::{
     cgt_mint_to, get_balance_cgt, get_cgt_total_supply, get_nonce_cgt, CGT_DECIMALS,
     CGT_MAX_SUPPLY, CGT_NAME, CGT_SYMBOL, BankCgtModule,
 };
 pub use fabric_manager::{get_fabric_asset, FabricManagerModule, FabricRootHash};
-pub use nft_dgen::{get_nft, get_nfts_by_owner, NftDgenModule, NftId, NftClass, FABRIC_ROOT_DEV_BADGE, system_mint_dev_nft};
+pub use nft_dgen::{get_nft, get_nfts_by_owner, NftDgenModule, NftId};
 pub use developer_registry::{
     add_project, get_all_developers, get_developer_by_username, get_developer_profile,
     get_project_maintainers, register_developer, DeveloperProfile,
     DeveloperRegistryModule,
 };
 pub use dev_capsules::{
-    create_capsule, get_capsule, list_capsules_by_owner, list_capsules_by_project,
-    update_capsule_status, update_capsule_notes, CapsuleStatus, DevCapsule, DevCapsulesModule,
+    create_capsule, get_capsule, list_capsules_by_owner,
+    update_capsule_status, CapsuleStatus, DevCapsulesModule,
 };
 pub use recursion_registry::{
-    create_world, get_world, list_worlds_by_owner, RecursionWorldMeta, RecursionRegistryModule,
+    create_world, get_world, list_worlds_by_owner, RecursionRegistryModule,
 };
-pub use work_claim::{calculate_reward, WorkClaimModule, WorkClaimParams};
-pub use activity_log::{
-    log_activity, get_activity, get_activities_for_address, get_activity_stats, get_recent_activities,
-    ActivityEntry, ActivityLogModule, ActivityStats, ActivityType,
-};
-pub use cgt_staking::{
-    stake, request_unstake, complete_unstake, cancel_unstake, claim_rewards,
-    get_stake_info, get_total_staked, get_staking_stats, calculate_pending_rewards,
-    StakeInfo, StakingStats, CgtStakingModule,
-    MIN_STAKE_AMOUNT, UNSTAKE_LOCK_PERIOD, BASE_APY_BPS,
-};
+pub use work_claim::WorkClaimModule;
+pub use activity_log::ActivityLogModule;
+pub use cgt_staking::CgtStakingModule;
 
 /// Trait that all runtime modules must implement.
 ///
