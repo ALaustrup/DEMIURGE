@@ -20,12 +20,12 @@ import {
   signTransactionRpc,
   setUsername,
   resolveUsername,
-  getUrgeIdProgress,
+  getAbyssIdProgress,
   getNftsByOwner,
   isDevBadgeNft,
   normalizeAddressForChain,
-  type UrgeIDProfile,
-  type UrgeIDProgress,
+  type AbyssIDProfile,
+  type AbyssIDProgress,
   type NftMetadata,
 } from "@/lib/rpc";
 import { signTransaction } from "@/lib/signing";
@@ -53,10 +53,10 @@ export default function HavenPage() {
   const [showAbyssID, setShowAbyssID] = useState(false);
 
   // Wallet & Profile State
-  const [urgeIdProfile, setUrgeIdProfile] = useState<UrgeIDProfile | null>(null);
+  const [urgeIdProfile, setUrgeIdProfile] = useState<AbyssIDProfile | null>(null);
   const [balance, setBalance] = useState<number | null>(null);
   const [nfts, setNfts] = useState<Nft[]>([]);
-  const [progress, setProgress] = useState<UrgeIDProgress | null>(null);
+  const [progress, setProgress] = useState<AbyssIDProgress | null>(null);
   const [loadingChain, setLoadingChain] = useState(false);
   const [chainError, setChainError] = useState<string | null>(null);
   const [usernameInput, setUsernameInput] = useState("");
@@ -167,7 +167,7 @@ export default function HavenPage() {
 
       // Load UrgeID profile
       try {
-        const profile = await callRpc<UrgeIDProfile | null>("urgeid_get", {
+        const profile = await callRpc<AbyssIDProfile | null>("urgeid_get", {
           address: normalizedAddr,
         });
         if (profile) {
@@ -201,7 +201,7 @@ export default function HavenPage() {
 
       // Load progress
       try {
-        const progressData = await getUrgeIdProgress(normalizedAddr);
+        const progressData = await getAbyssIdProgress(normalizedAddr);
         setProgress(progressData);
       } catch (err) {
         console.warn("Failed to load progress:", err);
