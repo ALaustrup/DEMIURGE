@@ -74,22 +74,22 @@
 ### Phase 6: Archon
 - ⏳ Not started (integrated in chain, no separate service needed)
 
-### Phase 7: AbyssID Service
+### Phase 7: QorID Service
 - ⏳ Not started
 - Requires: Node.js dependencies, build, systemd service
 
-### Phase 8: Abyss Gateway
+### Phase 8: QOR Gateway
 - ⏳ Not started
 - Requires: Node.js dependencies, build, systemd service
 
 ### Phase 9: Web Builds
 - ⏳ Not started
-- Requires: Build AbyssOS, Build Portal, deploy to `/opt/demiurge/web/`
+- Requires: Build QOR OS, Build Portal, deploy to `/opt/demiurge/web/`
 
 ### Phase 10: Nginx Configuration
 - ⏳ Not started
 - Requires: Server blocks for:
-  - demiurge.cloud → AbyssOS
+  - demiurge.cloud → QOR OS
   - demiurge.guru → Portal
   - rpc.demiurge.cloud → RPC proxy
 
@@ -127,8 +127,8 @@
 
 2. **Continue Deployment**
    - Once chain is running, proceed with Phases 7-12
-   - Build and deploy AbyssID service
-   - Build and deploy Abyss Gateway
+   - Build and deploy QorID service
+   - Build and deploy QOR Gateway
    - Build and deploy web applications
    - Configure Nginx
    - Obtain TLS certificates

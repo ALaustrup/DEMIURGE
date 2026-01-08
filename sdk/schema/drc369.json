@@ -21,7 +21,7 @@
     },
     "owner": {
       "type": "string",
-      "description": "AbyssID or external wallet address"
+      "description": "QorID or external wallet address"
     },
     "creator": {
       "type": "string",

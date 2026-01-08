@@ -28,7 +28,7 @@
    - ✅ Automatic flag setting on file upload, manual mint, or NFT swap
 
 5. **Integration Points**
-   - ✅ Abyss Wallet: Balance display and send functionality
+   - ✅ QOR Wallet: Balance display and send functionality
    - ✅ File Upload: Auto-minting triggers send permission
    - ✅ NFT Swapping: Triggers send permission
    - ✅ Manual Minting: Triggers send permission

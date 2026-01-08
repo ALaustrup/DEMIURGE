@@ -4,8 +4,8 @@ import { FractureShell } from "@/components/fracture/FractureShell";
 import { HeroPanel } from "@/components/fracture/HeroPanel";
 import Link from "next/link";
 import { Home, User, Fingerprint, Key, Calendar, LogOut, Code, Sparkles, BarChart3, FolderKanban, Coins, Send, History, Lock, Eye, EyeOff, Download, ChevronLeft, ChevronRight, AlertCircle } from "lucide-react";
-import { useAbyssID } from "@/lib/fracture/identity/AbyssIDContext";
-import { AbyssIDDialog } from "@/components/fracture/AbyssIDDialog";
+import { useQorID } from "@/lib/fracture/identity/QorIDContext";
+import { QorIDDialog } from "@/components/fracture/QorIDDialog";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -24,8 +24,8 @@ import {
   getNftsByOwner,
   isDevBadgeNft,
   normalizeAddressForChain,
-  type AbyssIDProfile,
-  type AbyssIDProgress,
+  type QorIDProfile,
+  type QorIDProgress,
   type NftMetadata,
 } from "@/lib/rpc";
 import { signTransaction } from "@/lib/signing";
@@ -49,14 +49,14 @@ type Nft = {
 };
 
 export default function HavenPage() {
-  const { identity, clearIdentity, setIdentity } = useAbyssID();
-  const [showAbyssID, setShowAbyssID] = useState(false);
+  const { identity, clearIdentity, setIdentity } = useQorID();
+  const [showQorID, setShowQorID] = useState(false);
 
   // Wallet & Profile State
-  const [urgeIdProfile, setUrgeIdProfile] = useState<AbyssIDProfile | null>(null);
+  const [urgeIdProfile, setUrgeIdProfile] = useState<QorIDProfile | null>(null);
   const [balance, setBalance] = useState<number | null>(null);
   const [nfts, setNfts] = useState<Nft[]>([]);
-  const [progress, setProgress] = useState<AbyssIDProgress | null>(null);
+  const [progress, setProgress] = useState<QorIDProgress | null>(null);
   const [loadingChain, setLoadingChain] = useState(false);
   const [chainError, setChainError] = useState<string | null>(null);
   const [usernameInput, setUsernameInput] = useState("");
@@ -145,7 +145,7 @@ export default function HavenPage() {
     } catch (err: any) {
       // Silently handle gateway connection errors
       if (err.message?.includes("Connection failed") || err.message?.includes("Unable to reach")) {
-        console.warn("Abyss Gateway not available - developer status check failed");
+        console.warn("QOR Gateway not available - developer status check failed");
         setIsDeveloper(false);
       } else {
         console.error("Failed to check developer status:", err);
@@ -167,7 +167,7 @@ export default function HavenPage() {
 
       // Load UrgeID profile
       try {
-        const profile = await callRpc<AbyssIDProfile | null>("urgeid_get", {
+        const profile = await callRpc<QorIDProfile | null>("urgeid_get", {
           address: normalizedAddr,
         });
         if (profile) {
@@ -510,7 +510,7 @@ export default function HavenPage() {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-zinc-100 mb-1 flex items-center gap-2">
-                    AbyssID: @{identity.username}
+                    QorID: @{identity.username}
                     {(isDeveloper || identity.isDeveloper) && (
                       <span className="px-2 py-1 text-xs font-semibold bg-gradient-to-r from-cyan-500 to-fuchsia-500 text-white rounded-full flex items-center gap-1">
                         <Code className="h-3 w-3" />
@@ -563,17 +563,17 @@ export default function HavenPage() {
             <div className="mb-4">
               <Fingerprint className="h-12 w-12 text-zinc-500 mx-auto mb-3" />
               <h3 className="text-lg font-semibold text-zinc-100 mb-2">
-                No AbyssID Found
+                No QorID Found
               </h3>
               <p className="text-sm text-zinc-400 mb-4">
-                You need an AbyssID to access Haven. Create one to begin your journey.
+                You need an QorID to access Haven. Create one to begin your journey.
               </p>
             </div>
             <button
-              onClick={() => setShowAbyssID(true)}
+              onClick={() => setShowQorID(true)}
               className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-fuchsia-500 text-white font-semibold rounded-lg hover:from-cyan-400 hover:to-fuchsia-400 transition-all duration-200 hover:scale-105"
             >
-              Create AbyssID
+              Create QorID
             </button>
           </motion.div>
         )}
@@ -961,7 +961,7 @@ export default function HavenPage() {
                 </p>
                 {identity.seedPhrase && (
                   <div className="mt-3 p-2 bg-black/20 rounded-lg">
-                    <p className="text-xs text-zinc-400 mb-1">Your AbyssID Seed Phrase:</p>
+                    <p className="text-xs text-zinc-400 mb-1">Your QorID Seed Phrase:</p>
                     <code className="text-xs text-zinc-300 font-mono break-words">{identity.seedPhrase}</code>
                   </div>
                 )}
@@ -1030,8 +1030,8 @@ export default function HavenPage() {
         </div>
       </div>
 
-      {/* AbyssID Dialog */}
-      <AbyssIDDialog open={showAbyssID} onClose={() => setShowAbyssID(false)} />
+      {/* QorID Dialog */}
+      <QorIDDialog open={showQorID} onClose={() => setShowQorID(false)} />
     </FractureShell>
   );
 }

@@ -58,7 +58,7 @@
 All components use context providers from root layout:
 - `RitualContextProvider` - Available globally
 - `ArchonContextProvider` - Available globally
-- `AbyssIDProvider` - Available globally
+- `QorIDProvider` - Available globally
 - `AudioContextProvider` - Available globally
 
 No duplicate providers needed.

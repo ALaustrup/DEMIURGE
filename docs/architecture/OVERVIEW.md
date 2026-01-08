@@ -20,7 +20,7 @@ DEMIURGE is a sovereign Layer 1 blockchain ecosystem for creators.
 │  ┌───────────────────────────┼───────────────────────────────┐  │
 │  │                    APPLICATIONS                            │  │
 │  │  ┌─────────────┐  ┌──────┴──────┐  ┌─────────────┐        │  │
-│  │  │ Portal Web  │  │   AbyssID   │  │   AbyssOS   │        │  │
+│  │  │ Portal Web  │  │   QorID   │  │   QOR OS   │        │  │
 │  │  │  (Landing)  │  │   Service   │  │   Portal    │        │  │
 │  │  │   :3000     │  │    :8082    │  │    :5173    │        │  │
 │  │  └─────────────┘  └─────────────┘  └─────────────┘        │  │
@@ -51,16 +51,16 @@ The Layer 1 blockchain written in Rust.
 | Module | Purpose |
 |--------|---------|
 | `bank_cgt` | CGT token balances, transfers, minting |
-| `abyssid_registry` | On-chain identity profiles |
+| `qor_registry` | On-chain identity profiles |
 | `nft_dgen` | D-GEN NFT standard |
 | `fabric_manager` | P2P content delivery |
-| `abyss_registry` | Marketplace listings |
+| `qor_registry_legacy` | Marketplace listings |
 | `developer_registry` | Developer profiles |
 | `dev_capsules` | Development environments |
 | `recursion_registry` | Game world registry |
 | `work_claim` | Mining reward claims |
 
-### 3. AbyssID Service (`apps/abyssid-service/`)
+### 3. QorID Service (`apps/qorid-service/`)
 
 TypeScript backend for identity and services.
 
@@ -84,13 +84,13 @@ Next.js information landing page.
 
 **Port:** 3000
 
-### 5. AbyssOS Portal (`apps/abyssos-portal/`)
+### 5. QLOUD OS (`apps/qloud-os/`)
 
 Full desktop environment in the browser.
 
 **Features:**
 - Boot screen with intro video
-- AbyssID login/signup
+- QorID login/signup
 - Window management
 - Multiple built-in apps
 - Chain integration
@@ -100,10 +100,10 @@ Full desktop environment in the browser.
 ## Data Flow
 
 ```
-User → Portal Web → "Enter Abyss" → AbyssOS Portal
+User → Portal Web → "Enter Abyss" → QLOUD OS
                                          │
                                          ▼
-                                   AbyssID Service
+                                   QorID Service
                                          │
                                          ▼
                                    Demiurge Chain
@@ -123,7 +123,7 @@ User → Portal Web → "Enter Abyss" → AbyssOS Portal
 
 - **Server:** 51.210.209.112 (OVHCloud)
 - **RPC:** https://rpc.demiurge.cloud/rpc
-- **AbyssOS:** https://demiurge.cloud
+- **QOR OS:** https://demiurge.cloud
 - **Target:** https://demiurge.guru
 
 See [Deployment Guide](../deployment/NODE_SETUP.md) for setup instructions.

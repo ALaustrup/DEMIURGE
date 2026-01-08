@@ -1,6 +1,6 @@
-# AbyssOS Deployment Guide
+# QOR OS Deployment Guide
 
-Complete guide for deploying AbyssOS to production with HTTPS.
+Complete guide for deploying QOR OS to production with HTTPS.
 
 ## Current Production Deployment
 
@@ -18,10 +18,10 @@ Complete guide for deploying AbyssOS to production with HTTPS.
 
 ## Deployment Steps
 
-### 1. Build AbyssOS Locally
+### 1. Build QOR OS Locally
 
 ```bash
-cd apps/abyssos-portal
+cd apps/qloud-os
 pnpm install
 pnpm build
 ```
@@ -32,8 +32,8 @@ This creates the `dist/` directory with production-ready static files.
 
 ```bash
 ssh ubuntu@51.210.209.112
-sudo mkdir -p /var/www/abyssos-portal
-sudo chown -R ubuntu:ubuntu /var/www/abyssos-portal
+sudo mkdir -p /var/www/qloud-os
+sudo chown -R ubuntu:ubuntu /var/www/qloud-os
 ```
 
 ### 3. Copy Files to Server
@@ -41,7 +41,7 @@ sudo chown -R ubuntu:ubuntu /var/www/abyssos-portal
 From your local machine:
 
 ```bash
-scp -r dist/* ubuntu@51.210.209.112:/var/www/abyssos-portal/
+scp -r dist/* ubuntu@51.210.209.112:/var/www/qloud-os/
 ```
 
 ### 4. Install and Configure Nginx
@@ -70,7 +70,7 @@ server {
     listen 443 ssl;
     server_name demiurge.cloud www.demiurge.cloud;
 
-    root /var/www/abyssos-portal;
+    root /var/www/qloud-os;
     index index.html;
 
     # SSL configuration (managed by Certbot)
@@ -79,7 +79,7 @@ server {
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
-    # Main AbyssOS SPA routing fallback
+    # Main QOR OS SPA routing fallback
     location / {
         try_files $uri $uri/ /index.html;
     }
@@ -153,19 +153,19 @@ curl -I https://demiurge.cloud
 
 You should see `HTTP/1.1 200 OK`.
 
-## Updating AbyssOS
+## Updating QOR OS
 
 To update the deployed version:
 
 1. **Build new version locally:**
    ```bash
-   cd apps/abyssos-portal
+   cd apps/qloud-os
    pnpm build
    ```
 
 2. **Copy to server:**
    ```bash
-   scp -r dist/* ubuntu@51.210.209.112:/var/www/abyssos-portal/
+   scp -r dist/* ubuntu@51.210.209.112:/var/www/qloud-os/
    ```
 
 3. **No nginx reload needed** (static files only)
@@ -175,7 +175,7 @@ To update the deployed version:
 ### 404 Errors
 
 - Check nginx config: `sudo nginx -t`
-- Verify files exist: `ls -la /var/www/abyssos-portal/`
+- Verify files exist: `ls -la /var/www/qloud-os/`
 - Check nginx error log: `sudo tail -f /var/log/nginx/error.log`
 
 ### SSL Certificate Issues
@@ -193,13 +193,13 @@ To update the deployed version:
 ### Permission Issues
 
 ```bash
-sudo chown -R www-data:www-data /var/www/abyssos-portal
-sudo chmod -R 755 /var/www/abyssos-portal
+sudo chown -R www-data:www-data /var/www/qloud-os
+sudo chmod -R 755 /var/www/qloud-os
 ```
 
 ## Environment Variables
 
-AbyssOS uses the following environment variables (set at build time):
+QOR OS uses the following environment variables (set at build time):
 
 - `VITE_DEMIURGE_RPC_URL`: RPC endpoint URL (default: `https://rpc.demiurge.cloud/rpc`)
 
@@ -211,7 +211,7 @@ VITE_DEMIURGE_RPC_URL=https://custom-rpc.example.com/rpc pnpm build
 
 ## Related Documentation
 
-- [AbyssOS Portal Documentation](../apps/ABYSSOS_PORTAL.md) - Complete AbyssOS guide
+- [QLOUD OS Documentation](../apps/QLOUD_OS_PORTAL.md) - Complete QOR OS guide
 - [Node0 Deployment Guide](README_NODE0.md) - Demiurge node deployment
 - [RPC API](../api/RPC.md) - Demiurge RPC methods
 

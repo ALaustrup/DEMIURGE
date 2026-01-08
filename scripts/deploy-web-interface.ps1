@@ -1,5 +1,5 @@
 # Deploy Full Web Interface for Demiurge
-# Sets up Nginx, AbyssOS Portal, SSL, and RPC proxy
+# Sets up Nginx, QLOUD OS, SSL, and RPC proxy
 
 param(
     [string]$Server = "ubuntu@51.210.209.112",
@@ -20,9 +20,9 @@ if (-not (Test-Path $SshKey)) {
     exit 1
 }
 
-# Step 1: Build AbyssOS Portal
-Write-Host "[1/6] Building AbyssOS Portal..." -ForegroundColor Yellow
-Push-Location "apps/abyssos-portal"
+# Step 1: Build QLOUD OS
+Write-Host "[1/6] Building QLOUD OS..." -ForegroundColor Yellow
+Push-Location "apps/qloud-os"
 try {
     if (-not (Test-Path "node_modules")) {
         Write-Host "Installing dependencies..." -ForegroundColor Gray
@@ -55,10 +55,10 @@ if ($LASTEXITCODE -ne 0) {
 }
 Write-Host "OK: Nginx installed" -ForegroundColor Green
 
-# Step 3: Deploy AbyssOS Portal
-Write-Host "`n[3/6] Deploying AbyssOS Portal..." -ForegroundColor Yellow
-$portalDir = "/var/www/abyssos-portal"
-$tempDir = "/tmp/abyssos-portal-$(Get-Date -Format 'yyyyMMddHHmmss')"
+# Step 3: Deploy QLOUD OS
+Write-Host "`n[3/6] Deploying QLOUD OS..." -ForegroundColor Yellow
+$portalDir = "/var/www/qloud-os"
+$tempDir = "/tmp/qloud-os-$(Get-Date -Format 'yyyyMMddHHmmss')"
 
 Write-Host "Creating remote directory..." -ForegroundColor Gray
 ssh -i $SshKey $Server "sudo mkdir -p $portalDir && sudo chown ubuntu:ubuntu $portalDir"
@@ -66,7 +66,7 @@ ssh -i $SshKey $Server "sudo mkdir -p $portalDir && sudo chown ubuntu:ubuntu $po
 Write-Host "Uploading files..." -ForegroundColor Gray
 # Create temp directory and upload
 ssh -i $SshKey $Server "mkdir -p $tempDir"
-scp -i $SshKey -r apps/abyssos-portal/dist/* "${Server}:${tempDir}/"
+scp -i $SshKey -r apps/qloud-os/dist/* "${Server}:${tempDir}/"
 if ($LASTEXITCODE -ne 0) {
     Write-Host "ERROR: File upload failed" -ForegroundColor Red
     exit 1

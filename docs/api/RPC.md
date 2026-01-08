@@ -67,7 +67,7 @@ Submit a signed transaction.
 Check if address has Archon status.
 
 #### `abyssid_get`
-Get AbyssID profile for address.
+Get QorID profile for address.
 
 ### NFTs
 

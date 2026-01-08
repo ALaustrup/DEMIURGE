@@ -97,7 +97,7 @@ void SystemTrayManager::initialize()
     m_trayIcon->setIcon(icon);
     
     // Set tooltip
-    m_trayIcon->setToolTip("Genesis Launcher - Demiurge Ecosystem");
+    m_trayIcon->setToolTip("DEMIURGE QOR - Demiurge Ecosystem");
     
     // Create context menu
     createMenu();
@@ -123,7 +123,7 @@ void SystemTrayManager::hideToTray()
 {
     if (m_showNotifications && m_trayIcon) {
         m_trayIcon->showMessage(
-            "Genesis Launcher",
+            "DEMIURGE QOR",
             "Running in background. Click the tray icon to open.",
             QSystemTrayIcon::Information,
             2000
@@ -255,7 +255,7 @@ void SystemTrayManager::createMenu()
     )");
     
     // Show Launcher
-    m_showAction = new QAction("Show Genesis Launcher", this);
+    m_showAction = new QAction("Show DEMIURGE QOR", this);
     m_showAction->setIcon(QIcon(":/icons/genesis.png"));
     connect(m_showAction, &QAction::triggered, this, &SystemTrayManager::onShowWindow);
     m_contextMenu->addAction(m_showAction);
@@ -269,7 +269,7 @@ void SystemTrayManager::createMenu()
     m_contextMenu->addAction(m_launchMinerAction);
     
     m_launchAbyssAction = new QAction("Enter The Abyss (Full OS)", this);
-    m_launchAbyssAction->setIcon(QIcon(":/icons/abyss.png"));
+    m_launchAbyssAction->setIcon(QIcon(":/icons/qor.png"));
     connect(m_launchAbyssAction, &QAction::triggered, this, &SystemTrayManager::onLaunchAbyss);
     m_contextMenu->addAction(m_launchAbyssAction);
     

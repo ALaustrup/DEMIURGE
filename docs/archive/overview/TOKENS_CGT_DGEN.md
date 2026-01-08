@@ -12,7 +12,7 @@ This document describes the token economics and standards for CGT and D-GEN NFTs
 - **Storage**: All amounts stored as `u128` in smallest units
 
 ### Distribution
-- **New User Bonus**: 5,000 CGT per AbyssID registration (minted on-chain)
+- **New User Bonus**: 5,000 CGT per QorID registration (minted on-chain)
 - **Block Production**: Rewards for Forge miners
 - **Content Seeding**: Rewards for Fabric seeders via Proof-of-Delivery
 - **Compute Work**: Rewards for verifiable compute jobs
@@ -64,7 +64,7 @@ D-GEN (Demiurge Genesis) is the native NFT standard for the Demiurge chain, also
 - NFT sales and purchases use CGT
 - Royalties paid in CGT to creators
 
-### AbyssOS Integration
+### QOR OS Integration
 - Wallet displays CGT balance
 - File uploads auto-mint as DRC-369 NFTs
 - NFT swapping from external chains
@@ -74,5 +74,5 @@ D-GEN (Demiurge Genesis) is the native NFT standard for the Demiurge chain, also
 
 - [CGT Policy](../economics/CGT_POLICY.md)
 - [Bank CGT Module](../modules/BANK_CGT.md)
-- [DRC-369 Studio](../apps/ABYSSOS_PORTAL.md#drc-369-studio)
+- [DRC-369 Studio](../apps/QLOUD_OS_PORTAL.md#drc-369-studio)
 

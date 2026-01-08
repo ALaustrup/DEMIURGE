@@ -46,7 +46,7 @@ All transaction fees are distributed as follows:
 
 | Destination | Share | Purpose |
 |-------------|-------|---------|
-| **Ecosystem Treasury** | 70% | Development, infrastructure, grants, AbyssID storage upgrades |
+| **Ecosystem Treasury** | 70% | Development, infrastructure, grants, QorID storage upgrades |
 | **Token Burn** | 20% | Deflationary pressure, offset staking inflation |
 | **Validator Rewards** | 10% | Incentivize network security |
 
@@ -126,7 +126,7 @@ Users can unlock premium features by paying CGT or staking:
 
 | Feature | Free | Archon | Genesis |
 |---------|------|--------|---------|
-| AbyssID Storage | 2 GB | 10 GB | 100 GB |
+| QorID Storage | 2 GB | 10 GB | 100 GB |
 | Transaction Priority | Standard | Priority | Highest |
 | Profile Badge | ❌ | ✅ | ✅ |
 | Priority Support | ❌ | ✅ | ✅ |
@@ -158,13 +158,13 @@ Only these modules can mint CGT:
 - `forge` - Block production rewards
 - `fabric_manager` - Seeding rewards
 - `system` - System operations
-- `abyssid_registry` - Level rewards
+- `qor_registry` - Level rewards
 - `abyssid_level_rewards` - Achievement rewards
 - `work_claim` - Mining rewards
 - `cgt_staking` - Staking rewards
 
 ### New User Bonus
-- **Amount:** 5,000 CGT per new AbyssID registration
+- **Amount:** 5,000 CGT per new QorID registration
 - **Purpose:** Enable initial platform usage
 
 ### Supply Enforcement
@@ -195,7 +195,7 @@ Treasury funds are used for:
 - Protocol development
 - Infrastructure upgrades (servers, storage)
 - Community grants
-- AbyssID storage expansion
+- QorID storage expansion
 - Security audits
 
 ### Governance (Future)

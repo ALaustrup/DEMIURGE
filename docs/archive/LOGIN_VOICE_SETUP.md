@@ -1,12 +1,12 @@
 # Login Voice Setup
 
 ## Overview
-The AbyssOS Portal now plays a voice file in the background when the login/signup screen appears, right after the intro video ends.
+The QLOUD OS now plays a voice file in the background when the login/signup screen appears, right after the intro video ends.
 
 ## Audio File Location
 Place your voice audio file at the following path:
 ```
-apps/abyssos-portal/public/audio/login-voice.wav
+apps/qloud-os/public/audio/login-voice.wav
 ```
 
 **Supported formats:** `.wav`, `.mp3`, `.ogg`
@@ -27,7 +27,7 @@ apps/abyssos-portal/public/audio/login-voice.wav
 - **One-Time Only**: Plays once per session (won't replay if user navigates back)
 
 ## Customization
-To adjust the volume, edit `apps/abyssos-portal/src/services/loginVoice.ts`:
+To adjust the volume, edit `apps/qloud-os/src/services/loginVoice.ts`:
 ```typescript
 private volume: number = 0.7; // Change this value (0.0 to 1.0)
 ```
@@ -43,7 +43,7 @@ private volume: number = 0.7; // Change this value (0.0 to 1.0)
 
 ## File Structure
 ```
-apps/abyssos-portal/
+apps/qloud-os/
 ├── public/
 │   ├── audio/
 │   │   ├── background-music.wav    # Background music (loops)

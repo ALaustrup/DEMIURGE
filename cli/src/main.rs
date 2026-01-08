@@ -25,7 +25,7 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// AbyssID operations
+    /// QorID operations
     Abyssid {
         #[command(subcommand)]
         command: AbyssidCommands,
@@ -56,7 +56,7 @@ enum Commands {
         #[arg(long, default_value = "/opt/demiurge/keys/validator.key")]
         output: String,
     },
-    /// AbyssOS operations
+    /// QOR OS operations
     Abyss {
         #[command(subcommand)]
         command: AbyssCommands,
@@ -85,9 +85,9 @@ enum Commands {
 
 #[derive(Subcommand)]
 enum AbyssidCommands {
-    /// Generate a new AbyssID (offline keygen)
+    /// Generate a new QorID (offline keygen)
     Generate,
-    /// Get AbyssID profile
+    /// Get QorID profile
     Profile {
         address: String,
     },
@@ -95,7 +95,7 @@ enum AbyssidCommands {
     Resolve {
         username: String,
     },
-    /// Get AbyssID progress
+    /// Get QorID progress
     Progress {
         address: String,
     },
@@ -141,7 +141,7 @@ enum MarketplaceCommands {
 enum DevCommands {
     /// Register as a developer
     Register {
-        /// Username (must match AbyssID username)
+        /// Username (must match QorID username)
         #[arg(long)]
         username: String,
         /// Address (optional, uses default if not provided)
@@ -181,11 +181,11 @@ enum DevCommands {
 
 #[derive(Subcommand)]
 enum AbyssCommands {
-    /// Initialize AbyssOS development environment
+    /// Initialize QOR OS development environment
     Init {
-        /// Initialize AbyssID backend database
+        /// Initialize QorID backend database
         #[arg(long)]
-        abyssid: bool,
+        qorid: bool,
         /// Install dependencies for all apps
         #[arg(long)]
         install: bool,
@@ -290,14 +290,14 @@ async fn main() -> anyhow::Result<()> {
                         &hex::encode(rand::random::<[u8; 32]>())
                     )?;
                     let address = signing::derive_address(&private_key)?;
-                    println!("New AbyssID generated:");
+                    println!("New QorID generated:");
                     println!("  Address: {}", address);
                     println!("  Private Key: 0x{}", hex::encode(private_key));
                     println!("\n⚠️  Keep your private key secure! Never share it.");
                 }
                 AbyssidCommands::Profile { address } => {
                     let profile = sdk.abyssid().get_profile(&address).await?;
-                    println!("AbyssID Profile:");
+                    println!("QorID Profile:");
                     println!("  Address: {}", profile.address);
                     println!("  Display Name: {}", profile.display_name);
                     if let Some(username) = &profile.username {
@@ -315,7 +315,7 @@ async fn main() -> anyhow::Result<()> {
                 }
                 AbyssidCommands::Progress { address } => {
                     let progress = sdk.abyssid().get_progress(&address).await?;
-                    println!("AbyssID Progress:");
+                    println!("QorID Progress:");
                     println!("  Level: {}", progress.level);
                     println!("  Syzygy Score: {}", progress.syzygy_score);
                     println!("  Progress: {:.2}%", progress.progress_ratio * 100.0);
@@ -577,7 +577,7 @@ async fn main() -> anyhow::Result<()> {
         Commands::Abyss { command } => {
             match command {
                 AbyssCommands::Init { abyssid, install, directories } => {
-                    println!("🌊 Initializing AbyssOS environment...\n");
+                    println!("🌊 Initializing QOR OS environment...\n");
                     
                     // Get the repository root (assuming we're in the repo)
                     let repo_root = std::env::current_dir()?;
@@ -586,8 +586,8 @@ async fn main() -> anyhow::Result<()> {
                         println!("📁 Creating necessary directories...");
                         let dirs = vec![
                             "apps/abyssid-backend/data",
-                            "apps/abyssos-portal/dist",
-                            "indexer/abyss-gateway/data",
+                            "apps/qloud-os/dist",
+                            "indexer/qor-gateway/data",
                         ];
                         
                         for dir in dirs {
@@ -598,7 +598,7 @@ async fn main() -> anyhow::Result<()> {
                     }
                     
                     if abyssid {
-                        println!("\n🔐 Initializing AbyssID backend database...");
+                        println!("\n🔐 Initializing QorID backend database...");
                         let abyssid_path = repo_root.join("apps/abyssid-backend");
                         if abyssid_path.exists() {
                             // Check if db-init.js exists
@@ -611,7 +611,7 @@ async fn main() -> anyhow::Result<()> {
                                     .output()?;
                                 
                                 if output.status.success() {
-                                    println!("  ✓ AbyssID database initialized");
+                                    println!("  ✓ QorID database initialized");
                                 } else {
                                     eprintln!("  ✗ Failed to initialize database");
                                     eprintln!("  {}", String::from_utf8_lossy(&output.stderr));
@@ -620,7 +620,7 @@ async fn main() -> anyhow::Result<()> {
                                 eprintln!("  ✗ db-init.js not found at {}", db_init.display());
                             }
                         } else {
-                            eprintln!("  ✗ AbyssID backend directory not found");
+                            eprintln!("  ✗ QorID backend directory not found");
                         }
                     }
                     
@@ -660,10 +660,10 @@ async fn main() -> anyhow::Result<()> {
                             }
                         }
                         
-                        // Install AbyssOS Portal dependencies
-                        let portal_path = repo_root.join("apps/abyssos-portal");
+                        // Install QLOUD OS dependencies
+                        let portal_path = repo_root.join("apps/qloud-os");
                         if portal_path.exists() {
-                            println!("  Installing AbyssOS Portal dependencies...");
+                            println!("  Installing QLOUD OS dependencies...");
                             let portal_output = std::process::Command::new(pnpm_cmd)
                                 .arg("install")
                                 .current_dir(&portal_path)
@@ -671,10 +671,10 @@ async fn main() -> anyhow::Result<()> {
                             
                             match portal_output {
                                 Ok(output) if output.status.success() => {
-                                    println!("  ✓ AbyssOS Portal dependencies installed");
+                                    println!("  ✓ QLOUD OS dependencies installed");
                                 }
                                 Ok(_) => {
-                                    eprintln!("  ✗ Failed to install AbyssOS Portal dependencies");
+                                    eprintln!("  ✗ Failed to install QLOUD OS dependencies");
                                 }
                                 Err(e) => {
                                     eprintln!("  ✗ Failed to run pnpm: {}", e);
@@ -682,10 +682,10 @@ async fn main() -> anyhow::Result<()> {
                             }
                         }
                         
-                        // Install AbyssID Backend dependencies
+                        // Install QorID Backend dependencies
                         let abyssid_path = repo_root.join("apps/abyssid-backend");
                         if abyssid_path.exists() {
-                            println!("  Installing AbyssID Backend dependencies...");
+                            println!("  Installing QorID Backend dependencies...");
                             let npm_cmd = if cfg!(windows) { "npm.cmd" } else { "npm" };
                             let abyssid_output = std::process::Command::new(npm_cmd)
                                 .arg("install")
@@ -694,10 +694,10 @@ async fn main() -> anyhow::Result<()> {
                             
                             match abyssid_output {
                                 Ok(output) if output.status.success() => {
-                                    println!("  ✓ AbyssID Backend dependencies installed");
+                                    println!("  ✓ QorID Backend dependencies installed");
                                 }
                                 Ok(_) => {
-                                    eprintln!("  ✗ Failed to install AbyssID Backend dependencies");
+                                    eprintln!("  ✗ Failed to install QorID Backend dependencies");
                                 }
                                 Err(e) => {
                                     eprintln!("  ✗ Failed to run npm: {}", e);
@@ -714,8 +714,8 @@ async fn main() -> anyhow::Result<()> {
                         println!("📁 Creating necessary directories...");
                         let dirs = vec![
                             "apps/abyssid-backend/data",
-                            "apps/abyssos-portal/dist",
-                            "indexer/abyss-gateway/data",
+                            "apps/qloud-os/dist",
+                            "indexer/qor-gateway/data",
                         ];
                         
                         for dir in dirs {
@@ -724,8 +724,8 @@ async fn main() -> anyhow::Result<()> {
                             println!("  ✓ Created: {}", dir);
                         }
                         
-                        // Initialize AbyssID database
-                        println!("\n🔐 Initializing AbyssID backend database...");
+                        // Initialize QorID database
+                        println!("\n🔐 Initializing QorID backend database...");
                         let abyssid_path = repo_root.join("apps/abyssid-backend");
                         if abyssid_path.exists() {
                             let db_init = abyssid_path.join("src/db-init.js");
@@ -737,7 +737,7 @@ async fn main() -> anyhow::Result<()> {
                                     .output()?;
                                 
                                 if output.status.success() {
-                                    println!("  ✓ AbyssID database initialized");
+                                    println!("  ✓ QorID database initialized");
                                 } else {
                                     eprintln!("  ✗ Failed to initialize database");
                                     eprintln!("  {}", String::from_utf8_lossy(&output.stderr));
@@ -782,9 +782,9 @@ async fn main() -> anyhow::Result<()> {
                             }
                         }
                         
-                        let portal_path = repo_root.join("apps/abyssos-portal");
+                        let portal_path = repo_root.join("apps/qloud-os");
                         if portal_path.exists() {
-                            println!("  Installing AbyssOS Portal dependencies...");
+                            println!("  Installing QLOUD OS dependencies...");
                             let portal_output = std::process::Command::new(pnpm_cmd)
                                 .arg("install")
                                 .current_dir(&portal_path)
@@ -792,10 +792,10 @@ async fn main() -> anyhow::Result<()> {
                             
                             match portal_output {
                                 Ok(output) if output.status.success() => {
-                                    println!("  ✓ AbyssOS Portal dependencies installed");
+                                    println!("  ✓ QLOUD OS dependencies installed");
                                 }
                                 Ok(_) => {
-                                    eprintln!("  ✗ Failed to install AbyssOS Portal dependencies");
+                                    eprintln!("  ✗ Failed to install QLOUD OS dependencies");
                                 }
                                 Err(e) => {
                                     eprintln!("  ✗ Failed to run pnpm: {}", e);
@@ -805,7 +805,7 @@ async fn main() -> anyhow::Result<()> {
                         
                         let abyssid_path = repo_root.join("apps/abyssid-backend");
                         if abyssid_path.exists() {
-                            println!("  Installing AbyssID Backend dependencies...");
+                            println!("  Installing QorID Backend dependencies...");
                             let npm_cmd = if cfg!(windows) { "npm.cmd" } else { "npm" };
                             let abyssid_output = std::process::Command::new(npm_cmd)
                                 .arg("install")
@@ -814,10 +814,10 @@ async fn main() -> anyhow::Result<()> {
                             
                             match abyssid_output {
                                 Ok(output) if output.status.success() => {
-                                    println!("  ✓ AbyssID Backend dependencies installed");
+                                    println!("  ✓ QorID Backend dependencies installed");
                                 }
                                 Ok(_) => {
-                                    eprintln!("  ✗ Failed to install AbyssID Backend dependencies");
+                                    eprintln!("  ✗ Failed to install QorID Backend dependencies");
                                 }
                                 Err(e) => {
                                     eprintln!("  ✗ Failed to run npm: {}", e);
@@ -826,10 +826,10 @@ async fn main() -> anyhow::Result<()> {
                         }
                     }
                     
-                    println!("\n✨ AbyssOS initialization complete!");
+                    println!("\n✨ QOR OS initialization complete!");
                     println!("\nNext steps:");
-                    println!("  • Start AbyssID backend: cd apps/abyssid-backend && node src/server.js");
-                    println!("  • Start AbyssOS Portal: cd apps/abyssos-portal && pnpm dev");
+                    println!("  • Start QorID backend: cd apps/abyssid-backend && node src/server.js");
+                    println!("  • Start QLOUD OS: cd apps/qloud-os && pnpm dev");
                     println!("  • Visit: http://localhost:5173");
                 }
             }
@@ -878,7 +878,7 @@ async fn main() -> anyhow::Result<()> {
                 MineCommands::Stats => {
                     println!("📊 Mining Statistics");
                     println!("\nNote: Full statistics require local database.");
-                    println!("Use the Mining Accounting app in AbyssOS for detailed stats.");
+                    println!("Use the Mining Accounting app in QOR OS for detailed stats.");
                 }
                 MineCommands::Pending => {
                     println!("⏳ Pending Rewards");
@@ -888,7 +888,7 @@ async fn main() -> anyhow::Result<()> {
                 MineCommands::History { limit } => {
                     println!("📜 Mining History (last {} entries)", limit);
                     println!("\nNote: Full history requires local database.");
-                    println!("Use the Mining Accounting app in AbyssOS for complete history.");
+                    println!("Use the Mining Accounting app in QOR OS for complete history.");
                 }
                 MineCommands::Adjust { reason, amount, evidence } => {
                     println!("📝 Requesting Manual Adjustment");

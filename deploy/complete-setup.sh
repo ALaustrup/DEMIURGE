@@ -79,7 +79,7 @@ echo -e "${GREEN}✅ Dependencies installed${NC}"
 # Phase 6: Create Directories
 echo -e "${BLUE}[Phase 6/10]${NC} Creating directory structure..."
 sudo mkdir -p "${REPO_DIR}"/{bin,config,data,logs}
-sudo mkdir -p /var/www/abyssos-portal
+sudo mkdir -p /var/www/qloud-os
 sudo chown -R $USER:$USER "${REPO_DIR}"
 echo -e "${GREEN}✅ Directories created${NC}"
 
@@ -142,8 +142,8 @@ echo -e "${GREEN}========================================${NC}"
 echo ""
 echo -e "${BLUE}Next Steps:${NC}"
 echo "  1. Configure systemd services:"
-echo "     sudo systemctl enable demiurge-chain abyssid dns-service abyss-gateway"
-echo "     sudo systemctl start demiurge-chain abyssid dns-service abyss-gateway"
+echo "     sudo systemctl enable demiurge-chain abyssid dns-service qor-gateway"
+echo "     sudo systemctl start demiurge-chain abyssid dns-service qor-gateway"
 echo ""
 echo "  2. Configure NGINX:"
 echo "     sudo cp ${REPO_DIR}/deploy/nginx/demiurge.cloud.conf /etc/nginx/sites-available/"

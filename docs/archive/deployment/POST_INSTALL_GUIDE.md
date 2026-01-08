@@ -97,7 +97,7 @@ Creates:
 - `/opt/demiurge/config/` - Configuration files
 - `/opt/demiurge/data/` - Data storage
 - `/opt/demiurge/logs/` - Log files
-- `/var/www/abyssos-portal/` - Web portal files
+- `/var/www/qloud-os/` - Web portal files
 
 ### 11. System Limits
 - Increases file descriptor limits

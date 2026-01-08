@@ -8,7 +8,7 @@
 //! - 10% → Validator Rewards (network security incentives)
 //!
 //! The treasury funds future development including:
-//! - AbyssID storage upgrades
+//! - QorID storage upgrades
 //! - Premium infrastructure
 //! - Community grants
 //! - Protocol improvements

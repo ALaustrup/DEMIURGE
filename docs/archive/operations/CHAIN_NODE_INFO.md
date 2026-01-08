@@ -71,7 +71,7 @@ Invoke-RestMethod -Uri "http://127.0.0.1:8545/rpc" -Method Post -Body $body -Con
 - ✅ `/nexus` - P2P analytics
 - ✅ `/scrolls` - Documentation
 - ✅ `/conspire` - AI chat
-- ✅ AbyssID registration (uses AbyssID backend on port 3001)
+- ✅ QorID registration (uses QorID backend on port 3001)
 
 ---
 

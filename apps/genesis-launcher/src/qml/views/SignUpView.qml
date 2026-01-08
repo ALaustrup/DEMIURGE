@@ -1,7 +1,7 @@
 /**
- * SignUpView.qml - AbyssID Creation Flow
+ * SignUpView.qml - QorID Creation Flow
  * 
- * Allows users to create a new AbyssID with real-time username availability check.
+ * Allows users to create a new QorID with real-time username availability check.
  * Supports offline account creation with automatic sync when online.
  */
 import QtQuick
@@ -114,7 +114,7 @@ Item {
             
             Text {
                 Layout.alignment: Qt.AlignHCenter
-                text: "Create Your AbyssID"
+                text: "Create Your QorID"
                 color: textPrimary
                 font.family: "Orbitron"
                 font.pixelSize: 18

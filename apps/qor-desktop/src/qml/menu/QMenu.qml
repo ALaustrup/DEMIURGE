@@ -28,7 +28,7 @@ Item {
     /** QOR button rect for positioning */
     property rect dockRect: Qt.rect(0, 0, 0, 0)
     
-    /** Connected AbyssID */
+    /** Connected QorID */
     property string abyssId: ""
     
     /** Premium tier */

@@ -8,7 +8,7 @@ Production-ready starter templates for building on the Demiurge Blockchain.
 **Location:** `templates/web-app/`
 
 Full-featured Next.js + TypeScript dApp with:
-- AbyssID generation/login
+- QorID generation/login
 - CGT balance & transfers
 - NFT viewer
 - Marketplace integration
@@ -28,7 +28,7 @@ pnpm dev
 **Location:** `templates/mobile-app/`
 
 React Native + Expo mobile app with:
-- AbyssID wallet
+- QorID wallet
 - CGT transfers
 - NFT gallery
 - Chat (world channel)
@@ -45,7 +45,7 @@ npx expo start
 **Location:** `templates/rust-service/`
 
 Axum-based server backend with:
-- AbyssID profile fetching
+- QorID profile fetching
 - NFT operations
 - CGT transaction handling
 - Fabric metadata integration
@@ -63,7 +63,7 @@ Archon-like microservice with:
 - GraphQL chat integration
 - Auto-responses
 - CGT microrewards
-- AbyssID username resolution
+- QorID username resolution
 - On-chain triggers
 
 **Quick Start:**
@@ -77,7 +77,7 @@ pnpm start
 **Location:** `templates/game-engine/`
 
 Lightweight game client with:
-- AbyssID login
+- QorID login
 - NFT fetching & rendering
 - CGT microtransactions
 - 3D scene integration
@@ -95,7 +95,7 @@ make
 
 All templates require:
 - **Demiurge Chain Node** running at `http://127.0.0.1:8545/rpc`
-- **Abyss Gateway** running at `http://localhost:4000/graphql` (for chat templates)
+- **QOR Gateway** running at `http://localhost:4000/graphql` (for chat templates)
 
 ## SDK Integration
 

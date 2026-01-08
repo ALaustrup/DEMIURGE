@@ -5,9 +5,9 @@ import QtQuick.Layouts
 import "components"
 
 /**
- * LoginView - AbyssID Authentication
+ * LoginView - QorID Authentication
  * 
- * A centered glass-morphic login modal for AbyssID authentication.
+ * A centered glass-morphic login modal for QorID authentication.
  * Supports both new identity creation and existing identity import.
  */
 Item {
@@ -74,7 +74,7 @@ Item {
                 }
                 
                 Text {
-                    text: isCreating ? "Create Your AbyssID" : "Enter the Abyss"
+                    text: isCreating ? "Create Your QorID" : "Enter the Abyss"
                     font.family: Theme.fontAncient
                     font.pixelSize: Theme.fontSizeBody
                     color: Theme.textSecondary
@@ -96,7 +96,7 @@ Item {
                     spacing: Theme.spacingTiny
                     
                     Text {
-                        text: "AbyssID"
+                        text: "QorID"
                         font.family: Theme.fontBody
                         font.pixelSize: Theme.fontSizeLabel
                         color: Theme.textSecondary

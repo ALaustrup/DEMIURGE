@@ -1,7 +1,7 @@
 /**
  * generateKeys
  * 
- * Generates AbyssID identity keys and seed phrase.
+ * Generates QorID identity keys and seed phrase.
  * 
  * TODO: Replace this stub with proper Ed25519 keypair generation and secure seed handling.
  */
@@ -61,7 +61,7 @@ export async function deriveKeysFromSeed(seedPhrase: string): Promise<{ publicKe
 }
 
 /**
- * Generate AbyssID identity (creates new seed phrase and derives keys from it)
+ * Generate QorID identity (creates new seed phrase and derives keys from it)
  * This ensures the seed phrase can be used to recover the keys later.
  */
 export async function generateKeys(username: string): Promise<GeneratedAbyssIdentity> {

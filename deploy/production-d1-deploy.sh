@@ -21,7 +21,7 @@ REPO_DIR="${DEMIURGE_HOME}/repo"
 LOG_FILE="${DEMIURGE_HOME}/logs/bootstrap.log"
 
 # Domains
-DOMAIN_ABYSSOS="demiurge.cloud"
+DOMAIN_QLOUD_OS="demiurge.cloud"
 DOMAIN_PORTAL="demiurge.guru"
 DOMAIN_RPC="rpc.demiurge.cloud"
 
@@ -370,54 +370,54 @@ phase6_archon() {
     log_success "PHASE 6 COMPLETE"
 }
 
-# PHASE 7: ABYSSID
+# PHASE 7: QORID
 phase7_abyssid() {
     log_info "=========================================="
-    log_info "PHASE 7: ABYSSID SERVICE"
+    log_info "PHASE 7: QORID SERVICE"
     log_info "=========================================="
     
     # Install dependencies
-    log_info "Installing AbyssID dependencies..."
-    cd "${REPO_DIR}/apps/abyssid-service"
-    sudo -u "$DEMIURGE_USER" pnpm install || error_exit "Failed to install AbyssID dependencies"
+    log_info "Installing QorID dependencies..."
+    cd "${REPO_DIR}/apps/qorid-service"
+    sudo -u "$DEMIURGE_USER" pnpm install || error_exit "Failed to install QorID dependencies"
     
     # Build
-    log_info "Building AbyssID service..."
-    sudo -u "$DEMIURGE_USER" pnpm build || error_exit "Failed to build AbyssID"
+    log_info "Building QorID service..."
+    sudo -u "$DEMIURGE_USER" pnpm build || error_exit "Failed to build QorID"
     
     # Create data directory
     sudo mkdir -p "${DEMIURGE_HOME}/chain/identity"
     sudo chown -R "$DEMIURGE_USER:$DEMIURGE_USER" "${DEMIURGE_HOME}/chain/identity"
     
     # Create .env file
-    log_info "Creating AbyssID environment configuration..."
-    sudo tee "${REPO_DIR}/apps/abyssid-service/.env" > /dev/null <<EOF
+    log_info "Creating QorID environment configuration..."
+    sudo tee "${REPO_DIR}/apps/qorid-service/.env" > /dev/null <<EOF
 PORT=8082
 HOST=127.0.0.1
 DB_PATH=${DEMIURGE_HOME}/chain/identity/abyssid.db
 RPC_URL=http://127.0.0.1:8545/rpc
 NODE_ENV=production
 EOF
-    sudo chown "$DEMIURGE_USER:$DEMIURGE_USER" "${REPO_DIR}/apps/abyssid-service/.env"
-    sudo chmod 600 "${REPO_DIR}/apps/abyssid-service/.env"
+    sudo chown "$DEMIURGE_USER:$DEMIURGE_USER" "${REPO_DIR}/apps/qorid-service/.env"
+    sudo chmod 600 "${REPO_DIR}/apps/qorid-service/.env"
     
     # Create systemd service
     log_info "Creating systemd service: abyssid.service"
     sudo tee /etc/systemd/system/abyssid.service > /dev/null <<EOF
 [Unit]
-Description=AbyssID Identity Backend
+Description=QorID Identity Backend
 After=network.target demiurge-chain.service
 Wants=demiurge-chain.service
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/node ${REPO_DIR}/apps/abyssid-service/dist/index.js
-WorkingDirectory=${REPO_DIR}/apps/abyssid-service
+ExecStart=/usr/bin/node ${REPO_DIR}/apps/qorid-service/dist/index.js
+WorkingDirectory=${REPO_DIR}/apps/qorid-service
 Restart=always
 RestartSec=5
 User=${DEMIURGE_USER}
 Group=${DEMIURGE_USER}
-EnvironmentFile=${REPO_DIR}/apps/abyssid-service/.env
+EnvironmentFile=${REPO_DIR}/apps/qorid-service/.env
 
 StandardOutput=journal
 StandardError=journal
@@ -453,26 +453,26 @@ phase8_abyss_gateway() {
     log_info "=========================================="
     
     # Install dependencies
-    log_info "Installing Abyss Gateway dependencies..."
-    cd "${REPO_DIR}/indexer/abyss-gateway"
+    log_info "Installing QOR Gateway dependencies..."
+    cd "${REPO_DIR}/indexer/qor-gateway"
     sudo -u "$DEMIURGE_USER" pnpm install || error_exit "Failed to install gateway dependencies"
     
     # Build
-    log_info "Building Abyss Gateway..."
+    log_info "Building QOR Gateway..."
     sudo -u "$DEMIURGE_USER" pnpm build || error_exit "Failed to build gateway"
     
     # Create systemd service
-    log_info "Creating systemd service: abyss-gateway.service"
-    sudo tee /etc/systemd/system/abyss-gateway.service > /dev/null <<EOF
+    log_info "Creating systemd service: qor-gateway.service"
+    sudo tee /etc/systemd/system/qor-gateway.service > /dev/null <<EOF
 [Unit]
-Description=Abyss Gateway (Indexer + GraphQL)
+Description=QOR Gateway (Indexer + GraphQL)
 After=network.target demiurge-chain.service
 Wants=demiurge-chain.service
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/node ${REPO_DIR}/indexer/abyss-gateway/dist/index.js
-WorkingDirectory=${REPO_DIR}/indexer/abyss-gateway
+ExecStart=/usr/bin/node ${REPO_DIR}/indexer/qor-gateway/dist/index.js
+WorkingDirectory=${REPO_DIR}/indexer/qor-gateway
 Restart=always
 RestartSec=5
 User=${DEMIURGE_USER}
@@ -482,7 +482,7 @@ Environment=NODE_ENV=production
 
 StandardOutput=journal
 StandardError=journal
-SyslogIdentifier=abyss-gateway
+SyslogIdentifier=qor-gateway
 
 NoNewPrivileges=true
 PrivateTmp=true
@@ -492,15 +492,15 @@ WantedBy=multi-user.target
 EOF
     
     sudo systemctl daemon-reload
-    sudo systemctl enable abyss-gateway.service
-    sudo systemctl start abyss-gateway.service
+    sudo systemctl enable qor-gateway.service
+    sudo systemctl start qor-gateway.service
     
     sleep 2
-    if sudo systemctl is-active --quiet abyss-gateway.service; then
-        log_success "abyss-gateway service is running"
+    if sudo systemctl is-active --quiet qor-gateway.service; then
+        log_success "qor-gateway service is running"
     else
-        log_error "abyss-gateway service failed to start"
-        sudo systemctl status abyss-gateway.service
+        log_error "qor-gateway service failed to start"
+        sudo systemctl status qor-gateway.service
         error_exit "Service start failed"
     fi
     
@@ -518,19 +518,19 @@ phase9_web_builds() {
     cd "$REPO_DIR"
     sudo -u "$DEMIURGE_USER" pnpm install || error_exit "Failed to install root dependencies"
     
-    # Build AbyssOS
-    log_info "Building AbyssOS Portal..."
-    cd "${REPO_DIR}/apps/abyssos-portal"
-    sudo -u "$DEMIURGE_USER" pnpm install || error_exit "Failed to install AbyssOS dependencies"
-    sudo -u "$DEMIURGE_USER" pnpm build || error_exit "Failed to build AbyssOS"
+    # Build QOR OS
+    log_info "Building QLOUD OS..."
+    cd "${REPO_DIR}/apps/qloud-os"
+    sudo -u "$DEMIURGE_USER" pnpm install || error_exit "Failed to install QOR OS dependencies"
+    sudo -u "$DEMIURGE_USER" pnpm build || error_exit "Failed to build QOR OS"
     
-    # Copy AbyssOS assets
-    log_info "Copying AbyssOS assets..."
+    # Copy QOR OS assets
+    log_info "Copying QOR OS assets..."
     sudo rm -rf "${DEMIURGE_HOME}/web/abyssos"/*
-    sudo cp -r "${REPO_DIR}/apps/abyssos-portal/dist"/* "${DEMIURGE_HOME}/web/abyssos/"
+    sudo cp -r "${REPO_DIR}/apps/qloud-os/dist"/* "${DEMIURGE_HOME}/web/abyssos/"
     sudo chown -R "$DEMIURGE_USER:$DEMIURGE_USER" "${DEMIURGE_HOME}/web/abyssos"
     sudo chmod -R 755 "${DEMIURGE_HOME}/web/abyssos"
-    log_success "AbyssOS assets deployed"
+    log_success "QOR OS assets deployed"
     
     # Build Abyss Portal
     log_info "Building Abyss Portal..."
@@ -574,13 +574,13 @@ phase10_nginx() {
     log_info "Disabling default Nginx site..."
     sudo rm -f /etc/nginx/sites-enabled/default
     
-    # Create AbyssOS site
-    log_info "Creating Nginx config: $DOMAIN_ABYSSOS"
+    # Create QOR OS site
+    log_info "Creating Nginx config: $DOMAIN_QLOUD_OS"
     sudo tee /etc/nginx/sites-available/abyssos > /dev/null <<EOF
 server {
     listen 80;
     listen [::]:80;
-    server_name $DOMAIN_ABYSSOS www.$DOMAIN_ABYSSOS;
+    server_name $DOMAIN_QLOUD_OS www.$DOMAIN_QLOUD_OS;
     
     root ${DEMIURGE_HOME}/web/abyssos;
     index index.html;
@@ -699,9 +699,9 @@ phase11_tls() {
     log_warn "Press Ctrl+C if DNS is not ready, or Enter to continue..."
     read -r
     
-    sudo certbot --nginx -d "$DOMAIN_ABYSSOS" -d "www.$DOMAIN_ABYSSOS" --non-interactive --agree-tos --email admin@$DOMAIN_ABYSSOS --redirect || log_warn "Certificate for $DOMAIN_ABYSSOS failed (DNS may not be ready)"
+    sudo certbot --nginx -d "$DOMAIN_QLOUD_OS" -d "www.$DOMAIN_QLOUD_OS" --non-interactive --agree-tos --email admin@$DOMAIN_QLOUD_OS --redirect || log_warn "Certificate for $DOMAIN_QLOUD_OS failed (DNS may not be ready)"
     sudo certbot --nginx -d "$DOMAIN_PORTAL" -d "www.$DOMAIN_PORTAL" --non-interactive --agree-tos --email admin@$DOMAIN_PORTAL --redirect || log_warn "Certificate for $DOMAIN_PORTAL failed (DNS may not be ready)"
-    sudo certbot --nginx -d "$DOMAIN_RPC" --non-interactive --agree-tos --email admin@$DOMAIN_ABYSSOS --redirect || log_warn "Certificate for $DOMAIN_RPC failed (DNS may not be ready)"
+    sudo certbot --nginx -d "$DOMAIN_RPC" --non-interactive --agree-tos --email admin@$DOMAIN_QLOUD_OS --redirect || log_warn "Certificate for $DOMAIN_RPC failed (DNS may not be ready)"
     
     # Configure auto-renewal
     log_info "Configuring certificate auto-renewal..."
@@ -719,7 +719,7 @@ phase12_verification() {
     
     log_info "Checking service status..."
     
-    SERVICES=("demiurge-chain" "abyssid" "abyss-gateway" "nginx")
+    SERVICES=("demiurge-chain" "qorid" "qor-gateway" "nginx")
     ALL_ACTIVE=true
     
     for service in "${SERVICES[@]}"; do
@@ -740,7 +740,7 @@ phase12_verification() {
     log_info "Service status summary:"
     sudo systemctl status demiurge-chain.service --no-pager -l | head -10
     sudo systemctl status abyssid.service --no-pager -l | head -10
-    sudo systemctl status abyss-gateway.service --no-pager -l | head -10
+    sudo systemctl status qor-gateway.service --no-pager -l | head -10
     
     log_info "Testing JSON-RPC endpoint..."
     if curl -s -X POST http://127.0.0.1:8545/rpc -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"cgt_getChainInfo","params":[],"id":1}' | grep -q "result"; then

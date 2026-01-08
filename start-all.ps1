@@ -12,7 +12,7 @@ function Test-Port {
 }
 
 # Check if ports are already in use
-$ports = @{8545 = "Chain RPC"; 4000 = "Abyss Gateway"; 3000 = "Portal Web"}
+$ports = @{8545 = "Chain RPC"; 4000 = "QOR Gateway"; 3000 = "Portal Web"}
 $portsInUse = @()
 
 foreach ($port in $ports.Keys) {
@@ -65,11 +65,11 @@ if ($chainReady) {
 }
 Write-Host ""
 
-# Start Abyss Gateway
-Write-Host "2️⃣  Starting Abyss Gateway (GraphQL on :4000)..." -ForegroundColor Green
+# Start QOR Gateway
+Write-Host "2️⃣  Starting QOR Gateway (GraphQL on :4000)..." -ForegroundColor Green
 $gatewayJob = Start-Job -ScriptBlock {
     Set-Location $using:PWD
-    Set-Location indexer\abyss-gateway
+    Set-Location indexer\qor-gateway
     pnpm dev 2>&1 | ForEach-Object { Write-Output $_ }
 } -Name "AbyssGateway"
 
@@ -91,7 +91,7 @@ for ($i = 0; $i -lt 20; $i++) {
 }
 
 if ($gatewayReady) {
-    Write-Host "   ✅ Abyss Gateway is ready!" -ForegroundColor Green
+    Write-Host "   ✅ QOR Gateway is ready!" -ForegroundColor Green
 } else {
     Write-Host "   ⚠️  Gateway may not be ready yet, continuing..." -ForegroundColor Yellow
 }
@@ -114,7 +114,7 @@ Write-Host "✅ All servers started!" -ForegroundColor Green
 Write-Host ""
 Write-Host "📍 Services:" -ForegroundColor Cyan
 Write-Host "   • Chain RPC:      http://127.0.0.1:8545/rpc" -ForegroundColor White
-Write-Host "   • Abyss Gateway:  http://localhost:4000/graphql" -ForegroundColor White
+Write-Host "   • QOR Gateway:  http://localhost:4000/graphql" -ForegroundColor White
 Write-Host "   • Portal Web:      http://localhost:3000" -ForegroundColor White
 Write-Host ""
 Write-Host "📋 Jobs running:" -ForegroundColor Cyan

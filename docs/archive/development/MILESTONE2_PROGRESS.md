@@ -15,7 +15,7 @@
 - ✅ RPC endpoints (`dev_registerDeveloper`, `dev_getDeveloperProfile`, etc.)
 - ✅ Integrated into runtime registry
 
-### Phase 3: Abyss Gateway Integration (100%)
+### Phase 3: QOR Gateway Integration (100%)
 - ✅ Database schema (developers, projects, project_maintainers tables)
 - ✅ Helper functions (upsertDeveloper, getDeveloperByAddress, etc.)
 - ✅ GraphQL schema (Developer, Project types)
@@ -48,7 +48,7 @@
 
 ### Phase 7: Sanity Checks
 - ⏳ Verify GraphQL schema compiles
-- ⏳ Test Abyss Gateway dev server
+- ⏳ Test QOR Gateway dev server
 - ⏳ Test Portal build
 - ⏳ Test CLI build
 - ⏳ End-to-end registration flow

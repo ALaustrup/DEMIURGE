@@ -11,15 +11,15 @@ export interface AbyssIdentity {
   isDeveloper?: boolean;
 }
 
-interface AbyssIDContextType {
+interface QorIDContextType {
   identity: AbyssIdentity | null;
   setIdentity: (identity: AbyssIdentity | null) => void;
   clearIdentity: () => void;
 }
 
-const AbyssIDContext = createContext<AbyssIDContextType | undefined>(undefined);
+const QorIDContext = createContext<QorIDContextType | undefined>(undefined);
 
-export function AbyssIDProvider({ children }: { children: ReactNode }) {
+export function QorIDProvider({ children }: { children: ReactNode }) {
   const [identity, setIdentityState] = useState<AbyssIdentity | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -56,16 +56,16 @@ export function AbyssIDProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AbyssIDContext.Provider value={{ identity, setIdentity, clearIdentity }}>
+    <QorIDContext.Provider value={{ identity, setIdentity, clearIdentity }}>
       {children}
-    </AbyssIDContext.Provider>
+    </QorIDContext.Provider>
   );
 }
 
-export function useAbyssID() {
-  const context = useContext(AbyssIDContext);
+export function useQorID() {
+  const context = useContext(QorIDContext);
   if (context === undefined) {
-    throw new Error('useAbyssID must be used within AbyssIDProvider');
+    throw new Error('useQorID must be used within QorIDProvider');
   }
   return context;
 }

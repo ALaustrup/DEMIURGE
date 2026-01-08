@@ -69,11 +69,11 @@ jobs:
           node-version: '20'
       - name: Install dependencies
         run: |
-          cd apps/abyssos-portal
+          cd apps/qloud-os
           npm install
       - name: Run Fractal-1 Benchmark
         run: |
-          cd apps/abyssos-portal
+          cd apps/qloud-os
           npx tsx src/fractall/fractall_benchmark.ts || echo "⚠️ Benchmark requires audio context (skipped in CI)"
 
   wallet-crypto-guard:
@@ -87,9 +87,9 @@ jobs:
           node-version: '20'
       - name: Verify Wallet Security Modules
         run: |
-          test -f apps/abyssid-service/src/security/key_derivation_guard.ts || exit 1
-          test -f apps/abyssid-service/src/security/signature_anomaly_detector.ts || exit 1
-          test -f apps/abyssid-service/src/security/wallet_state_sentinel.ts || exit 1
+          test -f apps/qorid-service/src/security/key_derivation_guard.ts || exit 1
+          test -f apps/qorid-service/src/security/signature_anomaly_detector.ts || exit 1
+          test -f apps/qorid-service/src/security/wallet_state_sentinel.ts || exit 1
           echo "✅ All wallet security modules present"
 
   indexer-quantum-stability:

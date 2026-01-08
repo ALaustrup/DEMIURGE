@@ -79,7 +79,7 @@ A comprehensive system for developers to easily build, submit, and integrate app
   },
   "integration": {
     "chain": true,
-    "abyssid": true,
+    "qorid": true,
     "gateway": false
   },
   "permissions": [
@@ -133,7 +133,7 @@ A comprehensive system for developers to easily build, submit, and integrate app
 
 **Available Templates**:
 - `web-app/` - Next.js dApp
-- `abyssos-app/` - AbyssOS application
+- `abyssos-app/` - QOR OS application
 - `rust-service/` - Rust backend
 - `node-bot/` - Node.js bot
 - `game-engine/` - Game integration
@@ -150,7 +150,7 @@ pnpm dev
 
 ### 5. CRAFT IDE
 
-**Location**: `apps/abyssos-portal/src/components/desktop/apps/CraftApp.tsx`
+**Location**: `apps/qloud-os/src/components/desktop/apps/CraftApp.tsx`
 
 #### Features
 
@@ -218,7 +218,7 @@ pnpm dev
 
 ### 6. App Marketplace
 
-**Location**: `apps/abyssos-portal/src/components/desktop/apps/AppMarketplaceApp.tsx`
+**Location**: `apps/qloud-os/src/components/desktop/apps/AppMarketplaceApp.tsx`
 
 #### Features
 

@@ -27,7 +27,7 @@ Runtime modules handle domain-specific logic:
 - **`urgeid_registry`**: UrgeID identity profiles, handles (@username), Syzygy tracking, and badge system
 - **`nft_dgen`**: D-GEN NFT minting, transfers, and metadata
 - **`fabric_manager`**: Fabric asset registration and fee pools
-- **`abyss_registry`**: NFT marketplace listings, buying, and royalties
+- **`qor_registry_legacy`**: NFT marketplace listings, buying, and royalties
 
 #### JSON-RPC Server
 - **Framework**: Axum + Tokio

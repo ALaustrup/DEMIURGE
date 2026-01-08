@@ -7,8 +7,8 @@ Configuration for deploying to https://demiurge.guru
 | Component | Platform | URL |
 |-----------|----------|-----|
 | Portal Web | **Vercel** | https://demiurge.guru |
-| AbyssID Service | Server (51.210.209.112) | https://api.demiurge.guru |
-| Abyss Gateway | Server | https://gateway.demiurge.guru |
+| QorID Service | Server (51.210.209.112) | https://api.demiurge.guru |
+| QOR Gateway | Server | https://gateway.demiurge.guru |
 | RPC Node | Server | https://rpc.demiurge.cloud |
 
 ## Domain Mapping
@@ -16,9 +16,9 @@ Configuration for deploying to https://demiurge.guru
 ```
 Demiurge.Guru
 ├── / (root)           → Portal Web (Vercel)
-│   └── "Enter Abyss"  → AbyssOS Portal
-├── api.demiurge.guru  → AbyssID Service (Server)
-├── gateway.demiurge.guru → Abyss Gateway (Server)
+│   └── "Enter Abyss"  → QLOUD OS
+├── api.demiurge.guru  → QorID Service (Server)
+├── gateway.demiurge.guru → QOR Gateway (Server)
 └── rpc.demiurge.cloud → RPC endpoint (existing)
 ```
 
@@ -37,9 +37,9 @@ Demiurge.Guru
 │              Click "Enter the Abyss"                    │
 │                          ▼                               │
 │  ┌─────────────────────────────────────────────────┐    │
-│  │              AbyssOS Portal                      │    │
+│  │              QLOUD OS                      │    │
 │  │  - Intro video                                  │    │
-│  │  - AbyssID login/signup                         │    │
+│  │  - QorID login/signup                         │    │
 │  │  - Full desktop environment                     │    │
 │  │  - 2GB cloud storage per user                   │    │
 │  └─────────────────────────────────────────────────┘    │
@@ -49,7 +49,7 @@ Demiurge.Guru
 ┌─────────────┐    ┌─────────────────┐    ┌─────────────┐
 │ api.demiurge│    │gateway.demiurge │    │rpc.demiurge │
 │    .guru    │    │     .guru       │    │   .cloud    │
-│  (AbyssID)  │    │  (GraphQL API)  │    │   (RPC)     │
+│  (QorID)  │    │  (GraphQL API)  │    │   (RPC)     │
 └─────────────┘    └─────────────────┘    └─────────────┘
          └──────────────────┬──────────────────┘
                             ▼
@@ -86,7 +86,7 @@ In Vercel Dashboard → Project → **Settings** → **Environment Variables**, 
 
 | Variable | Production Value |
 |----------|-----------------|
-| `NEXT_PUBLIC_ABYSSID_API_URL` | `https://api.demiurge.guru` |
+| `NEXT_PUBLIC_QORID_API_URL` | `https://api.demiurge.guru` |
 | `NEXT_PUBLIC_DEMIURGE_RPC_URL` | `https://rpc.demiurge.cloud/rpc` |
 | `NEXT_PUBLIC_ABYSS_GATEWAY_URL` | `https://gateway.demiurge.guru/graphql` |
 | `NEXT_PUBLIC_ARCHONAI_URL` | `https://archonai.demiurge.guru` |
@@ -141,7 +141,7 @@ Backend services remain on **51.210.209.112**.
 ```nginx
 # /etc/nginx/sites-available/api.demiurge.guru
 
-# AbyssID Service API
+# QorID Service API
 server {
     listen 443 ssl http2;
     server_name api.demiurge.guru;
@@ -164,7 +164,7 @@ server {
     }
 }
 
-# Abyss Gateway GraphQL
+# QOR Gateway GraphQL
 server {
     listen 443 ssl http2;
     server_name gateway.demiurge.guru;
@@ -195,10 +195,10 @@ server {
 }
 ```
 
-### AbyssID Service Environment
+### QorID Service Environment
 
 ```env
-# apps/abyssid-service/.env
+# apps/qorid-service/.env
 PORT=8082
 CORS_ORIGIN=https://demiurge.guru
 NODE_ENV=production
@@ -217,15 +217,15 @@ sudo systemctl enable certbot.timer
 ### Start Services
 
 ```bash
-# AbyssID Service
-cd /opt/demiurge/apps/abyssid-service
+# QorID Service
+cd /opt/demiurge/apps/qorid-service
 pnpm install --production
-pm2 start dist/index.js --name abyssid-service
+pm2 start dist/index.js --name qorid-service
 
-# Abyss Gateway (Indexer)
-cd /opt/demiurge/indexer/abyss-gateway
+# QOR Gateway (Indexer)
+cd /opt/demiurge/indexer/qor-gateway
 pnpm install --production
-pm2 start dist/index.js --name abyss-gateway
+pm2 start dist/index.js --name qor-gateway
 
 # Save PM2 config
 pm2 save
@@ -239,7 +239,7 @@ pm2 startup
 | Check | Command/URL |
 |-------|-------------|
 | Portal Web | Visit https://demiurge.guru |
-| AbyssID API | `curl https://api.demiurge.guru/healthz` |
+| QorID API | `curl https://api.demiurge.guru/healthz` |
 | Gateway GraphQL | `curl https://gateway.demiurge.guru/graphql` |
 | RPC Endpoint | `curl https://rpc.demiurge.cloud/rpc` |
 | SSL Certificates | `curl -I https://demiurge.guru` |
@@ -259,7 +259,7 @@ pnpm build
 
 ### CORS Errors
 
-Check nginx CORS headers and ensure `CORS_ORIGIN` in AbyssID service matches `https://demiurge.guru`.
+Check nginx CORS headers and ensure `CORS_ORIGIN` in QorID service matches `https://demiurge.guru`.
 
 ### Domain Not Resolving
 
@@ -274,7 +274,7 @@ Check nginx CORS headers and ensure `CORS_ORIGIN` in AbyssID service matches `ht
 curl http://127.0.0.1:8082/healthz
 
 # Check service logs
-pm2 logs abyssid-service
+pm2 logs qorid-service
 ```
 
 ---

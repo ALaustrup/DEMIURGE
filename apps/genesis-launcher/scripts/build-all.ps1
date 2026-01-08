@@ -1,4 +1,4 @@
-# Genesis Launcher Build Script (Windows)
+# DEMIURGE QOR Build Script (Windows)
 # Builds all components with Qt 6
 
 param(
@@ -11,7 +11,7 @@ $ErrorActionPreference = "Stop"
 $ProjectDir = Split-Path -Parent $PSScriptRoot
 $BuildDir = Join-Path $ProjectDir "build"
 
-Write-Host "=== Genesis Launcher Build ===" -ForegroundColor Cyan
+Write-Host "=== DEMIURGE QOR Build ===" -ForegroundColor Cyan
 Write-Host "Qt Path: $QtPath"
 Write-Host "Build Type: $BuildType"
 Write-Host ""

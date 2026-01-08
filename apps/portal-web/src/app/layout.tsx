@@ -3,7 +3,7 @@ import "./globals.css";
 import { NavbarWrapper } from "@/components/layout/NavbarWrapper";
 import { ServiceWorkerRegistration } from "@/components/pwa/ServiceWorkerRegistration";
 import { AudioContextProvider } from "@/lib/fracture/audio/AudioContextProvider";
-import { AbyssIDProvider } from "@/lib/fracture/identity/AbyssIDContext";
+import { QorIDProvider } from "@/lib/fracture/identity/QorIDContext";
 import { RitualContextProvider } from "@/lib/rituals/RitualContextProvider";
 import { ArchonContextProvider } from "@/lib/archon/ArchonContextProvider";
 import { GenesisContextProvider } from "@/lib/genesis/GenesisContextProvider";
@@ -74,7 +74,7 @@ export default function RootLayout({
       </head>
       <body className="gradient-orbit min-h-screen antialiased">
         <ServiceWorkerRegistration />
-        <AbyssIDProvider>
+        <QorIDProvider>
           <AudioContextProvider>
             <OperatorContextProvider>
               <FabricServiceProvider>
@@ -96,7 +96,7 @@ export default function RootLayout({
               </FabricServiceProvider>
             </OperatorContextProvider>
           </AudioContextProvider>
-        </AbyssIDProvider>
+        </QorIDProvider>
       </body>
     </html>
   );

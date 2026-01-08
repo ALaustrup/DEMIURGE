@@ -6,7 +6,7 @@ This document summarizes the existing Demiurge L1 blockchain implementation as o
 **Production Status**: 
 - Node0: Live at 51.210.209.112
 - RPC: https://rpc.demiurge.cloud/rpc (HTTPS)
-- AbyssOS: https://demiurge.cloud (HTTPS)
+- QOR OS: https://demiurge.cloud (HTTPS)
 
 ## Directory Layout
 
@@ -27,7 +27,7 @@ chain/
 │   └── runtime/
 │       ├── mod.rs      # Runtime module registry and dispatch
 │       ├── bank_cgt.rs # CGT token module (balances, transfers, minting)
-│       ├── abyss_registry.rs
+│       ├── qor_registry_legacy.rs
 │       ├── urgeid_registry.rs
 │       ├── nft_dgen.rs
 │       ├── fabric_manager.rs
@@ -116,7 +116,7 @@ Currently registered in `Runtime::with_default_modules()`:
 4. **FabricManagerModule** (`fabric_manager`)
    - Fabric asset management
 
-5. **AbyssRegistryModule** (`abyss_registry`)
+5. **AbyssRegistryModule** (`qor_registry_legacy`)
    - Marketplace listings
 
 6. **DeveloperRegistryModule** (`developer_registry`)

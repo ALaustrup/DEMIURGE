@@ -1,4 +1,4 @@
-# AbyssOS - Complete Current State Overview
+# QOR OS - Complete Current State Overview
 
 **Last Updated**: January 5, 2026  
 **Version**: Alpha v1.1  
@@ -6,9 +6,9 @@
 
 ---
 
-## What is AbyssOS?
+## What is QOR OS?
 
-**AbyssOS** is a full-screen, cybernetic "remote desktop" environment for the Demiurge Blockchain. It provides a complete desktop-style interface for interacting with the entire Demiurge ecosystem, featuring a boot screen, authentication system, window management, and 28+ integrated applications.
+**QOR OS** is a full-screen, cybernetic "remote desktop" environment for the Demiurge Blockchain. It provides a complete desktop-style interface for interacting with the entire Demiurge ecosystem, featuring a boot screen, authentication system, window management, and 28+ integrated applications.
 
 ---
 
@@ -26,7 +26,7 @@
 ### Project Structure
 
 ```
-apps/abyssos-portal/
+apps/qloud-os/
 ├── src/
 │   ├── routes/              # Main screens
 │   │   ├── BootScreen.tsx   # Boot animation
@@ -34,7 +34,7 @@ apps/abyssos-portal/
 │   │   └── Desktop.tsx      # Main desktop environment
 │   ├── components/
 │   │   ├── layout/          # FullscreenContainer, AbyssBackground, AudioReactiveBackground
-│   │   ├── auth/            # AbyssIDLoginForm, AbyssIDSignupModal
+│   │   ├── auth/            # QorIDLoginForm, QorIDSignupModal
 │   │   ├── desktop/         # Dock, WindowFrame, StatusBar, SystemMenu, Apps
 │   │   └── shared/          # Button, Card, GlitchText
 │   ├── state/               # Zustand stores
@@ -44,15 +44,15 @@ apps/abyssos-portal/
 │   │   └── customizationStore.ts
 │   ├── services/            # Business logic
 │   │   ├── wallet/          # Wallet operations
-│   │   ├── abyssid/         # AbyssID integration
+│   │   ├── qorid/         # QorID integration
 │   │   ├── chain/           # Blockchain RPC client
 │   │   ├── backgroundMusic.ts
 │   │   └── loginVoice.ts
 │   ├── lib/                 # Utilities
 │   │   ├── demiurgeRpcClient.ts
-│   │   └── abyssIdClient.ts
+│   │   └── qorIdClient.ts
 │   ├── context/             # React contexts
-│   │   ├── AbyssIDContext.tsx
+│   │   ├── QorIDContext.tsx
 │   │   ├── ThemeContext.tsx
 │   │   └── BlockListenerContext.tsx
 │   └── styles/              # Global CSS
@@ -100,7 +100,7 @@ apps/abyssos-portal/
 
 ### 3. Login Screen (`LoginScreen.tsx`)
 
-**Purpose**: AbyssID authentication
+**Purpose**: QorID authentication
 
 **Features**:
 - **Login Form**: Username + public key/code authentication
@@ -110,8 +110,8 @@ apps/abyssos-portal/
 - **Auto-login**: If session exists, skips to desktop
 
 **Components**:
-- `AbyssIDLoginForm` - Login interface
-- `AbyssIDSignupModal` - Signup interface
+- `QorIDLoginForm` - Login interface
+- `QorIDSignupModal` - Signup interface
 - `AbyssBackground` - Animated background
 
 ### 4. Desktop (`Desktop.tsx`)
@@ -150,7 +150,7 @@ apps/abyssos-portal/
    - View blocks
    - Search functionality
 
-3. **Abyss Wallet** (`AbyssWalletApp.tsx`)
+3. **QOR Wallet** (`QorWalletApp.tsx`)
    - CGT balance display
    - Send/receive CGT
    - Transaction history
@@ -177,7 +177,7 @@ apps/abyssos-portal/
    - Background playback mode
    - NFT metadata display
 
-7. **Abyss Radio** (`NeonRadioApp.tsx`)
+7. **QOR Radio** (`NeonRadioApp.tsx`)
    - Radio streaming interface
    - Station selection
    - Playback controls
@@ -275,12 +275,12 @@ apps/abyssos-portal/
     - User interactions
     - Social features
 
-25. **Abyss Writer** (`AbyssWriterApp.tsx`)
+25. **QOR Writer** (`QorWriterApp.tsx`)
     - Writing interface
     - Document creation
     - Text processing
 
-26. **Abyss Calc** (`AbyssCalcApp.tsx`)
+26. **QOR Calc** (`QorCalcApp.tsx`)
     - Calculator application
     - Mathematical operations
 
@@ -321,10 +321,10 @@ apps/abyssos-portal/
 
 ## Authentication System
 
-### AbyssID Integration
+### QorID Integration
 
-**Context**: `AbyssIDContext.tsx`
-- Provides AbyssID session management
+**Context**: `QorIDContext.tsx`
+- Provides QorID session management
 - Handles login/logout
 - Syncs with authStore
 
@@ -339,7 +339,7 @@ apps/abyssos-portal/
 3. Session persists across reloads
 4. Auto-login if session exists
 
-### AbyssID Features
+### QorID Features
 
 - **Username-based authentication**
 - **Seed phrase generation** (12-word mnemonic)
@@ -362,7 +362,7 @@ apps/abyssos-portal/
 
 ### Wallet Integration
 
-- **AbyssID Wallet**: Integrated wallet app
+- **QorID Wallet**: Integrated wallet app
 - **Auto-initialization**: Wallet initialized on desktop load
 - **RPC Connection**: Connects to Demiurge RPC endpoint
 - **Transaction Building**: Creates and signs transactions
@@ -389,7 +389,7 @@ apps/abyssos-portal/
 
 ### Storage System
 
-- **500GB Per-User**: Each AbyssID account gets 500GB
+- **500GB Per-User**: Each QorID account gets 500GB
 - **On-Chain Files App**: File explorer interface
 - **Remote Access**: Files accessible from anywhere
 - **Auto-Minting**: Files automatically minted as NFTs
@@ -553,8 +553,8 @@ apps/abyssos-portal/
 
 ### Auth Components
 
-- **AbyssIDLoginForm**: Login form
-- **AbyssIDSignupModal**: Signup modal
+- **QorIDLoginForm**: Login form
+- **QorIDSignupModal**: Signup modal
 - **WalletInitializer**: Wallet setup
 
 ---
@@ -567,7 +567,7 @@ apps/abyssos-portal/
 - **keyDerivation.ts**: Key derivation utilities
 - **permissions.ts**: Web3 permissions
 
-### AbyssID Services
+### QorID Services
 
 - **localProvider.ts**: Local storage provider
 - **IdentityService.ts**: Identity management
@@ -644,7 +644,7 @@ VITE_DEMIURGE_RPC_URL=https://rpc.demiurge.cloud/rpc
 ### Setup
 
 ```bash
-cd apps/abyssos-portal
+cd apps/qloud-os
 pnpm install
 pnpm dev
 ```
@@ -716,11 +716,11 @@ pnpm build
 
 ## Summary
 
-**AbyssOS** is a comprehensive desktop environment with:
+**QOR OS** is a comprehensive desktop environment with:
 
 ✅ **28 Applications** across 6 categories  
 ✅ **Complete Window Management** system  
-✅ **AbyssID Authentication** with seed phrase recovery  
+✅ **QorID Authentication** with seed phrase recovery  
 ✅ **Wallet Integration** with CGT support  
 ✅ **File Management** with 500GB storage  
 ✅ **Media Playback** with NEON Player  

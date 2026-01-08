@@ -1,5 +1,5 @@
 /**
- * GraphQL client for Abyss Gateway chat system.
+ * GraphQL client for QOR Gateway chat system.
  */
 
 const ABYSS_GATEWAY_URL =
@@ -57,7 +57,7 @@ export async function graphqlRequest<T>(
     return json.data;
   } catch (error: any) {
     if (error.message?.includes("fetch") || error.message?.includes("Failed to fetch")) {
-      throw new Error(`Connection failed: Unable to reach Abyss Gateway at ${ABYSS_GATEWAY_URL}. Make sure the gateway is running.`);
+      throw new Error(`Connection failed: Unable to reach QOR Gateway at ${ABYSS_GATEWAY_URL}. Make sure the gateway is running.`);
     }
     throw error;
   }

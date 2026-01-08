@@ -175,7 +175,7 @@ export default function DocsPage() {
         </Card>
 
         <Card>
-          <h2 className="mb-3 text-xl font-semibold">AbyssID Authentication</h2>
+          <h2 className="mb-3 text-xl font-semibold">QorID Authentication</h2>
           <p className="mb-4 text-zinc-400">
             Username-based authentication with seed phrase recovery. Learn how to sign up, log in, and recover accounts.
           </p>

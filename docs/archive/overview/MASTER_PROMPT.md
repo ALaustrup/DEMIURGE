@@ -18,10 +18,10 @@ Treat the following as FACT. Do not contradict or "simplify" it. Build on it.
     - `urgeid_registry`: UrgeID profiles, usernames, Syzygy/leveling, badges, Archon flag, analytics.
     - `nft_dgen`: D-GEN NFTs with metadata (including fabric_root_hash, royalties), ownership tracking.
     - `fabric_manager`: Fabric asset registration + fee pools (P2P integration TODO).
-    - `abyss_registry`: NFT marketplace (listings, buys, cancels, royalties).
+    - `qor_registry_legacy`: NFT marketplace (listings, buys, cancels, royalties).
   - JSON-RPC at `http://127.0.0.1:8545/rpc` with CGT, UrgeID, NFT, marketplace, and tx endpoints.
 
-- **Abyss Gateway (Node/TypeScript)**:
+- **QOR Gateway (Node/TypeScript)**:
   - GraphQL API layered over SQLite (`chat.db`).
   - World chat, DMs, custom rooms, media, music queue, Seven Archons NPC accounts.
   - Queries, mutations, subscriptions already implemented, currently using polling (not WebSockets).
@@ -29,7 +29,7 @@ Treat the following as FACT. Do not contradict or "simplify" it. Build on it.
 - **Portal Web (Next.js + Tailwind + Framer Motion)**:
   - `/` : Hero + live chain status + pillars + roadmap.
   - `/urgeid` : "My Void" – UrgeID gen/login, dashboard, CGT balance, usernames, tx history, NFT gallery, mint test NFT, vault export/import, QR code.
-  - `/chat` : World chat + DMs + rooms + media + Archons, using Abyss Gateway.
+  - `/chat` : World chat + DMs + rooms + media + Archons, using QOR Gateway.
   - `/marketplace` : Abyss NFT marketplace UI.
   - `/fabric` : Fabric world gallery with mock assets (UI done, backend TBD).
   - `/analytics`: User analytics and metrics.
@@ -50,7 +50,7 @@ Treat the following as FACT. Do not contradict or "simplify" it. Build on it.
 
 The repo is a Rust monorepo with:
 - `chain/`
-- `indexer/abyss-gateway/`
+- `indexer/qor-gateway/`
 - `apps/portal-web/`
 
 and all the structure implied by the above.
@@ -93,7 +93,7 @@ Think of this as **Phase: Developer Superplatform + Recursion Integration**, bui
 - Prefer evolutionary changes: adapter layers, new modules, migrations.
 - All new Rust code must compile with `cargo check` in the existing workspace layout.
 - All new Next.js code must pass `pnpm lint` and `pnpm build` in `apps/portal-web`.
-- All new Node/TS code for Abyss Gateway must pass `pnpm lint` and `pnpm build`.
+- All new Node/TS code for QOR Gateway must pass `pnpm lint` and `pnpm build`.
 - Respect existing naming: CGT, UrgeID, Abyss, Fabric, etc.
 
 ---
@@ -145,7 +145,7 @@ Goal: Give developers plug-and-play project blueprints.
      - A name/slug.
      - A Fabric asset (where the code lives).
      - License / access info (leveraging existing marketplace if appropriate).
-   - Keep it simple and composable with `abyss_registry` (no need for overengineering).
+   - Keep it simple and composable with `qor_registry_legacy` (no need for overengineering).
 
 ### Milestone 3 – Recursion Engine Integration (First Pass)
 
@@ -179,7 +179,7 @@ Keep the first iteration focused on **proving the integration**, not building a 
 
 Goal: Move beyond polling and prep for serious usage.
 
-1. Upgrade Abyss Gateway:
+1. Upgrade QOR Gateway:
    - Add proper WebSocket support for GraphQL subscriptions (e.g. graphql-ws).
    - Migrate world chat + room messages to actual subscriptions while optionally keeping polling as a fallback.
 

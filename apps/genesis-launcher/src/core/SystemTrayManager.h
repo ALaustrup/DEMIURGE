@@ -2,7 +2,7 @@
  * SystemTrayManager - System Tray Integration
  * 
  * Manages the system tray icon, context menu, and background mode
- * for the Genesis Launcher.
+ * for the DEMIURGE QOR.
  * 
  * Features:
  * - Minimize to tray instead of closing

@@ -1,6 +1,6 @@
-# AbyssOS Alpha Deployment Guide
+# QOR OS Alpha Deployment Guide
 
-**Complete guide for deploying AbyssOS to your server for public alpha testing.**
+**Complete guide for deploying QOR OS to your server for public alpha testing.**
 
 ---
 
@@ -29,7 +29,7 @@
 
 ```bash
 # From project root
-cd apps/abyssos-portal
+cd apps/qloud-os
 chmod +x deploy-alpha.sh
 ./deploy-alpha.sh YOUR_SERVER_IP YOUR_DOMAIN
 ```
@@ -42,12 +42,12 @@ Follow the steps below.
 
 ## Step-by-Step Deployment
 
-### Step 1: Build AbyssOS for Production
+### Step 1: Build QOR OS for Production
 
 **On your local machine:**
 
 ```bash
-cd apps/abyssos-portal
+cd apps/qloud-os
 
 # Install dependencies (if not already done)
 pnpm install
@@ -87,8 +87,8 @@ ssh root@YOUR_SERVER_IP
 **Create deployment directory:**
 
 ```bash
-sudo mkdir -p /var/www/abyssos-portal
-sudo chown -R $USER:$USER /var/www/abyssos-portal
+sudo mkdir -p /var/www/qloud-os
+sudo chown -R $USER:$USER /var/www/qloud-os
 ```
 
 **Install Nginx (if not installed):**
@@ -108,17 +108,17 @@ sudo systemctl start nginx
 
 ```bash
 # Copy all files from dist/ to server
-scp -r apps/abyssos-portal/dist/* ubuntu@YOUR_SERVER_IP:/var/www/abyssos-portal/
+scp -r apps/qloud-os/dist/* ubuntu@YOUR_SERVER_IP:/var/www/qloud-os/
 
 # Or if using different user:
-scp -r apps/abyssos-portal/dist/* root@YOUR_SERVER_IP:/var/www/abyssos-portal/
+scp -r apps/qloud-os/dist/* root@YOUR_SERVER_IP:/var/www/qloud-os/
 ```
 
 **Verify files on server:**
 
 ```bash
 ssh ubuntu@YOUR_SERVER_IP
-ls -la /var/www/abyssos-portal/
+ls -la /var/www/qloud-os/
 # Should see: index.html, assets/, etc.
 ```
 
@@ -148,7 +148,7 @@ server {
     listen [::]:80 default_server;
     server_name _;
 
-    root /var/www/abyssos-portal;
+    root /var/www/qloud-os;
     index index.html;
 
     # Security headers
@@ -204,7 +204,7 @@ server {
     listen [::]:443 ssl http2;
     server_name YOUR_DOMAIN.com www.YOUR_DOMAIN.com;
 
-    root /var/www/abyssos-portal;
+    root /var/www/qloud-os;
     index index.html;
 
     # SSL configuration (will be updated by Certbot)
@@ -328,8 +328,8 @@ sudo ufw status
 
 ```bash
 # Set proper ownership
-sudo chown -R www-data:www-data /var/www/abyssos-portal
-sudo chmod -R 755 /var/www/abyssos-portal
+sudo chown -R www-data:www-data /var/www/qloud-os
+sudo chmod -R 755 /var/www/qloud-os
 ```
 
 ---
@@ -366,33 +366,33 @@ Set these **before building** (`pnpm build`):
 # RPC Endpoint (required)
 export VITE_DEMIURGE_RPC_URL=https://rpc.demiurge.cloud/rpc
 
-# AbyssID API (optional, defaults to local mode)
-export VITE_ABYSSID_MODE=remote
-export VITE_ABYSSID_API_URL=https://YOUR_DOMAIN.com/api/abyssid
+# QorID API (optional, defaults to local mode)
+export VITE_QORID_MODE=remote
+export VITE_QORID_API_URL=https://YOUR_DOMAIN.com/api/abyssid
 ```
 
 **Example build with custom RPC:**
 
 ```bash
-cd apps/abyssos-portal
+cd apps/qloud-os
 VITE_DEMIURGE_RPC_URL=https://your-rpc-server.com/rpc pnpm build
 ```
 
 ---
 
-## Updating AbyssOS
+## Updating QOR OS
 
 **To update the deployed version:**
 
 1. **Build new version locally:**
    ```bash
-   cd apps/abyssos-portal
+   cd apps/qloud-os
    pnpm build
    ```
 
 2. **Copy to server:**
    ```bash
-   scp -r dist/* ubuntu@YOUR_SERVER_IP:/var/www/abyssos-portal/
+   scp -r dist/* ubuntu@YOUR_SERVER_IP:/var/www/qloud-os/
    ```
 
 3. **No restart needed** (static files only)
@@ -412,7 +412,7 @@ sudo nginx -t
 
 **Verify files exist:**
 ```bash
-ls -la /var/www/abyssos-portal/
+ls -la /var/www/qloud-os/
 ```
 
 **Check Nginx error log:**
@@ -459,8 +459,8 @@ sudo tail -f /var/log/letsencrypt/letsencrypt.log
 ### Permission Issues
 
 ```bash
-sudo chown -R www-data:www-data /var/www/abyssos-portal
-sudo chmod -R 755 /var/www/abyssos-portal
+sudo chown -R www-data:www-data /var/www/qloud-os
+sudo chmod -R 755 /var/www/qloud-os
 ```
 
 ### CORS Errors
@@ -476,7 +476,7 @@ sudo chmod -R 755 /var/www/abyssos-portal
 
 ### Pre-Launch
 
-- [ ] AbyssOS builds successfully
+- [ ] QOR OS builds successfully
 - [ ] Files copied to server
 - [ ] Nginx configured and tested
 - [ ] SSL certificate obtained (if using domain)
@@ -587,11 +587,11 @@ free -h
 
 ## Backup Strategy
 
-### Backup AbyssOS Files
+### Backup QOR OS Files
 
 ```bash
 # Create backup
-sudo tar -czf /backup/abyssos-$(date +%Y%m%d).tar.gz /var/www/abyssos-portal/
+sudo tar -czf /backup/abyssos-$(date +%Y%m%d).tar.gz /var/www/qloud-os/
 
 # Restore from backup
 sudo tar -xzf /backup/abyssos-YYYYMMDD.tar.gz -C /
@@ -603,8 +603,8 @@ sudo tar -xzf /backup/abyssos-YYYYMMDD.tar.gz -C /
 
 ### Documentation
 
-- [AbyssOS Complete Overview](../apps/ABYSSOS_COMPLETE_OVERVIEW.md)
-- [AbyssOS Portal Docs](../apps/ABYSSOS_PORTAL.md)
+- [QOR OS Complete Overview](../apps/QLOUD_OS_COMPLETE_OVERVIEW.md)
+- [QLOUD OS Docs](../apps/QLOUD_OS_PORTAL.md)
 - [Deployment Troubleshooting](README_NODE0.md)
 
 ### Common Issues
@@ -624,10 +624,10 @@ After successful deployment:
 2. **Monitor usage** via Nginx logs
 3. **Collect feedback** from testers
 4. **Iterate** based on feedback
-5. **Update** as needed (see "Updating AbyssOS" section)
+5. **Update** as needed (see "Updating QOR OS" section)
 
 ---
 
-**Your AbyssOS alpha is now live! 🚀**
+**Your QOR OS alpha is now live! 🚀**
 
 *The flame burns eternal. The code serves the will.*

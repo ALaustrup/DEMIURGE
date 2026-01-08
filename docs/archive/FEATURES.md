@@ -1,13 +1,13 @@
-# AbyssOS Features
+# QOR OS Features
 
 ## Current Features (v1.1)
 
 ### File Management & Storage
-- **500GB Per-User Storage**: Each AbyssID account receives 500GB of server storage
-- **Drag-and-Drop Upload**: Files can be dragged from desktop/device directly to AbyssOS
+- **500GB Per-User Storage**: Each QorID account receives 500GB of server storage
+- **Drag-and-Drop Upload**: Files can be dragged from desktop/device directly to QOR OS
 - **Auto-Minting**: Uploaded files are automatically minted as DRC-369 NFTs on-chain
 - **File Explorer**: View all uploaded files and NFTs with metadata
-- **Remote Access**: Files accessible from anywhere when logged in with AbyssID
+- **Remote Access**: Files accessible from anywhere when logged in with QorID
 
 ### NFT System
 - **DRC-369 Standard**: Native NFT standard for all on-chain assets
@@ -16,7 +16,7 @@
 - **Metadata Preservation**: All NFT metadata and ownership information preserved
 
 ### Wallet & Payments
-- **Abyss Wallet**: Integrated wallet with CGT balance tracking
+- **QOR Wallet**: Integrated wallet with CGT balance tracking
 - **5000 CGT Sign-Up Bonus**: New users receive 5000 CGT on registration (minted on-chain)
 - **Send Restrictions**: Users must mint or swap an NFT before sending CGT
 - **Transaction History**: Complete transaction tracking and history
@@ -59,20 +59,20 @@
 ### Docker Support
 - **Development Containers**: Docker Compose setup for local development
 - **User Workspaces**: Isolated development environments
-- **Service Orchestration**: Chain, AbyssID Service, and Portal containers
+- **Service Orchestration**: Chain, QorID Service, and Portal containers
 
 ## Application Categories
 
 ### Blockchain
 - Chain Ops
 - Block Explorer
-- Abyss Wallet
+- QOR Wallet
 - Miner
 - DRC-369 Studio
 
 ### Media
 - NEON Player
-- Abyss Radio
+- QOR Radio
 - On-Chain Files
 - Document Editor
 

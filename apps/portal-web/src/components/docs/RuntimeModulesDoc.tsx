@@ -23,7 +23,7 @@ export function RuntimeModulesDoc() {
             <p className="text-xs text-zinc-300">CGT token operations: balances, transfers, minting, supply management. Constants: CGT_NAME, CGT_SYMBOL, CGT_DECIMALS (8), CGT_MAX_SUPPLY (1B).</p>
           </div>
           <div className="p-3 bg-black/20 border border-white/10 rounded-lg">
-            <h4 className="font-semibold text-rose-400 mb-1">2. AbyssID Registry (urgeid_registry)</h4>
+            <h4 className="font-semibold text-rose-400 mb-1">2. QorID Registry (urgeid_registry)</h4>
             <p className="text-xs text-zinc-300">Identity system: profiles, usernames, Syzygy scores, leveling (level = 1 + syzygy/1000), badges (Luminary at 10K syzygy), CGT rewards for level-ups.</p>
           </div>
           <div className="p-3 bg-black/20 border border-white/10 rounded-lg">
@@ -35,12 +35,12 @@ export function RuntimeModulesDoc() {
             <p className="text-xs text-zinc-300">P2P Fabric asset registration, CGT fee pools, seeder rewards (Proof-of-Delivery). Archons register content with initial reward pools.</p>
           </div>
           <div className="p-3 bg-black/20 border border-white/10 rounded-lg">
-            <h4 className="font-semibold text-rose-400 mb-1">5. Abyss Registry (abyss_registry)</h4>
+            <h4 className="font-semibold text-rose-400 mb-1">5. Abyss Registry (qor_registry_legacy)</h4>
             <p className="text-xs text-zinc-300">NFT marketplace: create/cancel listings, purchase NFTs with CGT, automatic royalty distribution to creators (if configured).</p>
           </div>
           <div className="p-3 bg-black/20 border border-white/10 rounded-lg">
             <h4 className="font-semibold text-rose-400 mb-1">6. Developer Registry (developer_registry)</h4>
-            <p className="text-xs text-zinc-300">Developer profiles, project registration, reputation tracking. Auto-mints DEV Badge NFT on registration. Username must match AbyssID username.</p>
+            <p className="text-xs text-zinc-300">Developer profiles, project registration, reputation tracking. Auto-mints DEV Badge NFT on registration. Username must match QorID username.</p>
           </div>
           <div className="p-3 bg-black/20 border border-white/10 rounded-lg">
             <h4 className="font-semibold text-rose-400 mb-1">7. Dev Capsules (dev_capsules)</h4>

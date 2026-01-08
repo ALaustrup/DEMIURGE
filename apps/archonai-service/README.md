@@ -55,5 +55,5 @@ Send a message to ArchonAI.
 ## Integration
 
 - **Portal Web**: `/conspire` page
-- **AbyssOS**: `ArchonAIAssistantApp`
+- **QOR OS**: `ArchonAIAssistantApp`
 - **CLI**: `demiurge ai <query>`

@@ -5,7 +5,7 @@ This guide explains how to deploy a single Demiurge devnet node (Node0) on Ubunt
 **Current Production Status:**
 - **Node**: Node0 at 51.210.209.112
 - **RPC**: https://rpc.demiurge.cloud/rpc (HTTPS enabled)
-- **AbyssOS**: https://demiurge.cloud (HTTPS enabled)
+- **QOR OS**: https://demiurge.cloud (HTTPS enabled)
 - **Status**: ✅ Live and operational
 
 ## Prerequisites
@@ -197,7 +197,7 @@ sudo systemctl restart demiurge-node0.service
 
 ## Next Steps
 
-- Connect AbyssID Wallet to the RPC endpoint
+- Connect QorID Wallet to the RPC endpoint
 - Use Mining Gateway to submit work claims
 - Monitor node health and performance
 - Expand to multi-node network (when P2P is implemented)

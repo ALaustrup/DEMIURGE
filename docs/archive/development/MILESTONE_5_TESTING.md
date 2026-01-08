@@ -16,7 +16,7 @@ Milestone 5 includes minimal smoke tests for the snapshot service. The test suit
 ### Snapshot Service Tests
 
 ```bash
-cd indexer/abyss-gateway
+cd indexer/qor-gateway
 npm run test:snapshots
 ```
 
@@ -209,7 +209,7 @@ npm run test:snapshots
 - Adding new edge cases
 
 **Test file location:**
-- `indexer/abyss-gateway/src/snapshotService.test.ts`
+- `indexer/qor-gateway/src/snapshotService.test.ts`
 
 ---
 

@@ -5,7 +5,7 @@ import { HeroPanel } from "@/components/fracture/HeroPanel";
 import { Sparkles, MessageSquare, Zap, BookOpen, Send, Loader2, X } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAbyssID } from "@/lib/fracture/identity/AbyssIDContext";
+import { useQorID } from "@/lib/fracture/identity/QorIDContext";
 import { ArchonProposalPanel } from "@/components/archon/ArchonProposalPanel";
 
 interface Message {
@@ -16,7 +16,7 @@ interface Message {
 }
 
 export default function ConspirePage() {
-  const { identity } = useAbyssID();
+  const { identity } = useQorID();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
@@ -135,7 +135,7 @@ export default function ConspirePage() {
                   ArchonAI Assistant
                 </h3>
                 <p className="text-sm text-zinc-400">
-                  {identity ? "Ready to assist" : "Please create an AbyssID to use ArchonAI"}
+                  {identity ? "Ready to assist" : "Please create an QorID to use ArchonAI"}
                 </p>
               </div>
             </div>
@@ -246,7 +246,7 @@ export default function ConspirePage() {
           ) : (
             <div className="p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg text-center">
               <p className="text-sm text-yellow-300">
-                Please create an AbyssID to use ArchonAI. Visit Haven to get started.
+                Please create an QorID to use ArchonAI. Visit Haven to get started.
               </p>
             </div>
           )}

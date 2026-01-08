@@ -290,8 +290,8 @@ phases: {
 - `apps/portal-web/src/components/fracture/FractureNav.tsx` - Genesis mode indicator
 - `apps/portal-web/src/components/fracture/FabricTopology.tsx` - Genesis nodes/edges support
 - `apps/portal-web/src/components/rituals/RitualControlPanel.tsx` - Genesis sequence controls
-- `indexer/abyss-gateway/src/schema.ts` - Added exportGenesisSession query
-- `indexer/abyss-gateway/src/resolvers.ts` - Added exportGenesisSession resolver
+- `indexer/qor-gateway/src/schema.ts` - Added exportGenesisSession query
+- `indexer/qor-gateway/src/resolvers.ts` - Added exportGenesisSession resolver
 
 ---
 

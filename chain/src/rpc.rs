@@ -134,23 +134,23 @@ pub struct GetTxHistoryParams {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct AbyssIDSetUsernameParams {
+pub struct QorIDSetUsernameParams {
     pub address: String, // hex string
     pub username: String,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct AbyssIDResolveUsernameParams {
+pub struct QorIDResolveUsernameParams {
     pub username: String,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct AbyssIDGetProfileByUsernameParams {
+pub struct QorIDGetProfileByUsernameParams {
     pub username: String,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct AbyssIDGetProgressParams {
+pub struct QorIDGetProgressParams {
     pub address: String, // hex string
 }
 
@@ -299,31 +299,31 @@ pub struct MintDgenNftParams {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct AbyssIDCreateParams {
+pub struct QorIDCreateParams {
     pub address: String, // hex string
     pub display_name: String,
     pub bio: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct AbyssIDGetParams {
+pub struct QorIDGetParams {
     pub address: String, // hex string
 }
 
 #[derive(Debug, Deserialize)]
-pub struct AbyssIDRecordSyzygyParams {
+pub struct QorIDRecordSyzygyParams {
     pub address: String, // hex string
     pub amount: u64,     // Syzygy contribution amount
 }
 
 #[derive(Debug, Deserialize)]
-pub struct AbyssIDSetHandleParams {
+pub struct QorIDSetHandleParams {
     pub address: String, // hex string
     pub handle: String,  // handle without @
 }
 
 #[derive(Debug, Deserialize)]
-pub struct AbyssIDGetByHandleParams {
+pub struct QorIDGetByHandleParams {
     pub handle: String, // handle without @
 }
 
@@ -606,7 +606,7 @@ async fn handle_rpc(
                 }
             };
 
-            use crate::runtime::abyss_registry::CreateListingParams as CreateParams;
+            use crate::runtime::qor_registry_legacy::CreateListingParams as CreateParams;
             let create_params = CreateParams {
                 token_id: params.token_id as NftId,
                 price_cgt,
@@ -629,7 +629,7 @@ async fn handle_rpc(
             let tx = Transaction {
                 from: address,
                 nonce,
-                module_id: "abyss_registry".to_string(),
+                module_id: "qor_registry_legacy".to_string(),
                 call_id: "create_listing".to_string(),
                 payload,
                 fee: 1000, // Default fee
@@ -699,7 +699,7 @@ async fn handle_rpc(
 
             let nonce = node.get_nonce(&address);
 
-            use crate::runtime::abyss_registry::CancelListingParams as CancelParams;
+            use crate::runtime::qor_registry_legacy::CancelListingParams as CancelParams;
             let cancel_params = CancelParams {
                 listing_id: params.listing_id as ListingId,
             };
@@ -721,7 +721,7 @@ async fn handle_rpc(
             let tx = Transaction {
                 from: address,
                 nonce,
-                module_id: "abyss_registry".to_string(),
+                module_id: "qor_registry_legacy".to_string(),
                 call_id: "cancel_listing".to_string(),
                 payload,
                 fee: 1000,
@@ -791,7 +791,7 @@ async fn handle_rpc(
 
             let nonce = node.get_nonce(&address);
 
-            use crate::runtime::abyss_registry::BuyListingParams as BuyParams;
+            use crate::runtime::qor_registry_legacy::BuyListingParams as BuyParams;
             let buy_params = BuyParams {
                 listing_id: params.listing_id as ListingId,
             };
@@ -813,7 +813,7 @@ async fn handle_rpc(
             let tx = Transaction {
                 from: address,
                 nonce,
-                module_id: "abyss_registry".to_string(),
+                module_id: "qor_registry_legacy".to_string(),
                 call_id: "buy_listing".to_string(),
                 payload,
                 fee: 1000,
@@ -1078,7 +1078,7 @@ async fn handle_rpc(
             // Otherwise, we'll bypass signature checks and mint directly
             let result = node.with_state_mut(|state| {
                 // Check if owner is Archon (required for minting)
-                if !crate::runtime::abyssid_registry::is_archon(state, &owner_addr) {
+                if !crate::runtime::qor_registry::is_archon(state, &owner_addr) {
                     return Err("only Archons may mint D-GEN NFTs".to_string());
                 }
 
@@ -1140,15 +1140,15 @@ async fn handle_rpc(
             }
         }
         "abyssid_create" => {
-            let params: AbyssIDCreateParams = match req.params.as_ref() {
+            let params: QorIDCreateParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
-                    .unwrap_or(AbyssIDCreateParams {
+                    .unwrap_or(QorIDCreateParams {
                         address: String::new(),
                         display_name: String::new(),
                         bio: None,
                     }),
-                None => AbyssIDCreateParams {
+                None => QorIDCreateParams {
                     address: String::new(),
                     display_name: String::new(),
                     bio: None,
@@ -1224,20 +1224,20 @@ async fn handle_rpc(
                     result: None,
                     error: Some(JsonRpcError {
                         code: -32603,
-                        message: format!("Failed to create AbyssID profile: {}", msg),
+                        message: format!("Failed to create QorID profile: {}", msg),
                     }),
                     id,
                 }),
             }
         }
         "abyssid_get" => {
-            let params: AbyssIDGetParams = match req.params.as_ref() {
+            let params: QorIDGetParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
-                    .unwrap_or(AbyssIDGetParams {
+                    .unwrap_or(QorIDGetParams {
                         address: String::new(),
                     }),
-                None => AbyssIDGetParams {
+                None => QorIDGetParams {
                     address: String::new(),
                 },
             };
@@ -1281,14 +1281,14 @@ async fn handle_rpc(
             })
         }
         "abyssid_recordSyzygy" => {
-            let params: AbyssIDRecordSyzygyParams = match req.params.as_ref() {
+            let params: QorIDRecordSyzygyParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
-                    .unwrap_or(AbyssIDRecordSyzygyParams {
+                    .unwrap_or(QorIDRecordSyzygyParams {
                         address: String::new(),
                         amount: 0,
                     }),
-                None => AbyssIDRecordSyzygyParams {
+                None => QorIDRecordSyzygyParams {
                     address: String::new(),
                     amount: 0,
                 },
@@ -1338,14 +1338,14 @@ async fn handle_rpc(
             }
         }
         "abyssid_setHandle" => {
-            let params: AbyssIDSetHandleParams = match req.params.as_ref() {
+            let params: QorIDSetHandleParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
-                    .unwrap_or(AbyssIDSetHandleParams {
+                    .unwrap_or(QorIDSetHandleParams {
                         address: String::new(),
                         handle: String::new(),
                     }),
-                None => AbyssIDSetHandleParams {
+                None => QorIDSetHandleParams {
                     address: String::new(),
                     handle: String::new(),
                 },
@@ -1400,13 +1400,13 @@ async fn handle_rpc(
             }
         }
         "abyssid_getByHandle" => {
-            let params: AbyssIDGetByHandleParams = match req.params.as_ref() {
+            let params: QorIDGetByHandleParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
-                    .unwrap_or(AbyssIDGetByHandleParams {
+                    .unwrap_or(QorIDGetByHandleParams {
                         handle: String::new(),
                     }),
-                None => AbyssIDGetByHandleParams {
+                None => QorIDGetByHandleParams {
                     handle: String::new(),
                 },
             };
@@ -1456,14 +1456,14 @@ async fn handle_rpc(
             }
         }
         "abyssid_setUsername" => {
-            let params: AbyssIDSetUsernameParams = match req.params.as_ref() {
+            let params: QorIDSetUsernameParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
-                    .unwrap_or(AbyssIDSetUsernameParams {
+                    .unwrap_or(QorIDSetUsernameParams {
                         address: String::new(),
                         username: String::new(),
                     }),
-                None => AbyssIDSetUsernameParams {
+                None => QorIDSetUsernameParams {
                     address: String::new(),
                     username: String::new(),
                 },
@@ -1525,13 +1525,13 @@ async fn handle_rpc(
             }
         }
         "abyssid_resolveUsername" => {
-            let params: AbyssIDResolveUsernameParams = match req.params.as_ref() {
+            let params: QorIDResolveUsernameParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
-                    .unwrap_or(AbyssIDResolveUsernameParams {
+                    .unwrap_or(QorIDResolveUsernameParams {
                         username: String::new(),
                     }),
-                None => AbyssIDResolveUsernameParams {
+                None => QorIDResolveUsernameParams {
                     username: String::new(),
                 },
             };
@@ -1570,13 +1570,13 @@ async fn handle_rpc(
             }
         }
         "abyssid_getProfileByUsername" => {
-            let params: AbyssIDGetProfileByUsernameParams = match req.params.as_ref() {
+            let params: QorIDGetProfileByUsernameParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
-                    .unwrap_or(AbyssIDGetProfileByUsernameParams {
+                    .unwrap_or(QorIDGetProfileByUsernameParams {
                         username: String::new(),
                     }),
-                None => AbyssIDGetProfileByUsernameParams {
+                None => QorIDGetProfileByUsernameParams {
                     username: String::new(),
                 },
             };
@@ -1632,13 +1632,13 @@ async fn handle_rpc(
             }
         }
         "abyssid_getProgress" => {
-            let params: AbyssIDGetProgressParams = match req.params.as_ref() {
+            let params: QorIDGetProgressParams = match req.params.as_ref() {
                 Some(raw) => serde_json::from_value(raw.clone())
                     .map_err(|e| e.to_string())
-                    .unwrap_or(AbyssIDGetProgressParams {
+                    .unwrap_or(QorIDGetProgressParams {
                         address: String::new(),
                     }),
-                None => AbyssIDGetProgressParams {
+                None => QorIDGetProgressParams {
                     address: String::new(),
                 },
             };
@@ -1661,7 +1661,7 @@ async fn handle_rpc(
             let profile_opt = node.with_state(|state| get_abyssid_profile(state, &address));
             match profile_opt {
                 Some(profile) => {
-                    use crate::runtime::abyssid_registry::level_threshold;
+                    use crate::runtime::qor_registry::level_threshold;
                     
                     let current_level = profile.level;
                     let current_threshold = level_threshold(current_level);
@@ -1697,7 +1697,7 @@ async fn handle_rpc(
                     result: None,
                     error: Some(JsonRpcError {
                         code: -32602,
-                        message: "AbyssID profile not found".to_string(),
+                        message: "QorID profile not found".to_string(),
                     }),
                     id,
                 }),

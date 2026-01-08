@@ -65,7 +65,7 @@ export function GenesisOnboarding() {
                     <Home className="w-5 h-5 text-cyan-400" />
                     <h3 className="font-oswald text-white">Haven</h3>
                   </div>
-                  <p className="text-xs text-gray-400">Your home and profile. Manage your AbyssID, view CGT balance, and browse NFTs.</p>
+                  <p className="text-xs text-gray-400">Your home and profile. Manage your QorID, view CGT balance, and browse NFTs.</p>
                 </div>
 
                 <div className="p-4 rounded-lg bg-white/5 border border-white/10">

@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback, useRef } from "react";
 import type { ArchonProposal, ArchonContext, ArchonProposalStatus } from "./archonTypes";
 import { graphqlRequest } from "@/lib/graphql";
-import { useAbyssID } from "@/lib/fracture/identity/AbyssIDContext";
+import { useQorID } from "@/lib/fracture/identity/QorIDContext";
 
 interface ArchonContextType {
   proposals: ArchonProposal[];
@@ -19,7 +19,7 @@ interface ArchonContextType {
 const ArchonContext = createContext<ArchonContextType | undefined>(undefined);
 
 export function ArchonContextProvider({ children }: { children: ReactNode }) {
-  const { identity } = useAbyssID();
+  const { identity } = useQorID();
   const [proposals, setProposals] = useState<ArchonProposal[]>([]);
   const [context, setContext] = useState<ArchonContext | null>(null);
   const [loading, setLoading] = useState(false);

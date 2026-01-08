@@ -36,9 +36,9 @@ export function APIDoc() {
             </ul>
           </div>
           <div className="p-3 bg-black/20 border border-white/10 rounded-lg">
-            <h4 className="font-semibold text-fuchsia-400 mb-1">AbyssID Operations</h4>
+            <h4 className="font-semibold text-fuchsia-400 mb-1">QorID Operations</h4>
             <ul className="text-xs text-zinc-300 space-y-1 mt-2">
-              <li><code className="bg-black/30 px-1 rounded">urgeid_create</code> - Create AbyssID profile</li>
+              <li><code className="bg-black/30 px-1 rounded">urgeid_create</code> - Create QorID profile</li>
               <li><code className="bg-black/30 px-1 rounded">urgeid_get</code> - Get profile by address</li>
               <li><code className="bg-black/30 px-1 rounded">urgeid_setUsername</code> - Set username</li>
               <li><code className="bg-black/30 px-1 rounded">urgeid_resolveUsername</code> - Resolve username to address</li>

@@ -3,14 +3,14 @@
  */
 
 #include "WalletManager.h"
-#include "../AbyssIDManager.h"
+#include "../QorIDManager.h"
 
 #include <QDebug>
 #include <QRandomGenerator>
 
 namespace QOR {
 
-WalletManager::WalletManager(AbyssIDManager *abyssId, QObject *parent)
+WalletManager::WalletManager(QorIDManager *abyssId, QObject *parent)
     : QObject(parent)
     , m_abyssId(abyssId)
     , m_balance("0.00")
@@ -18,7 +18,7 @@ WalletManager::WalletManager(AbyssIDManager *abyssId, QObject *parent)
 {
     if (m_abyssId) {
         m_address = m_abyssId->getPublicKey();
-        connect(m_abyssId, &AbyssIDManager::authChanged, this, [this]() {
+        connect(m_abyssId, &QorIDManager::authChanged, this, [this]() {
             m_address = m_abyssId->getPublicKey();
             emit addressChanged();
             refresh();

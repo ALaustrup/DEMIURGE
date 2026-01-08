@@ -26,7 +26,7 @@
 - ✅ **FractureShell** - Main portal shell with video background support
 - ✅ **FractureNav** - New IA navigation (Haven, Void, Nexus, Scrolls, Conspire)
 - ✅ **5 New Routes** - `/haven`, `/void`, `/nexus`, `/scrolls`, `/conspire`
-- ✅ **AbyssIDDialog** - Identity modal with availability checking UI
+- ✅ **QorIDDialog** - Identity modal with availability checking UI
 - ✅ **Audio Engine Scaffolding** - AudioEngine, AudioContextProvider, hooks
 - ✅ **ShaderPlane** - Shader component (CSS-based, WebGL upgrade planned)
 - ✅ **Theme System** - Fracture theme configuration
@@ -34,7 +34,7 @@
 #### Deployment Infrastructure
 - ✅ **7 Deployment Scripts** - Phase 0-7 automation scripts
 - ✅ **Complete Documentation** - `COMPLETE_DEPLOYMENT_INSTRUCTIONS.md`
-- ✅ **AbyssID Backend** - Basic Express server scaffolded
+- ✅ **QorID Backend** - Basic Express server scaffolded
 
 ---
 
@@ -54,29 +54,29 @@
 - `apps/portal-web/src/lib/fracture/audio/AudioEngine.ts` - Complete implementation
 - `apps/portal-web/src/lib/fracture/audio/AbyssReactive.ts` - Add state mapping
 - `apps/portal-web/src/components/fracture/ShaderPlane.tsx` - Wire reactive values
-- `apps/portal-web/src/components/fracture/AbyssIDDialog.tsx` - Integrate ShaderPlane
+- `apps/portal-web/src/components/fracture/QorIDDialog.tsx` - Integrate ShaderPlane
 
 **TODO Markers Found:**
-- `AbyssIDDialog.tsx:289` - "TODO: Integrate ShaderPlane backdrop"
-- `AbyssIDDialog.tsx:290` - "TODO: Integrate audio-reactive layer"
+- `QorIDDialog.tsx:289` - "TODO: Integrate ShaderPlane backdrop"
+- `QorIDDialog.tsx:290` - "TODO: Integrate audio-reactive layer"
 - `AudioReactiveLayer.tsx:20` - "TODO: Apply reactive visual effects"
 
 ---
 
-### Phase 5: AbyssID Backend Integration ⚠️ **HIGH PRIORITY**
+### Phase 5: QorID Backend Integration ⚠️ **HIGH PRIORITY**
 
 **Status:** Backend scaffolded, frontend needs connection
 
 **What's Missing:**
 1. **Real API Integration** - Replace mock availability check
-2. **AbyssIDContext** - Store identity globally
+2. **QorIDContext** - Store identity globally
 3. **Keypair Generation** - Connect to actual wallet system
 4. **Backend Testing** - Verify backend endpoints work
 
 **Files to Update:**
 - `apps/portal-web/src/components/fracture/AbyssStateMachine.ts` - Use real API
-- `apps/portal-web/src/lib/fracture/identity/AbyssIDContext.tsx` - Create context
-- `apps/portal-web/src/app/layout.tsx` - Wrap with AbyssIDProvider
+- `apps/portal-web/src/lib/fracture/identity/QorIDContext.tsx` - Create context
+- `apps/portal-web/src/app/layout.tsx` - Wrap with QorIDProvider
 
 **TODO Markers Found:**
 - `AbyssStateMachine.ts:48` - "TODO: Replace with real backend availability API"
@@ -126,21 +126,21 @@
 
 3. **Wire ShaderPlane**
    - Update ShaderPlane to use AbyssReactive values
-   - Connect to AbyssIDDialog state machine
+   - Connect to QorIDDialog state machine
 
 4. **Test Integration**
-   - Open AbyssID ritual
+   - Open QorID ritual
    - Verify shader reacts to state transitions
    - Test with microphone or background music
 
 **Success Criteria:**
-- Shader effects change during AbyssID ritual
+- Shader effects change during QorID ritual
 - Audio reactivity works with microphone/background music
 - No console errors
 
 ---
 
-### **Step 2: Complete Phase 5 - AbyssID Backend** (2-3 hours)
+### **Step 2: Complete Phase 5 - QorID Backend** (2-3 hours)
 
 **Priority:** HIGH - Core identity functionality
 
@@ -155,12 +155,12 @@
 2. **Update Frontend**
    - Follow `scripts/phase5_frontend_update.md`
    - Replace mock API calls with real endpoints
-   - Create AbyssIDContext
+   - Create QorIDContext
    - Update layout.tsx
 
 3. **Test Flow**
    - Check username availability
-   - Register new AbyssID
+   - Register new QorID
    - Verify identity persists in localStorage
 
 **Success Criteria:**
@@ -194,13 +194,13 @@
 
 1. **Start All Services**
    - Chain: `cargo run --bin demiurge-chain` (or existing start script)
-   - Abyss Gateway: `cd indexer/abyss-gateway && npm start`
-   - AbyssID Backend: `cd apps/abyssid-backend && node src/server.js`
+   - QOR Gateway: `cd indexer/qor-gateway && npm start`
+   - QorID Backend: `cd apps/abyssid-backend && node src/server.js`
    - Portal: `cd apps/portal-web && pnpm dev`
 
 2. **Test Fracture Portal**
    - Navigate to `/haven` (or any Fracture route)
-   - Click "AbyssID" button
+   - Click "QorID" button
    - Complete registration flow
    - Verify audio-reactive shader effects
    - Check identity persists
@@ -216,7 +216,7 @@
 ### **Daily Checklist**
 
 1. **Start with Phase 4** - Complete audio engine implementation
-2. **Move to Phase 5** - Connect AbyssID backend
+2. **Move to Phase 5** - Connect QorID backend
 3. **Test Integration** - Verify everything works together
 4. **Commit Progress** - Small, focused commits per phase
 5. **Update Status** - Document what's done
@@ -230,7 +230,7 @@
 ### **Quick Wins**
 
 1. ✅ **AudioEngine.ts** - Straightforward implementation from guide
-2. ✅ **AbyssIDContext** - Simple React context pattern
+2. ✅ **QorIDContext** - Simple React context pattern
 3. ✅ **API Integration** - Replace mock with fetch calls
 
 ### **Git Workflow**

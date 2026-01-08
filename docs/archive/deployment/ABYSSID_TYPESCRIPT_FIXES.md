@@ -1,4 +1,4 @@
-# AbyssID TypeScript Fixes - Complete
+# QorID TypeScript Fixes - Complete
 
 **Branch:** D1  
 **Date:** 2026-01-03  
@@ -113,12 +113,12 @@ if (mintResult && typeof mintResult === 'object' && mintResult.result !== undefi
 
 ## Files Modified
 
-1. `apps/abyssid-service/src/routes/wallet.ts`
-2. `apps/abyssid-service/src/routes/nftSwap.ts`
-3. `apps/abyssid-service/src/routes/storage.ts`
-4. `apps/abyssid-service/src/routes/archon.ts`
-5. `apps/abyssid-service/src/routes/abyssid.ts`
-6. `apps/abyssid-service/src/crypto/chainSigner.ts`
+1. `apps/qorid-service/src/routes/wallet.ts`
+2. `apps/qorid-service/src/routes/nftSwap.ts`
+3. `apps/qorid-service/src/routes/storage.ts`
+4. `apps/qorid-service/src/routes/archon.ts`
+5. `apps/qorid-service/src/routes/abyssid.ts`
+6. `apps/qorid-service/src/crypto/chainSigner.ts`
 
 ---
 
@@ -132,7 +132,7 @@ if (mintResult && typeof mintResult === 'object' && mintResult.result !== undefi
 
 ## Service Status
 
-**AbyssID Service:**
+**QorID Service:**
 - ✅ Build: Successful
 - ✅ Service: Active (running)
 - ✅ Port: 8082 (bound to 127.0.0.1)
@@ -144,9 +144,9 @@ if (mintResult && typeof mintResult === 'object' && mintResult.result !== undefi
 
 ## Commits
 
-1. `a2e3d48` - Fix: AbyssID TypeScript build errors (router types, ChainUser)
+1. `a2e3d48` - Fix: QorID TypeScript build errors (router types, ChainUser)
 2. `4778870` - Fix: Add .js extensions to ES module imports
-3. `073abef` - Fix: Complete AbyssID TypeScript and ES module fixes
+3. `073abef` - Fix: Complete QorID TypeScript and ES module fixes
 
 ---
 

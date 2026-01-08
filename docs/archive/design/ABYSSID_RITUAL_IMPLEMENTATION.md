@@ -1,7 +1,7 @@
-# AbyssID Ritual Implementation
+# QorID Ritual Implementation
 
 ## Overview
-The AbyssID Ritual is a complete identity initiation system for the Fracture Portal. This is not a login form—it is an initiation sequence that feels alive, inevitable, ancient, and quietly terrifying.
+The QorID Ritual is a complete identity initiation system for the Fracture Portal. This is not a login form—it is an initiation sequence that feels alive, inevitable, ancient, and quietly terrifying.
 
 ## Implementation Status
 ✅ **COMPLETE** - All components implemented and integrated
@@ -22,7 +22,7 @@ The AbyssID Ritual is a complete identity initiation system for the Fracture Por
    - Vignette collapse (binding state)
    - State-reactive parameters
 
-3. **`AbyssIDDialog.tsx`** - Complete ritual UI
+3. **`QorIDDialog.tsx`** - Complete ritual UI
    - All exact copy blocks as specified
    - State-specific animations
    - Key generation integration
@@ -177,8 +177,8 @@ Proceed.
 ## Integration Points
 
 ### Navigation
-- `FractureNav` already uses "AbyssID" terminology
-- AbyssID button opens `AbyssIDDialog`
+- `FractureNav` already uses "QorID" terminology
+- QorID button opens `QorIDDialog`
 
 ### Routing
 - After confirmation, routes to `/haven`

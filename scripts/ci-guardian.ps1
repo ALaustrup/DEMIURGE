@@ -40,7 +40,7 @@ if ($orphaned.Count -gt 0) {
 # Check 3: Runtime Module Registration
 Write-Host "`n[3/7] Verifying runtime module registration..." -ForegroundColor Yellow
 $runtimeMod = Get-Content "chain/src/runtime/mod.rs" -Raw
-$requiredModules = @("bank_cgt", "nft_dgen", "abyss_registry", "fabric_manager", "work_claim")
+$requiredModules = @("bank_cgt", "nft_dgen", "qor_registry_legacy", "fabric_manager", "work_claim")
 $missing = @()
 foreach ($module in $requiredModules) {
     if ($runtimeMod -notmatch "mod $module|pub mod $module") {
@@ -56,7 +56,7 @@ if ($missing) {
 
 # Check 4: Schema Drift
 Write-Host "`n[4/7] Checking schema consistency..." -ForegroundColor Yellow
-$schemas = @("drc369", "abyssid", "fractal1", "wallet")
+$schemas = @("drc369", "qorid", "fractal1", "wallet")
 $missingSchemas = @()
 foreach ($schema in $schemas) {
     if (-not (Test-Path "sdk/schema/$schema.json")) {

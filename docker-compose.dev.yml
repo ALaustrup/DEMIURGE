@@ -19,17 +19,17 @@ services:
       - demiurge-network
     restart: unless-stopped
 
-  # AbyssID Service
-  abyssid-service:
+  # QorID Service
+  qorid-service:
     build:
       context: .
-      dockerfile: docker/AbyssIDService.Dockerfile
-    container_name: abyssid-service
+      dockerfile: docker/QorIDService.Dockerfile
+    container_name: qorid-service
     ports:
       - "8082:8082"
     volumes:
-      - ./apps/abyssid-service/data:/app/data
-      - ./apps/abyssid-service/data/user-storage:/app/data/user-storage
+      - ./apps/qorid-service/data:/app/data
+      - ./apps/qorid-service/data/user-storage:/app/data/user-storage
     environment:
       - PORT=8082
       - DEMIURGE_RPC_URL=http://demiurge-chain:8080/rpc
@@ -41,23 +41,23 @@ services:
       - demiurge-network
     restart: unless-stopped
 
-  # AbyssOS Portal (Frontend)
-  abyssos-portal:
+  # QLOUD OS (Frontend)
+  qloud-os:
     build:
       context: .
-      dockerfile: docker/AbyssOSPortal.Dockerfile
-    container_name: abyssos-portal
+      dockerfile: docker/QOR OSPortal.Dockerfile
+    container_name: qloud-os
     ports:
       - "5173:5173"
     volumes:
-      - ./apps/abyssos-portal:/app
+      - ./apps/qloud-os:/app
       - /app/node_modules
     environment:
       - VITE_DEMIURGE_RPC_URL=http://localhost:8080/rpc
-      - VITE_ABYSSID_API_URL=http://localhost:8082
-      - VITE_ABYSSID_MODE=remote
+      - VITE_QORID_API_URL=http://localhost:8082
+      - VITE_QORID_MODE=remote
     depends_on:
-      - abyssid-service
+      - qorid-service
     networks:
       - demiurge-network
     restart: unless-stopped

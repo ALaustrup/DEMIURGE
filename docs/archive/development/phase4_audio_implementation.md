@@ -290,12 +290,12 @@ export function useBackgroundMusic() {
 
 ## Integration Steps
 
-1. **Update AbyssIDDialog** to pass state to ShaderPlane:
+1. **Update QorIDDialog** to pass state to ShaderPlane:
    ```typescript
    <ShaderPlane mode={state} />
    ```
 
-2. **Add Audio Toggle** to FractureShell or AbyssIDDialog
+2. **Add Audio Toggle** to FractureShell or QorIDDialog
 
-3. **Test**: Open AbyssID ritual and verify audio-reactive effects change with state transitions
+3. **Test**: Open QorID ritual and verify audio-reactive effects change with state transitions
 

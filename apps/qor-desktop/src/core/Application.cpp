@@ -5,7 +5,7 @@
 #include "Application.h"
 #include "../storage/LocalDatabase.h"
 #include "../storage/SecureVault.h"
-#include "../AbyssIDManager.h"
+#include "../QorIDManager.h"
 #include "../WalletBridge.h"
 #include "../wallet/WalletManager.h"
 #include "../chain/ChainClient.h"
@@ -175,10 +175,10 @@ bool Application::initIdentity()
 {
     qInfo() << "Initializing identity system...";
     
-    // Create AbyssID manager
-    m_abyssId = QSharedPointer<AbyssIDManager>::create();
+    // Create QorID manager
+    m_abyssId = QSharedPointer<QorIDManager>::create();
     
-    // AbyssID will load credentials from keychain automatically
+    // QorID will load credentials from keychain automatically
     // via loadFromKeychain() in its constructor if available
     
     // Create wallet manager
@@ -225,9 +225,9 @@ void Application::connectSignals()
         }
     });
     
-    // AbyssID changes trigger wallet refresh
+    // QorID changes trigger wallet refresh
     if (m_abyssId && m_wallet) {
-        connect(m_abyssId.data(), &AbyssIDManager::authChanged, [this]() {
+        connect(m_abyssId.data(), &QorIDManager::authChanged, [this]() {
             if (m_abyssId->isAuthenticated()) {
                 m_wallet->refresh();
             }

@@ -25,7 +25,7 @@ The Demiurge blockchain system **is ready** for bare metal deployment on Ubuntu 
    - RocksDB database: Production-ready persistent storage
    - RPC API: 40+ methods operational
 
-2. **AbyssOS Portal** - ✅ Live
+2. **QLOUD OS** - ✅ Live
    - Next.js application
    - SSL certificates (Let's Encrypt)
    - Auto-renewal enabled
@@ -53,7 +53,7 @@ The Demiurge blockchain system **is ready** for bare metal deployment on Ubuntu 
 2. **Systemd Service Files** (`deploy/systemd/`)
    - `demiurge-chain.service` - Chain node service
    - `abyssid.service` - Identity service
-   - `abyss-gateway.service` - GraphQL gateway
+   - `qor-gateway.service` - GraphQL gateway
    - `dns-service.service` - DNS resolution
    - All services configured with:
      - Auto-restart on failure
@@ -161,10 +161,10 @@ sudo systemctl reload nginx
 
 ```bash
 # Enable services (auto-start on boot)
-sudo systemctl enable demiurge-chain abyssid dns-service abyss-gateway
+sudo systemctl enable demiurge-chain abyssid dns-service qor-gateway
 
 # Start services
-sudo systemctl start demiurge-chain abyssid dns-service abyss-gateway
+sudo systemctl start demiurge-chain abyssid dns-service qor-gateway
 
 # Verify status
 sudo systemctl status demiurge-chain
@@ -206,7 +206,7 @@ All modules are production-ready:
 2. ✅ `urgeid_registry` - Identity system
 3. ✅ `nft_dgen` - NFT standard
 4. ✅ `fabric_manager` - P2P asset management
-5. ✅ `abyss_registry` - Marketplace
+5. ✅ `qor_registry_legacy` - Marketplace
 6. ✅ `developer_registry` - Developer profiles
 7. ✅ `dev_capsules` - Development capsules
 8. ✅ `recursion_registry` - World management

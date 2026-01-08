@@ -10,7 +10,7 @@ export function CreatorsDoc() {
         </p>
         <div className="p-4 bg-black/20 border border-white/10 rounded-lg">
           <p className="text-xs text-zinc-300">
-            <strong className="text-zinc-100">Archon Status:</strong> Set on-chain via genesis or special transaction. Archons have all AbyssID abilities plus creator features.
+            <strong className="text-zinc-100">Archon Status:</strong> Set on-chain via genesis or special transaction. Archons have all QorID abilities plus creator features.
           </p>
         </div>
       </div>

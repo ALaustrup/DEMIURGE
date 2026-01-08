@@ -1,7 +1,7 @@
 /**
  * Ritual Engine Types
  * 
- * Defines the structure for AbyssID rituals, phases, events, and effects.
+ * Defines the structure for QorID rituals, phases, events, and effects.
  */
 
 export type RitualPhase = 

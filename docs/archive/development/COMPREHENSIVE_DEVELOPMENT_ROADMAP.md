@@ -14,7 +14,7 @@ This document outlines the complete development plan to finish all on-chain appl
 
 ## Phase 1: On-Chain Application Completion
 
-### 1.1 Wallet Application (`AbyssWalletApp`)
+### 1.1 Wallet Application (`QorWalletApp`)
 
 **Current State**: Basic UI exists, needs full functionality
 
@@ -322,7 +322,7 @@ This document outlines the complete development plan to finish all on-chain appl
 
 **Features**:
 - All blockchain operations
-- AbyssOS management
+- QOR OS management
 - Developer tools
 - Documentation system
 - Lore/ebook integration

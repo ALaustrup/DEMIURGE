@@ -92,7 +92,7 @@ tx:{hash} → Transaction
   - Asset registration
   - Fee pool management
 
-#### **Abyss Registry** (`chain/src/runtime/abyss_registry.rs`)
+#### **Abyss Registry** (`chain/src/runtime/qor_registry_legacy.rs`)
 - **Purpose**: NFT marketplace
 - **Features**:
   - Listing creation
@@ -146,9 +146,9 @@ tx:{hash} → Transaction
 - `cgt_devUnsafeTransfer` - Unsafe transfer (no signature)
 - `cgt_devFaucet` - Get free CGT for testing
 
-### 3.3 Abyss Gateway (GraphQL API)
+### 3.3 QOR Gateway (GraphQL API)
 
-**Location**: `indexer/abyss-gateway/`
+**Location**: `indexer/qor-gateway/`
 
 **Purpose**: GraphQL API for chat and social features
 
@@ -434,7 +434,7 @@ tx:{hash} → Transaction
         │                     │                       │
         ▼                     ▼                       ▼
 ┌──────────────┐      ┌──────────────┐      ┌──────────────┐
-│ Chain Node   │      │ Abyss Gateway│      │ Portal Web   │
+│ Chain Node   │      │ QOR Gateway│      │ Portal Web   │
 │ (Rust)       │      │ (Node.js)    │      │ (Next.js)    │
 │              │      │              │      │              │
 │ Port: 8545   │      │ Port: 4000   │      │ Port: 3000   │
@@ -465,7 +465,7 @@ User (Portal) → RPC Call → Chain Node → NFT Module → State Storage
 ### Data Flow: Chat Message
 
 ```
-User (Portal) → GraphQL Mutation → Abyss Gateway → SQLite DB
+User (Portal) → GraphQL Mutation → QOR Gateway → SQLite DB
                 ↓
          Polling Query (2s)
                 ↓
@@ -508,7 +508,7 @@ chain/
 │       ├── urgeid_registry.rs # Identity
 │       ├── nft_dgen.rs      # NFTs
 │       ├── fabric_manager.rs # Fabric
-│       └── abyss_registry.rs # Marketplace
+│       └── qor_registry_legacy.rs # Marketplace
 └── Cargo.toml
 ```
 
@@ -560,9 +560,9 @@ apps/portal-web/
 └── package.json
 ```
 
-### Abyss Gateway (`indexer/abyss-gateway/`)
+### QOR Gateway (`indexer/qor-gateway/`)
 ```
-indexer/abyss-gateway/
+indexer/qor-gateway/
 ├── src/
 │   ├── index.ts            # Entry point
 │   ├── server.ts           # Express server
@@ -673,7 +673,7 @@ indexer/abyss-gateway/
 - **react-qr-code**: QR code generation
 - **@noble/ed25519**: Ed25519 signing
 
-### Abyss Gateway Dependencies
+### QOR Gateway Dependencies
 - **Node.js**: Latest LTS
 - **Express**: HTTP server
 - **GraphQL**: Apollo Server
@@ -687,12 +687,12 @@ indexer/abyss-gateway/
 - Endpoint: `http://127.0.0.1:8545/rpc`
 - All operations via RPC methods
 
-**Abyss Gateway ↔ Portal**:
+**QOR Gateway ↔ Portal**:
 - GraphQL over HTTP
 - Endpoint: `http://localhost:4000/graphql`
 - Chat and social features
 
-**Chain ↔ Abyss Gateway**:
+**Chain ↔ QOR Gateway**:
 - Currently independent
 - Future: Chain events → Gateway indexing
 
@@ -737,8 +737,8 @@ indexer/abyss-gateway/
 # Terminal 1: Chain
 cargo run -p demiurge-chain
 
-# Terminal 2: Abyss Gateway
-cd indexer/abyss-gateway
+# Terminal 2: QOR Gateway
+cd indexer/qor-gateway
 pnpm dev
 
 # Terminal 3: Portal
@@ -768,7 +768,7 @@ See `TESTING_PHASE3_CHAT.md` for comprehensive testing guide.
 - Core runtime (CGT, UrgeID, NFTs, Marketplace)
 - Chat system (World, DMs, Archons, Custom Rooms)
 - Portal UI (All major pages)
-- GraphQL API (Abyss Gateway)
+- GraphQL API (QOR Gateway)
 - JSON-RPC API (Chain Node)
 - State persistence (RocksDB, SQLite)
 - Authentication (Ed25519)

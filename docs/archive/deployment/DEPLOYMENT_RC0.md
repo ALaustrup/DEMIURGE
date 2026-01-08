@@ -7,7 +7,7 @@
 
 ## Overview
 
-This guide covers deploying the Fracture Portal with Docker Compose for Release Candidate 0. The deployment includes the portal web app and Abyss Gateway (GraphQL API + SQLite).
+This guide covers deploying the Fracture Portal with Docker Compose for Release Candidate 0. The deployment includes the portal web app and QOR Gateway (GraphQL API + SQLite).
 
 ---
 
@@ -184,9 +184,9 @@ CURRENT_USER_ROLE=ARCHITECT
 | `NEXT_PUBLIC_CURRENT_USER_ID` | `default` | Current operator ID |
 | `NEXT_PUBLIC_CURRENT_USER_ROLE` | `OBSERVER` | Current operator role |
 | `NEXT_PUBLIC_CURRENT_USER_NAME` | `Observer` | Current operator display name |
-| `NEXT_PUBLIC_GRAPHQL_ENDPOINT` | `http://abyss-gateway:4000/graphql` | GraphQL API endpoint |
+| `NEXT_PUBLIC_GRAPHQL_ENDPOINT` | `http://qor-gateway:4000/graphql` | GraphQL API endpoint |
 
-### Abyss Gateway
+### QOR Gateway
 
 | Variable | Default | Description |
 |----------|---------|-------------|
@@ -215,10 +215,10 @@ NEXT_PUBLIC_CURRENT_USER_ROLE=OPERATOR
 NEXT_PUBLIC_GRAPHQL_ENDPOINT=http://localhost:4000/graphql
 ```
 
-### Abyss Gateway
+### QOR Gateway
 
 ```bash
-cd indexer/abyss-gateway
+cd indexer/qor-gateway
 npm install
 npm run dev
 ```
@@ -235,12 +235,12 @@ SNAPSHOT_INTERVAL_MS=300000
 ## Data Persistence
 
 SQLite database is stored in:
-- **Docker:** `./indexer/abyss-gateway/data/chat.db`
-- **Local:** `indexer/abyss-gateway/data/chat.db`
+- **Docker:** `./indexer/qor-gateway/data/chat.db`
+- **Local:** `indexer/qor-gateway/data/chat.db`
 
 **Backup:**
 ```bash
-cp indexer/abyss-gateway/data/chat.db backup/chat-$(date +%Y%m%d).db
+cp indexer/qor-gateway/data/chat.db backup/chat-$(date +%Y%m%d).db
 ```
 
 ---
@@ -255,8 +255,8 @@ cp indexer/abyss-gateway/data/chat.db backup/chat-$(date +%Y%m%d).db
 
 ### GraphQL errors
 
-1. Verify Abyss Gateway is running: `docker-compose logs abyss-gateway`
-2. Check database is initialized: `ls indexer/abyss-gateway/data/chat.db`
+1. Verify QOR Gateway is running: `docker-compose logs qor-gateway`
+2. Check database is initialized: `ls indexer/qor-gateway/data/chat.db`
 3. Verify GraphQL endpoint in portal config
 
 ### Fabric data not loading

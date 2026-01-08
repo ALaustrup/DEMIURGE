@@ -48,7 +48,7 @@ fn developer_project_key(project_slug: &str) -> Vec<u8> {
     key
 }
 
-/// Register a developer (requires AbyssID username).
+/// Register a developer (requires QorID username).
 pub fn register_developer(
     address: Address,
     username: String,

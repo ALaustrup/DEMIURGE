@@ -22,7 +22,7 @@ struct SharedSession {
     uint8_t  authenticated;   // Is user authenticated
     char     token[256];      // Session token
     char     username[64];    // Username
-    char     abyssId[64];     // AbyssID address
+    char     abyssId[64];     // QorID address
     int64_t  timestamp;       // Last update timestamp
     uint32_t checksum;        // CRC32 of data
 };

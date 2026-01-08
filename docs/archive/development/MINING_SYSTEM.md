@@ -21,7 +21,7 @@ The Demiurge mining system provides a comprehensive CLI-based mining interface a
 - CGT minting
 - On-chain validation
 
-**OS Operations** (AbyssOS):
+**OS Operations** (QOR OS):
 - Mining UI
 - Statistics display
 - Account management
@@ -191,7 +191,7 @@ fn calculate_reward(depth_metric: f64, active_ms: u64) -> u128 {
 
 ### Implementation
 
-**File**: `apps/abyssos-portal/src/components/desktop/apps/MiningAccountingApp.tsx`
+**File**: `apps/qloud-os/src/components/desktop/apps/MiningAccountingApp.tsx`
 
 **Features**:
 - Adjustment request form
@@ -215,7 +215,7 @@ fn calculate_reward(depth_metric: f64, active_ms: u64) -> u128 {
 - **Storage**: Local SQLite database
 - **RPC**: Direct connection to chain
 
-### AbyssOS Integration
+### QOR OS Integration
 
 - **App**: `MiningAccountingApp`
 - **Data Source**: Local storage + RPC

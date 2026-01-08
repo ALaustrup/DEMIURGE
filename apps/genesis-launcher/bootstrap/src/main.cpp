@@ -3,7 +3,7 @@
  * 
  * A lightweight executable (~10MB) that:
  * 1. Displays a sleek "seed" window
- * 2. Downloads the Genesis Launcher
+ * 2. Downloads the DEMIURGE QOR
  * 3. Launches the full launcher
  * 4. Exits
  */
@@ -28,9 +28,9 @@ int main(int argc, char *argv[])
     QDir().mkpath(appDataPath);
     
 #ifdef Q_OS_WIN
-    QString launcherPath = appDataPath + "/GenesisLauncher.exe";
+    QString launcherPath = appDataPath + "/DemiurgeQor.exe";
 #else
-    QString launcherPath = appDataPath + "/GenesisLauncher";
+    QString launcherPath = appDataPath + "/DemiurgeQor";
 #endif
     
     // Create and show the seed window
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     }
     
     // Download launcher
-    window.setStatus("Downloading Genesis Launcher...");
+    window.setStatus("Downloading DEMIURGE QOR...");
     
     Downloader downloader;
     

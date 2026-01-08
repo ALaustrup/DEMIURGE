@@ -41,7 +41,7 @@
 
 ### Frontend Applications
 
-#### AbyssOS Portal (Production)
+#### QLOUD OS (Production)
 - **Framework**: React 18.3.1
 - **Language**: TypeScript 5.5.3
 - **Build Tool**: Vite 5.4.21
@@ -58,7 +58,7 @@
 
 ### Backend Services
 
-#### AbyssID Service
+#### QorID Service
 - **Runtime**: Node.js 20+
 - **Framework**: Express
 - **Database**: SQLite
@@ -71,7 +71,7 @@
 - **Database**: SQLite
 - **DNS**: Unbound integration
 
-#### Abyss Gateway (GraphQL)
+#### QOR Gateway (GraphQL)
 - **Runtime**: Node.js 20+
 - **Framework**: GraphQL
 - **Purpose**: Block indexing and GraphQL API
@@ -118,7 +118,7 @@ DEMIURGE/
 │   │   │   ├── bank_cgt.rs        # CGT token operations
 │   │   │   ├── urgeid_registry.rs # Identity system
 │   │   │   ├── nft_dgen.rs        # D-GEN NFT standard
-│   │   │   ├── abyss_registry.rs  # Marketplace
+│   │   │   ├── qor_registry_legacy.rs  # Marketplace
 │   │   │   ├── fabric_manager.rs  # P2P network management
 │   │   │   ├── developer_registry.rs # Developer profiles
 │   │   │   ├── dev_capsules.rs    # Development capsules
@@ -133,19 +133,19 @@ DEMIURGE/
 │       └── node.devnet.toml        # Devnet configuration
 │
 ├── apps/
-│   ├── abyssos-portal/            # ⭐ Production desktop environment
+│   ├── qloud-os/            # ⭐ Production desktop environment
 │   │   ├── package.json
 │   │   ├── vite.config.ts
 │   │   └── src/                   # React components, stores, services
 │   ├── portal-web/                # Legacy Next.js portal
-│   ├── abyssid-service/           # Identity backend service
-│   ├── abyssid-backend/           # AbyssID backend
+│   ├── qorid-service/           # Identity backend service
+│   ├── abyssid-backend/           # QorID backend
 │   ├── dns-service/               # DNS resolution service
 │   ├── desktop/                   # QML desktop app
 │   └── desktop-qt/                # Qt Widgets desktop app
 │
 ├── indexer/
-│   ├── abyss-gateway/             # GraphQL gateway + block indexer
+│   ├── qor-gateway/             # GraphQL gateway + block indexer
 │   │   ├── package.json
 │   │   └── src/                   # GraphQL schema, resolvers, indexing
 │   └── ingestor-rs/               # Rust block ingestor
@@ -159,7 +159,7 @@ DEMIURGE/
 │   ├── ts-sdk/                    # TypeScript SDK
 │   │   ├── package.json
 │   │   └── src/                   # Client, types, signing, modules
-│   └── schema/                    # JSON schemas (AbyssID, DRC-369, etc.)
+│   └── schema/                    # JSON schemas (QorID, DRC-369, etc.)
 │
 ├── cli/                           # Command-line tools
 │   ├── Cargo.toml
@@ -305,7 +305,7 @@ pub trait RuntimeModule: Send + Sync {
    - **Calls**: `register_fabric_asset`, `reward_seeder`
    - **Purpose**: P2P content-addressed network management
 
-5. **AbyssRegistryModule** (`abyss_registry`)
+5. **AbyssRegistryModule** (`qor_registry_legacy`)
    - **Functions**: `get_listing`, `get_all_active_listings`
    - **Calls**: `create_listing`, `cancel_listing`, `buy_listing`
    - **Purpose**: NFT marketplace and listings
@@ -549,7 +549,7 @@ cargo run -p demiurge-chain    # Run chain node
 
 **Packages**:
 - `apps/*` - All apps
-- `indexer/abyss-gateway` - GraphQL gateway
+- `indexer/qor-gateway` - GraphQL gateway
 - `sdk/ts-sdk` - TypeScript SDK
 
 **Build Commands**:
@@ -597,14 +597,14 @@ cargo run --release -p demiurge-chain
 
 **Starts**:
 1. Demiurge Chain (RPC on :8545)
-2. Abyss Gateway (GraphQL on :4000)
+2. QOR Gateway (GraphQL on :4000)
 3. Portal Web (Next.js on :3000)
 
 ### Development Mode
 
-**AbyssOS Portal**:
+**QLOUD OS**:
 ```bash
-cd apps/abyssos-portal
+cd apps/qloud-os
 pnpm install
 pnpm dev  # Vite dev server
 ```
@@ -725,7 +725,7 @@ pnpm test                      # Run all tests
 - `toml` - TOML parsing
 - `rand` - Random number generation
 
-### TypeScript (apps/abyssos-portal/package.json)
+### TypeScript (apps/qloud-os/package.json)
 
 **Core**:
 - `react` ^18.3.1
@@ -874,9 +874,9 @@ mod tests {
 - **Database**: `/opt/demiurge/.demiurge/data`
 - **RPC**: `https://rpc.demiurge.cloud/rpc` (HTTPS, CORS)
 
-### AbyssOS Portal
+### QLOUD OS
 - **URL**: `https://demiurge.cloud`
-- **Path**: `/var/www/abyssos-portal`
+- **Path**: `/var/www/qloud-os`
 - **SSL**: Let's Encrypt (auto-renewal)
 
 ### Nginx Configuration

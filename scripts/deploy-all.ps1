@@ -215,5 +215,5 @@ Write-Host "`n📋 Next Steps:" -ForegroundColor Yellow
 Write-Host "   1. Monitor logs: ssh -i $SshKey $Server 'sudo journalctl -u demiurge-node0 -f'" -ForegroundColor White
 Write-Host "   2. Check Archon: Look for [ARCHON_EVENT] messages" -ForegroundColor White
 Write-Host "   3. Test RPC: curl -X POST http://localhost:8545/rpc -d '{\"jsonrpc\":\"2.0\",\"method\":\"archon_state\",\"params\":[],\"id\":1}'" -ForegroundColor White
-Write-Host "   4. Verify AbyssOS: Open Archon Panel in portal" -ForegroundColor White
+Write-Host "   4. Verify QOR OS: Open Archon Panel in portal" -ForegroundColor White
 Write-Host ""

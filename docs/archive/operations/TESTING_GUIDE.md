@@ -1,8 +1,8 @@
-# Testing Guide - AbyssID Registration Flow
+# Testing Guide - QorID Registration Flow
 
 ## Complete End-to-End Testing
 
-This guide walks through testing the full AbyssID registration flow from start to finish.
+This guide walks through testing the full QorID registration flow from start to finish.
 
 ---
 
@@ -10,7 +10,7 @@ This guide walks through testing the full AbyssID registration flow from start t
 
 ### **1. Start Backend Services**
 
-#### **AbyssID Backend**
+#### **QorID Backend**
 ```bash
 cd apps/abyssid-backend
 npm install  # If not already done
@@ -20,7 +20,7 @@ node src/server.js
 
 **Expected Output:**
 ```
-AbyssID Backend running on port 3001
+QorID Backend running on port 3001
 Database: ./data/abyssid.db
 ```
 
@@ -52,8 +52,8 @@ pnpm dev
 #### **Steps:**
 1. Open browser to `http://localhost:3000`
 2. Navigate to any Fracture route (e.g., `/haven`)
-3. Click "AbyssID" button in navigation
-4. **Verify:** AbyssIDDialog opens with "THE ABYSS DOES NOT ASK" message
+3. Click "QorID" button in navigation
+4. **Verify:** QorIDDialog opens with "THE ABYSS DOES NOT ASK" message
 5. Enter username: `testuser123`
 6. Click "Engage"
 7. **Verify:** 
@@ -92,7 +92,7 @@ pnpm dev
 #### **Verify Backend:**
 ```bash
 # Check registered identity
-curl http://localhost:3001/api/abyssid/testuser123
+curl http://localhost:3001/api/qorid/testuser123
 
 # Expected response:
 # {
@@ -108,7 +108,7 @@ curl http://localhost:3001/api/abyssid/testuser123
 
 #### **Steps:**
 1. Register `testuser123` (from Test 1)
-2. Open AbyssIDDialog again
+2. Open QorIDDialog again
 3. Enter username: `testuser123`
 4. Click "Engage"
 5. **Verify:**
@@ -128,7 +128,7 @@ curl http://localhost:3001/api/abyssid/testuser123
 ### **Test 3: Username Too Short**
 
 #### **Steps:**
-1. Open AbyssIDDialog
+1. Open QorIDDialog
 2. Enter username: `ab` (2 characters)
 3. Click "Engage"
 4. **Verify:**
@@ -146,8 +146,8 @@ curl http://localhost:3001/api/abyssid/testuser123
 ### **Test 4: Backend Unavailable**
 
 #### **Steps:**
-1. Stop AbyssID backend (`Ctrl+C` or kill process)
-2. Open AbyssIDDialog
+1. Stop QorID backend (`Ctrl+C` or kill process)
+2. Open QorIDDialog
 3. Enter username: `testuser456`
 4. Click "Engage"
 5. **Verify:**
@@ -187,8 +187,8 @@ curl http://localhost:3001/api/abyssid/testuser123
 2. Click logout button (red icon in top-right of identity card)
 3. **Verify:**
    - Identity card disappears
-   - "No AbyssID Found" message appears
-   - "Create AbyssID" button shown
+   - "No QorID Found" message appears
+   - "Create QorID" button shown
    - localStorage cleared
 
 #### **Expected Results:**
@@ -204,7 +204,7 @@ curl http://localhost:3001/api/abyssid/testuser123
 - Microphone access or background music available
 
 #### **Steps:**
-1. Open AbyssIDDialog
+1. Open QorIDDialog
 2. Grant microphone access (if prompted)
 3. **Verify:**
    - Shader effects react to audio input
@@ -249,7 +249,7 @@ sqlite3 data/abyssid.db "SELECT * FROM abyssid_identities;"
 
 #### **"Failed to check username availability"**
 - **Cause:** Backend not running or wrong URL
-- **Fix:** Start backend, check `NEXT_PUBLIC_ABYSSID_API_URL`
+- **Fix:** Start backend, check `NEXT_PUBLIC_QORID_API_URL`
 
 #### **"Username already taken" (but it's new)**
 - **Cause:** Database not cleared, or previous test data

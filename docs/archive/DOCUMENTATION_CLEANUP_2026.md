@@ -83,8 +83,8 @@ docs/
 │   └── WORK_CLAIM.md          # Work claim API
 │
 ├── apps/                       # Application documentation
-│   ├── ABYSSOS_PORTAL.md
-│   └── ABYSSOS_COMPLETE_OVERVIEW.md
+│   ├── QLOUD_OS_PORTAL.md
+│   └── QLOUD_OS_COMPLETE_OVERVIEW.md
 │
 ├── development/                # Development guides
 │   ├── CRAFT_OVERVIEW.md      # CRAFT IDE documentation
@@ -118,7 +118,7 @@ docs/
 │   └── [operations docs]
 │
 └── lore/                       # Lore documentation
-    ├── ABYSSOS_LORE.md
+    ├── QLOUD_OS_LORE.md
     └── [lore docs]
 ```
 
@@ -135,13 +135,13 @@ docs/
 ### CRAFT IDE
 
 - **Name**: CRAFT (Creator's Advanced Framework & Tools)
-- **Location**: `apps/abyssos-portal/src/components/desktop/apps/CraftApp.tsx`
+- **Location**: `apps/qloud-os/src/components/desktop/apps/CraftApp.tsx`
 - **Features**: Monaco Editor, ArchonAI integration, Templates, Drag-and-drop, GitHub integration, Rig system
 
 ### Runtime Modules
 
 - **Total**: 9 modules
-- **Order**: bank_cgt, urgeid_registry, nft_dgen, fabric_manager, abyss_registry, developer_registry, dev_capsules, recursion_registry, work_claim
+- **Order**: bank_cgt, urgeid_registry, nft_dgen, fabric_manager, qor_registry_legacy, developer_registry, dev_capsules, recursion_registry, work_claim
 
 ---
 

@@ -2,11 +2,11 @@
  * QØЯ - Demiurge Blockchain Desktop Client
  * 
  * The complete native desktop environment for the Demiurge ecosystem.
- * Provides full chain access, AbyssOS GUI, and native performance.
+ * Provides full chain access, QOR OS GUI, and native performance.
  * 
  * QØЯ (pronounced "core") represents the heart of Demiurge - 
  * a desktop client that facilitates all blockchain operations while
- * providing the Abyss OS graphical environment.
+ * providing the QOR OS graphical environment.
  */
 
 #include <QApplication>

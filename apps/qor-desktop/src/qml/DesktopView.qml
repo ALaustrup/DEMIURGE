@@ -23,7 +23,7 @@ Item {
     /** Whether edit mode is active */
     property bool editMode: false
     
-    /** Connected AbyssID */
+    /** Connected QorID */
     property string abyssId: ""
     
     /** Premium tier */
@@ -304,9 +304,9 @@ Item {
      */
     function getAppTitle(appId) {
         switch (appId) {
-            case "wallet": return "Abyss Wallet"
+            case "wallet": return "QOR Wallet"
             case "mining": return "Mining Dashboard"
-            case "explorer": return "Abyss Explorer"
+            case "explorer": return "QOR Explorer"
             case "neon": return "NEON Player"
             case "wryt": return "WRYT Editor"
             case "files": return "Files"

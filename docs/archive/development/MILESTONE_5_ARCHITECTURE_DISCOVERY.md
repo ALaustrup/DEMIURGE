@@ -12,7 +12,7 @@
 - **Framework:** Next.js 15+ with App Router
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS + Framer Motion
-- **State Management:** React Context API (AbyssIDProvider, AudioContextProvider)
+- **State Management:** React Context API (QorIDProvider, AudioContextProvider)
 
 ### Key Directories
 - `apps/portal-web/src/app/` - Page routes
@@ -21,19 +21,19 @@
 - `apps/portal-web/src/lib/fracture/` - Fracture-specific modules
 
 ### Existing Providers
-- `AbyssIDProvider` - Identity management (localStorage persistence)
+- `QorIDProvider` - Identity management (localStorage persistence)
 - `AudioContextProvider` - Audio engine and reactivity
 
 ### Key Components
 - `ShaderPlane.tsx` - WebGL/GLSL fragment shader (upgraded)
 - `FabricTopology.tsx` - Network visualization (Canvas-based)
-- `AbyssIDDialog.tsx` - Identity ritual UI
+- `QorIDDialog.tsx` - Identity ritual UI
 - `AbyssStateMachine.ts` - Ritual state management (currently simple)
 
 ### Integration Points
-- GraphQL client: `lib/graphql.ts` → Abyss Gateway (port 4000)
+- GraphQL client: `lib/graphql.ts` → QOR Gateway (port 4000)
 - RPC client: `lib/rpc.ts` → Chain Node (port 8545)
-- AbyssID API: Direct fetch → AbyssID Backend (port 3001)
+- QorID API: Direct fetch → QorID Backend (port 3001)
 
 ---
 
@@ -41,18 +41,18 @@
 
 ### Services
 
-#### 1. AbyssID Backend (`apps/abyssid-backend/`)
+#### 1. QorID Backend (`apps/abyssid-backend/`)
 - **Stack:** Express.js + SQLite
 - **Port:** 3001
 - **Database:** `data/abyssid.db`
 - **Endpoints:**
-  - `POST /api/abyssid/check` - Username availability
-  - `POST /api/abyssid/register` - Register identity
-  - `GET /api/abyssid/:username` - Get by username
-  - `GET /api/abyssid/by-address/:address` - Get by address
+  - `POST /api/qorid/check` - Username availability
+  - `POST /api/qorid/register` - Register identity
+  - `GET /api/qorid/:username` - Get by username
+  - `GET /api/qorid/by-address/:address` - Get by address
   - `GET /health` - Health check
 
-#### 2. Abyss Gateway (`indexer/abyss-gateway/`)
+#### 2. QOR Gateway (`indexer/qor-gateway/`)
 - **Stack:** GraphQL Yoga + SQLite
 - **Port:** 4000
 - **Database:** `data/chat.db`
@@ -89,18 +89,18 @@
    - `AbyssStateMachine.ts` - Formalize as Ritual Engine
 
 #### Backend
-1. **Extend Abyss Gateway:**
+1. **Extend QOR Gateway:**
    - Add GraphQL types for Events, Snapshots, Rituals
    - Add queries/mutations for timeline and ArchonAI
    - Extend SQLite schema
 
-2. **Extend AbyssID Backend:**
+2. **Extend QorID Backend:**
    - Add REST endpoints for events/snapshots (or use GraphQL)
    - Add ArchonAI context aggregation service
 
 3. **New Services (Optional):**
    - Separate service for event/snapshot persistence (if needed)
-   - Or integrate into existing Abyss Gateway
+   - Or integrate into existing QOR Gateway
 
 ---
 
@@ -109,9 +109,9 @@
 ### Current Flow
 1. User interacts with Portal → React components
 2. Components call `lib/graphql.ts` or `lib/rpc.ts`
-3. GraphQL → Abyss Gateway (port 4000)
+3. GraphQL → QOR Gateway (port 4000)
 4. RPC → Chain Node (port 8545)
-5. Direct fetch → AbyssID Backend (port 3001)
+5. Direct fetch → QorID Backend (port 3001)
 
 ### New Flow (Milestone 5)
 1. **Ritual Engine:**

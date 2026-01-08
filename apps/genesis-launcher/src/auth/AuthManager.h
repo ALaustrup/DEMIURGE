@@ -1,5 +1,5 @@
 /**
- * AuthManager - AbyssID Authentication
+ * AuthManager - QorID Authentication
  * 
  * Handles login, signup, session management, and credential verification.
  * Supports offline account creation with automatic sync when online.
@@ -47,7 +47,7 @@ public:
 
 public slots:
     /**
-     * Login with AbyssID credentials
+     * Login with QorID credentials
      */
     Q_INVOKABLE void login(const QString &username, const QString &password);
     
@@ -72,7 +72,7 @@ public slots:
     Q_INVOKABLE void checkUsernameAvailability(const QString &username);
     
     /**
-     * Create a new AbyssID account
+     * Create a new QorID account
      * Works offline - will sync when connection is available
      */
     Q_INVOKABLE void createAccount(const QString &username);

@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 import { motion } from "framer-motion";
 import { useReactiveMotion } from "@/lib/fracture/motion/useReactiveMotion";
 import { useState } from "react";
-import { AbyssIDDialog } from "./AbyssIDDialog";
+import { QorIDDialog } from "./QorIDDialog";
 import Link from "next/link";
 
 interface HeroPanelProps {
@@ -21,7 +21,7 @@ export function HeroPanel({
   showCTAs = false 
 }: HeroPanelProps) {
   const { panelJitter, glyphPulse } = useReactiveMotion();
-  const [showAbyssID, setShowAbyssID] = useState(false);
+  const [showQorID, setShowQorID] = useState(false);
 
   // Default dark subtitle if not provided
   const defaultSubtitle = "Demiuge Blockchain";
@@ -68,7 +68,7 @@ export function HeroPanel({
         {showCTAs && (
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
             <button
-              onClick={() => setShowAbyssID(true)}
+              onClick={() => setShowQorID(true)}
               className="px-8 py-3 bg-white/5 border border-cyan-500/30 text-cyan-300 font-bold-display rounded-lg hover:bg-cyan-500/10 hover:border-cyan-500/50 transition-all duration-300 hover:scale-105 text-sm tracking-wider"
               style={{
                 boxShadow: "0 0 20px rgba(6, 182, 212, 0.2)",
@@ -99,11 +99,11 @@ export function HeroPanel({
         )}
       </motion.div>
 
-      {/* AbyssID Dialog */}
-      {showAbyssID && (
-        <AbyssIDDialog
-          open={showAbyssID}
-          onClose={() => setShowAbyssID(false)}
+      {/* QorID Dialog */}
+      {showQorID && (
+        <QorIDDialog
+          open={showQorID}
+          onClose={() => setShowQorID(false)}
         />
       )}
     </>

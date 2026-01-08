@@ -4,7 +4,7 @@ import { FractureShell } from "@/components/fracture/FractureShell";
 import { HeroPanel } from "@/components/fracture/HeroPanel";
 import Link from "next/link";
 import { Code, FolderKanban, BookOpen, Sparkles, Award, AlertCircle, Plus, Crown, TrendingUp, Calendar, ArrowRight, BarChart3 } from "lucide-react";
-import { useAbyssID } from "@/lib/fracture/identity/AbyssIDContext";
+import { useQorID } from "@/lib/fracture/identity/QorIDContext";
 import { useState, useEffect } from "react";
 import { graphqlRequest, getChatHeaders, MUTATIONS } from "@/lib/graphql";
 import { motion } from "framer-motion";
@@ -14,7 +14,7 @@ import { ShaderPlane } from "@/components/fracture/ShaderPlane";
 import { useRitual } from "@/lib/rituals/RitualContextProvider";
 
 export default function VoidPage() {
-  const { identity, setIdentity } = useAbyssID();
+  const { identity, setIdentity } = useQorID();
   const { effects: ritualEffects } = useRitual();
   const [isDeveloper, setIsDeveloper] = useState(false);
   const [registering, setRegistering] = useState(false);
@@ -116,7 +116,7 @@ export default function VoidPage() {
     } catch (err: any) {
       // Silently handle gateway connection errors
       if (err.message?.includes("Connection failed") || err.message?.includes("Unable to reach")) {
-        console.warn("Abyss Gateway not available - developer features disabled");
+        console.warn("QOR Gateway not available - developer features disabled");
         setIsDeveloper(false);
       } else {
         console.error("Failed to check developer status:", err);
@@ -129,7 +129,7 @@ export default function VoidPage() {
 
   const handleBecomeDeveloper = async () => {
     if (!identity?.address || !identity?.username) {
-      alert("You need an AbyssID with a username to become a developer. Please create an AbyssID first.");
+      alert("You need an QorID with a username to become a developer. Please create an QorID first.");
       return;
     }
 
@@ -204,7 +204,7 @@ export default function VoidPage() {
 
   const handleClaimDevBadge = async () => {
     if (!identity?.address) {
-      alert("You need an AbyssID to claim the Developer NFT Badge.");
+      alert("You need an QorID to claim the Developer NFT Badge.");
       return;
     }
 
@@ -352,7 +352,7 @@ export default function VoidPage() {
       setProjects(data.projects || []);
     } catch (err: any) {
       if (err.message?.includes("Connection failed") || err.message?.includes("Unable to reach")) {
-        console.warn("Abyss Gateway not available - projects not loaded");
+        console.warn("QOR Gateway not available - projects not loaded");
       } else {
         console.error("Failed to load projects:", err);
       }
@@ -489,7 +489,7 @@ export default function VoidPage() {
                   )}
                 </button>
                 <p className="text-xs text-zinc-500 mt-2">
-                  Requires an AbyssID with a username. You'll be added to the developer directory and receive a Dev badge.
+                  Requires an QorID with a username. You'll be added to the developer directory and receive a Dev badge.
                 </p>
               </div>
             )}

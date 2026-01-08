@@ -4,10 +4,10 @@
 //! - On startup
 //! - Per block
 //! - Per radio segment
-//! - On AbyssOS IPC
+//! - On QOR OS IPC
 //! - On Fractal-1 beatmaps
 //! - On DNS state mutations
-//! - On AbyssID signature derivation
+//! - On QorID signature derivation
 //!
 //! Outcome: Nothing breaks silently again.
 
@@ -45,14 +45,14 @@ pub enum DiagnosticCategory {
     /// Fractal-1 codec tests
     Fractal1,
     
-    /// AbyssOS API tests
-    AbyssOS,
+    /// QOR OS API tests
+    QOR OS,
     
     /// DNS service tests
     DNS,
     
-    /// AbyssID signature tests
-    AbyssID,
+    /// QorID signature tests
+    QorID,
     
     /// Radio pipeline tests
     Radio,

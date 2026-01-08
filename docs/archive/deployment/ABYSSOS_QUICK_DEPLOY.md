@@ -1,4 +1,4 @@
-# AbyssOS Quick Deployment Guide
+# QOR OS Quick Deployment Guide
 
 **Fast deployment for alpha testing - 5 minutes to live!**
 
@@ -7,7 +7,7 @@
 ## Quick Deploy (PowerShell - Windows)
 
 ```powershell
-cd apps/abyssos-portal
+cd apps/qloud-os
 
 # Deploy to server (IP only)
 .\deploy-alpha.ps1 -ServerIp YOUR_SERVER_IP
@@ -24,7 +24,7 @@ cd apps/abyssos-portal
 ## Quick Deploy (Bash - Linux/Mac)
 
 ```bash
-cd apps/abyssos-portal
+cd apps/qloud-os
 chmod +x deploy-alpha.sh
 
 # Deploy to server (IP only)
@@ -43,14 +43,14 @@ chmod +x deploy-alpha.sh
 
 ### 1. Build
 ```bash
-cd apps/abyssos-portal
+cd apps/qloud-os
 pnpm install
 pnpm build
 ```
 
 ### 2. Copy to Server
 ```bash
-scp -r dist/* ubuntu@YOUR_SERVER_IP:/var/www/abyssos-portal/
+scp -r dist/* ubuntu@YOUR_SERVER_IP:/var/www/qloud-os/
 ```
 
 ### 3. Configure Nginx (on server)
@@ -66,7 +66,7 @@ sudo nano /etc/nginx/sites-available/abyssos
 server {
     listen 80;
     server_name _;
-    root /var/www/abyssos-portal;
+    root /var/www/qloud-os;
     index index.html;
     location / {
         try_files $uri $uri/ /index.html;
@@ -83,8 +83,8 @@ sudo systemctl reload nginx
 
 ### 4. Set Permissions
 ```bash
-sudo chown -R www-data:www-data /var/www/abyssos-portal
-sudo chmod -R 755 /var/www/abyssos-portal
+sudo chown -R www-data:www-data /var/www/qloud-os
+sudo chmod -R 755 /var/www/qloud-os
 ```
 
 ### 5. Access
@@ -94,7 +94,7 @@ Open: `http://YOUR_SERVER_IP`
 
 ## What the Script Does
 
-✅ Builds AbyssOS for production  
+✅ Builds QOR OS for production  
 ✅ Creates server directory  
 ✅ Copies files via SCP  
 ✅ Configures Nginx automatically  
@@ -120,7 +120,7 @@ Open: `http://YOUR_SERVER_IP`
 - Check logs: `sudo tail -f /var/log/nginx/error.log`
 
 **Blank page?**
-- Check files: `ls -la /var/www/abyssos-portal/`
+- Check files: `ls -la /var/www/qloud-os/`
 - Check browser console (F12)
 - Verify RPC endpoint is accessible
 
@@ -130,4 +130,4 @@ Open: `http://YOUR_SERVER_IP`
 
 ---
 
-**See [ABYSSOS_ALPHA_DEPLOYMENT.md](ABYSSOS_ALPHA_DEPLOYMENT.md) for complete guide.**
+**See [QLOUD_OS_ALPHA_DEPLOYMENT.md](QLOUD_OS_ALPHA_DEPLOYMENT.md) for complete guide.**

@@ -36,9 +36,9 @@
    - Database: RocksDB at `/opt/demiurge/.demiurge/data`
    - Config: Devnet configuration
 
-2. **AbyssOS Portal**
+2. **QLOUD OS**
    - URL: `https://demiurge.cloud` (HTTPS, Let's Encrypt)
-   - Path: `/var/www/abyssos-portal`
+   - Path: `/var/www/qloud-os`
    - Status: ✅ Live and deployed
 
 3. **Nginx Reverse Proxy**
@@ -66,7 +66,7 @@
 - `work_claim` - Work-claim mining module
 - `urgeid_registry` - Identity system with profiles, handles, Syzygy scores
 - `nft_dgen` - D-GEN NFT standard (flexible NFT standard)
-- `abyss_registry` - Marketplace registry
+- `qor_registry_legacy` - Marketplace registry
 - `fabric_manager` - P2P network management
 - `developer_registry` - Developer profiles
 - `recursion_registry` - Recursive computation registry
@@ -82,7 +82,7 @@
 
 ### Layer 2: Applications
 
-#### 1. AbyssOS Portal (`apps/abyssos-portal/`)
+#### 1. QLOUD OS (`apps/qloud-os/`)
 
 **Technology**: React 18, TypeScript, Vite, Tailwind CSS, Framer Motion, Zustand
 
@@ -90,7 +90,7 @@
 
 **Core Features**:
 - **Boot Screen**: Animated "A B Y S S OS" intro with glitch effects
-- **AbyssID Authentication**: Login/signup flow with local account management
+- **QorID Authentication**: Login/signup flow with local account management
 - **Desktop Environment**: Full-screen desktop with glassmorphism UI
 - **Circular Dock**: App launcher with drag-and-drop reordering
 - **Window Management**: Draggable, resizable windows for apps
@@ -113,7 +113,7 @@
 13. **Temporal Observatory** - Timeline and branching futures visualization
 
 **Advanced Systems**:
-- **AbyssID SDK**: Identity layer with local/remote modes
+- **QorID SDK**: Identity layer with local/remote modes
 - **DRC-369 Standard**: Multi-chain NFT compatibility (Ethereum, Solana, Bitcoin adapters)
 - **Web3 Bridge**: `window.abyss` injection for dApps
 - **Block Listener**: Real-time block updates via WebSocket/long-poll
@@ -125,7 +125,7 @@
 - **DNS Intelligence Layer**: Chain-anchored DNS resolution
 
 **State Management**:
-- `authStore` - AbyssID authentication state
+- `authStore` - QorID authentication state
 - `desktopStore` - Window management, app state
 - `walletStore` - Wallet state and transactions
 
@@ -149,7 +149,7 @@
 - Archon AI integration
 - Fabric visualization
 
-#### 3. AbyssID Service (`apps/abyssid-service/`)
+#### 3. QorID Service (`apps/qorid-service/`)
 
 **Technology**: Node.js, TypeScript, Express, SQLite, Zod
 
@@ -165,11 +165,11 @@
 - Mining rewards
 
 **API Endpoints**:
-- `GET /api/abyssid/username-available` - Check username
-- `POST /api/abyssid/register` - Register identity
-- `POST /api/abyssid/session/init` - Init session
-- `POST /api/abyssid/session/confirm` - Confirm session
-- `GET /api/abyssid/me` - Get current user
+- `GET /api/qorid/username-available` - Check username
+- `POST /api/qorid/register` - Register identity
+- `POST /api/qorid/session/init` - Init session
+- `POST /api/qorid/session/confirm` - Confirm session
+- `GET /api/qorid/me` - Get current user
 - `GET /api/drc369/assets/owned` - Get owned assets
 - `POST /api/drc369/assets/native` - Mint native DRC-369
 - `POST /api/drc369/assets/import` - Import external asset
@@ -194,7 +194,7 @@
 - `POST /api/dns/cache/flush` - Clear cache
 - `GET /api/dns/onchain/:domain` - On-chain DNS record
 
-#### 5. Abyss Gateway (`indexer/abyss-gateway/`)
+#### 5. QOR Gateway (`indexer/qor-gateway/`)
 
 **Technology**: Node.js, TypeScript, GraphQL
 
@@ -217,7 +217,7 @@
 **Milestone 6**: Genesis mode, snapshot system, ritual framework
 **Milestone 7**: Real Fabric integration, operator roles, Action Bridge
 
-### Phase 8-14: AbyssOS Evolution
+### Phase 8-14: QOR OS Evolution
 
 **Phase 8**: ZK Compute, Staked Execution, Resident AI Agents
 - Zero-knowledge WASM verification
@@ -253,7 +253,7 @@
 
 **Phase 13**: DNS Intelligence Layer
 - Backend DNS microservice
-- AbyssOS DNS Console
+- QOR OS DNS Console
 - WASM Runtime DNS API
 - Grid Protocol DNS Extension
 - DRC-369 On-Chain DNS Anchoring
@@ -317,9 +317,9 @@
 - Badges (achievement markers)
 - Role flags (Archon status)
 
-### AbyssID
+### QorID
 
-**AbyssOS Identity Layer**:
+**QOR OS Identity Layer**:
 - Username + public key identity
 - Local/remote modes (localStorage or backend)
 - Session management
@@ -349,7 +349,7 @@
 ✅ **Phase 4**: Fabric & Abyss  
 ✅ **Phase 5**: UX Layer (Portal web, Qt console)  
 ✅ **Phase 6**: Docker & Deployment  
-✅ **Phase 7-14**: AbyssOS evolution (8 phases of advanced features)
+✅ **Phase 7-14**: QOR OS evolution (8 phases of advanced features)
 
 ---
 
@@ -366,13 +366,13 @@ DEMIURGE/
 │   │   └── runtime/         # Runtime modules (bank_cgt, urgeid_registry, etc.)
 │   └── configs/             # Devnet configurations
 ├── apps/
-│   ├── abyssos-portal/      # ⭐ AbyssOS desktop environment (PRODUCTION)
+│   ├── qloud-os/      # ⭐ QOR OS desktop environment (PRODUCTION)
 │   ├── portal-web/          # Fracture Portal (legacy)
-│   ├── abyssid-service/     # Identity backend service
+│   ├── qorid-service/     # Identity backend service
 │   ├── dns-service/         # DNS resolution service
 │   └── desktop-qt/          # Qt desktop app
 ├── indexer/
-│   └── abyss-gateway/       # GraphQL gateway + indexer
+│   └── qor-gateway/       # GraphQL gateway + indexer
 ├── sdk/                     # TypeScript & Rust SDKs
 ├── deploy/
 │   └── node0/               # Node0 deployment scripts
@@ -391,7 +391,7 @@ DEMIURGE/
 - **Consensus**: Custom PoW (Forge)
 - **RPC**: JSON-RPC 2.0
 
-### Frontend (AbyssOS)
+### Frontend (QOR OS)
 - **Framework**: React 18
 - **Language**: TypeScript
 - **Build Tool**: Vite
@@ -419,13 +419,13 @@ DEMIURGE/
 ### Production Services
 
 ✅ **Demiurge Chain Node**: Running on Node0 (51.210.209.112)  
-✅ **AbyssOS Portal**: Live at https://demiurge.cloud  
+✅ **QLOUD OS**: Live at https://demiurge.cloud  
 ✅ **RPC Endpoint**: https://rpc.demiurge.cloud/rpc  
 ✅ **HTTPS**: All services with valid SSL certificates  
 
 ### Recent Deployments
 
-✅ **AbyssID Signup Fixes** (December 5, 2024):
+✅ **QorID Signup Fixes** (December 5, 2024):
 - Real-time username availability checking
 - Backup confirmation flow fix
 - Build error resolution
@@ -438,10 +438,10 @@ DEMIURGE/
 
 ### Codebase Statistics
 
-- **Total Files**: 200+ TypeScript/TSX files in AbyssOS
+- **Total Files**: 200+ TypeScript/TSX files in QOR OS
 - **Services**: 5+ backend services
 - **Runtime Modules**: 9+ chain modules
-- **Apps**: 13+ AbyssOS applications
+- **Apps**: 13+ QOR OS applications
 - **Documentation**: 80+ markdown files
 
 ---
@@ -459,7 +459,7 @@ DEMIURGE/
 
 ### Identity & Authentication
 - ✅ UrgeID (on-chain identity)
-- ✅ AbyssID (AbyssOS identity)
+- ✅ QorID (QOR OS identity)
 - ✅ Username system
 - ✅ Syzygy tracking
 - ✅ Leveling system
@@ -475,7 +475,7 @@ DEMIURGE/
 - ✅ World NFTs (AWE)
 
 ### Applications
-- ✅ AbyssOS desktop environment
+- ✅ QOR OS desktop environment
 - ✅ Wallet application
 - ✅ Block explorer
 - ✅ DNS console
@@ -503,15 +503,15 @@ All documentation is organized in `/docs`:
 - **[Architecture](overview/ARCHITECTURE_DEMIURGE_CURRENT.md)** - System design
 - **[RPC API](api/RPC.md)** - API reference
 - **[Deployment Guide](deployment/README_NODE0.md)** - Production setup
-- **[AbyssOS Portal](apps/ABYSSOS_PORTAL.md)** - Desktop environment guide
+- **[QLOUD OS](apps/QLOUD_OS_PORTAL.md)** - Desktop environment guide
 
 ---
 
 ## Next Steps & Roadmap
 
 ### Immediate Priorities
-- [ ] Expand AbyssOS app ecosystem
-- [ ] Real AbyssID Wallet SDK integration
+- [ ] Expand QOR OS app ecosystem
+- [ ] Real QorID Wallet SDK integration
 - [ ] Multi-node devnet setup
 - [ ] P2P networking implementation
 - [ ] WASM runtime enhancements

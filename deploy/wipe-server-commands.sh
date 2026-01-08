@@ -16,8 +16,8 @@ fi
 
 echo ""
 echo "Stopping all services..."
-sudo systemctl stop demiurge-chain abyssid abyss-gateway nginx 2>/dev/null || true
-sudo systemctl disable demiurge-chain abyssid abyss-gateway nginx 2>/dev/null || true
+sudo systemctl stop demiurge-chain abyssid qor-gateway nginx 2>/dev/null || true
+sudo systemctl disable demiurge-chain abyssid qor-gateway nginx 2>/dev/null || true
 
 echo "Removing application data..."
 sudo rm -rf /opt/demiurge/*

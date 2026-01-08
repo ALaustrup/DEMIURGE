@@ -86,7 +86,7 @@ apps/portal-web/src/
 │   └── observability/
 │       └── HealthPanel.tsx
 
-indexer/abyss-gateway/src/
+indexer/qor-gateway/src/
 ├── chatDb.ts (extended)
 ├── schema.ts (extended)
 └── resolvers.ts (extended)

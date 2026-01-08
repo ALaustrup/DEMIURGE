@@ -16,7 +16,7 @@ use serde::{Serialize, Deserialize};
 /// A0 — THE PRIME ARCHON ROOT DIRECTIVE
 ///
 /// A0: Maintain total structural, logical, and cryptographic coherence
-/// across the Demiurge chain, AbyssOS, SDKs, services, runtime,
+/// across the Demiurge chain, QOR OS, SDKs, services, runtime,
 /// and sovereign identity layers.
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct A0Directive {
@@ -80,7 +80,7 @@ impl A0Directive {
             governed_components: vec![
                 "Runtime".to_string(),
                 "Chain".to_string(),
-                "AbyssOS".to_string(),
+                "QOR OS".to_string(),
                 "Indexer".to_string(),
                 "SDK".to_string(),
                 "Wallet".to_string(),
@@ -94,7 +94,7 @@ impl A0Directive {
     
     /// Get directive description
     pub fn description(&self) -> String {
-        "Maintain total structural, logical, and cryptographic coherence across the Demiurge chain, AbyssOS, SDKs, services, runtime, and sovereign identity layers.".to_string()
+        "Maintain total structural, logical, and cryptographic coherence across the Demiurge chain, QOR OS, SDKs, services, runtime, and sovereign identity layers.".to_string()
     }
     
     /// Get outcome statement
@@ -149,7 +149,7 @@ mod tests {
         let a0 = activate_a0();
         assert!(a0.governs_component("Runtime"));
         assert!(a0.governs_component("Chain"));
-        assert!(a0.governs_component("AbyssOS"));
+        assert!(a0.governs_component("QOR OS"));
         assert!(!a0.governs_component("Unknown"));
     }
     

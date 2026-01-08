@@ -39,10 +39,10 @@ All unnecessary and outdated files/folders have been removed from the repository
 
 ### Applications:
 - ✅ `apps/portal-web/` - Next.js portal
-- ✅ `apps/abyssos-portal/` - AbyssOS desktop environment
+- ✅ `apps/qloud-os/` - QOR OS desktop environment
 - ✅ `apps/desktop-qt/` - Qt desktop application
-- ✅ `apps/abyssid-service/` - AbyssID service
-- ✅ `apps/abyssid-backend/` - AbyssID backend
+- ✅ `apps/qorid-service/` - QorID service
+- ✅ `apps/abyssid-backend/` - QorID backend
 - ✅ `apps/dns-service/` - DNS service
 
 ### Infrastructure:

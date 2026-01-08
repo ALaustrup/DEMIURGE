@@ -1,0 +1,24 @@
+{
+  "name": "@demiurge/qor-gateway",
+  "version": "0.1.0",
+  "description": "GraphQL gateway for Abyss marketplace and Demiurge chain data",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "ts-node src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test:snapshots": "ts-node src/snapshotService.test.ts"
+  },
+  "dependencies": {
+    "@graphql-yoga/node": "^3.9.1",
+    "graphql": "^16.9.0",
+    "better-sqlite3": "^11.9.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "@types/better-sqlite3": "^7.6.12",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9"
+  }
+}
+

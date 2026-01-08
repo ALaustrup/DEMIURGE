@@ -123,7 +123,7 @@ sudo mkdir -p "${REPO_DIR}" \
     "${REPO_DIR}/config" \
     "${REPO_DIR}/data" \
     "${REPO_DIR}/logs" \
-    "/var/www/abyssos-portal"
+    "/var/www/qloud-os"
 
 sudo chown -R $USER:$USER "${REPO_DIR}"
 echo -e "${GREEN}✅ Directories created${NC}"
@@ -184,8 +184,8 @@ echo "     sudo ln -sf /etc/nginx/sites-available/demiurge.cloud /etc/nginx/site
 echo "     sudo nginx -t && sudo systemctl reload nginx"
 echo ""
 echo "  3. Start services:"
-echo "     sudo systemctl enable demiurge-chain abyssid dns-service abyss-gateway"
-echo "     sudo systemctl start demiurge-chain abyssid dns-service abyss-gateway"
+echo "     sudo systemctl enable demiurge-chain abyssid dns-service qor-gateway"
+echo "     sudo systemctl start demiurge-chain abyssid dns-service qor-gateway"
 echo ""
 echo -e "${BLUE}Useful Commands:${NC}"
 echo "  • Check service status: sudo systemctl status demiurge-chain"

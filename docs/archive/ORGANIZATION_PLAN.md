@@ -118,7 +118,7 @@ This document outlines the plan for organizing all `.md` files in the Demiurge r
 ### Rituals & Special (`docs/` - archive or special folder)
 
 **Special Documentation:**
-- `ABYSSID_RITUAL_IMPLEMENTATION.md` → Archive or special folder
+- `QORID_RITUAL_IMPLEMENTATION.md` → Archive or special folder
 - `RESET_INSTRUCTIONS.md` → `docs/operations/`
 - `README-START.md` → Archive (outdated)
 

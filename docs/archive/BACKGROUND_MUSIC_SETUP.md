@@ -2,14 +2,14 @@
 
 ## Overview
 
-AbyssOS supports background music that plays automatically after AbyssID login or signup. The music is enabled by default but can be toggled off by users via the toolbar widget.
+QOR OS supports background music that plays automatically after QorID login or signup. The music is enabled by default but can be toggled off by users via the toolbar widget.
 
 ## File Placement
 
 Place your `.wav` music file at the following location:
 
 ```
-apps/abyssos-portal/public/audio/background-music.wav
+apps/qloud-os/public/audio/background-music.wav
 ```
 
 ### Directory Structure
@@ -17,24 +17,24 @@ apps/abyssos-portal/public/audio/background-music.wav
 If the `public/audio/` directory doesn't exist, create it:
 
 ```bash
-mkdir -p apps/abyssos-portal/public/audio
+mkdir -p apps/qloud-os/public/audio
 ```
 
 Then place your `.wav` file there:
 
 ```bash
-cp /path/to/your/music.wav apps/abyssos-portal/public/audio/background-music.wav
+cp /path/to/your/music.wav apps/qloud-os/public/audio/background-music.wav
 ```
 
 ## File Requirements
 
 - **Format**: `.wav` (WAV audio format)
-- **Location**: `apps/abyssos-portal/public/audio/background-music.wav`
+- **Location**: `apps/qloud-os/public/audio/background-music.wav`
 - **Naming**: Must be exactly `background-music.wav`
 
 ## How It Works
 
-1. **Automatic Playback**: Music starts automatically after successful AbyssID login or signup
+1. **Automatic Playback**: Music starts automatically after successful QorID login or signup
 2. **Looping**: Music loops continuously while playing
 3. **Volume**: Default volume is set to 30% to avoid being too loud
 4. **Toggle**: Users can toggle music on/off via the 🔊/🔇 button in the toolbar
@@ -49,7 +49,7 @@ Users can control background music via:
 
 ## Technical Details
 
-- Music service: `apps/abyssos-portal/src/services/backgroundMusic.ts`
+- Music service: `apps/qloud-os/src/services/backgroundMusic.ts`
 - Storage key: `abyssos_background_music_enabled` (localStorage)
 - Volume storage: `abyssos_background_music_volume` (localStorage)
 - Default volume: 0.3 (30%)

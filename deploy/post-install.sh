@@ -206,9 +206,9 @@ fi
 # Step 10: Create directory structure
 echo -e "${BLUE}[10/12]${NC} Creating directory structure..."
 mkdir -p /opt/demiurge/{bin,config,data,logs}
-mkdir -p /var/www/abyssos-portal
+mkdir -p /var/www/qloud-os
 chown -R demiurge:demiurge /opt/demiurge
-chown -R www-data:www-data /var/www/abyssos-portal
+chown -R www-data:www-data /var/www/qloud-os
 echo -e "${GREEN}✅ Directories created${NC}"
 
 # Step 11: Configure system limits

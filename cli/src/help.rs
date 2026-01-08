@@ -24,8 +24,8 @@ impl HelpSystem {
         let mut topics = HashMap::new();
         
         // Core Topics - Load lore from files if they exist, otherwise use defaults
-        let abyssid_lore = std::fs::read_to_string("docs/archive/lore/ABYSSID_LORE.md")
-            .unwrap_or_else(|_| "# AbyssID - Sovereign Identity\n\nYour identity in the Abyss.".to_string());
+        let abyssid_lore = std::fs::read_to_string("docs/archive/lore/QORID_LORE.md")
+            .unwrap_or_else(|_| "# QorID - Sovereign Identity\n\nYour identity in the Abyss.".to_string());
         
         let cgt_lore = std::fs::read_to_string("docs/lore/CGT_LORE.md")
             .unwrap_or_else(|_| "# CGT - Creator God Token\n\nThe native token of Demiurge.".to_string());
@@ -39,12 +39,12 @@ impl HelpSystem {
         let dev_lore = std::fs::read_to_string("docs/lore/DEVELOPER_LORE.md")
             .unwrap_or_else(|_| "# Developer Registry\n\nBuilders of the Abyss.".to_string());
         
-        let abyssos_lore = std::fs::read_to_string("docs/lore/ABYSSOS_LORE.md")
-            .unwrap_or_else(|_| "# AbyssOS\n\nThe desktop of the Abyss.".to_string());
+        let abyssos_lore = std::fs::read_to_string("docs/lore/QLOUD_OS_LORE.md")
+            .unwrap_or_else(|_| "# QOR OS\n\nThe desktop of the Abyss.".to_string());
         
-        topics.insert("abyssid".to_string(), HelpTopic {
-            title: "AbyssID - Sovereign Identity".to_string(),
-            description: "AbyssID is your sovereign identity on Demiurge. It serves as your wallet address, profile, and Syzygy tracker.".to_string(),
+        topics.insert("qorid".to_string(), HelpTopic {
+            title: "QorID - Sovereign Identity".to_string(),
+            description: "QorID is your sovereign identity on Demiurge. It serves as your wallet address, profile, and Syzygy tracker.".to_string(),
             commands: vec![
                 "demiurge abyssid generate".to_string(),
                 "demiurge abyssid profile <address>".to_string(),
@@ -89,7 +89,7 @@ impl HelpSystem {
                 "demiurge nft by-owner 0x1234...".to_string(),
             ],
             lore: Some(nft_lore),
-            related: vec!["marketplace".to_string(), "abyssid".to_string()],
+            related: vec!["marketplace".to_string(), "qorid".to_string()],
         });
         
         topics.insert("marketplace".to_string(), HelpTopic {
@@ -125,8 +125,8 @@ impl HelpSystem {
         });
         
         topics.insert("abyss".to_string(), HelpTopic {
-            title: "AbyssOS Operations".to_string(),
-            description: "Manage AbyssOS development environment, initialize databases, and install dependencies.".to_string(),
+            title: "QOR OS Operations".to_string(),
+            description: "Manage QOR OS development environment, initialize databases, and install dependencies.".to_string(),
             commands: vec![
                 "demiurge abyss init".to_string(),
                 "demiurge abyss init --abyssid".to_string(),

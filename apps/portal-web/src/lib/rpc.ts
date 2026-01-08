@@ -2,7 +2,7 @@ import { DEMIURGE_RPC_URL } from "@/config/demiurge";
 
 /**
  * Normalize address for chain RPC calls.
- * AbyssID addresses are 20 bytes (40 hex chars), but chain expects 32 bytes (64 hex chars).
+ * QorID addresses are 20 bytes (40 hex chars), but chain expects 32 bytes (64 hex chars).
  * Pads with zeros on the left to make it 32 bytes.
  */
 export function normalizeAddressForChain(address: string): string {
@@ -69,7 +69,7 @@ export type CgtBalance = {
   balance: string;
 };
 
-export type AbyssIDProfile = {
+export type QorIDProfile = {
   address: string;
   display_name: string;
   bio?: string | null;
@@ -82,7 +82,7 @@ export type AbyssIDProfile = {
   created_at_height?: number | null;
 };
 
-export type AbyssIDProgress = {
+export type QorIDProgress = {
   address: string;
   level: number;
   syzygyScore: number;
@@ -406,7 +406,7 @@ export async function signTransactionRpc(
 }
 
 /**
- * Set username for an AbyssID.
+ * Set username for an QorID.
  */
 export async function setUsername(
   address: string,
@@ -430,34 +430,34 @@ export async function resolveUsername(
 }
 
 /**
- * Get AbyssID profile by username.
+ * Get QorID profile by username.
  */
 export async function getProfileByUsername(
   username: string
-): Promise<AbyssIDProfile | null> {
-  return callRpc<AbyssIDProfile | null>("abyssid_getProfileByUsername", {
+): Promise<QorIDProfile | null> {
+  return callRpc<QorIDProfile | null>("abyssid_getProfileByUsername", {
     username,
   });
 }
 
 /**
- * Get AbyssID profile by address.
+ * Get QorID profile by address.
  */
 export async function getUrgeIdProfile(
   address: string
-): Promise<AbyssIDProfile | null> {
-  return callRpc<AbyssIDProfile | null>("abyssid_get", {
+): Promise<QorIDProfile | null> {
+  return callRpc<QorIDProfile | null>("abyssid_get", {
     address,
   });
 }
 
 /**
- * Get AbyssID progression info (level, thresholds, progress).
+ * Get QorID progression info (level, thresholds, progress).
  */
 export async function getAbyssIdProgress(
   address: string
-): Promise<AbyssIDProgress> {
-  return callRpc<AbyssIDProgress>("abyssid_getProgress", {
+): Promise<QorIDProgress> {
+  return callRpc<QorIDProgress>("abyssid_getProgress", {
     address,
   });
 }

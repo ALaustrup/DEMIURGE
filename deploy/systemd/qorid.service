@@ -1,0 +1,17 @@
+[Unit]
+Description=QorID Identity Backend
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/node /opt/demiurge/qorid-service/dist/index.js
+WorkingDirectory=/opt/demiurge/qorid-service/
+Restart=always
+RestartSec=5
+EnvironmentFile=/opt/demiurge/qorid-service/.env
+User=root
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+

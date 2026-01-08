@@ -12,7 +12,7 @@ import { GenesisOnboarding } from "@/components/genesis/GenesisOnboarding";
  * - Video background
  * - Audio-reactive effects
  * - Glass cathedral aesthetic
- * - AbyssID ritual entry
+ * - QorID ritual entry
  */
 export default function HomePage() {
   return (

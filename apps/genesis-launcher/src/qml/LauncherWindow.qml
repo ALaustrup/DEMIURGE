@@ -1,5 +1,5 @@
 /**
- * LauncherWindow.qml - Genesis Launcher Main Window
+ * LauncherWindow.qml - DEMIURGE QOR Main Window
  * Features: Intro video sequence → Login screen
  */
 import QtQuick
@@ -13,7 +13,7 @@ ApplicationWindow {
     width: 800
     height: 600
     visible: true
-    title: "Genesis Launcher"
+    title: "DEMIURGE QOR"
     color: "transparent"
     flags: Qt.FramelessWindowHint | Qt.Window
     
@@ -214,7 +214,7 @@ ApplicationWindow {
                 // Subtitle
                 Text {
                     Layout.alignment: Qt.AlignHCenter
-                    text: "Sign in with your AbyssID"
+                    text: "Sign in with your QorID"
                     color: textSecondary
                     font.pixelSize: 14
                 }
@@ -281,7 +281,7 @@ ApplicationWindow {
                 // Create account link
                 Text {
                     Layout.alignment: Qt.AlignHCenter
-                    text: "Create new AbyssID"
+                    text: "Create new QorID"
                     color: cipherCyan
                     font.pixelSize: 13
                     MouseArea {

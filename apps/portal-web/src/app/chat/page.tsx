@@ -309,7 +309,7 @@ export default function ChatPage() {
       console.error("Failed to load world messages:", err);
       // Don't show alert for initial load failures, just log
       if (err.message?.includes("Connection failed")) {
-        console.warn("Abyss Gateway not available - chat features disabled");
+        console.warn("QOR Gateway not available - chat features disabled");
       }
     }
   };
@@ -329,7 +329,7 @@ export default function ChatPage() {
       console.error("Failed to load DM rooms:", err);
       // Don't show alert for background refresh failures
       if (err.message?.includes("Connection failed")) {
-        console.warn("Abyss Gateway not available");
+        console.warn("QOR Gateway not available");
       }
     }
   };
@@ -373,7 +373,7 @@ export default function ChatPage() {
       console.error("Failed to load custom rooms:", err);
       // Don't show alert, just log - rooms might not exist yet
       if (err.message?.includes("Connection failed")) {
-        console.warn("Abyss Gateway not available for custom rooms");
+        console.warn("QOR Gateway not available for custom rooms");
       }
     }
   };

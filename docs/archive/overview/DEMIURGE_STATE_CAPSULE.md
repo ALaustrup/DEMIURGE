@@ -17,7 +17,7 @@
 - `urgeid_registry`: UrgeID profiles, @usernames, Syzygy/leveling, badges, Archon flag, analytics.
 - `nft_dgen`: D-GEN NFTs with metadata, fabric_root_hash, royalty_bps, ownership tracking.
 - `fabric_manager`: Fabric asset registration + fee pools (P2P integration TODO).
-- `abyss_registry`: NFT marketplace (listings, buys, cancels, royalties).
+- `qor_registry_legacy`: NFT marketplace (listings, buys, cancels, royalties).
 
 ### RPC API (Chain)
 
@@ -31,7 +31,7 @@
 
 **Transactions**: signing + `cgt_sendRawTransaction`, tx history, nonces.
 
-### Abyss Gateway (GraphQL, Node/TS)
+### QOR Gateway (GraphQL, Node/TS)
 
 - **GraphQL API** for chat & social on top of SQLite (`data/chat.db`).
 
@@ -57,7 +57,7 @@
 
 **Client libs:**
 - `lib/rpc.ts`: JSON-RPC client for the chain.
-- `lib/graphql.ts`: GraphQL client for Abyss Gateway (polling-based "subscriptions").
+- `lib/graphql.ts`: GraphQL client for QOR Gateway (polling-based "subscriptions").
 - `lib/signing.ts`, `lib/txBuilder.ts`, `lib/transactions.ts`: Ed25519 signing & local tx tracking.
 - `lib/urgeid.ts`, `lib/vault.ts`, `lib/archons.ts`, `lib/aeonId.ts`: identity and vault utilities.
 

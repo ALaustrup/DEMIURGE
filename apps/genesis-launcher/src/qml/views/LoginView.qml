@@ -1,5 +1,5 @@
 /**
- * LoginView.qml - AbyssID Authentication
+ * LoginView.qml - QorID Authentication
  * 
  * Login screen with option to create new accounts.
  * Supports offline login only for previously authenticated users.
@@ -97,7 +97,7 @@ Item {
         // Subtitle
         Text {
             Layout.alignment: Qt.AlignHCenter
-            text: "Sign in with your AbyssID"
+            text: "Sign in with your QorID"
             color: textSecondary
             font.family: "Rajdhani"
             font.pixelSize: 14
@@ -204,7 +204,7 @@ Item {
             
             Text {
                 anchors.centerIn: parent
-                text: "CREATE NEW ABYSSID"
+                text: "CREATE NEW QORID"
                 color: cipherCyan
                 font.family: "Orbitron"
                 font.pixelSize: 13

@@ -3,7 +3,7 @@
  * 
  * PHASE OMEGA PART II: Recalculates EVERYTHING and regenerates the seal
  * with all runtime module hashes, SDK schema version hashes, CI guard script hashes,
- * AbyssOS subsystem version stamps, Fractal-1 benchmark reference scores,
+ * QOR OS subsystem version stamps, Fractal-1 benchmark reference scores,
  * chain invariants checksum, and indexer integrity signature
  */
 
@@ -194,7 +194,7 @@ function updateSovereigntySeal(): void {
   
   // Runtime module hashes
   console.log('  Calculating runtime module hashes...');
-  const runtimeModules = ['abyss_registry', 'avatars_profiles', 'bank_cgt', 'fabric_manager', 'nft_dgen'];
+  const runtimeModules = ['qor_registry_legacy', 'avatars_profiles', 'bank_cgt', 'fabric_manager', 'nft_dgen'];
   for (const module of runtimeModules) {
     const modulePath = join(repoRoot, `runtime/${module}/src/lib.rs`);
     seal.runtime.modules[module] = hashFile(modulePath);
@@ -205,7 +205,7 @@ function updateSovereigntySeal(): void {
   
   // SDK schema hashes
   console.log('  Calculating SDK schema hashes...');
-  const schemas = ['drc369', 'abyssid', 'fractal1', 'wallet'];
+  const schemas = ['drc369', 'qorid', 'fractal1', 'wallet'];
   for (const schema of schemas) {
     const schemaPath = join(repoRoot, `sdk/schema/${schema}.json`);
     seal.sdk.schemas[schema] = hashFile(schemaPath);
@@ -217,16 +217,16 @@ function updateSovereigntySeal(): void {
   seal.sdk.tsSdk.sdk = hashFile(join(repoRoot, 'sdk/ts-sdk/src/sdk.ts'));
   seal.sdk.rustSdk.lib = hashFile(join(repoRoot, 'sdk/rust-sdk/src/lib.rs'));
   
-  // AbyssOS subsystem hashes
-  console.log('  Calculating AbyssOS subsystem hashes...');
-  seal.abyssos.security.hypervisorGuard = hashFile(join(repoRoot, 'apps/abyssos-portal/src/core/security/HypervisorGuard.ts'));
-  seal.abyssos.security.memoryCage = hashFile(join(repoRoot, 'apps/abyssos-portal/src/core/security/MemoryCage.ts'));
-  seal.abyssos.security.taskSandbox = hashFile(join(repoRoot, 'apps/abyssos-portal/src/core/security/TaskSandbox.ts'));
+  // QOR OS subsystem hashes
+  console.log('  Calculating QOR OS subsystem hashes...');
+  seal.abyssos.security.hypervisorGuard = hashFile(join(repoRoot, 'apps/qloud-os/src/core/security/HypervisorGuard.ts'));
+  seal.abyssos.security.memoryCage = hashFile(join(repoRoot, 'apps/qloud-os/src/core/security/MemoryCage.ts'));
+  seal.abyssos.security.taskSandbox = hashFile(join(repoRoot, 'apps/qloud-os/src/core/security/TaskSandbox.ts'));
   
   // Fractal-1 hashes
-  seal.abyssos.fractall.codec = hashFile(join(repoRoot, 'apps/abyssos-portal/src/fractall/codec.ts'));
-  seal.abyssos.fractall.verifier = hashFile(join(repoRoot, 'apps/abyssos-portal/src/fractall/fractall_verifier.ts'));
-  seal.abyssos.fractall.benchmark = hashFile(join(repoRoot, 'apps/abyssos-portal/src/fractall/fractall_benchmark.ts'));
+  seal.abyssos.fractall.codec = hashFile(join(repoRoot, 'apps/qloud-os/src/fractall/codec.ts'));
+  seal.abyssos.fractall.verifier = hashFile(join(repoRoot, 'apps/qloud-os/src/fractall/fractall_verifier.ts'));
+  seal.abyssos.fractall.benchmark = hashFile(join(repoRoot, 'apps/qloud-os/src/fractall/fractall_benchmark.ts'));
   
   // Chain protection hashes
   console.log('  Calculating chain protection hashes...');
@@ -249,9 +249,9 @@ function updateSovereigntySeal(): void {
   
   // Wallet security hashes
   console.log('  Calculating wallet security hashes...');
-  seal.wallet.keyDerivationGuard = hashFile(join(repoRoot, 'apps/abyssid-service/src/security/key_derivation_guard.ts'));
-  seal.wallet.signatureAnomalyDetector = hashFile(join(repoRoot, 'apps/abyssid-service/src/security/signature_anomaly_detector.ts'));
-  seal.wallet.walletStateSentinel = hashFile(join(repoRoot, 'apps/abyssid-service/src/security/wallet_state_sentinel.ts'));
+  seal.wallet.keyDerivationGuard = hashFile(join(repoRoot, 'apps/qorid-service/src/security/key_derivation_guard.ts'));
+  seal.wallet.signatureAnomalyDetector = hashFile(join(repoRoot, 'apps/qorid-service/src/security/signature_anomaly_detector.ts'));
+  seal.wallet.walletStateSentinel = hashFile(join(repoRoot, 'apps/qorid-service/src/security/wallet_state_sentinel.ts'));
   
   // CI guard script hashes
   console.log('  Calculating CI guard script hashes...');

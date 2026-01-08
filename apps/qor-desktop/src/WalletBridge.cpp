@@ -3,7 +3,7 @@
  */
 
 #include "WalletBridge.h"
-#include "AbyssIDManager.h"
+#include "QorIDManager.h"
 
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
@@ -12,7 +12,7 @@
 #include <QJsonObject>
 #include <QTimer>
 
-WalletBridge::WalletBridge(AbyssIDManager *abyssId, QObject *parent)
+WalletBridge::WalletBridge(QorIDManager *abyssId, QObject *parent)
     : QObject(parent)
     , m_abyssIdManager(abyssId)
     , m_networkManager(new QNetworkAccessManager(this))

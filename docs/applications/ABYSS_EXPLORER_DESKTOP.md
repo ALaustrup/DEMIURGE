@@ -1,15 +1,15 @@
-# Abyss Explorer Desktop Application
+# QOR Explorer Desktop Application
 
-A Qt-based cross-platform desktop application providing the complete AbyssOS experience as a standalone application.
+A Qt-based cross-platform desktop application providing the complete QOR OS experience as a standalone application.
 
 ## Overview
 
-Abyss Explorer Desktop brings the full Demiurge blockchain experience to users without requiring a web browser. Built with Qt 6 and QtWebEngine, it provides:
+QOR Explorer Desktop brings the full Demiurge blockchain experience to users without requiring a web browser. Built with Qt 6 and QtWebEngine, it provides:
 
 - **Native Performance**: Hardware-accelerated rendering
 - **Full Web3 Support**: No iframe restrictions, direct wallet integration
 - **Cross-Platform**: Windows, macOS, and Linux support
-- **Complete AbyssOS**: All features from the web portal
+- **Complete QOR OS**: All features from the web portal
 - **Offline Capable**: Local caching and offline mode
 - **System Integration**: Native notifications, file associations, system tray
 
@@ -19,7 +19,7 @@ Abyss Explorer Desktop brings the full Demiurge blockchain experience to users w
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    Abyss Explorer Desktop                        │
+│                    QOR Explorer Desktop                        │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                  │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
@@ -37,7 +37,7 @@ Abyss Explorer Desktop brings the full Demiurge blockchain experience to users w
 │  └──────────────────────┬────────────────────────────┘          │
 │                         │                                        │
 │  ┌──────────────────────┴────────────────────────────┐          │
-│  │              AbyssOS Web Application               │          │
+│  │              QOR OS Web Application               │          │
 │  │  (Same React codebase as web portal)              │          │
 │  └───────────────────────────────────────────────────┘          │
 │                                                                  │
@@ -56,7 +56,7 @@ Abyss Explorer Desktop brings the full Demiurge blockchain experience to users w
 | **Build System** | CMake | Cross-platform builds |
 | **Installer** | Qt Installer Framework | Windows/Mac/Linux installers |
 | **Updates** | Qt Auto-Updater | Automatic updates |
-| **Web Content** | React (AbyssOS Portal) | Existing web codebase |
+| **Web Content** | React (QLOUD OS) | Existing web codebase |
 
 ---
 
@@ -73,8 +73,8 @@ apps/abyss-explorer-desktop/
 │   ├── BrowserView.h
 │   ├── SystemTray.cpp          # System tray
 │   ├── SystemTray.h
-│   ├── AbyssIDManager.cpp      # AbyssID native integration
-│   ├── AbyssIDManager.h
+│   ├── QorIDManager.cpp      # QorID native integration
+│   ├── QorIDManager.h
 │   ├── WalletBridge.cpp        # Wallet native bridge
 │   ├── WalletBridge.h
 │   ├── UpdateManager.cpp       # Auto-updates
@@ -86,8 +86,8 @@ apps/abyss-explorer-desktop/
 │       │   └── app.png         # Linux icon
 │       └── qml/
 │           └── main.qml        # Optional QML UI
-├── web/                        # Bundled AbyssOS web app
-│   └── (built from abyssos-portal)
+├── web/                        # Bundled QOR OS web app
+│   └── (built from qloud-os)
 ├── installer/
 │   ├── config/
 │   │   └── config.xml
@@ -140,7 +140,7 @@ class BrowserView : public QWebEngineView {
 public:
     BrowserView(QWidget *parent = nullptr);
     
-    // Inject AbyssOS bridge
+    // Inject QOR OS bridge
     void injectAbyssBridge();
     
     // Handle Web3 requests from the page
@@ -150,7 +150,7 @@ public:
     
 private:
     QWebChannel *m_channel;
-    AbyssIDManager *m_abyssId;
+    QorIDManager *m_abyssId;
     WalletBridge *m_wallet;
     
 protected:
@@ -158,17 +158,17 @@ protected:
 };
 ```
 
-### 3. AbyssID Native Integration
+### 3. QorID Native Integration
 
 ```cpp
-// AbyssIDManager.h
-class AbyssIDManager : public QObject {
+// QorIDManager.h
+class QorIDManager : public QObject {
     Q_OBJECT
     Q_PROPERTY(bool isAuthenticated READ isAuthenticated NOTIFY authChanged)
     Q_PROPERTY(QString username READ username NOTIFY authChanged)
     
 public:
-    AbyssIDManager(QObject *parent = nullptr);
+    QorIDManager(QObject *parent = nullptr);
     
     Q_INVOKABLE bool login();
     Q_INVOKABLE void logout();
@@ -280,7 +280,7 @@ cmake --build build --config Release
 
 ```bash
 # Build web content first
-cd ../abyssos-portal
+cd ../qloud-os
 pnpm build
 cp -r dist ../abyss-explorer-desktop/web/
 
@@ -305,7 +305,7 @@ cd ../abyss-explorer-desktop/installer
 - **Installer**: DMG with drag-to-Applications
 - **Code signing**: Required for Gatekeeper
 - **Notarization**: Required for distribution
-- **Keychain**: AbyssID credentials stored securely
+- **Keychain**: QorID credentials stored securely
 - **Menu bar**: Native menu integration
 
 ### Linux
@@ -330,14 +330,14 @@ cd ../abyss-explorer-desktop/installer
 
 ## Accessibility
 
-All users can access Abyss Explorer Desktop regardless of premium tier:
+All users can access QOR Explorer Desktop regardless of premium tier:
 
 | Feature | Free | Archon | Genesis |
 |---------|------|--------|---------|
 | Desktop App | ✅ | ✅ | ✅ |
-| Full AbyssOS | ✅ | ✅ | ✅ |
+| Full QOR OS | ✅ | ✅ | ✅ |
 | Web3 Browsing | ✅ | ✅ | ✅ |
-| AbyssID Login | ✅ | ✅ | ✅ |
+| QorID Login | ✅ | ✅ | ✅ |
 | System Tray | ✅ | ✅ | ✅ |
 | Auto-Updates | ✅ | ✅ | ✅ |
 | Extended Storage | ❌ | ✅ | ✅ |
@@ -359,8 +359,8 @@ All users can access Abyss Explorer Desktop regardless of premium tier:
 
 | Phase | Duration | Deliverables |
 |-------|----------|--------------|
-| **Phase 1** | 2 weeks | Basic Qt app with WebEngine, loads AbyssOS |
-| **Phase 2** | 2 weeks | Native AbyssID integration, wallet bridge |
+| **Phase 1** | 2 weeks | Basic Qt app with WebEngine, loads QOR OS |
+| **Phase 2** | 2 weeks | Native QorID integration, wallet bridge |
 | **Phase 3** | 1 week | System tray, notifications, auto-start |
 | **Phase 4** | 2 weeks | Installer packages, code signing |
 | **Phase 5** | 1 week | Auto-update system |
@@ -370,4 +370,4 @@ All users can access Abyss Explorer Desktop regardless of premium tier:
 
 ---
 
-*Abyss Explorer Desktop - The Demiurge experience, natively.*
+*QOR Explorer Desktop - The Demiurge experience, natively.*

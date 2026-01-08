@@ -5,7 +5,7 @@
 //! This module establishes the Prime Archon as the sovereign, system-wide
 //! meta-validator for:
 //! - Blockchain runtime consistency
-//! - AbyssOS state consistency
+//! - QOR OS state consistency
 //! - SDK alignment
 //! - Node-to-node state convergence
 //! - Emergent optimization signals

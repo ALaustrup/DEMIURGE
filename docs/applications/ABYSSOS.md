@@ -1,12 +1,12 @@
-# AbyssOS Portal
+# QLOUD OS
 
 The full-screen desktop environment for DEMIURGE.
 
 ## Overview
 
-AbyssOS is a web-based desktop environment that provides:
+QOR OS is a web-based desktop environment that provides:
 - Boot screen with intro video
-- AbyssID authentication
+- QorID authentication
 - Window-based application system
 - Chain integration
 
@@ -17,7 +17,7 @@ AbyssOS is a web-based desktop environment that provides:
 ## Local Development
 
 ```bash
-cd apps/abyssos-portal
+cd apps/qloud-os
 pnpm install
 pnpm dev
 ```
@@ -32,7 +32,7 @@ Opens at `http://localhost:5173`
 3. Transitions to login screen
 
 ### Authentication
-- AbyssID login with username
+- QorID login with username
 - Seed phrase recovery
 - New account registration
 
@@ -55,7 +55,7 @@ Opens at `http://localhost:5173`
 
 ```env
 VITE_DEMIURGE_RPC_URL=https://rpc.demiurge.cloud/rpc
-VITE_ABYSSID_API_URL=https://demiurge.cloud/api
+VITE_QORID_API_URL=https://demiurge.cloud/api
 ```
 
 ### Tech Stack
@@ -78,7 +78,7 @@ Output: `dist/` directory
 
 Copy `dist/` to web server:
 ```bash
-scp -r dist/* user@server:/var/www/abyssos-portal/
+scp -r dist/* user@server:/var/www/qloud-os/
 ```
 
 Configure nginx:
@@ -87,7 +87,7 @@ server {
     listen 443 ssl;
     server_name demiurge.cloud;
     
-    root /var/www/abyssos-portal;
+    root /var/www/qloud-os;
     index index.html;
     
     location / {
@@ -98,4 +98,4 @@ server {
 
 ---
 
-See [apps/abyssos-portal/README.md](../../apps/abyssos-portal/README.md) for more details.
+See [apps/qloud-os/README.md](../../apps/qloud-os/README.md) for more details.

@@ -8,7 +8,7 @@
 #include <QFile>
 
 const QString Downloader::LAUNCHER_URL = 
-    "https://releases.demiurge.cloud/genesis/latest/GenesisLauncher";
+    "https://releases.demiurge.cloud/genesis/latest/DemiurgeQor";
 
 Downloader::Downloader(QObject *parent)
     : QObject(parent)

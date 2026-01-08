@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     
     // Try to get session from launcher
     if (!ipcClient.connectToLauncher()) {
-        qWarning() << "Could not connect to Genesis Launcher";
+        qWarning() << "Could not connect to DEMIURGE QOR";
         // Allow standalone operation with manual login
     }
     

@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { generateKeys, deriveKeysFromSeed, type GeneratedAbyssIdentity } from "@/lib/fracture/crypto/generateKeys";
-import { useAbyssID } from "@/lib/fracture/identity/AbyssIDContext";
+import { useQorID } from "@/lib/fracture/identity/QorIDContext";
 
 export type AbyssState = "idle" | "checking" | "reject" | "accept" | "binding" | "confirm" | "login" | "verifying";
 
@@ -16,11 +16,11 @@ export interface AbyssContext {
 }
 
 // Get API URL from environment or use default
-// NOTE: Using abyssid-service (port 8082) - the full-featured TypeScript backend
+// NOTE: Using qorid-service (port 8082) - the full-featured TypeScript backend
 // (Previously used abyssid-backend on port 3001 which has been deprecated)
 const getApiUrl = () => {
   if (typeof window !== 'undefined') {
-    return process.env.NEXT_PUBLIC_ABYSSID_API_URL || 'http://localhost:8082';
+    return process.env.NEXT_PUBLIC_QORID_API_URL || 'http://localhost:8082';
   }
   return 'http://localhost:8082';
 };
@@ -28,11 +28,11 @@ const getApiUrl = () => {
 /**
  * useAbyssStateMachine
  * 
- * React hook for managing the AbyssID ritual state machine.
+ * React hook for managing the QorID ritual state machine.
  * Controls the flow: idle → checking → reject|accept → binding → confirm
  */
 export function useAbyssStateMachine() {
-  const { setIdentity } = useAbyssID();
+  const { setIdentity } = useQorID();
   const [state, setState] = useState<AbyssState>("idle");
   const [context, setContext] = useState<AbyssContext>({
     username: "",
@@ -72,7 +72,7 @@ export function useAbyssStateMachine() {
       }
 
       // Call real backend API
-      const response = await fetch(`${API_URL}/api/abyssid/check`, {
+      const response = await fetch(`${API_URL}/api/qorid/check`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username }),
@@ -139,7 +139,7 @@ export function useAbyssStateMachine() {
       const address = "0x" + generated.publicKey.replace(/[^0-9a-f]/gi, '').substring(0, 40).padEnd(40, '0');
 
       // Register with backend
-      const response = await fetch(`${API_URL}/api/abyssid/register`, {
+      const response = await fetch(`${API_URL}/api/qorid/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -216,7 +216,7 @@ export function useAbyssStateMachine() {
       const { publicKey } = await deriveKeysFromSeed(seedPhrase);
       
       // Get stored identity from backend
-      const response = await fetch(`${API_URL}/api/abyssid/${username}`, {
+      const response = await fetch(`${API_URL}/api/qorid/${username}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });

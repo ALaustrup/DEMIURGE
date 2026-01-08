@@ -12,8 +12,8 @@ use crate::core::transaction::Transaction;
 
 pub mod version;
 
-pub mod abyss_registry;
-pub mod abyssid_registry;
+pub mod qor_registry_legacy;
+pub mod qor_registry;
 pub mod activity_log;
 pub mod bank_cgt;
 pub mod cgt_staking;
@@ -26,11 +26,11 @@ pub mod recursion_registry;
 pub mod treasury;
 pub mod work_claim;
 
-pub use abyss_registry::{get_all_active_listings, get_listing, AbyssRegistryModule, ListingId};
-pub use abyssid_registry::{
-    create_abyssid_profile, get_address_by_handle, get_address_by_username, get_abyssid_profile,
+pub use qor_registry_legacy::{get_all_active_listings, get_listing, QorRegistryLegacyModule, ListingId};
+pub use qor_registry::{
+    create_qorid_profile, get_address_by_handle, get_address_by_username, get_qorid_profile,
     is_archon, record_syzygy, set_handle, set_username,
-    AbyssIDRegistryModule,
+    QorIDRegistryModule,
 };
 pub use bank_cgt::{
     cgt_mint_to, get_balance_cgt, get_cgt_total_supply, get_nonce_cgt, CGT_DECIMALS,
@@ -120,10 +120,10 @@ impl Runtime {
     pub fn with_default_modules() -> Self {
         let runtime = Self::new()
             .with_module(Box::new(BankCgtModule::new()))
-            .with_module(Box::new(AbyssIDRegistryModule::new()))
+            .with_module(Box::new(QorIDRegistryModule::new()))
             .with_module(Box::new(NftDgenModule::new()))
             .with_module(Box::new(FabricManagerModule::new()))
-            .with_module(Box::new(AbyssRegistryModule::new()))
+            .with_module(Box::new(QorRegistryLegacyModule::new()))
             .with_module(Box::new(DeveloperRegistryModule::new()))
             .with_module(Box::new(DevCapsulesModule::new()))
             .with_module(Box::new(RecursionRegistryModule::new()))

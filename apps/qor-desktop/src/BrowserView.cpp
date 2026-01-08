@@ -8,7 +8,7 @@
 
 #ifdef QOR_WEBENGINE_ENABLED
 
-#include "AbyssIDManager.h"
+#include "QorIDManager.h"
 #include "WalletBridge.h"
 
 #include <QWebEnginePage>
@@ -20,7 +20,7 @@
 #include <QFile>
 #include <QDebug>
 
-BrowserView::BrowserView(AbyssIDManager *abyssId, WalletBridge *wallet, QWidget *parent)
+BrowserView::BrowserView(QorIDManager *abyssId, WalletBridge *wallet, QWidget *parent)
     : QWebEngineView(parent)
     , m_channel(nullptr)
     , m_abyssIdManager(abyssId)
@@ -78,7 +78,7 @@ void BrowserView::injectAbyssBridge()
                 isDesktop: true,
                 version: '%1',
                 
-                // AbyssID methods
+                // QorID methods
                 isAuthenticated: function() {
                     return window.abyssIdNative.isAuthenticated();
                 },

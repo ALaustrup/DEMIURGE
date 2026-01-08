@@ -5,7 +5,7 @@ Axum-based server backend template for Demiurge Blockchain integration.
 ## Features
 
 - ✅ Axum HTTP server
-- ✅ AbyssID profile fetching
+- ✅ QorID profile fetching
 - ✅ CGT balance queries
 - ✅ NFT operations
 - ✅ SDK integration
@@ -20,7 +20,7 @@ Axum-based server backend template for Demiurge Blockchain integration.
 2. **Test endpoints:**
    ```bash
    curl http://localhost:3001/
-   curl http://localhost:3001/abyssid/0x...
+   curl http://localhost:3001/qorid/0x...
    curl http://localhost:3001/cgt/balance/0x...
    curl http://localhost:3001/nfts/0x...
    ```

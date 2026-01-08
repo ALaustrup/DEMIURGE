@@ -9,17 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Repository restructure and cleanup (January 2026)
-- Consolidated AbyssID service (removed deprecated abyssid-backend)
+- Consolidated QorID service (removed deprecated abyssid-backend)
 - Comprehensive documentation rewrite
 - Professional repository structure
 
 ### Changed
-- Portal Web now uses abyssid-service (port 8082) instead of deprecated abyssid-backend
+- Portal Web now uses qorid-service (port 8082) instead of deprecated abyssid-backend
 - Moved engine/recursion to templates/game-engine-recursion
 - Archived legacy documentation to docs/archive/
 
 ### Removed
-- `apps/abyssid-backend/` - Superseded by `apps/abyssid-service/`
+- `apps/abyssid-backend/` - Superseded by `apps/qorid-service/`
 - `other/legacy-runtime-stubs/` - Deprecated runtime crates
 - `engine/` directory - Contents moved to templates/
 
@@ -33,14 +33,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - urgeid_registry (On-chain identity)
   - nft_dgen (D-GEN NFT standard)
   - fabric_manager (P2P asset management)
-  - abyss_registry (Marketplace)
+  - qor_registry_legacy (Marketplace)
   - developer_registry (Developer profiles)
   - dev_capsules (Development environments)
   - recursion_registry (Game worlds)
   - work_claim (Mining rewards)
-- AbyssOS Portal desktop environment
+- QLOUD OS desktop environment
 - Portal Web information site
-- AbyssID authentication system
+- QorID authentication system
 - JSON-RPC 2.0 API (40+ methods)
 - TypeScript and Rust SDKs
 - Docker deployment configurations
@@ -48,7 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Infrastructure
 - Production deployment at 51.210.209.112
-- AbyssOS live at https://demiurge.cloud
+- QOR OS live at https://demiurge.cloud
 - RPC endpoint at https://rpc.demiurge.cloud/rpc
 
 ---

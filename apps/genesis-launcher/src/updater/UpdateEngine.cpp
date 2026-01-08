@@ -45,7 +45,7 @@ void UpdateEngine::checkForUpdates()
     QUrl url{getManifestUrl()};
     QNetworkRequest request{url};
     request.setHeader(QNetworkRequest::UserAgentHeader, 
-                      QString("GenesisLauncher/%1").arg(APP_VERSION));
+                      QString("DemiurgeQor/%1").arg(APP_VERSION));
     
     QNetworkReply *reply = m_networkManager->get(request);
     
@@ -301,7 +301,7 @@ QString UpdateEngine::getCurrentVersion(const QString &component) const
 {
     // Read version from installed component
     // For now return the app version
-    if (component == "GenesisLauncher") {
+    if (component == "DemiurgeQor") {
         return QString(APP_VERSION);
     }
     

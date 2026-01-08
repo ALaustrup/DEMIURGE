@@ -47,7 +47,7 @@ NEXT_PUBLIC_FABRIC_PROD_ENDPOINT=https://fabric.demiurge.xyz/api/fabric
 **Implementation:**
 - `apps/portal-web/src/config/operator.ts` - Role definitions and permissions
 - `apps/portal-web/src/lib/operator/OperatorContextProvider.tsx` - React context
-- `indexer/abyss-gateway/src/chatDb.ts` - Operators table and functions
+- `indexer/qor-gateway/src/chatDb.ts` - Operators table and functions
 - GraphQL schema and resolvers for operators
 
 **Roles:**
@@ -73,7 +73,7 @@ NEXT_PUBLIC_CURRENT_USER_NAME=Operator
 ### 3. Archon Action Bridge
 
 **Implementation:**
-- `indexer/abyss-gateway/src/actionBridge.ts` - Action execution service
+- `indexer/qor-gateway/src/actionBridge.ts` - Action execution service
 - GraphQL mutation: `executeAction`
 - Extended Archon proposals to reference actions
 
@@ -127,12 +127,12 @@ NEXT_PUBLIC_CURRENT_USER_NAME=Operator
 **Files:**
 - `docker-compose.yml` - Multi-container deployment
 - `apps/portal-web/Dockerfile` - Portal web container
-- `indexer/abyss-gateway/Dockerfile` - Gateway container
+- `indexer/qor-gateway/Dockerfile` - Gateway container
 - `docs/DEPLOYMENT_RC0.md` - Deployment guide
 
 **Services:**
 - `portal-web` - Next.js frontend (port 3000)
-- `abyss-gateway` - GraphQL API + SQLite (port 4000)
+- `qor-gateway` - GraphQL API + SQLite (port 4000)
 
 **Features:**
 - Environment variable configuration
@@ -223,10 +223,10 @@ DEMIURGE_RPC_URL=http://...
 - `apps/portal-web/src/config/operator.ts`
 - `apps/portal-web/src/lib/operator/OperatorContextProvider.tsx`
 - `apps/portal-web/src/components/ops/OpsLogView.tsx`
-- `indexer/abyss-gateway/src/actionBridge.ts`
+- `indexer/qor-gateway/src/actionBridge.ts`
 - `docker-compose.yml`
 - `apps/portal-web/Dockerfile`
-- `indexer/abyss-gateway/Dockerfile`
+- `indexer/qor-gateway/Dockerfile`
 - `docs/DEPLOYMENT_RC0.md`
 
 ### Modified Files
@@ -237,9 +237,9 @@ DEMIURGE_RPC_URL=http://...
 - `apps/portal-web/src/app/timeline/page.tsx` - Role-based export button
 - `apps/portal-web/src/components/fracture/FractureNav.tsx` - Operator role badge
 - `apps/portal-web/src/components/fracture/FabricTopology.tsx` - FabricService integration
-- `indexer/abyss-gateway/src/chatDb.ts` - Operators table
-- `indexer/abyss-gateway/src/schema.ts` - Operator types, Action Bridge mutation
-- `indexer/abyss-gateway/src/resolvers.ts` - Operator resolvers, Action Bridge resolver, enhanced applyArchonProposal
+- `indexer/qor-gateway/src/chatDb.ts` - Operators table
+- `indexer/qor-gateway/src/schema.ts` - Operator types, Action Bridge mutation
+- `indexer/qor-gateway/src/resolvers.ts` - Operator resolvers, Action Bridge resolver, enhanced applyArchonProposal
 
 ---
 

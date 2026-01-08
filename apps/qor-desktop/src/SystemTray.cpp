@@ -15,7 +15,7 @@ SystemTray::SystemTray(MainWindow *mainWindow)
 {
     // Set icon
     setIcon(QIcon(":/icons/app.png"));
-    setToolTip(tr("Abyss Explorer"));
+    setToolTip(tr("QOR Explorer"));
     
     // Create context menu
     setContextMenu(createContextMenu());
@@ -32,7 +32,7 @@ QMenu* SystemTray::createContextMenu()
 {
     QMenu *menu = new QMenu();
     
-    QAction *showAction = menu->addAction(tr("&Show Abyss Explorer"));
+    QAction *showAction = menu->addAction(tr("&Show QOR Explorer"));
     connect(showAction, &QAction::triggered, [this]() {
         m_mainWindow->show();
         m_mainWindow->raise();
@@ -69,7 +69,7 @@ void SystemTray::showNotification(const QString &title, const QString &message)
 void SystemTray::updateStatus(bool connected, int blockHeight)
 {
     QString tooltip = connected 
-        ? tr("Abyss Explorer - Connected (Block #%1)").arg(blockHeight)
-        : tr("Abyss Explorer - Disconnected");
+        ? tr("QOR Explorer - Connected (Block #%1)").arg(blockHeight)
+        : tr("QOR Explorer - Disconnected");
     setToolTip(tooltip);
 }

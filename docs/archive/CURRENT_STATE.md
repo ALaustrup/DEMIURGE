@@ -21,17 +21,17 @@
    - Config: `/opt/demiurge/chain/configs/node.devnet.toml`
    - Status: ✅ Live
 
-2. **AbyssOS Portal**
+2. **QLOUD OS**
    - URL: https://demiurge.cloud
-   - Path: `/var/www/abyssos-portal`
+   - Path: `/var/www/qloud-os`
    - SSL: Let's Encrypt (auto-renewal enabled)
    - Status: ✅ Live
 
-3. **Abyss Gateway (GraphQL)**
+3. **QOR Gateway (GraphQL)**
    - URL: http://localhost:4000/graphql (internal)
    - Status: ✅ Running (integrated with portal-web)
 
-4. **AbyssID Backend**
+4. **QorID Backend**
    - URL: http://localhost:3001/api/abyssid
    - Database: SQLite3
    - Status: ✅ Running (for local development)
@@ -40,8 +40,8 @@
 
 - **Config File**: `/etc/nginx/sites-available/demiurge.cloud`
 - **Domains**:
-  - `demiurge.cloud` → AbyssOS Portal
-  - `www.demiurge.cloud` → AbyssOS Portal
+  - `demiurge.cloud` → QLOUD OS
+  - `www.demiurge.cloud` → QLOUD OS
   - `rpc.demiurge.cloud` → RPC Proxy
 - **SSL**: All domains have valid Let's Encrypt certificates
 - **HTTP**: Redirects to HTTPS
@@ -67,7 +67,7 @@ DEMIURGE/
 │   │       ├── urgeid_registry.rs
 │   │       ├── nft_dgen.rs
 │   │       ├── fabric_manager.rs
-│   │       ├── abyss_registry.rs
+│   │       ├── qor_registry_legacy.rs
 │   │       ├── developer_registry.rs
 │   │       ├── dev_capsules.rs
 │   │       ├── recursion_registry.rs
@@ -78,15 +78,15 @@ DEMIURGE/
 │   │   ├── src/app/        # Pages (nexus, chat, fabric, etc.)
 │   │   ├── src/components/ # React components
 │   │   └── src/lib/        # Utilities, RPC client, GraphQL
-│   ├── abyssos-portal/     # AbyssOS desktop environment
+│   ├── qloud-os/     # QOR OS desktop environment
 │   │   ├── src/routes/     # BootScreen, LoginScreen, Desktop
 │   │   ├── src/components/ # UI components
 │   │   └── src/state/      # Zustand stores
-│   ├── abyssid-backend/    # AbyssID backend service (SQLite)
-│   ├── abyssid-service/    # AbyssID service (TypeScript)
+│   ├── abyssid-backend/    # QorID backend service (SQLite)
+│   ├── qorid-service/    # QorID service (TypeScript)
 │   └── desktop-qt/         # Qt desktop app
 ├── indexer/
-│   └── abyss-gateway/      # GraphQL gateway + indexer
+│   └── qor-gateway/      # GraphQL gateway + indexer
 │       ├── src/schema.ts   # GraphQL schema
 │       └── src/resolvers.ts # GraphQL resolvers
 ├── sdk/                    # TypeScript & Rust SDKs
@@ -120,7 +120,7 @@ All runtime modules are implemented in `chain/src/runtime/`:
 2. ✅ `urgeid_registry` - Identity system (profiles, usernames, handles, Syzygy, leveling, badges)
 3. ✅ `nft_dgen` - D-GEN NFT standard (D-721, minting, transfers, royalties, DEV Badges)
 4. ✅ `fabric_manager` - P2P Fabric asset management (registration, fee pools, seeder rewards)
-5. ✅ `abyss_registry` - Marketplace listings (create, cancel, buy, royalties)
+5. ✅ `qor_registry_legacy` - Marketplace listings (create, cancel, buy, royalties)
 6. ✅ `developer_registry` - Developer profiles and projects (registration, reputation, auto-mint DEV Badge)
 7. ✅ `dev_capsules` - Development capsule management (draft, live, paused, archived)
 8. ✅ `recursion_registry` - Recursion world management (world creation, ownership, Fabric linking)
@@ -139,16 +139,16 @@ See [Runtime Modules Documentation](overview/RUNTIME.md) for complete details.
   - Nexus (Fabric topology)
   - Timeline view
   - Archon AI integration
-  - GraphQL integration with Abyss Gateway
+  - GraphQL integration with QOR Gateway
 
-- ✅ **AbyssOS** (`abyssos-portal`) - Full-screen desktop environment
+- ✅ **QOR OS** (`qloud-os`) - Full-screen desktop environment
   - Boot screen with glitch effects
-  - AbyssID authentication (login/signup with seed phrase recovery)
+  - QorID authentication (login/signup with seed phrase recovery)
   - Desktop environment with circular dock
   - Window management (drag, resize, minimize, maximize)
   - Chain Ops app (real-time blockchain status)
   - CRAFT IDE (Creator's Advanced Framework & Tools) - Monaco Editor, AI integration, templates, drag-and-drop, GitHub integration, Rig system
-  - Abyss Wallet integration
+  - QOR Wallet integration
   - File storage (500GB per user)
   - NFT minting and swapping
   - NEON Player (media playback)
@@ -177,7 +177,7 @@ See [Runtime Modules Documentation](overview/RUNTIME.md) for complete details.
   - Badge system (Luminary at 10,000 syzygy)
   - Archon status tracking
 
-- ✅ **AbyssID** - Off-chain authentication system
+- ✅ **QorID** - Off-chain authentication system
   - Username-based authentication
   - Seed phrase generation and recovery
   - Deterministic key derivation (Ed25519)
@@ -200,7 +200,7 @@ See [Runtime Modules Documentation](overview/RUNTIME.md) for complete details.
   - Transaction building and signing
   - Transaction history
 
-- ✅ **GraphQL** (Abyss Gateway)
+- ✅ **GraphQL** (QOR Gateway)
   - Chat system queries and mutations
   - User profiles
   - Developer data
@@ -215,9 +215,9 @@ See [RPC API Documentation](api/RPC.md) and [GraphQL API Documentation](api/GRAP
 - ✅ Complete runtime module system (9 modules)
 - ✅ Comprehensive RPC API (40+ methods)
 - ✅ UrgeID identity system with leveling
-- ✅ AbyssID authentication with seed phrase recovery
+- ✅ QorID authentication with seed phrase recovery
 - ✅ Fracture Portal with full feature set
-- ✅ AbyssOS desktop environment
+- ✅ QOR OS desktop environment
 - ✅ GraphQL gateway for chat and social features
 - ✅ Developer registry with auto-mint DEV Badge NFTs
 - ✅ Work claim mining system
@@ -284,15 +284,15 @@ See [RPC API Documentation](api/RPC.md) and [GraphQL API Documentation](api/GRAP
    ```
    - Portal available at `http://localhost:3000`
 
-5. **Start Abyss Gateway (dev):**
+5. **Start QOR Gateway (dev):**
    ```bash
-   cd indexer/abyss-gateway
+   cd indexer/qor-gateway
    pnpm install
    pnpm dev
    ```
    - GraphQL API at `http://localhost:4000/graphql`
 
-6. **Start AbyssID Backend (dev):**
+6. **Start QorID Backend (dev):**
    ```bash
    cd apps/abyssid-backend
    npm install
@@ -320,15 +320,15 @@ All documentation is organized in `docs/`:
 - [RPC API](api/RPC.md) - JSON-RPC method reference
 - [GraphQL API](api/GRAPHQL.md) - GraphQL schema and queries
 - [Deployment](deployment/README_NODE0.md) - Production setup
-- [AbyssOS](apps/ABYSSOS_PORTAL.md) - Desktop environment guide
-- [AbyssID](ABYSSID_UNIVERSAL_AUTH.md) - Authentication system
+- [QOR OS](apps/QLOUD_OS_PORTAL.md) - Desktop environment guide
+- [QorID](QORID_UNIVERSAL_AUTH.md) - Authentication system
 
 ## Next Steps
 
 ### Immediate
 
 - [ ] Complete GraphQL API documentation
-- [ ] Expand AbyssOS apps (Mandelbrot Miner integration)
+- [ ] Expand QOR OS apps (Mandelbrot Miner integration)
 - [ ] Multi-node devnet setup
 - [ ] Enhanced transaction indexing
 
@@ -345,7 +345,7 @@ All documentation is organized in `docs/`:
 
 - **Documentation**: See [docs/index.md](index.md)
 - **RPC Endpoint**: https://rpc.demiurge.cloud/rpc
-- **AbyssOS Portal**: https://demiurge.cloud
+- **QLOUD OS**: https://demiurge.cloud
 - **GraphQL Endpoint**: http://localhost:4000/graphql (dev)
 
 ---

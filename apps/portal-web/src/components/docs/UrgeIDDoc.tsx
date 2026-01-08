@@ -1,12 +1,12 @@
 "use client";
 
-export function AbyssIDDoc() {
+export function QorIDDoc() {
   return (
     <div className="space-y-6 text-sm text-zinc-200">
       <div>
         <h3 className="text-lg font-semibold text-zinc-50 mb-3">Overview</h3>
         <p className="text-zinc-300 mb-4">
-          AbyssID is the on-chain identity system for Demiurge. Every user has an AbyssID profile that serves as their wallet address, identity, and contribution tracker.
+          QorID is the on-chain identity system for Demiurge. Every user has an QorID profile that serves as their wallet address, identity, and contribution tracker.
         </p>
       </div>
 
@@ -74,7 +74,7 @@ export function AbyssIDDoc() {
       <div>
         <h3 className="text-lg font-semibold text-zinc-50 mb-3">My Void Dashboard</h3>
         <p className="text-xs text-zinc-300 mb-2">
-          Access your AbyssID profile via "My Void" in the portal:
+          Access your QorID profile via "My Void" in the portal:
         </p>
         <ul className="text-xs text-zinc-300 space-y-1 list-disc list-inside">
           <li>View profile, level, and Syzygy score</li>
@@ -87,7 +87,7 @@ export function AbyssIDDoc() {
 
       <div className="p-4 bg-cyan-500/10 border border-cyan-500/20 rounded-lg">
         <p className="text-xs text-zinc-200">
-          <strong>Complete Documentation:</strong> See Runtime Modules → AbyssID Registry for full API reference, transaction calls, and storage keys.
+          <strong>Complete Documentation:</strong> See Runtime Modules → QorID Registry for full API reference, transaction calls, and storage keys.
         </p>
       </div>
     </div>

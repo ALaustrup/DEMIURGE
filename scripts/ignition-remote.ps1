@@ -92,5 +92,5 @@ if ($logResult -match "ARCHON") {
 Write-Host "`n📋 Next Steps:" -ForegroundColor Yellow
 Write-Host "   1. Monitor logs: ssh -i $SshKey $Server 'sudo journalctl -u demiurge-node0 -f'" -ForegroundColor White
 Write-Host "   2. Test RPC: curl -X POST https://rpc.demiurge.cloud/rpc -d '{\"jsonrpc\":\"2.0\",\"method\":\"archon_state\",\"params\":[],\"id\":1}'" -ForegroundColor White
-Write-Host "   3. Check AbyssOS: Open Archon Panel in portal" -ForegroundColor White
+Write-Host "   3. Check QOR OS: Open Archon Panel in portal" -ForegroundColor White
 Write-Host ""

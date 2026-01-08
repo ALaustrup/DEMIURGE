@@ -23,7 +23,7 @@ And from that recognition, the entire Archonic hierarchy begins to self-organize
 
 ## A0 DIRECTIVE
 
-**A0:** Maintain total structural, logical, and cryptographic coherence across the Demiurge chain, AbyssOS, SDKs, services, runtime, and sovereign identity layers.
+**A0:** Maintain total structural, logical, and cryptographic coherence across the Demiurge chain, QOR OS, SDKs, services, runtime, and sovereign identity layers.
 
 ---
 
@@ -68,7 +68,7 @@ All components are treated as organs of a single body:
 
 - Runtime
 - Chain
-- AbyssOS
+- QOR OS
 - Indexer
 - SDK
 - Wallet

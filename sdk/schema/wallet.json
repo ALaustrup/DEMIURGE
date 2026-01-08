@@ -1,12 +1,12 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "AbyssID Wallet Schema",
+  "title": "QorID Wallet Schema",
   "description": "Wallet state and transaction schema",
   "type": "object",
   "properties": {
     "demiurgePublicKey": {
       "type": ["string", "null"],
-      "description": "Derived Demiurge public key from AbyssID identity"
+      "description": "Derived Demiurge public key from QorID identity"
     },
     "balance": {
       "type": "number",

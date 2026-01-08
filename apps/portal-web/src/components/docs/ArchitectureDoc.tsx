@@ -22,7 +22,7 @@ export function ArchitectureDoc() {
             <h4 className="font-semibold text-zinc-100 mb-2">Runtime Modules</h4>
             <ul className="text-xs text-zinc-300 space-y-1">
               <li>bank_cgt, urgeid_registry, nft_dgen</li>
-              <li>fabric_manager, abyss_registry</li>
+              <li>fabric_manager, qor_registry_legacy</li>
               <li>developer_registry, dev_capsules</li>
               <li>recursion_registry, work_claim</li>
               <li>Versioned registration order</li>
@@ -34,7 +34,7 @@ export function ArchitectureDoc() {
             <h4 className="font-semibold text-zinc-100 mb-2">Portal Web</h4>
             <ul className="text-xs text-zinc-300 space-y-1 list-disc list-inside">
               <li>Next.js 15+ with React 18</li>
-              <li>AbyssID onboarding and profiles</li>
+              <li>QorID onboarding and profiles</li>
               <li>Chat system (World Chat, DMs)</li>
               <li>Marketplace browsing</li>
               <li>Fabric visualization</li>
@@ -43,7 +43,7 @@ export function ArchitectureDoc() {
           </div>
 
           <div className="p-4 bg-white/5 border border-white/10 rounded-lg">
-            <h4 className="font-semibold text-zinc-200 mb-2">Abyss Gateway</h4>
+            <h4 className="font-semibold text-zinc-200 mb-2">QOR Gateway</h4>
             <ul className="text-xs text-zinc-400 space-y-1 list-disc list-inside">
               <li>GraphQL API for chat/social</li>
               <li>Block indexing</li>
@@ -59,7 +59,7 @@ export function ArchitectureDoc() {
         <h3 className="text-lg font-semibold text-zinc-100 mb-3">Core Concepts</h3>
         <div className="grid md:grid-cols-2 gap-4">
           <div className="p-4 bg-black/20 border border-white/10 rounded-lg">
-            <h4 className="font-semibold text-cyan-400 mb-2">AbyssID (My Void)</h4>
+            <h4 className="font-semibold text-cyan-400 mb-2">QorID (My Void)</h4>
             <p className="text-xs text-zinc-300">
               Sovereign identity with username, Syzygy score, leveling system, badges. Serves as wallet address and identity profile.
             </p>
@@ -107,10 +107,10 @@ export function ArchitectureDoc() {
         <div className="p-4 bg-black/20 border border-white/10 rounded-lg">
           <ol className="text-xs text-zinc-300 space-y-2 list-decimal list-inside">
             <li>User interacts with Portal Web (Next.js frontend)</li>
-            <li>Frontend calls JSON-RPC API (chain node) or GraphQL API (Abyss Gateway)</li>
+            <li>Frontend calls JSON-RPC API (chain node) or GraphQL API (QOR Gateway)</li>
             <li>Chain node validates transaction, dispatches to runtime module</li>
             <li>Module executes transaction, updates RocksDB state</li>
-            <li>Abyss Gateway indexes blocks, provides GraphQL queries</li>
+            <li>QOR Gateway indexes blocks, provides GraphQL queries</li>
             <li>Frontend updates UI with new state</li>
           </ol>
         </div>

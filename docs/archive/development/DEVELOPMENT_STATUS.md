@@ -39,7 +39,7 @@
 - ✅ **Vault Export/Import**: Password-encrypted key backup/restore
 - ✅ **Genesis Archon Dashboard**: Balance, Archon status, NFT display
 
-### Abyss Gateway (Implemented)
+### QOR Gateway (Implemented)
 - ✅ **GraphQL API**: Complete schema with queries, mutations, subscriptions
 - ✅ **SQLite Database**: Message persistence
 - ✅ **Chat Resolvers**: All chat operations implemented
@@ -158,7 +158,7 @@
 ## 📝 Development Workflow
 
 Based on `TESTING_PHASE3_CHAT.md`, the workflow is:
-1. Start services (Chain, Abyss Gateway, Portal)
+1. Start services (Chain, QOR Gateway, Portal)
 2. Test features against checklist
 3. Commit when tests pass
 4. Move to next enhancement

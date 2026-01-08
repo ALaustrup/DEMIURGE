@@ -12,7 +12,7 @@ import { StakingApi } from './staking';
 
 export class DemiurgeSDK {
   public readonly cgt: CgtApi;
-  public readonly abyssid: AbyssIdApi;
+  public readonly qorid: AbyssIdApi;
   public readonly nft: NftApi;
   public readonly marketplace: MarketplaceApi;
   public readonly activity: ActivityApi;

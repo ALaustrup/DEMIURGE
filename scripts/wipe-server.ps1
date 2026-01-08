@@ -55,7 +55,7 @@ Write-Host "⏹️  Step 1: Stopping all services..." -ForegroundColor Yellow
 
 $stopCommands = @(
     "sudo systemctl stop demiurge-node0 2>/dev/null || true",
-    "sudo systemctl stop abyssid-service 2>/dev/null || true",
+    "sudo systemctl stop qorid-service 2>/dev/null || true",
     "sudo systemctl stop dns-service 2>/dev/null || true",
     "sleep 3"
 )
@@ -110,7 +110,7 @@ Write-Host "`n🗑️  Step 4: Cleaning up logs..." -ForegroundColor Yellow
 
 $logCommands = @(
     "sudo journalctl --vacuum-time=1s -u demiurge-node0 2>/dev/null || true",
-    "sudo journalctl --vacuum-time=1s -u abyssid-service 2>/dev/null || true",
+    "sudo journalctl --vacuum-time=1s -u qorid-service 2>/dev/null || true",
     "sudo journalctl --vacuum-time=1s -u dns-service 2>/dev/null || true",
     "sudo rm -f $RemoteBase/*.log 2>/dev/null || true",
     "sudo rm -f $RemoteBase/PULSE_SEAL.json 2>/dev/null || true"
@@ -129,10 +129,10 @@ if ($RemoveServices) {
     
     $serviceCommands = @(
         "sudo systemctl disable demiurge-node0 2>/dev/null || true",
-        "sudo systemctl disable abyssid-service 2>/dev/null || true",
+        "sudo systemctl disable qorid-service 2>/dev/null || true",
         "sudo systemctl disable dns-service 2>/dev/null || true",
         "sudo rm -f /etc/systemd/system/demiurge-node0.service 2>/dev/null || true",
-        "sudo rm -f /etc/systemd/system/abyssid-service.service 2>/dev/null || true",
+        "sudo rm -f /etc/systemd/system/qorid-service.service 2>/dev/null || true",
         "sudo rm -f /etc/systemd/system/dns-service.service 2>/dev/null || true",
         "sudo systemctl daemon-reload"
     )

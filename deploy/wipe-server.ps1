@@ -32,8 +32,8 @@ Write-Host "Connecting to server to wipe..." -ForegroundColor Yellow
 # Commands to run on server
 $wipeCommands = @"
 # Stop all services
-sudo systemctl stop demiurge-chain abyssid abyss-gateway nginx 2>/dev/null || true
-sudo systemctl disable demiurge-chain abyssid abyss-gateway nginx 2>/dev/null || true
+sudo systemctl stop demiurge-chain abyssid qor-gateway nginx 2>/dev/null || true
+sudo systemctl disable demiurge-chain abyssid qor-gateway nginx 2>/dev/null || true
 
 # Remove all application data
 sudo rm -rf /opt/demiurge/*

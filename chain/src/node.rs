@@ -18,7 +18,7 @@ use crate::core::transaction::{Address, Transaction};
 use crate::runtime::{
     get_all_active_listings, get_balance_cgt, get_cgt_total_supply, get_fabric_asset, get_listing, get_nft,
     get_nfts_by_owner, is_archon,
-    BankCgtModule, FabricRootHash, ListingId, NftId, Runtime, RuntimeModule, AbyssIDRegistryModule,
+    BankCgtModule, FabricRootHash, ListingId, NftId, Runtime, RuntimeModule, QorIDRegistryModule,
 };
 
 /// Chain information returned by JSON-RPC queries.
@@ -266,12 +266,12 @@ impl Node {
     }
 
     /// Get marketplace listing by ID.
-    pub fn get_listing(&self, id: ListingId) -> Option<crate::runtime::abyss_registry::Listing> {
+    pub fn get_listing(&self, id: ListingId) -> Option<crate::runtime::qor_registry_legacy::Listing> {
         self.with_state(|state| get_listing(state, id))
     }
 
     /// Get all active marketplace listings.
-    pub fn get_all_active_listings(&self) -> Vec<crate::runtime::abyss_registry::Listing> {
+    pub fn get_all_active_listings(&self) -> Vec<crate::runtime::qor_registry_legacy::Listing> {
         self.with_state(|state| get_all_active_listings(state))
     }
 
@@ -428,11 +428,11 @@ fn init_genesis_state(state: &mut State) -> Result<()> {
         .map_err(|e| anyhow::anyhow!("Failed to mint genesis CGT: {}", e))?;
 
     // Mark Genesis Archon as Archon
-    let abyssid_module = AbyssIDRegistryModule::new();
+    let abyssid_module = QorIDRegistryModule::new();
     let claim_tx = Transaction {
         from: genesis_addr,
         nonce: 0,
-        module_id: "abyssid_registry".to_string(),
+        module_id: "qor_registry".to_string(),
         call_id: "claim_archon".to_string(),
         payload: vec![],
         fee: 0,

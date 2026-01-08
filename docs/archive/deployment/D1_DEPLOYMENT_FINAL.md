@@ -25,27 +25,27 @@
 #### ✅ Phase 6: Archon
 - Integrated in chain binary (no separate service)
 
-#### ✅ Phase 7: AbyssID
+#### ✅ Phase 7: QorID
 - ✅ All TypeScript errors fixed
 - ✅ Built successfully
 - ✅ systemd service: `abyssid.service` - **ACTIVE**
 - ✅ Endpoint: `http://127.0.0.1:8082`
 - ✅ Health check: `/healthz`
 
-#### ✅ Phase 8: Abyss Gateway
+#### ✅ Phase 8: QOR Gateway
 - ✅ Built successfully
-- ✅ systemd service: `abyss-gateway.service` - **ACTIVE**
+- ✅ systemd service: `qor-gateway.service` - **ACTIVE**
 - ✅ GraphQL endpoint: `http://127.0.0.1:4000/graphql`
 
 #### ✅ Phase 9: Web Applications
-- ✅ AbyssOS built and deployed to `/opt/demiurge/web/abyssos`
+- ✅ QOR OS built and deployed to `/opt/demiurge/web/abyssos`
 - ✅ All assets deployed (JS, CSS, media files)
 - ⚠️ Portal (Next.js) - deferred (requires Next.js server setup)
 
 #### ✅ Phase 10: Nginx
 - ✅ Configured for:
-  - `demiurge.cloud` → AbyssOS (HTTPS)
-  - `www.demiurge.cloud` → AbyssOS (HTTPS)
+  - `demiurge.cloud` → QOR OS (HTTPS)
+  - `www.demiurge.cloud` → QOR OS (HTTPS)
   - `rpc.demiurge.cloud` → Chain RPC proxy (HTTPS)
 - ✅ Service: `nginx.service` - **ACTIVE**
 
@@ -71,7 +71,7 @@
 | Service | Status | Port | Internal Endpoint | Public Endpoint |
 |---------|--------|------|-------------------|-----------------|
 | demiurge-chain | ✅ Active | 8545 | `http://127.0.0.1:8545/rpc` | `https://rpc.demiurge.cloud/rpc` |
-| abyss-gateway | ✅ Active | 4000 | `http://127.0.0.1:4000/graphql` | Internal only |
+| qor-gateway | ✅ Active | 4000 | `http://127.0.0.1:4000/graphql` | Internal only |
 | abyssid | ✅ Active | 8082 | `http://127.0.0.1:8082` | Internal only |
 | nginx | ✅ Active | 80, 443 | - | `https://demiurge.cloud` |
 
@@ -80,7 +80,7 @@
 ## 🌐 Public Access Points
 
 ### ✅ Fully Operational
-- **AbyssOS**: `https://demiurge.cloud` ✅
+- **QOR OS**: `https://demiurge.cloud` ✅
 - **RPC**: `https://rpc.demiurge.cloud/rpc` ✅
 
 ### ⏳ Pending DNS
@@ -112,11 +112,11 @@
 ## ✅ Completed Todos
 
 1. ✅ **Chain Invariant Bug** - Fixed (genesis height check)
-2. ✅ **AbyssID TypeScript Errors** - All fixed
-3. ✅ **AbyssID Service** - Built, deployed, and running
-4. ✅ **Abyss Gateway** - Built, deployed, and running
-5. ✅ **AbyssOS Build** - Built successfully
-6. ✅ **AbyssOS Deployment** - Deployed with all assets
+2. ✅ **QorID TypeScript Errors** - All fixed
+3. ✅ **QorID Service** - Built, deployed, and running
+4. ✅ **QOR Gateway** - Built, deployed, and running
+5. ✅ **QOR OS Build** - Built successfully
+6. ✅ **QOR OS Deployment** - Deployed with all assets
 7. ✅ **Nginx Configuration** - Configured for all domains
 8. ✅ **TLS Certificates** - Obtained for `demiurge.cloud`
 9. ✅ **Service Verification** - All services active
@@ -153,13 +153,13 @@ sudo certbot --nginx -d rpc.demiurge.cloud \
 
 **Check all services:**
 ```bash
-sudo systemctl status demiurge-chain abyss-gateway abyssid nginx
+sudo systemctl status demiurge-chain qor-gateway abyssid nginx
 ```
 
 **View logs:**
 ```bash
 sudo journalctl -u demiurge-chain.service -f
-sudo journalctl -u abyss-gateway.service -f
+sudo journalctl -u qor-gateway.service -f
 sudo journalctl -u abyssid.service -f
 sudo tail -f /var/log/nginx/access.log
 ```
@@ -176,7 +176,7 @@ curl -X POST http://127.0.0.1:4000/graphql \
   -H "Content-Type: application/json" \
   -d '{"query":"{ __typename }"}'
 
-# AbyssID Health
+# QorID Health
 curl http://127.0.0.1:8082/healthz
 ```
 
@@ -187,7 +187,7 @@ curl http://127.0.0.1:8082/healthz
 - **Total Deployment Time:** ~2.5 hours (including fixes and iterations)
 - **Phases Completed:** 12/12 (100%)
 - **Services Running:** 4/4 (100%)
-- **Web Apps Deployed:** 1/2 (50% - AbyssOS complete, Portal deferred)
+- **Web Apps Deployed:** 1/2 (50% - QOR OS complete, Portal deferred)
 - **TLS:** ✅ Configured for `demiurge.cloud`
 - **Uptime:** All services stable and auto-starting
 
@@ -198,26 +198,26 @@ curl http://127.0.0.1:8082/healthz
 1. **Chain Invariant Fix**
    - `chain/src/invariants.rs` - Allow genesis state (height 0)
 
-2. **AbyssID TypeScript Fixes**
-   - `apps/abyssid-service/src/routes/wallet.ts` - Router types
-   - `apps/abyssid-service/src/routes/nftSwap.ts` - Router types
-   - `apps/abyssid-service/src/routes/storage.ts` - Router types
-   - `apps/abyssid-service/src/routes/archon.ts` - Import extensions
-   - `apps/abyssid-service/src/crypto/chainSigner.ts` - ChainUserMinimal type
+2. **QorID TypeScript Fixes**
+   - `apps/qorid-service/src/routes/wallet.ts` - Router types
+   - `apps/qorid-service/src/routes/nftSwap.ts` - Router types
+   - `apps/qorid-service/src/routes/storage.ts` - Router types
+   - `apps/qorid-service/src/routes/archon.ts` - Import extensions
+   - `apps/qorid-service/src/crypto/chainSigner.ts` - ChainUserMinimal type
 
-3. **AbyssOS Intro Video Fixes**
-   - `apps/abyssos-portal/src/components/IntroVideo.tsx` - Aggressive autoplay, mute workaround, clickability fixes
+3. **QOR OS Intro Video Fixes**
+   - `apps/qloud-os/src/components/IntroVideo.tsx` - Aggressive autoplay, mute workaround, clickability fixes
 
 4. **Deployment Scripts**
    - `deploy/production-d1-deploy.sh` - Complete deployment automation
    - `deploy/deploy-to-d1.ps1` - PowerShell deployment helper
    - `deploy/node.toml` - Chain configuration template
-   - `deploy/nginx-abyssos.conf` - Nginx config for AbyssOS
+   - `deploy/nginx-abyssos.conf` - Nginx config for QOR OS
    - `deploy/nginx-rpc.conf` - Nginx config for RPC
 
 5. **Documentation**
    - `docs/deployment/D1_DEPLOYMENT_COMPLETE.md` - Deployment status
-   - `docs/deployment/ABYSSID_TYPESCRIPT_FIXES.md` - Fix documentation
+   - `docs/deployment/QORID_TYPESCRIPT_FIXES.md` - Fix documentation
 
 ---
 
@@ -225,7 +225,7 @@ curl http://127.0.0.1:8082/healthz
 
 ### ✅ Ready for Alpha Testing
 - All core services operational
-- AbyssOS accessible via HTTPS
+- QOR OS accessible via HTTPS
 - RPC endpoint available
 - Services auto-start on reboot
 - TLS configured and auto-renewing

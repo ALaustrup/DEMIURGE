@@ -10,7 +10,7 @@
 #include <QObject>
 #include <QVariantMap>
 
-class AbyssIDManager;
+class QorIDManager;
 class QNetworkAccessManager;
 
 class WalletBridge : public QObject
@@ -20,7 +20,7 @@ class WalletBridge : public QObject
     Q_PROPERTY(int blockHeight READ blockHeight NOTIFY blockHeightChanged)
 
 public:
-    explicit WalletBridge(AbyssIDManager *abyssId, QObject *parent = nullptr);
+    explicit WalletBridge(QorIDManager *abyssId, QObject *parent = nullptr);
     ~WalletBridge();
 
     // Chain status
@@ -45,7 +45,7 @@ private slots:
 private:
     void connectToChain();
     
-    AbyssIDManager *m_abyssIdManager;
+    QorIDManager *m_abyssIdManager;
     QNetworkAccessManager *m_networkManager;
     
     QString m_rpcUrl = "https://rpc.demiurge.cloud/rpc";

@@ -3,7 +3,7 @@
  * 
  * Shows branded intro animations in sequence:
  * 1. Genesis Logo (3s)
- * 2. Abyss OS Logo (3s)
+ * 2. QOR OS Logo (3s)
  * 3. Demiurge Blockchain Logo (3s)
  * 
  * Uses animated text with glow effects.

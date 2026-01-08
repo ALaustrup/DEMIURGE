@@ -19,11 +19,11 @@ Fracture v1 is the new global portal shell that replaces the old UI structure wi
 2. **FractureNav.tsx** - Top navigation with new IA terms:
    - FRACTURE (brand/logo)
    - Haven | Void | Nexus | Scrolls | Conspire
-   - AbyssID button (triggers AbyssIDDialog)
+   - QorID button (triggers QorIDDialog)
    - Responsive mobile navigation
 
-3. **AbyssIDDialog.tsx** - Identity system modal with:
-   - AbyssID input with availability checking
+3. **QorIDDialog.tsx** - Identity system modal with:
+   - QorID input with availability checking
    - Red glow animation for "taken"
    - Neochrome glow animation for "available"
    - Multi-step flow: Input → Generating → Backup Warning
@@ -118,14 +118,14 @@ Fracture v1 is the new global portal shell that replaces the old UI structure wi
 
 All components include TODO markers for Milestone 4.1 integration:
 - `TODO: Milestone 4.1 – integrate audio-reactive behavior`
-- `TODO: Milestone 4.1 – connect to AbyssID state`
+- `TODO: Milestone 4.1 – connect to QorID state`
 - `TODO: Milestone 4.1 – integrate keypair generation and wallet binding`
 - `TODO: Milestone 4.1 – integrate [specific feature]`
 
 ## Next Steps
 
 1. Add actual video background assets to `/public/media/`
-2. Integrate real AbyssID registration system
+2. Integrate real QorID registration system
 3. Connect audio engine to actual audio source
 4. Implement full audio-reactive visual effects
 5. Complete ArchonAI chat integration for Conspire page
@@ -150,7 +150,7 @@ apps/portal-web/
 │   │   └── fracture/
 │   │       ├── FractureShell.tsx
 │   │       ├── FractureNav.tsx
-│   │       ├── AbyssIDDialog.tsx
+│   │       ├── QorIDDialog.tsx
 │   │       ├── HeroPanel.tsx
 │   │       ├── AudioReactiveLayer.tsx
 │   │       ├── AudioToggle.tsx
@@ -176,9 +176,9 @@ apps/portal-web/
 feat(fracture): scaffold Fracture v1 portal, IA, routes, and audio engine
 
 - Add FractureShell component with video background and glassmorphism UI
-- Add FractureNav with new IA terms (Haven, Void, Nexus, Scrolls, Conspire, AbyssID)
+- Add FractureNav with new IA terms (Haven, Void, Nexus, Scrolls, Conspire, QorID)
 - Create new route pages: /haven, /void, /nexus, /scrolls, /conspire
-- Add AbyssIDDialog modal component with availability checking
+- Add QorIDDialog modal component with availability checking
 - Implement audio engine scaffolding (AudioEngine, AudioContextProvider, hooks)
 - Add audio-reactive layer and motion hooks (stubbed for future integration)
 - Add Fracture theme configuration

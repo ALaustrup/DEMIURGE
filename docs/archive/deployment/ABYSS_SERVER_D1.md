@@ -15,7 +15,7 @@
 
 **SSH Key Generated:**
 - Private Key: `C:\Users\Gnosis\.ssh\id_abyss`
-- Public Key: `C:\Users\Gnosis\.ssh\id_abyss.pub`
+- Public Key: `C:\Users\Gnosis\.ssh\id_qor.pub`
 
 **Public Key:**
 ```
@@ -51,7 +51,7 @@ When prompted, enter:
 ### Option 2: One-Liner (if you have password access)
 
 ```powershell
-Get-Content $env:USERPROFILE\.ssh\id_abyss.pub | ssh ubuntu@51.210.209.112 "mkdir -p ~/.ssh && chmod 700 ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
+Get-Content $env:USERPROFILE\.ssh\id_qor.pub | ssh ubuntu@51.210.209.112 "mkdir -p ~/.ssh && chmod 700 ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
 ```
 
 ### Option 3: Manual
@@ -77,12 +77,12 @@ Get-Content $env:USERPROFILE\.ssh\id_abyss.pub | ssh ubuntu@51.210.209.112 "mkdi
 
 ---
 
-## Deploying AbyssOS to D1
+## Deploying QOR OS to D1
 
 ### Quick Deploy
 
 ```powershell
-cd apps/abyssos-portal
+cd apps/qloud-os
 
 # Deploy with IP only
 .\deploy-alpha.ps1 -ServerIp 51.210.209.112
@@ -95,14 +95,14 @@ cd apps/abyssos-portal
 
 1. **Build locally:**
    ```bash
-   cd apps/abyssos-portal
+   cd apps/qloud-os
    pnpm install
    pnpm build
    ```
 
 2. **Copy to server:**
    ```bash
-   scp -r dist/* abyss:/var/www/abyssos-portal/
+   scp -r dist/* abyss:/var/www/qloud-os/
    ```
 
 3. **Configure Nginx on server:**
@@ -116,7 +116,7 @@ cd apps/abyssos-portal
    server {
        listen 80;
        server_name _;
-       root /var/www/abyssos-portal;
+       root /var/www/qloud-os;
        index index.html;
        location / {
            try_files $uri $uri/ /index.html;
@@ -133,13 +133,13 @@ cd apps/abyssos-portal
 
 5. **Set permissions:**
    ```bash
-   sudo chown -R www-data:www-data /var/www/abyssos-portal
-   sudo chmod -R 755 /var/www/abyssos-portal
+   sudo chown -R www-data:www-data /var/www/qloud-os
+   sudo chmod -R 755 /var/www/qloud-os
    ```
 
 ---
 
-## Access AbyssOS
+## Access QOR OS
 
 **After deployment:**
 - **URL**: `http://51.210.209.112`
@@ -221,7 +221,7 @@ Get-Content $env:USERPROFILE\.ssh\config
 
 **Verify key:**
 ```powershell
-Get-Content $env:USERPROFILE\.ssh\id_abyss.pub
+Get-Content $env:USERPROFILE\.ssh\id_qor.pub
 ```
 
 ### Permission Denied
@@ -239,15 +239,15 @@ Get-Content $env:USERPROFILE\.ssh\id_abyss.pub
 ssh abyss
 ```
 
-**Deploy AbyssOS:**
+**Deploy QOR OS:**
 ```powershell
-cd apps/abyssos-portal
+cd apps/qloud-os
 .\deploy-alpha.ps1 -ServerIp 51.210.209.112
 ```
 
 **View Public Key:**
 ```powershell
-Get-Content $env:USERPROFILE\.ssh\id_abyss.pub
+Get-Content $env:USERPROFILE\.ssh\id_qor.pub
 ```
 
 **Server IP:** 51.210.209.112

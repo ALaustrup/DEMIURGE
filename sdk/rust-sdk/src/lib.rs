@@ -35,9 +35,9 @@ impl DemiurgeSDK {
         cgt::CgtApi::new(&self.client)
     }
 
-    /// Get the AbyssID API
-    pub fn abyssid(&self) -> abyssid::AbyssIdApi<'_> {
-        abyssid::AbyssIdApi::new(&self.client)
+    /// Get the QorID API
+    pub fn abyssid(&self) -> qorid::AbyssIdApi<'_> {
+        qorid::AbyssIdApi::new(&self.client)
     }
 
     /// Get the NFT API

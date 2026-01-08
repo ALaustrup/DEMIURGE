@@ -134,7 +134,7 @@ function enforceRuntimeIntegrity(): void {
     'urgeid_registry',
     'nft_dgen',
     'fabric_manager',
-    'abyss_registry',
+    'qor_registry_legacy',
     'developer_registry',
     'dev_capsules',
     'recursion_registry',

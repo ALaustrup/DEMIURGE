@@ -61,17 +61,17 @@ scp fracture-bg.mp4 ubuntu@YOUR_SERVER_IP:/opt/demiurge/media/
 ./scripts/setup_pm2.sh
 ```
 
-### 7. Deploy AbyssID Backend (Phase 5)
+### 7. Deploy QorID Backend (Phase 5)
 
 ```bash
 ./scripts/phase5_abyssid_backend.sh
 ```
 
-### 8. Update Frontend for AbyssID (Phase 5)
+### 8. Update Frontend for QorID (Phase 5)
 
 Follow instructions in `scripts/phase5_frontend_update.md` to update:
 - `AbyssStateMachine.ts`
-- Create `AbyssIDContext.tsx`
+- Create `QorIDContext.tsx`
 - Update `layout.tsx`
 
 ### 9. Implement Audio Engine (Phase 4)
@@ -93,7 +93,7 @@ pm2 status
 # Check portal
 curl http://localhost:3000
 
-# Check AbyssID backend
+# Check QorID backend
 curl http://localhost:3001/health
 
 # Check NGINX

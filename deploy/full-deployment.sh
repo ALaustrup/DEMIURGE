@@ -11,24 +11,24 @@ REPO_DIR="/opt/demiurge"
 echo "=== PHASE B: SYNC ARTIFACTS TO PRODUCTION SERVER ==="
 
 # PHASE OMEGA: Ensure only dist/ artifacts are deployed
-# 1. Upload AbyssOS Portal (only dist/ directory)
-echo "Uploading AbyssOS Portal (dist/ only)..."
-if [ ! -d "apps/abyssos-portal/dist" ]; then
-  echo "ERROR: apps/abyssos-portal/dist/ not found. Run 'pnpm build' first."
+# 1. Upload QLOUD OS (only dist/ directory)
+echo "Uploading QLOUD OS (dist/ only)..."
+if [ ! -d "apps/qloud-os/dist" ]; then
+  echo "ERROR: apps/qloud-os/dist/ not found. Run 'pnpm build' first."
   exit 1
 fi
-rsync -avz --delete apps/abyssos-portal/dist/ $SERVER:/var/www/abyssos-portal/
+rsync -avz --delete apps/qloud-os/dist/ $SERVER:/var/www/qloud-os/
 
-# 2. Upload AbyssID backend (only dist/ directory)
-echo "Uploading AbyssID backend (dist/ only)..."
-if [ ! -d "apps/abyssid-service/dist" ]; then
-  echo "ERROR: apps/abyssid-service/dist/ not found. Run 'pnpm build' first."
+# 2. Upload QorID backend (only dist/ directory)
+echo "Uploading QorID backend (dist/ only)..."
+if [ ! -d "apps/qorid-service/dist" ]; then
+  echo "ERROR: apps/qorid-service/dist/ not found. Run 'pnpm build' first."
   exit 1
 fi
-ssh $SERVER "mkdir -p $REPO_DIR/abyssid-service"
-rsync -avz --delete apps/abyssid-service/dist/ $SERVER:$REPO_DIR/abyssid-service/
-if [ -f apps/abyssid-service/.env.production ]; then
-  rsync -avz apps/abyssid-service/.env.production $SERVER:$REPO_DIR/abyssid-service/.env
+ssh $SERVER "mkdir -p $REPO_DIR/qorid-service"
+rsync -avz --delete apps/qorid-service/dist/ $SERVER:$REPO_DIR/qorid-service/
+if [ -f apps/qorid-service/.env.production ]; then
+  rsync -avz apps/qorid-service/.env.production $SERVER:$REPO_DIR/qorid-service/.env
 fi
 
 # 3. Upload DNS Service (only dist/ directory)
@@ -43,14 +43,14 @@ if [ -f apps/dns-service/.env.production ]; then
   rsync -avz apps/dns-service/.env.production $SERVER:$REPO_DIR/dns-service/.env
 fi
 
-# 4. Upload Abyss Gateway / Indexer (only dist/ directory)
-echo "Uploading Abyss Gateway (dist/ only)..."
-if [ ! -d "indexer/abyss-gateway/dist" ]; then
-  echo "ERROR: indexer/abyss-gateway/dist/ not found. Run 'pnpm build' first."
+# 4. Upload QOR Gateway / Indexer (only dist/ directory)
+echo "Uploading QOR Gateway (dist/ only)..."
+if [ ! -d "indexer/qor-gateway/dist" ]; then
+  echo "ERROR: indexer/qor-gateway/dist/ not found. Run 'pnpm build' first."
   exit 1
 fi
-ssh $SERVER "mkdir -p $REPO_DIR/abyss-gateway"
-rsync -avz --delete indexer/abyss-gateway/dist/ $SERVER:$REPO_DIR/abyss-gateway/
+ssh $SERVER "mkdir -p $REPO_DIR/qor-gateway"
+rsync -avz --delete indexer/qor-gateway/dist/ $SERVER:$REPO_DIR/qor-gateway/
 
 # 5. Upload Demiurge Chain Node (release binary only)
 echo "Uploading Demiurge Chain Node (release binary only)..."
@@ -79,8 +79,8 @@ ssh $SERVER "sudo nginx -t && sudo systemctl reload nginx"
 echo "=== PHASE E: ENABLE & START ALL SERVICES ==="
 
 ssh $SERVER "sudo systemctl daemon-reload"
-ssh $SERVER "sudo systemctl enable demiurge-chain abyssid dns-service abyss-gateway"
-ssh $SERVER "sudo systemctl restart demiurge-chain abyssid dns-service abyss-gateway"
+ssh $SERVER "sudo systemctl enable demiurge-chain abyssid dns-service qor-gateway"
+ssh $SERVER "sudo systemctl restart demiurge-chain abyssid dns-service qor-gateway"
 
 echo "=== PHASE F: POST-DEPLOYMENT VALIDATION ==="
 
@@ -88,14 +88,14 @@ echo "Checking services status..."
 ssh $SERVER "sudo systemctl status demiurge-chain --no-pager | head -5"
 ssh $SERVER "sudo systemctl status abyssid --no-pager | head -5"
 ssh $SERVER "sudo systemctl status dns-service --no-pager | head -5"
-ssh $SERVER "sudo systemctl status abyss-gateway --no-pager | head -5"
+ssh $SERVER "sudo systemctl status qor-gateway --no-pager | head -5"
 
 echo ""
 echo "=== Deployment Complete ==="
 echo "Services should be running. Test endpoints:"
 echo "  - RPC: https://rpc.demiurge.cloud/rpc"
-echo "  - AbyssID: https://id.demiurge.cloud/api/abyssid/me"
+echo "  - QorID: https://id.demiurge.cloud/api/qorid/me"
 echo "  - DNS: https://dns.demiurge.cloud/api/dns/lookup?domain=demiurge.cloud"
 echo "  - Gateway: https://gateway.demiurge.cloud/graphql"
-echo "  - AbyssOS: https://demiurge.cloud"
+echo "  - QOR OS: https://demiurge.cloud"
 

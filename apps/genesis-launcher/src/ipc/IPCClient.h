@@ -1,7 +1,7 @@
 /**
  * IPCClient - IPC Client for Child Processes
  * 
- * Used by DemiurgeMiner and QOR Desktop to connect to Genesis Launcher
+ * Used by DemiurgeMiner and QOR Desktop to connect to DEMIURGE QOR
  * for SSO authentication.
  */
 
@@ -29,7 +29,7 @@ public:
     
 public slots:
     /**
-     * Connect to Genesis Launcher
+     * Connect to DEMIURGE QOR
      */
     Q_INVOKABLE bool connectToLauncher();
     

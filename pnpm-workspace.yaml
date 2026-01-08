@@ -1,5 +1,5 @@
 packages:
   - 'apps/*'
-  - 'indexer/abyss-gateway'
+  - 'indexer/qor-gateway'
   - 'sdk/ts-sdk'
 

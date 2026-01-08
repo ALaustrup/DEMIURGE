@@ -16,7 +16,7 @@ import "effects"
  * 
  * States:
  *   - splash: 3-stage intro animation
- *   - login: AbyssID authentication
+ *   - login: QorID authentication
  *   - desktop: Main workspace
  *   - locked: Screen lock (session active but secured)
  */
@@ -46,7 +46,7 @@ ApplicationWindow {
     /** Whether edit mode is active (UI customization unlocked) */
     property bool editMode: false
     
-    /** Connected AbyssID (empty if not logged in) */
+    /** Connected QorID (empty if not logged in) */
     property string abyssId: ""
     
     /** Premium tier of the user (0=free, 1=archon, 2=genesis) */

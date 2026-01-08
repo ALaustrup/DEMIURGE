@@ -32,17 +32,17 @@ The Abyss Desktop Suite transforms the desktop application from a single browser
 
 ## Application Modes
 
-### 1. Abyss OS (Full Desktop)
-The complete AbyssOS experience with all applications, taskbar, windows, and the full blockchain ecosystem.
+### 1. QOR OS (Full Desktop)
+The complete QOR OS experience with all applications, taskbar, windows, and the full blockchain ecosystem.
 
 **Features:**
 - Complete desktop environment
-- All AbyssOS applications
+- All QOR OS applications
 - File management
 - System settings
-- Full AbyssID integration
+- Full QorID integration
 
-### 2. Abyss Explorer (Web Browser)
+### 2. QOR Explorer (Web Browser)
 Standalone Web3 browser mode for focused web browsing.
 
 **Features:**
@@ -80,7 +80,7 @@ Professional word processing and document creation.
 **Features:**
 - Rich text editing
 - Multiple format support
-- Cloud sync via AbyssID
+- Cloud sync via QorID
 - Collaboration features
 - Export to PDF/DOCX/ODT
 
@@ -122,7 +122,7 @@ Professional word processing and document creation.
 ┌───────────────────────────────────────┐
 │  Switch Application                    │
 ├───────────────────────────────────────┤
-│  🌊  Abyss OS        ⌘1              │
+│  🌊  QOR OS        ⌘1              │
 │  🔍  Explorer        ⌘2              │
 │  🎵  NEON           ⌘3              │
 │  ⚡  CRAFT          ⌘4              │
@@ -145,7 +145,7 @@ class AppSuite : public QMainWindow {
 
 public:
     enum AppMode {
-        AbyssOS,
+        QOR OS,
         Explorer,
         Neon,
         Craft,
@@ -164,7 +164,7 @@ private:
     QuickSwitcher *m_quickSwitcher;
     
     // Individual app views
-    AbyssOSView *m_abyssOS;
+    QOR OSView *m_abyssOS;
     ExplorerView *m_explorer;
     NeonView *m_neon;
     CraftView *m_craft;
@@ -205,7 +205,7 @@ Each application maintains its own state:
 
 ## NEON Media Player Expansion
 
-### Current Features (AbyssOS)
+### Current Features (QOR OS)
 - Basic audio playback
 - Radio stations
 - DRC-369 audio assets
@@ -272,7 +272,7 @@ Supported Formats:
 
 ## CRAFT IDE Expansion
 
-### Current Features (AbyssOS)
+### Current Features (QOR OS)
 - Basic code editor
 - Syntax highlighting
 - File browser
@@ -389,7 +389,7 @@ Import/Export Support:
 ```
 
 #### Cloud Features
-- **Auto-save** to AbyssID storage
+- **Auto-save** to QorID storage
 - **Version History** (blockchain-anchored)
 - **Collaboration** (real-time editing)
 - **Sharing** (public/private links)
@@ -414,7 +414,7 @@ Frontend:
 Backend (for collaboration):
 ├── WebSocket: Real-time sync
 ├── CRDT: Conflict resolution
-└── Storage: AbyssID + IPFS
+└── Storage: QorID + IPFS
 ```
 
 ---
@@ -463,7 +463,7 @@ Backend (for collaboration):
 ```
 Application    Extensions
 ─────────────────────────────────────
-Abyss OS       .abyss (workspace)
+QOR OS       .abyss (workspace)
 Explorer       .html, .url
 NEON           .mp3, .mp4, .mkv, .flac, .wav, .ogg, .avi, .mov
 CRAFT          .rs, .ts, .js, .py, .go, .c, .cpp, .sol
@@ -478,7 +478,7 @@ All applications are available to all users regardless of premium tier:
 
 | Application | Free | Archon | Genesis |
 |------------|------|--------|---------|
-| Abyss OS | ✅ | ✅ | ✅ |
+| QOR OS | ✅ | ✅ | ✅ |
 | Explorer | ✅ | ✅ | ✅ |
 | NEON | ✅ | ✅ | ✅ |
 | CRAFT | ✅ | ✅ | ✅ |

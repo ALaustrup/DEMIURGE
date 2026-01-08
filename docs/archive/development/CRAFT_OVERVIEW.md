@@ -7,7 +7,7 @@
 
 ## Overview
 
-**CRAFT** (Creator's Advanced Framework & Tools) is a comprehensive on-chain IDE built into AbyssOS, designed to provide developers with the ultimate development experience. Inspired by Cursor IDE, CRAFT combines powerful code editing, AI assistance, and seamless blockchain integration.
+**CRAFT** (Creator's Advanced Framework & Tools) is a comprehensive on-chain IDE built into QOR OS, designed to provide developers with the ultimate development experience. Inspired by Cursor IDE, CRAFT combines powerful code editing, AI assistance, and seamless blockchain integration.
 
 ---
 
@@ -46,8 +46,8 @@
 - **DeFi dApp**: DeFi application with staking
 - **NFT Marketplace**: Complete NFT marketplace template
 
-#### AbyssOS Apps
-- **AbyssOS App**: Native desktop application template
+#### QOR OS Apps
+- **QOR OS App**: Native desktop application template
 
 #### Services
 - **Rust Service**: Axum-based backend service
@@ -90,7 +90,7 @@ See [RIG_SYSTEM.md](./RIG_SYSTEM.md) for complete details.
 
 ### Creating a New Project
 
-1. **Open CRAFT** from AbyssOS app menu
+1. **Open CRAFT** from QOR OS app menu
 2. **Choose Template** from categorized templates
 3. **Project Created** with all template files
 4. **Start Coding** immediately
@@ -129,7 +129,7 @@ See [RIG_SYSTEM.md](./RIG_SYSTEM.md) for complete details.
 
 ## Architecture
 
-### Frontend (AbyssOS)
+### Frontend (QOR OS)
 - **Monaco Editor**: Code editing
 - **File Management**: Project and file handling
 - **UI Components**: Template browser, file tree, terminal
@@ -295,7 +295,7 @@ Each porting template includes:
 
 ## Getting Started
 
-1. **Open CRAFT** from AbyssOS
+1. **Open CRAFT** from QOR OS
 2. **Choose Template** or import project
 3. **Start Coding** with Monaco Editor
 4. **Use AI** for assistance

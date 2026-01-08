@@ -98,7 +98,7 @@
 - **Asset Registration**: Register content on-chain with fee pools
 - **Revenue Hooks**: Automatic payment routing to creators
 
-### 7. **Social Layer (Abyss Gateway)**
+### 7. **Social Layer (QOR Gateway)**
 - **World Chat**: Global public chat channel
 - **Direct Messages**: Private messaging between users
 - **Custom Rooms**: Create and join themed chat rooms

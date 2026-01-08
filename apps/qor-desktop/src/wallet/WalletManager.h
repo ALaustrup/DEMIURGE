@@ -11,7 +11,7 @@
 #include <QString>
 #include <QVariantMap>
 
-class AbyssIDManager;
+class QorIDManager;
 
 namespace QOR {
 
@@ -32,7 +32,7 @@ class WalletManager : public QObject
     Q_PROPERTY(bool isLoading READ isLoading NOTIFY loadingChanged)
 
 public:
-    explicit WalletManager(AbyssIDManager *abyssId, QObject *parent = nullptr);
+    explicit WalletManager(QorIDManager *abyssId, QObject *parent = nullptr);
     ~WalletManager() = default;
 
     QString address() const { return m_address; }
@@ -81,7 +81,7 @@ signals:
     void error(const QString &message);
 
 private:
-    AbyssIDManager *m_abyssId;
+    QorIDManager *m_abyssId;
     QString m_address;
     QString m_balance;
     bool m_isLoading;

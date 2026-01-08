@@ -11,7 +11,7 @@
 ## Minting & Distribution
 
 ### New User Bonus
-- **Amount**: 5,000 CGT per new AbyssID registration
+- **Amount**: 5,000 CGT per new QorID registration
 - **Method**: On-chain minting via `cgt_faucet` RPC method
 - **Purpose**: Welcome bonus to enable initial platform usage
 - **Restriction**: Users cannot send CGT until they mint or swap a DRC-369 NFT
@@ -75,7 +75,7 @@ Only the following modules can mint CGT:
 ### Balance Tracking
 - On-chain balances via `cgt_getBalance` RPC
 - Database tracking in `user_wallet_balances` table
-- Wallet balance API endpoint: `/api/abyssid/wallet/balance`
+- Wallet balance API endpoint: `/api/qorid/wallet/balance`
 
 ## Economic Model
 

@@ -41,7 +41,7 @@ All deployment scripts, configurations, and documentation have been structured a
    - `demiurge-chain.service` - Enhanced with security hardening
    - `abyssid.service` - Fixed paths, added logging
    - `dns-service.service` - Fixed paths, added logging
-   - `abyss-gateway.service` - Fixed paths, added logging
+   - `qor-gateway.service` - Fixed paths, added logging
    - `abyss-radio.service` - Fixed paths
 
 2. **Documentation**:
@@ -91,9 +91,9 @@ deploy/
 │
 ├── systemd/                     # Systemd services
 │   ├── demiurge-chain.service  # Chain node
-│   ├── abyssid.service         # AbyssID
+│   ├── abyssid.service         # QorID
 │   ├── dns-service.service     # DNS
-│   ├── abyss-gateway.service   # Gateway
+│   ├── qor-gateway.service   # Gateway
 │   └── abyss-radio.service     # Radio
 │
 └── nginx/                       # NGINX configs
@@ -113,7 +113,7 @@ All services use consistent paths:
 ## Service Ports
 
 - **Chain RPC**: 8545
-- **AbyssID**: 3001
+- **QorID**: 3001
 - **DNS Service**: 5053
 - **Gateway**: 4000
 - **NGINX**: 80/443

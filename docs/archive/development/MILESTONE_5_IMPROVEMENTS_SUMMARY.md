@@ -8,8 +8,8 @@
 ## 1. Tests Added
 
 ### Smoke Test Suite
-- **File:** `indexer/abyss-gateway/src/snapshotService.test.ts`
-- **Command:** `npm run test:snapshots` (in `indexer/abyss-gateway/`)
+- **File:** `indexer/qor-gateway/src/snapshotService.test.ts`
+- **Command:** `npm run test:snapshots` (in `indexer/qor-gateway/`)
 - **Coverage:**
   - ✅ Snapshot creation with valid data
   - ✅ Snapshot persistence verification
@@ -155,10 +155,10 @@ SNAPSHOT_INTERVAL_MS=600000 npm run dev  # 10 minutes
 ## Files Modified
 
 ### Backend
-- `indexer/abyss-gateway/src/snapshotService.ts` - Enhanced error handling
-- `indexer/abyss-gateway/src/index.ts` - Configurable snapshot service
-- `indexer/abyss-gateway/src/snapshotService.test.ts` - New smoke tests
-- `indexer/abyss-gateway/package.json` - Added test script
+- `indexer/qor-gateway/src/snapshotService.ts` - Enhanced error handling
+- `indexer/qor-gateway/src/index.ts` - Configurable snapshot service
+- `indexer/qor-gateway/src/snapshotService.test.ts` - New smoke tests
+- `indexer/qor-gateway/package.json` - Added test script
 
 ### Frontend
 - `apps/portal-web/src/components/timeline/TimelineView.tsx` - Resilience + UX improvements

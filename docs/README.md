@@ -13,14 +13,14 @@ Welcome to the official documentation for **DEMIURGE**, a sovereign Layer 1 bloc
 | [API Reference](api/RPC.md) | JSON-RPC API specification |
 | [Tokenomics](tokenomics/CGT.md) | Creator God Token (CGT) |
 | [Deployment](deployment/NODE_SETUP.md) | Production deployment guide |
-| [Applications](applications/ABYSSOS.md) | AbyssOS Portal documentation |
+| [Applications](applications/QLOUD_OS.md) | QLOUD OS documentation |
 
 ## 🌊 Live Services
 
 | Service | URL | Status |
 |---------|-----|--------|
 | **Genesis Portal** | https://demiurge.guru | 🚧 Coming Soon |
-| **AbyssOS Portal** | https://demiurge.cloud | ✅ Live |
+| **QLOUD OS** | https://demiurge.cloud | ✅ Live |
 | **GraphQL API** | https://api.demiurge.cloud/graphql | ✅ Live |
 | **RPC Endpoint** | https://rpc.demiurge.cloud/rpc | ✅ Live |
 
@@ -32,7 +32,7 @@ Sovereign Layer 1 blockchain built in Rust with custom **Forge Proof-of-Work** c
 **Key Features:**
 - 3-second block time
 - Custom runtime modules
-- On-chain identity (AbyssID)
+- On-chain identity (QorID)
 - Native NFT support (DRC-369)
 - P2P asset distribution (Fabric)
 
@@ -41,7 +41,7 @@ Sovereign Layer 1 blockchain built in Rust with custom **Forge Proof-of-Work** c
 | Module | Purpose |
 |--------|---------|
 | `bank_cgt` | Creator God Token (CGT) operations |
-| `abyssid_registry` | On-chain identity system |
+| `qor_registry` | On-chain identity system |
 | `drc369` | DRC-369 NFT standard |
 | `fabric_manager` | P2P asset distribution |
 | `marketplace` | Asset trading |
@@ -53,17 +53,17 @@ Sovereign Layer 1 blockchain built in Rust with custom **Forge Proof-of-Work** c
 ### Applications
 
 **Desktop:**
-- **Genesis Launcher** - Unified entry point (Qt/QML)
+- **DEMIURGE QOR** - Unified entry point (Qt/QML)
 - **QØЯ Desktop** - Native desktop suite (Qt/QML)
-- **AbyssOS Portal** - Full web-based OS environment
+- **QLOUD OS** - Full web-based OS environment
 
 **Web:**
 - **Portal Web** - Information and landing page
 - **Demiurge.Guru** - Official portal (planned)
 
 **Services:**
-- **AbyssID Service** - Identity and authentication API
-- **Abyss Gateway** - GraphQL indexer
+- **QorID Service** - Identity and authentication API
+- **QOR Gateway** - GraphQL indexer
 - **Archon AI** - AI-powered assistance
 
 ## 📚 Documentation Structure
@@ -84,13 +84,13 @@ docs/
 │   ├── RPC_TROUBLESHOOTING.md # RPC debugging
 │   └── DEMIURGE_GURU.md   # Demiurge.Guru deployment
 ├── applications/          # App documentation
-│   └── ABYSSOS.md         # AbyssOS Portal
+│   └── QLOUD_OS.md         # QLOUD OS
 └── archive/               # Historical documentation
 ```
 
 ## 🎨 Genesis Theme
 
-The entire Demiurge ecosystem uses the unified **Genesis Launcher Theme**:
+The entire Demiurge ecosystem uses the unified **DEMIURGE QOR Theme**:
 
 **Colors:**
 - Void: `#050505` (primary background)
@@ -98,7 +98,7 @@ The entire Demiurge ecosystem uses the unified **Genesis Launcher Theme**:
 - Cipher Cyan: `#00FFC8` (secondary accent)
 - Glass: `#0A0A0A` (containers)
 
-See [Genesis Theme Documentation](../apps/abyssos-portal/GENESIS_THEME.md) for details.
+See [Genesis Theme Documentation](../apps/qloud-os/GENESIS_THEME.md) for details.
 
 ## 🛠️ Development
 
@@ -118,7 +118,7 @@ cargo build --release -p demiurge-chain
 ./target/release/demiurge-chain
 
 # Frontend applications
-cd apps/abyssos-portal && pnpm dev  # Port 5173
+cd apps/qloud-os && pnpm dev  # Port 5173
 cd apps/portal-web && pnpm dev       # Port 3000
 ```
 
@@ -138,6 +138,6 @@ cd apps/portal-web && pnpm dev       # Port 3000
 ---
 
 **Last updated: January 8, 2026**  
-**Theme: Genesis Launcher v1.0**
+**Theme: DEMIURGE QOR v1.0**
 
 *The void awaits. Build with purpose.*

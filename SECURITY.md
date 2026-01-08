@@ -43,13 +43,13 @@ DEMIURGE implements several security measures:
 
 ### Application Security
 
-#### AbyssID Service
+#### QorID Service
 - Seed phrases never transmitted to server
 - Only public keys stored
 - Case-insensitive username handling
 - Input validation on all endpoints
 
-#### AbyssOS Portal
+#### QLOUD OS
 - Client-side key derivation
 - No sensitive data in localStorage
 - Secure WebSocket connections

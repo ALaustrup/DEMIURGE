@@ -22,7 +22,7 @@ namespace QOR {
  * LocalDatabase - SQLite wrapper for local storage
  * 
  * Tables:
- * - account: AbyssID data and cached balance
+ * - account: QorID data and cached balance
  * - pending_tx: Queued transactions for offline support
  * - media_library: Local media index for NEON
  * - documents: WRYT document metadata

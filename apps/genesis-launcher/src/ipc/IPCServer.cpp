@@ -9,7 +9,7 @@
 #include <QJsonObject>
 #include <QDebug>
 
-const QString IPCServer::SERVER_NAME = "GenesisLauncherIPC";
+const QString IPCServer::SERVER_NAME = "DemiurgeQorIPC";
 const QString IPCServer::SHARED_MEM_KEY = "GenesisSession";
 
 IPCServer::IPCServer(QObject *parent)

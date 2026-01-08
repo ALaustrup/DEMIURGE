@@ -9,7 +9,7 @@
 
 QString getCurrentVersion(const QString &component)
 {
-    if (component == "GenesisLauncher") {
+    if (component == "DemiurgeQor") {
         return QString(APP_VERSION);
     }
     

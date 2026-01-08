@@ -50,7 +50,7 @@ void MinerDaemon::showTray()
 void MinerDaemon::onAuthenticated(const QString &token)
 {
     m_sessionToken = token;
-    qInfo() << "Miner authenticated via Genesis Launcher";
+    qInfo() << "Miner authenticated via DEMIURGE QOR";
     
     if (m_trayIcon) {
         m_trayIcon->showMessage("Authenticated",

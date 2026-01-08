@@ -10,7 +10,7 @@
 
 Milestone 5 transforms the Fracture Portal into a semi-autonomous, stateful, AI-driven operations console. The Portal can now:
 
-1. **Manage Rituals** - Formalized AbyssID rituals with lifecycle events and visual effects
+1. **Manage Rituals** - Formalized QorID rituals with lifecycle events and visual effects
 2. **ArchonAI Autonomy** - AI-driven proposals for system actions (human-in-the-loop)
 3. **Time Travel** - Browse historical snapshots and events, restore past states
 4. **Observability** - Real-time health monitoring and anomaly detection
@@ -22,7 +22,7 @@ Milestone 5 transforms the Fracture Portal into a semi-autonomous, stateful, AI-
 ### Backend Extensions
 
 #### Database Schema (SQLite)
-New tables added to `indexer/abyss-gateway/src/chatDb.ts`:
+New tables added to `indexer/qor-gateway/src/chatDb.ts`:
 - `rituals` - Ritual definitions and state
 - `ritual_events` - Ritual lifecycle events
 - `archon_proposals` - ArchonAI proposals and reviews
@@ -30,7 +30,7 @@ New tables added to `indexer/abyss-gateway/src/chatDb.ts`:
 - `system_snapshots` - Periodic system state snapshots
 
 #### GraphQL API
-New types and resolvers in `indexer/abyss-gateway/src/schema.ts` and `resolvers.ts`:
+New types and resolvers in `indexer/qor-gateway/src/schema.ts` and `resolvers.ts`:
 - **Queries:**
   - `rituals`, `ritual`, `ritualEvents`
   - `archonProposals`, `archonProposal`, `archonContext`
@@ -249,9 +249,9 @@ export default function ConspirePage() {
 ## Files Created/Modified
 
 ### Backend
-- `indexer/abyss-gateway/src/chatDb.ts` - Added Milestone 5 tables and functions
-- `indexer/abyss-gateway/src/schema.ts` - Added GraphQL types and queries/mutations
-- `indexer/abyss-gateway/src/resolvers.ts` - Added resolver implementations
+- `indexer/qor-gateway/src/chatDb.ts` - Added Milestone 5 tables and functions
+- `indexer/qor-gateway/src/schema.ts` - Added GraphQL types and queries/mutations
+- `indexer/qor-gateway/src/resolvers.ts` - Added resolver implementations
 
 ### Frontend - Types
 - `apps/portal-web/src/lib/rituals/ritualTypes.ts`
@@ -281,7 +281,7 @@ export default function ConspirePage() {
 ### Test Strategy
 
 **Smoke Tests:**
-- Run `npm run test:snapshots` in `indexer/abyss-gateway/` to verify snapshot service behavior
+- Run `npm run test:snapshots` in `indexer/qor-gateway/` to verify snapshot service behavior
 - Tests cover: snapshot creation, database persistence, event creation, interval service, error handling
 
 **Manual Testing Checklist:**
@@ -331,7 +331,7 @@ SNAPSHOT_INTERVAL_MS=600000 npm run dev
 
 **Running Snapshot Service Tests:**
 ```bash
-cd indexer/abyss-gateway
+cd indexer/qor-gateway
 npm run test:snapshots
 ```
 
@@ -380,7 +380,7 @@ npm run test:snapshots
 - Ensure ritual is in "active" or "peaking" phase
 
 **ArchonAI proposals not loading:**
-- Verify Abyss Gateway is running (port 4000)
+- Verify QOR Gateway is running (port 4000)
 - Check GraphQL endpoint in browser console
 - Ensure `ArchonContextProvider` is in the component tree
 - Check for backend errors in console (errors are logged but don't break UI)

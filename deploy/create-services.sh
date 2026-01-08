@@ -41,15 +41,15 @@ EOF
 # Create abyssid.service
 cat > /opt/demiurge/deploy/systemd/abyssid.service << 'EOF'
 [Unit]
-Description=AbyssID Identity Backend
+Description=QorID Identity Backend
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/node /opt/demiurge/abyssid-service/dist/index.js
-WorkingDirectory=/opt/demiurge/abyssid-service/
+ExecStart=/usr/bin/node /opt/demiurge/qorid-service/dist/index.js
+WorkingDirectory=/opt/demiurge/qorid-service/
 Restart=always
 RestartSec=5
-EnvironmentFile=/opt/demiurge/abyssid-service/.env
+EnvironmentFile=/opt/demiurge/qorid-service/.env
 User=root
 StandardOutput=journal
 StandardError=journal
@@ -78,15 +78,15 @@ StandardError=journal
 WantedBy=multi-user.target
 EOF
 
-# Create abyss-gateway.service
-cat > /opt/demiurge/deploy/systemd/abyss-gateway.service << 'EOF'
+# Create qor-gateway.service
+cat > /opt/demiurge/deploy/systemd/qor-gateway.service << 'EOF'
 [Unit]
-Description=Abyss Gateway (Indexer + GraphQL)
+Description=QOR Gateway (Indexer + GraphQL)
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/node /opt/demiurge/abyss-gateway/dist/index.js
-WorkingDirectory=/opt/demiurge/abyss-gateway/
+ExecStart=/usr/bin/node /opt/demiurge/qor-gateway/dist/index.js
+WorkingDirectory=/opt/demiurge/qor-gateway/
 Restart=always
 RestartSec=5
 User=root

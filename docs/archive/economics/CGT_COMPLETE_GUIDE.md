@@ -35,7 +35,7 @@ Creator God Token (CGT) is the native currency of the Demiurge blockchain. It se
 
 ### 1. New User Bonus
 
-**Amount**: 5,000 CGT per new AbyssID registration
+**Amount**: 5,000 CGT per new QorID registration
 
 **Method**: On-chain minting via `cgt_devFaucet` RPC method
 
@@ -45,7 +45,7 @@ Creator God Token (CGT) is the native currency of the Demiurge blockchain. It se
 
 **Implementation**:
 - Minted via `cgt_mint_to()` with caller_module `"system"`
-- Automatically triggers on AbyssID registration
+- Automatically triggers on QorID registration
 - Enforced by `has_minted_nft` flag check before transfers
 
 ### 2. Level-Up Rewards (UrgeID)
@@ -153,7 +153,7 @@ Only the following modules can mint CGT (enforced in `cgt_mint_to()`):
 
 ### 2. Marketplace Operations
 
-**Abyss Registry** (`abyss_registry` module):
+**Abyss Registry** (`qor_registry_legacy` module):
 - NFT listings priced in CGT
 - Purchases transfer CGT from buyer to seller
 - Royalties automatically distributed in CGT
@@ -174,7 +174,7 @@ Only the following modules can mint CGT (enforced in `cgt_mint_to()`):
 
 ### 4. Transfers Between Users
 
-**Format**: CGT transfers between AbyssID addresses
+**Format**: CGT transfers between QorID addresses
 
 **Recipient Formats**:
 - Username: `@username` (automatically resolved to address)
@@ -736,7 +736,7 @@ Get transaction by hash.
 ### For Users
 
 1. **Get CGT**:
-   - Register AbyssID → Receive 5,000 CGT bonus
+   - Register QorID → Receive 5,000 CGT bonus
    - Level up → Receive 10 CGT per level
    - Submit work claims → Earn CGT from mining
    - Seed Fabric content → Earn CGT from pools

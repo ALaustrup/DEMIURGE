@@ -349,17 +349,17 @@ find /opt/demiurge/repo/apps/portal-web/src/components/fracture -name "*Audio*" 
 
 The audio engine scaffolding is already in place. We need to:
 1. Complete the audio-reactive hooks
-2. Wire AbyssID states to audio effects
+2. Wire QorID states to audio effects
 3. Add background music support
 
 **Files to edit** (we'll create these in the next steps):
 - `apps/portal-web/src/lib/fracture/audio/AudioEngine.ts` - Complete implementation
-- `apps/portal-web/src/lib/fracture/audio/AbyssReactive.ts` - Wire to AbyssID states
+- `apps/portal-web/src/lib/fracture/audio/AbyssReactive.ts` - Wire to QorID states
 - `apps/portal-web/src/components/fracture/AudioReactiveLayer.tsx` - Visual effects
 
 ---
 
-## Phase 5: AbyssID Backend & Real ID Binding
+## Phase 5: QorID Backend & Real ID Binding
 
 ### Step 5.1: Choose Database
 
@@ -382,7 +382,7 @@ npm install --save-dev @types/express @types/cors
 
 ### Step 5.3: Database Schema
 
-We'll create a simple SQLite schema for AbyssID mappings.
+We'll create a simple SQLite schema for QorID mappings.
 
 ---
 

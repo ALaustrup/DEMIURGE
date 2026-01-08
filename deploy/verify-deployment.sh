@@ -89,7 +89,7 @@ if [ -d "${REPO_DIR}/deploy/systemd" ]; then
     echo "  ✅ Found $SERVICE_COUNT service files"
     
     # Check if services are installed
-    for service in demiurge-chain abyssid dns-service abyss-gateway; do
+    for service in demiurge-chain abyssid dns-service qor-gateway; do
         if systemctl list-unit-files | grep -q "^${service}.service"; then
             echo "  ✅ $service.service installed"
         else

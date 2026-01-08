@@ -1,0 +1,16 @@
+[Unit]
+Description=QOR Gateway (Indexer + GraphQL)
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/node /opt/demiurge/qor-gateway/dist/index.js
+WorkingDirectory=/opt/demiurge/qor-gateway/
+Restart=always
+RestartSec=5
+User=root
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+

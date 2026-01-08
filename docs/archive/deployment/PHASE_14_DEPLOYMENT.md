@@ -5,7 +5,7 @@
 
 ## Deployment Summary
 
-Phase 14 introduces the **Autonomous World Engine (AWE)** - a complete procedural universe simulator integrated into AbyssOS.
+Phase 14 introduces the **Autonomous World Engine (AWE)** - a complete procedural universe simulator integrated into QOR OS.
 
 ### What Was Deployed
 
@@ -56,7 +56,7 @@ git push origin main
 
 ### 2. Frontend Build
 ```bash
-cd apps/abyssos-portal
+cd apps/qloud-os
 pnpm install
 pnpm run build
 ```
@@ -69,7 +69,7 @@ pnpm run build
 - **Nginx Status:** ✅ Active and reloaded
 
 ### 4. Backend Services
-- **AbyssID Service:** ✅ Running on port 8082
+- **QorID Service:** ✅ Running on port 8082
 - **Database:** ✅ Initialized and operational
 - **CORS:** Configured for `https://demiurge.cloud`
 
@@ -85,8 +85,8 @@ pnpm run build
 - ✅ SPA routing functional
 
 ### Backend APIs
-- ✅ `https://demiurge.cloud/api/abyssid/username-available` - Working
-- ✅ AbyssID service responding on port 8082
+- ✅ `https://demiurge.cloud/api/qorid/username-available` - Working
+- ✅ QorID service responding on port 8082
 - ✅ CORS headers configured correctly
 
 ### Chain RPC
@@ -133,7 +133,7 @@ pnpm run build
 ## Service Status
 
 ```bash
-# AbyssID Service
+# QorID Service
 sudo systemctl status abyssid.service
 # ✅ Active (running) on port 8082
 
@@ -148,8 +148,8 @@ If issues occur, rollback to Phase 13:
 
 ```bash
 sudo mv /var/www/abyssos-phase14 /var/www/abyssos-phase14-backup
-sudo mv /var/www/abyssos-backup-phase13 /var/www/abyssos-portal
-sudo sed -i 's|/var/www/abyssos-phase14|/var/www/abyssos-portal|g' /etc/nginx/sites-available/demiurge.cloud
+sudo mv /var/www/abyssos-backup-phase13 /var/www/qloud-os
+sudo sed -i 's|/var/www/abyssos-phase14|/var/www/qloud-os|g' /etc/nginx/sites-available/demiurge.cloud
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
@@ -184,7 +184,7 @@ scp -i ~/.ssh/demiurge_new -r dist/* ubuntu@51.210.209.112:/tmp/abyssos-phase14-
 ssh -i ~/.ssh/demiurge_new ubuntu@51.210.209.112 "sudo mv /tmp/abyssos-phase14-temp/* /var/www/abyssos-phase14/"
 
 # Nginx update
-ssh -i ~/.ssh/demiurge_new ubuntu@51.210.209.112 "sudo sed -i 's|/var/www/abyssos-portal|/var/www/abyssos-phase14|g' /etc/nginx/sites-available/demiurge.cloud && sudo nginx -t && sudo systemctl reload nginx"
+ssh -i ~/.ssh/demiurge_new ubuntu@51.210.209.112 "sudo sed -i 's|/var/www/qloud-os|/var/www/abyssos-phase14|g' /etc/nginx/sites-available/demiurge.cloud && sudo nginx -t && sudo systemctl reload nginx"
 
 # Service restart
 ssh -i ~/.ssh/demiurge_new ubuntu@51.210.209.112 "sudo systemctl restart abyssid.service"

@@ -69,7 +69,7 @@ foreach ($file in $criticalFiles) {
 
 # Runtime module registration
 Write-Host "  Verifying runtime modules..." -ForegroundColor Yellow
-$runtimeModules = @("abyss_registry", "avatars_profiles", "bank_cgt", "fabric_manager", "nft_dgen")
+$runtimeModules = @("qor_registry_legacy", "avatars_profiles", "bank_cgt", "fabric_manager", "nft_dgen")
 foreach ($module in $runtimeModules) {
     $modulePath = "runtime/$module/src/lib.rs"
     if (Test-Path $modulePath) {
@@ -83,7 +83,7 @@ if (Test-Path "chain/src/runtime/work_claim.rs") {
 
 # SDK schemas
 Write-Host "  Verifying SDK schemas..." -ForegroundColor Yellow
-$schemas = @("drc369", "abyssid", "fractal1", "wallet")
+$schemas = @("drc369", "qorid", "fractal1", "wallet")
 foreach ($schema in $schemas) {
     $schemaPath = "sdk/schema/$schema.json"
     if (Test-Path $schemaPath) {

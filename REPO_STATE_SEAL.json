@@ -24,7 +24,7 @@
     "chain/src/runtime/work_claim.rs": "verified"
   },
   "runtime": {
-    "abyss_registry": "verified",
+    "qor_registry_legacy": "verified",
     "avatars_profiles": "verified",
     "bank_cgt": "verified",
     "fabric_manager": "verified",
@@ -38,7 +38,7 @@
   },
   "schemas": {
     "drc369": "verified",
-    "abyssid": "verified",
+    "qorid": "verified",
     "fractal1": "verified",
     "wallet": "verified"
   },

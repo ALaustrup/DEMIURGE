@@ -56,7 +56,7 @@ All Node.js dependencies have been updated to latest stable versions:
 - `@types/node`: `^20` → `^22`
 - `typescript`: `^5` → `^5.9`
 
-#### apps/abyssid-service/package.json:
+#### apps/qorid-service/package.json:
 - `express`: `^4.18.2` → `^4.21.2`
 - `better-sqlite3`: `^9.2.2` → `^11.9.0`
 - `@noble/curves`: `^1.2.0` → `^1.7.0`
@@ -89,7 +89,7 @@ All Node.js dependencies have been updated to latest stable versions:
 - `eslint`: `^8.0.0` → `^9`
 - `typescript`: `^5.0.0` → `^5.9`
 
-#### indexer/abyss-gateway/package.json:
+#### indexer/qor-gateway/package.json:
 - `@graphql-yoga/node`: `^3.9.1` (already at latest)
 - `graphql`: `^16.8.1` → `^16.9.0`
 - `better-sqlite3`: `^9.0.0` → `^11.9.0`

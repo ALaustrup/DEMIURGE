@@ -25,24 +25,24 @@
 #### Phase 6: Archon ✅
 - Integrated in chain binary (no separate service)
 
-#### Phase 7: AbyssID ✅
+#### Phase 7: QorID ✅
 - ✅ TypeScript build errors fixed
 - ✅ Built successfully
 - ✅ systemd service: `abyssid.service` - **ACTIVE**
 - ✅ Endpoint: `http://127.0.0.1:8082`
 
-#### Phase 8: Abyss Gateway ✅
+#### Phase 8: QOR Gateway ✅
 - ✅ Built successfully
-- ✅ systemd service: `abyss-gateway.service` - **ACTIVE**
+- ✅ systemd service: `qor-gateway.service` - **ACTIVE**
 - ✅ GraphQL endpoint available
 
 #### Phase 9: Web Applications ✅
-- ✅ AbyssOS built and deployed to `/opt/demiurge/web/abyssos`
+- ✅ QOR OS built and deployed to `/opt/demiurge/web/abyssos`
 - ⚠️ Portal (Next.js) - needs server setup or static export
 
 #### Phase 10: Nginx ✅
 - ✅ Configured for:
-  - `demiurge.cloud` → AbyssOS
+  - `demiurge.cloud` → QOR OS
   - `rpc.demiurge.cloud` → Chain RPC proxy
 - ✅ Service: `nginx.service` - **ACTIVE**
 
@@ -65,7 +65,7 @@
 | Service | Status | Port | Notes |
 |---------|--------|------|-------|
 | demiurge-chain | ✅ Active | 8545 | Chain node running |
-| abyss-gateway | ✅ Active | 4000 | GraphQL gateway |
+| qor-gateway | ✅ Active | 4000 | GraphQL gateway |
 | abyssid | ✅ Active | 8082 | Identity backend |
 | nginx | ✅ Active | 80, 443 | Web server & reverse proxy |
 
@@ -96,14 +96,14 @@
 
 **Once DNS is configured:**
 
-- **AbyssOS**: `http://demiurge.cloud` (or `http://51.210.209.112`)
+- **QOR OS**: `http://demiurge.cloud` (or `http://51.210.209.112`)
 - **RPC**: `http://rpc.demiurge.cloud/rpc` (or `http://51.210.209.112/rpc`)
 - **Portal**: `http://demiurge.guru` (needs Next.js server setup)
 
 **Current Access:**
-- AbyssOS: `https://demiurge.cloud` ✅ (TLS configured)
+- QOR OS: `https://demiurge.cloud` ✅ (TLS configured)
 - RPC: `https://rpc.demiurge.cloud/rpc` (via Nginx proxy, TLS configured)
-- AbyssID: `http://127.0.0.1:8082` (internal only)
+- QorID: `http://127.0.0.1:8082` (internal only)
 - Gateway: `http://127.0.0.1:4000/graphql` (internal only)
 
 ---
@@ -111,7 +111,7 @@
 ## 🔐 TLS Setup (When DNS Ready)
 
 ```bash
-# AbyssOS
+# QOR OS
 sudo certbot --nginx -d demiurge.cloud -d www.demiurge.cloud \
   --non-interactive --agree-tos \
   --email admin@demiurge.cloud --redirect
@@ -126,8 +126,8 @@ sudo certbot --nginx -d rpc.demiurge.cloud \
 
 ## 🐛 Known Issues
 
-### 1. AbyssID Build Errors
-**Issue:** TypeScript compilation errors in `abyssid-service`
+### 1. QorID Build Errors
+**Issue:** TypeScript compilation errors in `qorid-service`
 **Impact:** Service cannot start
 **Fix Required:** Resolve TypeScript type errors in:
 - `src/routes/wallet.ts`
@@ -158,7 +158,7 @@ sudo certbot --nginx -d rpc.demiurge.cloud \
    - Enable auto-renewal
 
 5. **Final Testing**
-   - Test AbyssOS access
+   - Test QOR OS access
    - Test RPC endpoint
    - Verify all services after reboot
 
@@ -168,13 +168,13 @@ sudo certbot --nginx -d rpc.demiurge.cloud \
 
 **Check services:**
 ```bash
-sudo systemctl status demiurge-chain abyss-gateway nginx
+sudo systemctl status demiurge-chain qor-gateway nginx
 ```
 
 **View logs:**
 ```bash
 sudo journalctl -u demiurge-chain.service -f
-sudo journalctl -u abyss-gateway.service -f
+sudo journalctl -u qor-gateway.service -f
 sudo tail -f /var/log/nginx/access.log
 ```
 
@@ -188,7 +188,7 @@ curl -X POST http://127.0.0.1:8545/rpc \
 **Restart services:**
 ```bash
 sudo systemctl restart demiurge-chain
-sudo systemctl restart abyss-gateway
+sudo systemctl restart qor-gateway
 sudo systemctl reload nginx
 ```
 
@@ -199,7 +199,7 @@ sudo systemctl reload nginx
 - **Total Time:** ~2 hours (including fixes and iterations)
 - **Phases Completed:** 12/12 (100%)
 - **Services Running:** 4/4 (100%)
-- **Web Apps Deployed:** 1/2 (50% - AbyssOS complete, Portal pending)
+- **Web Apps Deployed:** 1/2 (50% - QOR OS complete, Portal pending)
 - **TLS:** ✅ Configured for `demiurge.cloud`
 
 ---

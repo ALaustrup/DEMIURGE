@@ -7,7 +7,7 @@
 3. **Phase 2**: Configure NGINX
 4. **Phase 3**: Upload media files
 5. **Phase 4**: Implement audio engine
-6. **Phase 5**: Set up AbyssID backend
+6. **Phase 5**: Set up QorID backend
 7. **Phase 6**: Scaffold Conspire
 8. **Phase 7**: Create deployment scripts
 
@@ -130,13 +130,13 @@ See `scripts/phase4_audio_implementation.md` for detailed code changes.
 
 **Test audio reactivity:**
 
-1. Open AbyssID ritual
+1. Open QorID ritual
 2. Verify shader effects change with state transitions
 3. Test with microphone or background music
 
 ---
 
-## Phase 5: AbyssID Backend & Real ID Binding
+## Phase 5: QorID Backend & Real ID Binding
 
 **Set up backend:**
 
@@ -148,13 +148,13 @@ See `scripts/phase4_audio_implementation.md` for detailed code changes.
 
 See `scripts/phase5_frontend_update.md` for code changes to:
 - `AbyssStateMachine.ts` - Use real API
-- Create `AbyssIDContext.tsx` - Store identity
+- Create `QorIDContext.tsx` - Store identity
 - Update `layout.tsx` - Wrap with provider
 
 **Test the flow:**
 
 1. Start backend: `cd /opt/demiurge/repo/apps/abyssid-backend && node src/server.js`
-2. Open portal, click AbyssID
+2. Open portal, click QorID
 3. Enter username → should check against backend
 4. Complete registration → should save to database
 
@@ -260,7 +260,7 @@ pm2 monit  # Real-time monitoring
 - Check NGINX config: `sudo nginx -t`
 - Check NGINX logs: `sudo tail -f /var/log/nginx/demiurge-portal-error.log`
 
-### AbyssID backend not responding
+### QorID backend not responding
 - Check service: `pm2 status abyssid-backend`
 - Check logs: `pm2 logs abyssid-backend`
 - Test endpoint: `curl http://localhost:3001/health`

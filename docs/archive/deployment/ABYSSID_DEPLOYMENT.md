@@ -1,13 +1,13 @@
-# AbyssID Service Deployment Guide
+# QorID Service Deployment Guide
 
-This guide covers deploying the AbyssID backend service alongside the Demiurge node and AbyssOS portal.
+This guide covers deploying the QorID backend service alongside the Demiurge node and QOR OS portal.
 
 ## Overview
 
-The AbyssID service provides:
+The QorID service provides:
 - User identity management (registration, authentication, sessions)
 - DRC-369 asset management (minting, importing, querying)
-- REST API endpoints for AbyssOS frontend
+- REST API endpoints for QOR OS frontend
 
 ## Prerequisites
 
@@ -15,7 +15,7 @@ The AbyssID service provides:
 - SQLite3 (usually included with Node.js)
 - Nginx (for reverse proxy)
 - Existing Demiurge node running on port 8545
-- AbyssOS portal deployed at `/var/www/abyssos-portal`
+- QOR OS portal deployed at `/var/www/qloud-os`
 
 ## Backend Service Setup
 
@@ -24,7 +24,7 @@ The AbyssID service provides:
 From the monorepo root:
 
 ```bash
-cd apps/abyssid-service
+cd apps/qorid-service
 pnpm install
 pnpm build
 ```
@@ -33,7 +33,7 @@ This creates the `dist/` directory with compiled JavaScript.
 
 ### 2. Environment Configuration
 
-Create `.env` file in `apps/abyssid-service/`:
+Create `.env` file in `apps/qorid-service/`:
 
 ```env
 PORT=8082
@@ -47,7 +47,7 @@ DEMIURGE_RPC_URL=https://rpc.demiurge.cloud/rpc
 ### 3. Create Data Directory
 
 ```bash
-mkdir -p apps/abyssid-service/data
+mkdir -p apps/qorid-service/data
 ```
 
 The database will be automatically initialized on first run.
@@ -67,7 +67,7 @@ pnpm start
 Or use a process manager like PM2:
 
 ```bash
-pm2 start dist/index.js --name abyssid-service
+pm2 start dist/index.js --name qorid-service
 pm2 save
 pm2 startup
 ```
@@ -77,9 +77,9 @@ pm2 startup
 Add the following to your nginx configuration (e.g., `/etc/nginx/sites-available/demiurge.cloud`):
 
 ```nginx
-# AbyssID API reverse proxy
-location /api/abyssid/ {
-    proxy_pass http://127.0.0.1:8082/api/abyssid/;
+# QorID API reverse proxy
+location /api/qorid/ {
+    proxy_pass http://127.0.0.1:8082/api/qorid/;
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -122,17 +122,17 @@ sudo systemctl reload nginx
 
 ## Systemd Service (Optional)
 
-Create `/etc/systemd/system/abyssid-service.service`:
+Create `/etc/systemd/system/qorid-service.service`:
 
 ```ini
 [Unit]
-Description=AbyssID Identity & DRC-369 Service
+Description=QorID Identity & DRC-369 Service
 After=network.target
 
 [Service]
 Type=simple
 User=ubuntu
-WorkingDirectory=/opt/demiurge/apps/abyssid-service
+WorkingDirectory=/opt/demiurge/apps/qorid-service
 Environment=NODE_ENV=production
 ExecStart=/usr/bin/node dist/index.js
 Restart=always
@@ -146,27 +146,27 @@ Enable and start:
 
 ```bash
 sudo systemctl daemon-reload
-sudo systemctl enable abyssid-service
-sudo systemctl start abyssid-service
-sudo systemctl status abyssid-service
+sudo systemctl enable qorid-service
+sudo systemctl start qorid-service
+sudo systemctl status qorid-service
 ```
 
 ## Frontend Configuration
 
-Update AbyssOS portal environment variables:
+Update QOR OS portal environment variables:
 
-Create or update `apps/abyssos-portal/.env.production`:
+Create or update `apps/qloud-os/.env.production`:
 
 ```env
-VITE_ABYSSID_MODE=remote
-VITE_ABYSSID_API_URL=https://demiurge.cloud/api/abyssid
+VITE_QORID_MODE=remote
+VITE_QORID_API_URL=https://demiurge.cloud/api/abyssid
 VITE_DEMIURGE_RPC_URL=https://rpc.demiurge.cloud/rpc
 ```
 
-Rebuild and deploy AbyssOS:
+Rebuild and deploy QOR OS:
 
 ```bash
-cd apps/abyssos-portal
+cd apps/qloud-os
 pnpm build
 # Deploy dist/ to server
 ```
@@ -176,13 +176,13 @@ pnpm build
 ### Health Check
 
 ```bash
-curl https://demiurge.cloud/api/abyssid/healthz
+curl https://demiurge.cloud/api/qorid/healthz
 ```
 
 ### Register User
 
 ```bash
-curl -X POST https://demiurge.cloud/api/abyssid/register \
+curl -X POST https://demiurge.cloud/api/qorid/register \
   -H "Content-Type: application/json" \
   -d '{
     "username": "testuser",
@@ -193,7 +193,7 @@ curl -X POST https://demiurge.cloud/api/abyssid/register \
 ### Initialize Session
 
 ```bash
-curl -X POST https://demiurge.cloud/api/abyssid/session/init \
+curl -X POST https://demiurge.cloud/api/qorid/session/init \
   -H "Content-Type: application/json" \
   -d '{
     "username": "testuser"
@@ -203,7 +203,7 @@ curl -X POST https://demiurge.cloud/api/abyssid/session/init \
 ### Confirm Session
 
 ```bash
-curl -X POST https://demiurge.cloud/api/abyssid/session/confirm \
+curl -X POST https://demiurge.cloud/api/qorid/session/confirm \
   -H "Content-Type: application/json" \
   -d '{
     "challengeId": "...",
@@ -216,7 +216,7 @@ curl -X POST https://demiurge.cloud/api/abyssid/session/confirm \
 ### Get Current User
 
 ```bash
-curl https://demiurge.cloud/api/abyssid/me \
+curl https://demiurge.cloud/api/qorid/me \
   -H "Authorization: Bearer <sessionId>"
 ```
 
@@ -258,7 +258,7 @@ SELECT * FROM abyssid_users;
 
 1. Check logs:
    ```bash
-   journalctl -u abyssid-service -f
+   journalctl -u qorid-service -f
    ```
 
 2. Verify port is available:

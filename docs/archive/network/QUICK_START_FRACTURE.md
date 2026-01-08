@@ -10,14 +10,14 @@
 
 This script will:
 - ✅ Check and install dependencies
-- ✅ Initialize AbyssID database
-- ✅ Start AbyssID Backend (port 3001)
+- ✅ Initialize QorID database
+- ✅ Start QorID Backend (port 3001)
 - ✅ Start Portal Web (port 3000)
 - ✅ Open separate windows for each service
 
 ### **Option 2: Manual Start**
 
-#### **1. Start AbyssID Backend**
+#### **1. Start QorID Backend**
 
 ```powershell
 cd apps/abyssid-backend
@@ -28,7 +28,7 @@ node src/server.js
 
 **Expected Output:**
 ```
-AbyssID Backend running on port 3001
+QorID Backend running on port 3001
 Database: ./data/abyssid.db
 ```
 
@@ -62,8 +62,8 @@ http://localhost:3000
 1. **Navigate to Haven:**
    - Click "Haven" in navigation or go to `http://localhost:3000/haven`
 
-2. **Create AbyssID:**
-   - Click "Create AbyssID" button
+2. **Create QorID:**
+   - Click "Create QorID" button
    - Enter a username (e.g., `testuser`)
    - Click "Engage"
    - Complete the registration flow
@@ -76,7 +76,7 @@ http://localhost:3000
 
 ## 🔍 **Verify Services**
 
-### **Check AbyssID Backend:**
+### **Check QorID Backend:**
 ```powershell
 curl http://localhost:3001/health
 # Expected: {"status":"ok","service":"abyssid-backend"}
@@ -145,7 +145,7 @@ node src/db-init.js
 
 ## 📝 **Next Steps**
 
-1. ✅ **Test Registration Flow** - Create an AbyssID
+1. ✅ **Test Registration Flow** - Create an QorID
 2. ✅ **Explore Fracture Routes** - Visit `/haven`, `/void`, `/nexus`, `/scrolls`, `/conspire`
 3. ⚠️ **Upload Media Files** - Add video backgrounds (see `MEDIA_FILES_SETUP.md`)
 4. ⚠️ **Test Audio Reactivity** - Grant microphone access to test shader effects

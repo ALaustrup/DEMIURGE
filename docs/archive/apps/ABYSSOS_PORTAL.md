@@ -1,13 +1,13 @@
-# AbyssOS Portal
+# QLOUD OS
 
-**AbyssOS** is a full-screen, cybernetic "remote desktop" environment for the Demiurge Blockchain, served at `https://demiurge.cloud`.
+**QOR OS** is a full-screen, cybernetic "remote desktop" environment for the Demiurge Blockchain, served at `https://demiurge.cloud`.
 
 ## Overview
 
-AbyssOS provides a complete desktop-style interface for interacting with the Demiurge ecosystem, featuring:
+QOR OS provides a complete desktop-style interface for interacting with the Demiurge ecosystem, featuring:
 
 - **Boot Screen**: Animated "A B Y S S OS" intro with glitch effects
-- **AbyssID Authentication**: Login and signup flow with local account management
+- **QorID Authentication**: Login and signup flow with local account management
 - **Desktop Environment**: Full-screen desktop with circular dock launcher
 - **Chain Ops**: Real-time Demiurge blockchain status and metrics
 - **Window Management**: Draggable, resizable windows for apps
@@ -26,7 +26,7 @@ AbyssOS provides a complete desktop-style interface for interacting with the Dem
 ### Project Structure
 
 ```
-apps/abyssos-portal/
+apps/qloud-os/
 ├── src/
 │   ├── routes/           # Main screens (BootScreen, LoginScreen, Desktop)
 │   ├── components/
@@ -35,7 +35,7 @@ apps/abyssos-portal/
 │   │   ├── desktop/      # Dock, WindowFrame, StatusBar, Apps
 │   │   └── shared/       # Button, Card, GlitchText
 │   ├── state/            # Zustand stores (authStore, desktopStore)
-│   ├── lib/              # RPC client, AbyssID client
+│   ├── lib/              # RPC client, QorID client
 │   └── styles/           # Global CSS
 ├── dist/                 # Build output
 └── package.json
@@ -48,10 +48,10 @@ apps/abyssos-portal/
 - Auto-transitions to login/desktop after 2.5 seconds
 - Skips if user is already authenticated
 
-#### AbyssID Authentication
+#### QorID Authentication
 - **Login**: Username + public key/code authentication
 - **Signup**: Username availability check, secret code generation, backup flow
-- **Storage**: LocalStorage-based account management (ready for real AbyssID SDK integration)
+- **Storage**: LocalStorage-based account management (ready for real QorID SDK integration)
 
 #### Desktop Environment
 - **Circular Dock**: Central launcher with app icons
@@ -74,7 +74,7 @@ apps/abyssos-portal/
 **Accounts / Wallet**
 - Display username and public key
 - Mock CGT balance (ready for real wallet integration)
-- AbyssID Wallet connection button
+- QorID Wallet connection button
 
 ## Development
 
@@ -86,7 +86,7 @@ apps/abyssos-portal/
 ### Setup
 
 ```bash
-cd apps/abyssos-portal
+cd apps/qloud-os
 pnpm install
 pnpm dev
 ```
@@ -115,25 +115,25 @@ Output will be in the `dist/` directory, ready to be served by any static file s
 
 ### Production Deployment
 
-AbyssOS is currently deployed at `https://demiurge.cloud` on Node0 (51.210.209.112).
+QOR OS is currently deployed at `https://demiurge.cloud` on Node0 (51.210.209.112).
 
 #### Deployment Steps
 
 1. **Build locally:**
    ```bash
-   cd apps/abyssos-portal
+   cd apps/qloud-os
    pnpm install
    pnpm build
    ```
 
 2. **Copy to server:**
    ```bash
-   scp -r dist/* ubuntu@51.210.209.112:/var/www/abyssos-portal/
+   scp -r dist/* ubuntu@51.210.209.112:/var/www/qloud-os/
    ```
 
 3. **Nginx Configuration:**
    - Config file: `/etc/nginx/sites-available/demiurge.cloud`
-   - Serves from: `/var/www/abyssos-portal`
+   - Serves from: `/var/www/qloud-os`
    - HTTPS enabled with Let's Encrypt certificates
    - HTTP redirects to HTTPS
 
@@ -160,7 +160,7 @@ The `DemiurgeRPC` client (`src/lib/demiurgeRpcClient.ts`) provides:
 - **Development**: Configurable via `VITE_DEMIURGE_RPC_URL`
 - **CORS**: Enabled on RPC proxy server
 
-## Extending AbyssOS
+## Extending QOR OS
 
 ### Adding a New App
 
@@ -169,7 +169,7 @@ The `DemiurgeRPC` client (`src/lib/demiurgeRpcClient.ts`) provides:
 3. Register in `Desktop.tsx` app components map
 4. Add icon to `CircularDock.tsx`
 
-See [AbyssOS README](../../apps/abyssos-portal/README.md) for detailed instructions.
+See [QOR OS README](../../apps/qloud-os/README.md) for detailed instructions.
 
 ### Integrating External Apps
 
@@ -189,14 +189,14 @@ export function ExternalApp() {
 
 ## Future Integration Points
 
-### AbyssID Wallet SDK
+### QorID Wallet SDK
 - Current: LocalStorage-based mock implementation
-- Future: Replace `abyssIdClient.ts` with real SDK
-- Integration point: `src/lib/abyssIdClient.ts`
+- Future: Replace `qorIdClient.ts` with real SDK
+- Integration point: `src/lib/qorIdClient.ts`
 
 ### Real Wallet Connection
 - Current: Mock CGT balance display
-- Future: Connect to AbyssID Wallet extension
+- Future: Connect to QorID Wallet extension
 - Integration point: `src/components/desktop/apps/WalletApp.tsx`
 
 ### Mandelbrot Miner
@@ -222,7 +222,7 @@ export function ExternalApp() {
 
 ## Related Documentation
 
-- [AbyssOS README](../../apps/abyssos-portal/README.md) - Detailed development guide
+- [QOR OS README](../../apps/qloud-os/README.md) - Detailed development guide
 - [Deployment Guide](../deployment/README_NODE0.md) - Server setup and deployment
 - [RPC API](../api/RPC.md) - Demiurge RPC methods
 

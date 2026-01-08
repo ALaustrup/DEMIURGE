@@ -1,5 +1,5 @@
 /**
- * Genesis Launcher - Main Entry Point (Simplified)
+ * DEMIURGE QOR - Main Entry Point (Simplified)
  */
 
 #include <QApplication>
@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     
     // Application metadata
-    app.setApplicationName("GenesisLauncher");
+    app.setApplicationName("DemiurgeQor");
     app.setApplicationVersion("1.0.0");
     app.setOrganizationName("Demiurge");
     app.setOrganizationDomain("demiurge.cloud");

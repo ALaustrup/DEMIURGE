@@ -9,7 +9,7 @@
 #include <QJsonObject>
 #include <QDebug>
 
-const QString IPCClient::SERVER_NAME = "GenesisLauncherIPC";
+const QString IPCClient::SERVER_NAME = "DemiurgeQorIPC";
 const QString IPCClient::SHARED_MEM_KEY = "GenesisSession";
 
 IPCClient::IPCClient(QObject *parent)
@@ -136,7 +136,7 @@ void IPCClient::onConnected()
     m_reconnectTimer->stop();
     emit connectionChanged();
     
-    qInfo() << "Connected to Genesis Launcher";
+    qInfo() << "Connected to DEMIURGE QOR";
     
     // Request authentication immediately
     requestAuth();
@@ -147,7 +147,7 @@ void IPCClient::onDisconnected()
     m_connected = false;
     emit connectionChanged();
     
-    qInfo() << "Disconnected from Genesis Launcher";
+    qInfo() << "Disconnected from DEMIURGE QOR";
     
     // Start reconnection attempts
     m_reconnectTimer->start();
@@ -178,7 +178,7 @@ void IPCClient::onError(QLocalSocket::LocalSocketError socketError)
     
     switch (socketError) {
     case QLocalSocket::ConnectionRefusedError:
-        errorMsg = "Connection refused - Genesis Launcher may not be running";
+        errorMsg = "Connection refused - DEMIURGE QOR may not be running";
         break;
     case QLocalSocket::ServerNotFoundError:
         errorMsg = "Launcher not found";
@@ -199,7 +199,7 @@ void IPCClient::onError(QLocalSocket::LocalSocketError socketError)
 
 void IPCClient::onReconnectTimer()
 {
-    qInfo() << "Attempting to reconnect to Genesis Launcher...";
+    qInfo() << "Attempting to reconnect to DEMIURGE QOR...";
     connectToLauncher();
 }
 

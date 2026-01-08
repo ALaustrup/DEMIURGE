@@ -79,31 +79,31 @@ $seal.sdk.tsSdkHash = Get-DirectoryHash "sdk/ts-sdk/src"
 $seal.sdk.rustSdkHash = Get-DirectoryHash "sdk/rust-sdk/src"
 
 # Schema hashes
-$schemas = @("drc369", "abyssid", "fractal1", "wallet")
+$schemas = @("drc369", "qorid", "fractal1", "wallet")
 foreach ($schema in $schemas) {
     $seal.schemas[$schema] = Get-FileHash "sdk/schema/$schema.json"
 }
 
 # Service hashes
-$seal.services.abyssidService = Get-DirectoryHash "apps/abyssid-service/src"
+$seal.services.abyssidService = Get-DirectoryHash "apps/qorid-service/src"
 $seal.services.dnsService = Get-DirectoryHash "apps/dns-service/src"
 
 # Portal hash
-$seal.portal.abyssosPortal = Get-DirectoryHash "apps/abyssos-portal/src"
+$seal.portal.abyssosPortal = Get-DirectoryHash "apps/qloud-os/src"
 
 # DNS hash
 $seal.dns.resolver = Get-FileHash "apps/dns-service/src/dns/resolver.ts"
 $seal.dns.security = Get-DirectoryHash "apps/dns-service/src/security"
 
 # Radio hash
-$seal.radio.routes = Get-FileHash "apps/abyssid-service/src/routes/radio.ts"
-$seal.radio.modules = Get-DirectoryHash "apps/abyssid-service/src/radio"
+$seal.radio.routes = Get-FileHash "apps/qorid-service/src/routes/radio.ts"
+$seal.radio.modules = Get-DirectoryHash "apps/qorid-service/src/radio"
 
 # Fractal-1 hash
-$seal.fractall.codec = Get-FileHash "apps/abyssos-portal/src/fractall/codec.ts"
-$seal.fractall.verifier = Get-FileHash "apps/abyssos-portal/src/fractall/fractall_verifier.ts"
-$seal.fractall.benchmark = Get-FileHash "apps/abyssos-portal/src/fractall/fractall_benchmark.ts"
-$seal.fractall.directory = Get-DirectoryHash "apps/abyssos-portal/src/fractall"
+$seal.fractall.codec = Get-FileHash "apps/qloud-os/src/fractall/codec.ts"
+$seal.fractall.verifier = Get-FileHash "apps/qloud-os/src/fractall/fractall_verifier.ts"
+$seal.fractall.benchmark = Get-FileHash "apps/qloud-os/src/fractall/fractall_benchmark.ts"
+$seal.fractall.directory = Get-DirectoryHash "apps/qloud-os/src/fractall"
 
 # Build graph hash
 $buildFiles = @("package.json", "pnpm-workspace.yaml", "Cargo.toml", "turbo.json")

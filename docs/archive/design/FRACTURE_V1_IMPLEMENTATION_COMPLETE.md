@@ -22,7 +22,7 @@ All Fracture v1 components have been refined to match the dark, ancient, hostile
    - Dark, menacing subtitle
    - Two CTAs: "Enter the Abyss" and "Read the Scrolls"
    - Audio-reactive motion (panelJitter, glyphPulse)
-   - Integrated AbyssID dialog
+   - Integrated QorID dialog
 
 3. **`apps/portal-web/src/components/fracture/FractureNav.tsx`**
    - Brand updated to "FRACTURE" (project name stays "DEMIURGE" in metadata)
@@ -128,7 +128,7 @@ All Fracture v1 components have been refined to match the dark, ancient, hostile
 - [ ] Clicking AudioToggle loads audio file (check console for errors if file missing)
 - [ ] Audio reactivity creates subtle edge glows when audio is playing
 - [ ] HeroPanel shows dark glass cathedral aesthetic
-- [ ] "Enter the Abyss" opens AbyssID dialog
+- [ ] "Enter the Abyss" opens QorID dialog
 - [ ] "Read the Scrolls" navigates to /scrolls
 - [ ] Navigation shows "FRACTURE" brand
 - [ ] All routes (Haven, Void, Nexus, Scrolls, Conspire) work
@@ -156,7 +156,7 @@ All Fracture v1 components have been refined to match the dark, ancient, hostile
 ### Navigation & Branding
 - **"FRACTURE" brand** (project name "DEMIURGE" in metadata) ✓
 - **All routes properly linked** ✓
-- **AbyssID integration** ✓
+- **QorID integration** ✓
 - **AudioToggle in nav** ✓
 
 ---
@@ -164,8 +164,8 @@ All Fracture v1 components have been refined to match the dark, ancient, hostile
 ## Backend Services
 
 **All backend processes remain unchanged:**
-- AbyssID Backend (port 3001) - Still works
-- Abyss Gateway (port 4000) - Still works
+- QorID Backend (port 3001) - Still works
+- QOR Gateway (port 4000) - Still works
 - Demiurge Chain (port 8545) - Still works (optional)
 
 **No breaking changes to existing functionality.**

@@ -1,7 +1,7 @@
 /**
  * Ritual Engine v1
  * 
- * Client-side state machine for managing AbyssID rituals.
+ * Client-side state machine for managing QorID rituals.
  * Handles ritual lifecycle, phase transitions, and effect propagation.
  */
 

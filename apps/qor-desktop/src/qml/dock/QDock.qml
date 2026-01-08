@@ -248,7 +248,7 @@ Item {
     
     function getAppName(appId) {
         switch (appId) {
-            case "wallet": return "Abyss Wallet"
+            case "wallet": return "QOR Wallet"
             case "mining": return "Mining"
             case "explorer": return "Explorer"
             case "neon": return "NEON"

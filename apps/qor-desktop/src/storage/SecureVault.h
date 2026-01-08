@@ -21,7 +21,7 @@ namespace QOR {
  * SecureVault - Secure credential storage
  * 
  * Uses OS-native keychain APIs for secure storage of:
- * - AbyssID private keys
+ * - QorID private keys
  * - Wallet encryption keys
  * - API tokens
  * - Other sensitive data

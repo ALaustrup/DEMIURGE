@@ -1,7 +1,7 @@
 //! Archon Event Logging
 //!
 //! PHASE OMEGA PART VI: Logging channel for Archon events
-//! AbyssOS will display these in the Archon Diagnostics Panel.
+//! QOR OS will display these in the Archon Diagnostics Panel.
 
 /// Emit an Archon event to the log
 ///

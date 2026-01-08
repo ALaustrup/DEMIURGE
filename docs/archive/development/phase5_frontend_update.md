@@ -1,4 +1,4 @@
-# Phase 5: Frontend Updates for AbyssID Backend
+# Phase 5: Frontend Updates for QorID Backend
 
 ## Update AbyssStateMachine.ts
 
@@ -16,7 +16,7 @@ const startChecking = useCallback(async () => {
 
   try {
     // Call real backend API
-    const response = await fetch('http://localhost:3001/api/abyssid/check', {
+    const response = await fetch('http://localhost:3001/api/qorid/check', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username: context.username.trim() }),
@@ -57,7 +57,7 @@ const startBinding = useCallback(async () => {
     const address = "0x" + generated.publicKey.substring(0, 40);
 
     // Register with backend
-    const response = await fetch('http://localhost:3001/api/abyssid/register', {
+    const response = await fetch('http://localhost:3001/api/qorid/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -94,21 +94,21 @@ const startBinding = useCallback(async () => {
 **File**: `apps/portal-web/.env.local` (create if doesn't exist)
 
 ```env
-NEXT_PUBLIC_ABYSSID_API_URL=http://localhost:3001
+NEXT_PUBLIC_QORID_API_URL=http://localhost:3001
 ```
 
 **Update API calls to use environment variable:**
 
 ```typescript
-const API_URL = process.env.NEXT_PUBLIC_ABYSSID_API_URL || 'http://localhost:3001';
+const API_URL = process.env.NEXT_PUBLIC_QORID_API_URL || 'http://localhost:3001';
 
 // Use API_URL in fetch calls
-const response = await fetch(`${API_URL}/api/abyssid/check`, { ... });
+const response = await fetch(`${API_URL}/api/qorid/check`, { ... });
 ```
 
 ## Store Identity in Context
 
-**File**: `apps/portal-web/src/lib/fracture/identity/AbyssIDContext.tsx` (NEW)
+**File**: `apps/portal-web/src/lib/fracture/identity/QorIDContext.tsx` (NEW)
 
 ```typescript
 "use client";
@@ -121,14 +121,14 @@ interface AbyssIdentity {
   publicKey: string;
 }
 
-interface AbyssIDContextType {
+interface QorIDContextType {
   identity: AbyssIdentity | null;
   setIdentity: (identity: AbyssIdentity | null) => void;
 }
 
-const AbyssIDContext = createContext<AbyssIDContextType | undefined>(undefined);
+const QorIDContext = createContext<QorIDContextType | undefined>(undefined);
 
-export function AbyssIDProvider({ children }: { children: ReactNode }) {
+export function QorIDProvider({ children }: { children: ReactNode }) {
   const [identity, setIdentityState] = useState<AbyssIdentity | null>(null);
 
   // Load from localStorage on mount
@@ -153,31 +153,31 @@ export function AbyssIDProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AbyssIDContext.Provider value={{ identity, setIdentity }}>
+    <QorIDContext.Provider value={{ identity, setIdentity }}>
       {children}
-    </AbyssIDContext.Provider>
+    </QorIDContext.Provider>
   );
 }
 
-export function useAbyssID() {
-  const context = useContext(AbyssIDContext);
+export function useQorID() {
+  const context = useContext(QorIDContext);
   if (context === undefined) {
-    throw new Error('useAbyssID must be used within AbyssIDProvider');
+    throw new Error('useQorID must be used within QorIDProvider');
   }
   return context;
 }
 ```
 
-**Update layout.tsx** to wrap with AbyssIDProvider:
+**Update layout.tsx** to wrap with QorIDProvider:
 
 ```typescript
-import { AbyssIDProvider } from "@/lib/fracture/identity/AbyssIDContext";
+import { QorIDProvider } from "@/lib/fracture/identity/QorIDContext";
 
 // In RootLayout:
-<AbyssIDProvider>
+<QorIDProvider>
   <AudioContextProvider>
     {/* existing content */}
   </AudioContextProvider>
-</AbyssIDProvider>
+</QorIDProvider>
 ```
 

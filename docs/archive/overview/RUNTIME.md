@@ -14,7 +14,7 @@ Modules are registered in a deterministic order (defined in `chain/src/runtime/m
 2. `urgeid_registry` - Identity and profile management
 3. `nft_dgen` - D-GEN NFT standard
 4. `fabric_manager` - P2P Fabric asset management
-5. `abyss_registry` - Marketplace listings
+5. `qor_registry_legacy` - Marketplace listings
 6. `developer_registry` - Developer profiles and projects
 7. `dev_capsules` - Development capsule management
 8. `recursion_registry` - Recursion world management
@@ -248,7 +248,7 @@ pub struct FabricAsset {
 
 ---
 
-### 5. Abyss Registry Module (`abyss_registry`)
+### 5. Abyss Registry Module (`qor_registry_legacy`)
 
 **Purpose**: Manages NFT marketplace listings, purchases, and royalty distribution.
 

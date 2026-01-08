@@ -123,10 +123,10 @@ sudo cp /opt/demiurge/deploy/systemd/*.service /etc/systemd/system/
 sudo systemctl daemon-reload
 
 # Enable services
-sudo systemctl enable demiurge-chain abyssid dns-service abyss-gateway
+sudo systemctl enable demiurge-chain abyssid dns-service qor-gateway
 
 # Start services
-sudo systemctl start demiurge-chain abyssid dns-service abyss-gateway
+sudo systemctl start demiurge-chain abyssid dns-service qor-gateway
 
 # Check status
 sudo systemctl status demiurge-chain
@@ -198,7 +198,7 @@ curl -X POST http://localhost:8545/rpc \
 sudo systemctl status demiurge-chain
 sudo systemctl status abyssid
 sudo systemctl status dns-service
-sudo systemctl status abyss-gateway
+sudo systemctl status qor-gateway
 
 # Check logs
 sudo journalctl -u demiurge-chain -f
@@ -211,13 +211,13 @@ sudo journalctl -u abyssid -f
 
 ```bash
 # Start all services
-sudo systemctl start demiurge-chain abyssid dns-service abyss-gateway
+sudo systemctl start demiurge-chain abyssid dns-service qor-gateway
 
 # Stop all services
-sudo systemctl stop demiurge-chain abyssid dns-service abyss-gateway
+sudo systemctl stop demiurge-chain abyssid dns-service qor-gateway
 
 # Restart all services
-sudo systemctl restart demiurge-chain abyssid dns-service abyss-gateway
+sudo systemctl restart demiurge-chain abyssid dns-service qor-gateway
 ```
 
 ### View Logs
@@ -226,14 +226,14 @@ sudo systemctl restart demiurge-chain abyssid dns-service abyss-gateway
 # Chain logs
 sudo journalctl -u demiurge-chain -f
 
-# AbyssID logs
+# QorID logs
 sudo journalctl -u abyssid -f
 
 # DNS service logs
 sudo journalctl -u dns-service -f
 
 # Gateway logs
-sudo journalctl -u abyss-gateway -f
+sudo journalctl -u qor-gateway -f
 ```
 
 ## Troubleshooting
@@ -282,7 +282,7 @@ cd /opt/demiurge
 git pull origin feature/fracture-v1-portal
 pnpm install
 pnpm run build
-sudo systemctl restart demiurge-chain abyssid dns-service abyss-gateway
+sudo systemctl restart demiurge-chain abyssid dns-service qor-gateway
 ```
 
 ### Backup Chain Data

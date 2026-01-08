@@ -15,7 +15,7 @@
 
 class BrowserView;
 class SystemTray;
-class AbyssIDManager;
+class QorIDManager;
 class WalletBridge;
 class UpdateManager;
 
@@ -65,7 +65,7 @@ private:
 
     BrowserView *m_browserView;
     SystemTray *m_systemTray;
-    AbyssIDManager *m_abyssIdManager;
+    QorIDManager *m_abyssIdManager;
     WalletBridge *m_walletBridge;
     UpdateManager *m_updateManager;
     

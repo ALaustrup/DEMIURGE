@@ -119,7 +119,7 @@ done
 
 # Disable unattended upgrades for services
 if [ -f /etc/apt/apt.conf.d/50unattended-upgrades ]; then
-    sudo sed -i 's/Unattended-Upgrade::Automatic-Reboot "false";/Unattended-Upgrade::Automatic-Reboot "false";\nUnattended-Upgrade::Package-Blacklist {\n    "nginx";\n    "demiurge-chain";\n    "abyssid";\n    "abyss-gateway";\n};/' /etc/apt/apt.conf.d/50unattended-upgrades
+    sudo sed -i 's/Unattended-Upgrade::Automatic-Reboot "false";/Unattended-Upgrade::Automatic-Reboot "false";\nUnattended-Upgrade::Package-Blacklist {\n    "nginx";\n    "demiurge-chain";\n    "qorid";\n    "qor-gateway";\n};/' /etc/apt/apt.conf.d/50unattended-upgrades
     log "INFO" "Unattended upgrades configured to skip Demiurge services"
 fi
 
@@ -242,7 +242,7 @@ echo "=== Memory ==="
 free -h
 
 echo "=== Service Status ==="
-systemctl is-active demiurge-chain.service abyss-gateway.service abyssid.service nginx.service 2>&1
+systemctl is-active demiurge-chain.service qor-gateway.service abyssid.service nginx.service 2>&1
 
 echo "=== Ports Listening ==="
 ss -tlnp | grep -E ':(8545|4000|8082|80|443)' || echo "No expected ports found"
@@ -294,23 +294,23 @@ node -v
 npm install -g pnpm@latest
 
 # Rebuild services
-cd /opt/demiurge/repo/apps/abyssid-service
+cd /opt/demiurge/repo/apps/qorid-service
 pnpm install
 pnpm build
 sudo systemctl restart abyssid.service
 
-cd /opt/demiurge/repo/indexer/abyss-gateway
+cd /opt/demiurge/repo/indexer/qor-gateway
 pnpm install
 pnpm build
-sudo systemctl restart abyss-gateway.service
+sudo systemctl restart qor-gateway.service
 ```
 
 ## Frontend Updates
 
-AbyssOS and Portal updates:
+QOR OS and Portal updates:
 ```bash
 # Build locally or on server
-cd /opt/demiurge/repo/apps/abyssos-portal
+cd /opt/demiurge/repo/apps/qloud-os
 pnpm build
 
 # Deploy
@@ -325,13 +325,13 @@ sudo systemctl reload nginx
 
 Check status:
 ```bash
-sudo systemctl status demiurge-chain abyss-gateway abyssid nginx
+sudo systemctl status demiurge-chain qor-gateway abyssid nginx
 ```
 
 View logs:
 ```bash
 sudo journalctl -u demiurge-chain.service -f
-sudo journalctl -u abyss-gateway.service -f
+sudo journalctl -u qor-gateway.service -f
 sudo journalctl -u abyssid.service -f
 sudo tail -f /var/log/nginx/access.log
 ```
@@ -339,7 +339,7 @@ sudo tail -f /var/log/nginx/access.log
 Restart services:
 ```bash
 sudo systemctl restart demiurge-chain
-sudo systemctl restart abyss-gateway
+sudo systemctl restart qor-gateway
 sudo systemctl restart abyssid
 sudo systemctl reload nginx
 ```
@@ -379,7 +379,7 @@ log "INFO" "PHASE 6: Service Correctness Check"
 log "INFO" "----------------------------------------"
 
 # Check if services exist and verify their configuration
-SERVICES=("demiurge-chain" "abyss-gateway" "abyssid")
+SERVICES=("demiurge-chain" "qor-gateway" "qorid")
 for service in "${SERVICES[@]}"; do
     if systemctl list-unit-files | grep -q "^${service}.service"; then
         SERVICE_FILE=$(systemctl show -p FragmentPath "$service.service" --value)
@@ -493,7 +493,7 @@ log "INFO" "=========================================="
 log "INFO" ""
 log "INFO" "Next steps:"
 log "INFO" "1. Reboot system to verify auto-start: sudo reboot"
-log "INFO" "2. After reboot, verify all services: sudo systemctl status demiurge-chain abyss-gateway abyssid nginx"
+log "INFO" "2. After reboot, verify all services: sudo systemctl status demiurge-chain qor-gateway abyssid nginx"
 log "INFO" "3. Test domains: curl -I https://demiurge.cloud"
 log "INFO" "4. Review operations manual: cat $DEMIURGE_ROOT/docs/OPERATIONS.md"
 log "INFO" ""

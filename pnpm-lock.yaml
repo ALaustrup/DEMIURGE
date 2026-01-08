@@ -15,7 +15,7 @@ importers:
         specifier: ^2.6.3
         version: 2.6.3
 
-  apps/abyssid-service:
+  apps/qorid-service:
     dependencies:
       '@noble/curves':
         specifier: ^1.7.0
@@ -73,7 +73,7 @@ importers:
         specifier: ^5.9
         version: 5.9.3
 
-  apps/abyssos-portal:
+  apps/qloud-os:
     dependencies:
       '@monaco-editor/react':
         specifier: ^4.7.0
@@ -317,7 +317,7 @@ importers:
         specifier: ^5.9
         version: 5.9.3
 
-  indexer/abyss-gateway:
+  indexer/qor-gateway:
     dependencies:
       '@graphql-yoga/node':
         specifier: ^3.9.1

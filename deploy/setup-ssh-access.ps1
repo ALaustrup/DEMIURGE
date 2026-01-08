@@ -2,7 +2,7 @@
 # This script helps configure SSH key access to the server
 
 $SSH_KEY_PATH = "$env:USERPROFILE\.ssh\id_abyss"
-$SSH_PUB_KEY_PATH = "$env:USERPROFILE\.ssh\id_abyss.pub"
+$SSH_PUB_KEY_PATH = "$env:USERPROFILE\.ssh\id_qor.pub"
 $SERVER_IP = "51.210.209.112"
 $SERVER_USER = "ubuntu"
 $SSH_CONFIG = "$env:USERPROFILE\.ssh\config"

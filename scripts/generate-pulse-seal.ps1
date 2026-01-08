@@ -42,7 +42,7 @@ $seal = @{
     integration = @{
         node_execution = Get-FileHash "chain/src/node.rs"
         rpc_exposure = Get-FileHash "chain/src/rpc.rs"
-        abyssos_integration = Get-FileHash "apps/abyssos-portal/src/archon/ArchonPresence.tsx"
+        abyssos_integration = Get-FileHash "apps/qloud-os/src/archon/ArchonPresence.tsx"
     }
     
     # Configuration

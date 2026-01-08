@@ -35,7 +35,7 @@ ArchonAI is an intelligent assistant system integrated into Demiurge that provid
 
 4. **Integration Points**
    - Portal Web (`/conspire`)
-   - AbyssOS (in-app assistant)
+   - QOR OS (in-app assistant)
    - CLI (`demiurge ai <query>`)
    - Developer IDE
 
@@ -185,7 +185,7 @@ Would you like help with:
 - Documentation links
 - Context-aware suggestions
 
-### 2. AbyssOS
+### 2. QOR OS
 
 **New App**: `ArchonAIAssistantApp`
 - Always-available assistant
@@ -224,7 +224,7 @@ demiurge ai "Show me NFT minting code"
 ### Frontend Integration
 
 - **Portal**: React component with streaming
-- **AbyssOS**: React app with context awareness
+- **QOR OS**: React app with context awareness
 - **CLI**: Text-based interface with formatting
 
 ---
@@ -244,7 +244,7 @@ demiurge ai "Show me NFT minting code"
 2. **Set up LLM Integration** (Week 1)
 3. **Build API Endpoint** (Week 2)
 4. **Integrate with Portal** (Week 2)
-5. **Add AbyssOS App** (Week 3)
+5. **Add QOR OS App** (Week 3)
 6. **CLI Integration** (Week 3)
 7. **Testing & Refinement** (Week 4)
 

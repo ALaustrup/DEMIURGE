@@ -43,8 +43,8 @@
 
 ### **Services Configured:**
 1. **Demiurge Portal Web** (Next.js) - Port 3000
-2. **AbyssID Backend** (Node.js) - Port 3001
-3. **Abyss Gateway** (GraphQL) - Port 4000
+2. **QorID Backend** (Node.js) - Port 3001
+3. **QOR Gateway** (GraphQL) - Port 4000
 4. **NGINX** (Reverse Proxy) - Port 80/443
 5. **PM2** (Process Manager)
 
@@ -83,12 +83,12 @@
 
 3. **Configure Environment Variables:**
    - Update `.env.local` with production URLs
-   - Set `NEXT_PUBLIC_ABYSSID_API_URL`
+   - Set `NEXT_PUBLIC_QORID_API_URL`
    - Set `NEXT_PUBLIC_ABYSS_GATEWAY_URL`
 
 4. **Test Full Stack:**
    - Verify all services start correctly
-   - Test AbyssID registration flow
+   - Test QorID registration flow
    - Test Developer upgrade flow
    - Verify video background loads
 
@@ -105,7 +105,7 @@
 ### **After Deployment:**
 - [ ] Portal accessible at domain
 - [ ] HTTPS working (SSL certificate)
-- [ ] AbyssID registration works
+- [ ] QorID registration works
 - [ ] Developer upgrade works
 - [ ] Video background displays
 - [ ] All routes accessible (/haven, /void, /nexus, /scrolls, /conspire)

@@ -111,10 +111,10 @@ See `docs/economics/CGT_TOKENOMICS_V2.md` for complete allocation breakdown.
 ### Wallet Components
 
 **Files to Update**:
-1. `apps/abyssos-portal/src/components/desktop/apps/AbyssWalletApp.tsx`
-2. `apps/abyssos-portal/src/components/desktop/AppStoreMenu.tsx`
-3. `apps/abyssos-portal/src/components/desktop/apps/BlockExplorerApp.tsx`
-4. `apps/abyssos-portal/src/state/walletStore.ts`
+1. `apps/qloud-os/src/components/desktop/apps/QorWalletApp.tsx`
+2. `apps/qloud-os/src/components/desktop/AppStoreMenu.tsx`
+3. `apps/qloud-os/src/components/desktop/apps/BlockExplorerApp.tsx`
+4. `apps/qloud-os/src/state/walletStore.ts`
 
 **Changes Required**:
 - Import `formatCGT` from `lib/cgtFormatter.ts`

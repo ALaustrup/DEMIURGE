@@ -18,8 +18,8 @@ This guide will help you deploy the entire Demiurge Devnet stack to your OVHclou
 ### **Services to Deploy:**
 
 1. **Demiurge Portal Web** (Next.js) - Port 3000
-2. **AbyssID Backend** (Node.js) - Port 3001
-3. **Abyss Gateway** (GraphQL) - Port 4000
+2. **QorID Backend** (Node.js) - Port 3001
+3. **QOR Gateway** (GraphQL) - Port 4000
 4. **NGINX** (Reverse Proxy) - Port 80/443
 5. **PM2** (Process Manager)
 
@@ -155,7 +155,7 @@ git checkout feature/fracture-v1-portal
 ls -la apps/
 # Should show: portal-web, abyssid-backend
 ls -la indexer/
-# Should show: abyss-gateway
+# Should show: qor-gateway
 ```
 
 ---
@@ -174,7 +174,7 @@ pnpm run start
 # Press Ctrl+C after verifying it works
 ```
 
-#### 3.2 Setup AbyssID Backend
+#### 3.2 Setup QorID Backend
 
 ```bash
 cd /opt/demiurge/repo/apps/abyssid-backend
@@ -189,10 +189,10 @@ node src/server.js
 # Press Ctrl+C after verifying it works
 ```
 
-#### 3.3 Setup Abyss Gateway
+#### 3.3 Setup QOR Gateway
 
 ```bash
-cd /opt/demiurge/repo/indexer/abyss-gateway
+cd /opt/demiurge/repo/indexer/qor-gateway
 pnpm install
 
 # Initialize data directory
@@ -247,8 +247,8 @@ module.exports = {
       max_memory_restart: '512M',
     },
     {
-      name: 'abyss-gateway',
-      cwd: '/opt/demiurge/repo/indexer/abyss-gateway',
+      name: 'qor-gateway',
+      cwd: '/opt/demiurge/repo/indexer/qor-gateway',
       script: 'pnpm',
       args: 'start',
       env: {
@@ -334,8 +334,8 @@ server {
         add_header Cache-Control "public, immutable";
     }
 
-    # AbyssID Backend API
-    location /api/abyssid/ {
+    # QorID Backend API
+    location /api/qorid/ {
         proxy_pass http://127.0.0.1:3001;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
@@ -344,7 +344,7 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
-    # Abyss Gateway GraphQL
+    # QOR Gateway GraphQL
     location /graphql {
         proxy_pass http://127.0.0.1:4000/graphql;
         proxy_http_version 1.1;
@@ -442,7 +442,7 @@ nano .env.local
 **Add:**
 
 ```env
-NEXT_PUBLIC_ABYSSID_API_URL=https://YOUR_DOMAIN.com/api/abyssid
+NEXT_PUBLIC_QORID_API_URL=https://YOUR_DOMAIN.com/api/abyssid
 NEXT_PUBLIC_ABYSS_GATEWAY_URL=https://YOUR_DOMAIN.com/graphql
 ```
 
@@ -471,10 +471,10 @@ pm2 logs --lines 50
 # Portal
 curl http://localhost:3000
 
-# AbyssID Backend
+# QorID Backend
 curl http://localhost:3001/health
 
-# Abyss Gateway
+# QOR Gateway
 curl http://localhost:4000/graphql
 ```
 
@@ -498,7 +498,7 @@ pm2 logs
 # Specific service
 pm2 logs demiurge-portal
 pm2 logs abyssid-backend
-pm2 logs abyss-gateway
+pm2 logs qor-gateway
 
 # NGINX logs
 sudo tail -f /var/log/nginx/demiurge-portal-error.log
@@ -510,7 +510,7 @@ sudo tail -f /var/log/nginx/demiurge-portal-error.log
 pm2 restart all
 pm2 restart demiurge-portal
 pm2 restart abyssid-backend
-pm2 restart abyss-gateway
+pm2 restart qor-gateway
 ```
 
 ### **Update Deployment**
@@ -527,7 +527,7 @@ pm2 restart demiurge-portal
 
 # Restart other services if needed
 pm2 restart abyssid-backend
-pm2 restart abyss-gateway
+pm2 restart qor-gateway
 ```
 
 ### **System Updates**

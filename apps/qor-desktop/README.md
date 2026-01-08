@@ -7,7 +7,7 @@
 QØЯ represents the heart of Demiurge - a Qt6-based cross-platform desktop application that provides:
 
 - **Full Chain Access** - Direct connection to the Demiurge blockchain
-- **Abyss OS Environment** - The complete graphical operating system
+- **QOR OS Environment** - The complete graphical operating system
 - **Native Performance** - No browser limitations or sandboxing
 - **Local Storage** - Unlimited storage using your machine's drives
 - **Hardware Mining** - CPU/GPU mining with native performance
@@ -29,24 +29,24 @@ QØЯ Desktop
 │   ├── File system access
 │   └── System integration
 │
-└── Abyss OS (Qt WebEngine + Native)
+└── QOR OS (Qt WebEngine + Native)
     ├── Desktop environment
     ├── Native apps (NEON, WRYT, Files)
-    ├── Abyss Explorer browser
-    └── AbyssID/Wallet integration
+    ├── QOR Explorer browser
+    └── QorID/Wallet integration
 ```
 
 ## Features
 
 - 🔗 **Full Blockchain Node** - Run as a validator or light node
-- 🔐 **Native AbyssID** - Secure key storage using OS keychain
-- 💰 **Abyss Wallet** - CGT and DRC-369 asset management
+- 🔐 **Native QorID** - Secure key storage using OS keychain
+- 💰 **QOR Wallet** - CGT and DRC-369 asset management
 - ⛏️ **Mining Engine** - CPU/GPU mining with 5-10x web rates
 - 🌐 **P2P Network** - Earn CGT by seeding content
 - 🎵 **NEON Player** - Native media player with visualizers
 - 📝 **WRYT Editor** - Document editing with all system fonts
 - 📁 **Files Manager** - Full filesystem access
-- 🌍 **Abyss Explorer** - Web3 browser component
+- 🌍 **QOR Explorer** - Web3 browser component
 - 🖥️ **System Tray** - Background operation with quick access
 - 🔄 **Auto-Update** - Seamless updates
 
@@ -120,7 +120,7 @@ qor-desktop/
 │   │   ├── FileManager.cpp     # Filesystem access
 │   │   └── SecureVault.cpp     # Encrypted credentials
 │   ├── identity/               # Identity management
-│   │   ├── AbyssIDManager.cpp  # AbyssID integration
+│   │   ├── QorIDManager.cpp  # QorID integration
 │   │   └── WalletManager.cpp   # Wallet operations
 │   ├── chain/                  # Chain integration
 │   │   ├── ChainClient.cpp     # RPC communication
@@ -137,9 +137,9 @@ qor-desktop/
 │   │   ├── neon/               # NEON media player
 │   │   ├── wryt/               # WRYT document editor
 │   │   ├── files/              # Files manager
-│   │   └── explorer/           # Abyss Explorer browser
+│   │   └── explorer/           # QOR Explorer browser
 │   └── resources/              # Icons and assets
-├── web/                        # Bundled Abyss OS (from web build)
+├── web/                        # Bundled QOR OS (from web build)
 ├── installer/                  # Platform installers
 └── README.md
 ```

@@ -1,6 +1,6 @@
 //! Premium Tier Module
 //!
-//! Manages premium subscription tiers for AbyssID users.
+//! Manages premium subscription tiers for QorID users.
 //! Users can either pay monthly or stake CGT to unlock premium features.
 //!
 //! Tier Structure:

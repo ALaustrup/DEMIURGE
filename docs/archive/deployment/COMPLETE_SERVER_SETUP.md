@@ -43,7 +43,7 @@ sudo apt install -y curl wget git
 
 ```bash
 sudo mkdir -p /opt/demiurge/{bin,config,data,logs}
-sudo mkdir -p /var/www/abyssos-portal
+sudo mkdir -p /var/www/qloud-os
 sudo chown -R ubuntu:ubuntu /opt/demiurge
 ```
 
@@ -190,7 +190,7 @@ sudo systemctl daemon-reload
 sudo systemctl enable demiurge-chain
 sudo systemctl enable abyssid
 sudo systemctl enable dns-service
-sudo systemctl enable abyss-gateway
+sudo systemctl enable qor-gateway
 ```
 
 ### Step 6.4: Start Services
@@ -199,7 +199,7 @@ sudo systemctl enable abyss-gateway
 sudo systemctl start demiurge-chain
 sudo systemctl start abyssid
 sudo systemctl start dns-service
-sudo systemctl start abyss-gateway
+sudo systemctl start qor-gateway
 ```
 
 ### Step 6.5: Check Service Status
@@ -208,7 +208,7 @@ sudo systemctl start abyss-gateway
 sudo systemctl status demiurge-chain
 sudo systemctl status abyssid
 sudo systemctl status dns-service
-sudo systemctl status abyss-gateway
+sudo systemctl status qor-gateway
 ```
 
 ---
@@ -272,7 +272,7 @@ sudo ufw status verbose
 sudo systemctl status demiurge-chain --no-pager
 sudo systemctl status abyssid --no-pager
 sudo systemctl status dns-service --no-pager
-sudo systemctl status abyss-gateway --no-pager
+sudo systemctl status qor-gateway --no-pager
 sudo systemctl status nginx --no-pager
 ```
 
@@ -292,14 +292,14 @@ Should return JSON with chain information.
 # Chain logs
 sudo journalctl -u demiurge-chain -n 50 --no-pager
 
-# AbyssID logs
+# QorID logs
 sudo journalctl -u abyssid -n 50 --no-pager
 
 # DNS service logs
 sudo journalctl -u dns-service -n 50 --no-pager
 
 # Gateway logs
-sudo journalctl -u abyss-gateway -n 50 --no-pager
+sudo journalctl -u qor-gateway -n 50 --no-pager
 ```
 
 ---
@@ -311,8 +311,8 @@ sudo journalctl -u abyss-gateway -n 50 --no-pager
 Some services may need `.env` files:
 
 ```bash
-# AbyssID service
-cd /opt/demiurge/abyssid-service
+# QorID service
+cd /opt/demiurge/qorid-service
 # Create .env file if needed
 sudo nano .env
 
@@ -352,13 +352,13 @@ htop
 
 ```bash
 # Start all services
-sudo systemctl start demiurge-chain abyssid dns-service abyss-gateway
+sudo systemctl start demiurge-chain abyssid dns-service qor-gateway
 
 # Stop all services
-sudo systemctl stop demiurge-chain abyssid dns-service abyss-gateway
+sudo systemctl stop demiurge-chain abyssid dns-service qor-gateway
 
 # Restart all services
-sudo systemctl restart demiurge-chain abyssid dns-service abyss-gateway
+sudo systemctl restart demiurge-chain abyssid dns-service qor-gateway
 
 # Check status
 sudo systemctl status demiurge-chain
@@ -385,7 +385,7 @@ curl -X POST http://localhost:8545/rpc \
   -H 'Content-Type: application/json' \
   -d '{"jsonrpc":"2.0","method":"getNetworkInfo","params":[],"id":1}'
 
-# AbyssID health
+# QorID health
 curl http://localhost:3001/health
 
 # DNS service

@@ -6,9 +6,9 @@ DEMIURGE is a sovereign L1 blockchain ecosystem designed for creators, gamers, m
 
 ## Core Universe Model
 
-### Identity: AbyssID
+### Identity: QorID
 
-**AbyssID** is the sovereign identity system on Demiurge. Every user has an AbyssID that serves as:
+**QorID** is the sovereign identity system on Demiurge. Every user has an QorID that serves as:
 - **Wallet Address**: Receive and send CGT
 - **Identity Profile**: Display name, bio, handle (@username)
 - **Syzygy Tracking**: Contribution score for seeding/serving other creators' content
@@ -16,15 +16,15 @@ DEMIURGE is a sovereign L1 blockchain ecosystem designed for creators, gamers, m
 
 ### Roles
 
-**AbyssID Users**
-- All users have an AbyssID identity
+**QorID Users**
+- All users have an QorID identity
 - Can browse Fabric, buy NFTs, explore worlds, hold CGT and assets
 - Can send and receive CGT transfers
 - Track Syzygy contributions
 
 **Archons (Creators)**
-- AbyssID users who have "ascended" to creator status
-- Have all AbyssID abilities plus:
+- QorID users who have "ascended" to creator status
+- Have all QorID abilities plus:
   - Upload to Fabric with revenue hooks
   - Mint D-GEN NFTs
   - List and sell in the Abyss
@@ -51,7 +51,7 @@ DEMIURGE is a sovereign L1 blockchain ecosystem designed for creators, gamers, m
   - Pays Forge compute workers
   - Denominates Abyss marketplace prices
   - Routes royalties to creators
-  - Transferable between AbyssIDs
+  - Transferable between QorIDs
 
 All CGT amounts are stored as `u128` in smallest units (10^-8 precision). RPC methods return amounts as strings to avoid JavaScript number overflow.
 
@@ -73,12 +73,12 @@ Other tokens (e.g., ETH, USDC) can exist later via bridges/swap modules, but the
 DEMIURGE/
 ├── docs/                    # Documentation
 ├── chain/                   # Rust L1 node (Archon node), Forge PoW, RPC
-│   └── src/runtime/         # Runtime modules (bank_cgt, abyssid_registry, etc.)
+│   └── src/runtime/         # Runtime modules (bank_cgt, qor_registry, etc.)
 ├── indexer/                 # Block ingestor + GraphQL gateway
 ├── sdk/                     # TypeScript & Rust SDKs
 ├── apps/
 │   ├── portal-web/          # Next.js website + creator dashboard
-│   ├── abyssos-portal/      # AbyssOS - Full-screen desktop environment
+│   ├── qloud-os/      # QOR OS - Full-screen desktop environment
 │   └── desktop-qt/          # Qt 6.10 Pantheon Console
 ├── deploy/                  # Deployment scripts and configs
 ├── other/                   # Legacy code and experimental features
@@ -97,10 +97,10 @@ All project documentation has been organized in the `/docs` directory. Start wit
 - [RPC API](docs/api/RPC.md)
 - [Devnet Setup](docs/network/DEVNET.md)
 - [Deployment Guide](docs/deployment/README_NODE0.md)
-- [AbyssOS Portal](docs/apps/ABYSSOS_PORTAL.md) - Desktop environment at `https://demiurge.cloud`
+- [QLOUD OS](docs/apps/QLOUD_OS_PORTAL.md) - Desktop environment at `https://demiurge.cloud`
 
 **Live Services:**
-- **AbyssOS**: https://demiurge.cloud
+- **QOR OS**: https://demiurge.cloud
 - **RPC**: https://rpc.demiurge.cloud/rpc
 
 ## Getting Started

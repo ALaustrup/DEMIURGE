@@ -189,8 +189,8 @@ Item {
                     id: abyssCard
                     title: "ENTER ABYSS"
                     subtitle: "Full Desktop"
-                    description: "Full Immersion. The Desktop.\nComplete Abyss OS environment."
-                    iconSource: "qrc:/icons/abyss.png"
+                    description: "Full Immersion. The Desktop.\nComplete QOR OS environment."
+                    iconSource: "qrc:/icons/qor.png"
                     accentColor: flameOrange
                     
                     onClicked: {

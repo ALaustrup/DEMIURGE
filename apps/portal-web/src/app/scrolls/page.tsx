@@ -6,8 +6,8 @@ import Link from "next/link";
 import { ArrowRight, BookOpen, FileText, GraduationCap, Code, Settings, Database, Zap, Users, Wallet, MessageSquare, Layers, Globe, Shield, X } from "lucide-react";
 import { useState } from "react";
 import { RuntimeModulesDoc } from "@/components/docs/RuntimeModulesDoc";
-import { AbyssIDAuthDoc } from "@/components/docs/AbyssIDAuthDoc";
-import { AbyssIDDoc } from "@/components/docs/UrgeIDDoc";
+import { QorIDAuthDoc } from "@/components/docs/QorIDAuthDoc";
+import { QorIDDoc } from "@/components/docs/UrgeIDDoc";
 import { ArchitectureDoc } from "@/components/docs/ArchitectureDoc";
 import { SystemOpsDoc } from "@/components/docs/SystemOpsDoc";
 import { APIDoc } from "@/components/docs/APIDoc";
@@ -168,7 +168,7 @@ export default function ScrollsPage() {
                 >
                   <h3 className="font-semibold text-zinc-100 mb-2">My Void & Identity</h3>
                   <p className="text-sm text-zinc-300 mb-2">
-                    AbyssID profiles (accessible via "My Void" in the portal), username registration, leveling system.
+                    QorID profiles (accessible via "My Void" in the portal), username registration, leveling system.
                   </p>
                   <ul className="text-xs text-zinc-400 space-y-1 list-disc list-inside">
                     <li>View your profile, level, and Syzygy score</li>
@@ -423,12 +423,12 @@ export default function ScrollsPage() {
           {expandedSection === "auth" && (
             <div className="mt-4 space-y-6">
               <div>
-                <h3 className="text-lg font-semibold text-zinc-100 mb-4">AbyssID Authentication</h3>
-                <AbyssIDAuthDoc />
+                <h3 className="text-lg font-semibold text-zinc-100 mb-4">QorID Authentication</h3>
+                <QorIDAuthDoc />
               </div>
               <div className="border-t border-white/10 pt-6">
-                <h3 className="text-lg font-semibold text-zinc-100 mb-4">AbyssID System</h3>
-                <AbyssIDDoc />
+                <h3 className="text-lg font-semibold text-zinc-100 mb-4">QorID System</h3>
+                <QorIDDoc />
               </div>
             </div>
           )}
@@ -456,15 +456,15 @@ export default function ScrollsPage() {
               <p className="text-xs text-zinc-400 mt-1">Portal available at http://localhost:3000</p>
             </div>
             <div>
-              <h3 className="font-semibold text-zinc-100 mb-2">3. Start Abyss Gateway</h3>
+              <h3 className="font-semibold text-zinc-100 mb-2">3. Start QOR Gateway</h3>
               <code className="block p-2 bg-black/30 rounded text-xs text-cyan-300 font-mono">
-                cd indexer/abyss-gateway && pnpm dev
+                cd indexer/qor-gateway && pnpm dev
               </code>
               <p className="text-xs text-zinc-400 mt-1">GraphQL API available at http://localhost:4000/graphql</p>
             </div>
             <div>
-              <h3 className="font-semibold text-zinc-100 mb-2">4. Create Your AbyssID</h3>
-              <p className="text-xs">Visit the portal, click "Create your AbyssID", generate keypair, set username, start earning Syzygy!</p>
+              <h3 className="font-semibold text-zinc-100 mb-2">4. Create Your QorID</h3>
+              <p className="text-xs">Visit the portal, click "Create your QorID", generate keypair, set username, start earning Syzygy!</p>
             </div>
           </div>
         </div>

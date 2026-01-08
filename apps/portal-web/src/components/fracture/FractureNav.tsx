@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Code, Network, BookOpen, Sparkles, Fingerprint } from "lucide-react";
 import { useState } from "react";
-import { AbyssIDDialog } from "./AbyssIDDialog";
+import { QorIDDialog } from "./QorIDDialog";
 import { AudioToggle } from "./AudioToggle";
 import { GENESIS_CONFIG } from "@/config/genesis";
 import { useOperator } from "@/lib/operator/OperatorContextProvider";
@@ -19,7 +19,7 @@ const navItems = [
 
 export function FractureNav() {
   const pathname = usePathname();
-  const [showAbyssID, setShowAbyssID] = useState(false);
+  const [showQorID, setShowQorID] = useState(false);
   const { operator } = useOperator();
 
   return (
@@ -71,7 +71,7 @@ export function FractureNav() {
               })}
             </div>
 
-            {/* Right side: Operator Role + Genesis Mode Indicator + Audio Toggle + AbyssID */}
+            {/* Right side: Operator Role + Genesis Mode Indicator + Audio Toggle + QorID */}
             <div className="flex items-center gap-3">
               {operator && (
                 <span className={`text-xs font-medium ${
@@ -89,9 +89,9 @@ export function FractureNav() {
               )}
               <AudioToggle />
               <button
-                onClick={() => setShowAbyssID(true)}
+                onClick={() => setShowQorID(true)}
                 className="flex items-center justify-center px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-zinc-300 hover:bg-white/10 hover:border-cyan-500/30 hover:text-cyan-300 transition-all duration-200"
-                title="AbyssID"
+                title="QorID"
               >
                 <Fingerprint className="h-4 w-4" />
               </button>
@@ -128,11 +128,11 @@ export function FractureNav() {
         </div>
       </nav>
 
-      {/* AbyssID Dialog */}
-      {showAbyssID && (
-        <AbyssIDDialog
-          open={showAbyssID}
-          onClose={() => setShowAbyssID(false)}
+      {/* QorID Dialog */}
+      {showQorID && (
+        <QorIDDialog
+          open={showQorID}
+          onClose={() => setShowQorID(false)}
         />
       )}
     </>

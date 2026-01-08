@@ -63,7 +63,7 @@ cat /home/ubuntu/.ssh/authorized_keys
 
 # If missing, add it manually (paste your public key)
 nano /home/ubuntu/.ssh/authorized_keys
-# Paste your public key from: C:\Users\Gnosis\.ssh\id_abyss.pub
+# Paste your public key from: C:\Users\Gnosis\.ssh\id_qor.pub
 ```
 
 ### Step 5: Restart SSH Service
@@ -93,7 +93,7 @@ If you can access the server another way, add your public key:
 ### Get Your Public Key
 ```powershell
 # On Windows
-Get-Content C:\Users\Gnosis\.ssh\id_abyss.pub
+Get-Content C:\Users\Gnosis\.ssh\id_qor.pub
 ```
 
 ### Add to Server (via console)
@@ -157,18 +157,18 @@ ssh abyss 'echo "Connected" && whoami && hostname'
 ssh abyss 'sudo cat /etc/ssh/sshd_config | grep AllowUsers'
 
 # Verify services
-ssh abyss 'sudo systemctl status demiurge-chain abyssid abyss-gateway nginx'
+ssh abyss 'sudo systemctl status demiurge-chain abyssid qor-gateway nginx'
 ```
 
 ---
 
 ## Your Public Key (for reference)
 
-Located at: `C:\Users\Gnosis\.ssh\id_abyss.pub`
+Located at: `C:\Users\Gnosis\.ssh\id_qor.pub`
 
 To view it:
 ```powershell
-Get-Content C:\Users\Gnosis\.ssh\id_abyss.pub
+Get-Content C:\Users\Gnosis\.ssh\id_qor.pub
 ```
 
 ---
@@ -200,7 +200,7 @@ echo "✅ SSH config updated. Try connecting now."
 
 ## After SSH is Restored
 
-Once SSH access is working, deploy AbyssOS:
+Once SSH access is working, deploy QOR OS:
 
 ```powershell
 .\deploy\deploy-abyssos-only.ps1

@@ -103,7 +103,7 @@ pub fn get_balance_cgt(state: &State, addr: &Address) -> u128 {
 
 /// Internal helper for modules to directly set balances.
 ///
-/// This is used by other runtime modules (e.g., fabric_manager, abyss_registry)
+/// This is used by other runtime modules (e.g., fabric_manager, qor_registry_legacy)
 /// to perform balance operations without going through the bank_cgt transfer call.
 /// Use with caution - this bypasses nonce checks and other validations.
 pub(crate) fn set_balance_for_module(
@@ -132,7 +132,7 @@ pub fn cgt_mint_to(
     caller_module: &str,
 ) -> Result<(), String> {
     // Enforce allowed minting modules
-    let allowed_modules = ["forge", "fabric_manager", "system", "abyssid_registry", "abyssid_level_rewards", "work_claim"];
+    let allowed_modules = ["forge", "fabric_manager", "system", "qor_registry", "abyssid_level_rewards", "work_claim"];
     if !allowed_modules.contains(&caller_module) {
         return Err(format!(
             "module '{}' is not authorized to mint CGT",

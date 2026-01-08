@@ -55,7 +55,7 @@ Most remaining vulnerabilities are in **legacy dependencies** that are deeply ne
 
 ### Remaining Moderate Priority Issue
 
-1. **esbuild** vulnerability in `apps/abyssos-portal` (DEVELOPMENT DEPENDENCY)
+1. **esbuild** vulnerability in `apps/qloud-os` (DEVELOPMENT DEPENDENCY)
    - **Package:** `esbuild@0.21.5`
    - **Vulnerable:** `<=0.24.2`
    - **Patched:** `>=0.25.0`
@@ -77,9 +77,9 @@ Most remaining vulnerabilities are in **legacy dependencies** that are deeply ne
 
 ### Next Steps
 
-1. **Update Vite/esbuild** in `apps/abyssos-portal`:
+1. **Update Vite/esbuild** in `apps/qloud-os`:
    ```bash
-   cd apps/abyssos-portal
+   cd apps/qloud-os
    pnpm update vite @vitejs/plugin-react
    ```
 

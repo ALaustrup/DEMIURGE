@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useAbyssID } from "@/hooks/useAbyssID";
+import { useQorID } from "@/hooks/useQorID";
 import { sdk } from "@/lib/sdk";
 import { signTransactionHex } from "@demiurge/ts-sdk";
 import { Coins, Send } from "lucide-react";
 
 export default function WalletPage() {
-  const { address, privateKey } = useAbyssID();
+  const { address, privateKey } = useQorID();
   const [balance, setBalance] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [sendTo, setSendTo] = useState("");
@@ -67,7 +67,7 @@ export default function WalletPage() {
     return (
       <div className="min-h-screen p-8">
         <div className="max-w-2xl mx-auto">
-          <p className="text-zinc-400">Please create or load an AbyssID first.</p>
+          <p className="text-zinc-400">Please create or load an QorID first.</p>
         </div>
       </div>
     );

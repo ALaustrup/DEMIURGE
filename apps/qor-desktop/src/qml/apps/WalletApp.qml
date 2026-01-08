@@ -5,7 +5,7 @@ import QtQuick.Controls
 import "../components"
 
 /**
- * WalletApp - Abyss Wallet Application
+ * WalletApp - QOR Wallet Application
  * 
  * The native CGT wallet interface for QØЯ desktop.
  * Displays balance, transaction history, and provides
@@ -18,7 +18,7 @@ Item {
     // PUBLIC PROPERTIES
     // ========================================================================
     
-    /** Connected AbyssID */
+    /** Connected QorID */
     property string abyssId: ""
     
     /** Current CGT balance (in smallest units) */

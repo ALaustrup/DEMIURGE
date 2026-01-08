@@ -7,17 +7,17 @@ import { useRouter } from "next/navigation";
 import { useAbyssStateMachine } from "./AbyssStateMachine";
 import { ShaderPlane } from "./ShaderPlane";
 import { useAbyssReactive } from "@/lib/fracture/audio/AbyssReactive";
-import { useAbyssID } from "@/lib/fracture/identity/AbyssIDContext";
+import { useQorID } from "@/lib/fracture/identity/QorIDContext";
 import { useAudioEngine } from "@/lib/fracture/audio/AudioContextProvider";
 
-interface AbyssIDDialogProps {
+interface QorIDDialogProps {
   open: boolean;
   onClose: () => void;
 }
 
-export function AbyssIDDialog({ open, onClose }: AbyssIDDialogProps) {
+export function QorIDDialog({ open, onClose }: QorIDDialogProps) {
   const router = useRouter();
-  const { identity } = useAbyssID();
+  const { identity } = useQorID();
   const {
     state,
     context,

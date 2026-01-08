@@ -7,7 +7,7 @@
 
 ## ✅ All Issues Resolved
 
-### 1. AbyssID Secret Key Storage & Login ✅
+### 1. QorID Secret Key Storage & Login ✅
 
 **Problem**: Users couldn't log back in with their secret keys after signup.
 
@@ -24,7 +24,7 @@
 - ✅ Dual lookup: direct secret map + public key search (backwards compatible)
 
 **Files Changed**:
-- `apps/abyssos-portal/src/lib/abyssIdClient.ts`
+- `apps/qloud-os/src/lib/qorIdClient.ts`
 
 **Testing**:
 - Signup creates account with secret
@@ -46,12 +46,12 @@
 - ✅ Consistent styling across all button components
 
 **Files Changed**:
-- `apps/abyssos-portal/src/components/shared/Button.tsx`
-- `apps/abyssos-portal/src/components/desktop/AppIcon.tsx`
-- `apps/abyssos-portal/src/components/desktop/SystemMenu.tsx`
-- `apps/abyssos-portal/src/components/desktop/TabbedWindow.tsx`
-- `apps/abyssos-portal/src/components/desktop/StartButton3D.tsx`
-- `apps/abyssos-portal/src/components/desktop/AppStoreMenu.tsx`
+- `apps/qloud-os/src/components/shared/Button.tsx`
+- `apps/qloud-os/src/components/desktop/AppIcon.tsx`
+- `apps/qloud-os/src/components/desktop/SystemMenu.tsx`
+- `apps/qloud-os/src/components/desktop/TabbedWindow.tsx`
+- `apps/qloud-os/src/components/desktop/StartButton3D.tsx`
+- `apps/qloud-os/src/components/desktop/AppStoreMenu.tsx`
 
 **New Button Style**:
 ```tsx
@@ -74,7 +74,7 @@ className="bg-abyss-cyan/20 border border-abyss-cyan/40 text-abyss-cyan
 - ✅ Maintains responsive layout
 
 **Files Changed**:
-- `apps/abyssos-portal/src/components/desktop/AppStoreMenu.tsx`
+- `apps/qloud-os/src/components/desktop/AppStoreMenu.tsx`
 
 **New Positioning**:
 ```tsx
@@ -96,8 +96,8 @@ className="fixed top-8 left-0 right-0 w-full h-[calc(100vh-2rem)]
 - ✅ Network health indicators
 
 **Files Changed**:
-- `apps/abyssos-portal/src/components/desktop/StatusBar.tsx`
-- `apps/abyssos-portal/src/components/desktop/apps/ChainOpsApp.tsx`
+- `apps/qloud-os/src/components/desktop/StatusBar.tsx`
+- `apps/qloud-os/src/components/desktop/apps/ChainOpsApp.tsx`
 
 **New Features in ChainOpsApp**:
 - RPC connection status with ChainStatusPill
@@ -123,12 +123,12 @@ className="fixed top-8 left-0 right-0 w-full h-[calc(100vh-2rem)]
 
 **Files Changed**:
 - `chain/src/runtime/bank_cgt.rs` - Updated MAX_SUPPLY
-- `apps/abyssos-portal/src/lib/cgtFormatter.ts` - New utility
-- `apps/abyssos-portal/src/components/desktop/apps/AbyssWalletApp.tsx`
-- `apps/abyssos-portal/src/components/desktop/AppStoreMenu.tsx`
-- `apps/abyssos-portal/src/components/desktop/apps/BlockExplorerApp.tsx`
-- `apps/abyssos-portal/src/state/walletStore.ts`
-- `apps/abyssos-portal/src/services/shell/commands/index.ts`
+- `apps/qloud-os/src/lib/cgtFormatter.ts` - New utility
+- `apps/qloud-os/src/components/desktop/apps/QorWalletApp.tsx`
+- `apps/qloud-os/src/components/desktop/AppStoreMenu.tsx`
+- `apps/qloud-os/src/components/desktop/apps/BlockExplorerApp.tsx`
+- `apps/qloud-os/src/state/walletStore.ts`
+- `apps/qloud-os/src/services/shell/commands/index.ts`
 
 **New Documents**:
 - `docs/economics/CGT_TOKENOMICS_V2.md` - Complete tokenomics
@@ -147,22 +147,22 @@ className="fixed top-8 left-0 right-0 w-full h-[calc(100vh-2rem)]
 **Problem**: Need complete mining system in CLI and accounting application.
 
 **Solutions Implemented**:
-- ✅ Created `MiningAccountingApp` for AbyssOS
+- ✅ Created `MiningAccountingApp` for QOR OS
 - ✅ Added mining commands to CLI (`demiurge mine *`)
 - ✅ Mining system documentation
 - ✅ Manual adjustment request system
-- ✅ Clear separation: Chain (Rust) vs OS (AbyssOS) vs CLI
+- ✅ Clear separation: Chain (Rust) vs OS (QOR OS) vs CLI
 
 **Files Created**:
-- `apps/abyssos-portal/src/components/desktop/apps/MiningAccountingApp.tsx`
+- `apps/qloud-os/src/components/desktop/apps/MiningAccountingApp.tsx`
 - `docs/development/MINING_SYSTEM.md`
 
 **Files Changed**:
 - `cli/src/main.rs` - Added mining commands
 - `cli/Cargo.toml` - Added chrono dependency
-- `apps/abyssos-portal/src/state/desktopStore.ts` - Added miningAccounting app
-- `apps/abyssos-portal/src/routes/Desktop.tsx` - Registered app
-- `apps/abyssos-portal/src/components/desktop/AppStoreMenu.tsx` - Added to dev category
+- `apps/qloud-os/src/state/desktopStore.ts` - Added miningAccounting app
+- `apps/qloud-os/src/routes/Desktop.tsx` - Registered app
+- `apps/qloud-os/src/components/desktop/AppStoreMenu.tsx` - Added to dev category
 
 **CLI Commands**:
 - `demiurge mine start` - Start mining session
@@ -190,7 +190,7 @@ className="fixed top-8 left-0 right-0 w-full h-[calc(100vh-2rem)]
 - On-chain validation
 - State management
 
-### OS Operations (AbyssOS)
+### OS Operations (QOR OS)
 - Mining UI
 - Statistics display
 - Account management
@@ -214,7 +214,7 @@ className="fixed top-8 left-0 right-0 w-full h-[calc(100vh-2rem)]
 
 ## Testing Checklist
 
-### AbyssID
+### QorID
 - [ ] Sign up new account
 - [ ] Save secret key
 - [ ] Log out

@@ -13,7 +13,7 @@
 
 // App definitions
 static const QList<AppInfo> APP_LIST = {
-    { AppMode::AbyssOS,  "Abyss OS",  "Full desktop experience", "🌊", "Ctrl+1" },
+    { AppMode::QOR OS,  "QOR OS",  "Full desktop experience", "🌊", "Ctrl+1" },
     { AppMode::Explorer, "Explorer",  "Web3 browser",           "🔍", "Ctrl+2" },
     { AppMode::Neon,     "NEON",      "Media player",           "🎵", "Ctrl+3" },
     { AppMode::Craft,    "CRAFT",     "Code editor & IDE",      "⚡", "Ctrl+4" },
@@ -277,7 +277,7 @@ void AppLauncher::keyPressEvent(QKeyEvent *event)
     switch (event->key()) {
         case Qt::Key_1:
             if (event->modifiers() & Qt::ControlModifier) {
-                setSelectedApp(AppMode::AbyssOS);
+                setSelectedApp(AppMode::QOR OS);
             }
             break;
         case Qt::Key_2:

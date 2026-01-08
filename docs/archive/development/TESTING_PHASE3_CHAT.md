@@ -5,7 +5,7 @@
 Before testing, ensure these services are running:
 
 1. **Demiurge Chain Node** - `http://127.0.0.1:8545/rpc`
-2. **Abyss Gateway** - `http://localhost:4000/graphql`
+2. **QOR Gateway** - `http://localhost:4000/graphql`
 3. **Portal Web** - `http://localhost:3000`
 
 ## Quick Start Commands
@@ -16,12 +16,12 @@ cd C:\Repos\DEMIURGE
 cargo run -p demiurge-chain
 ```
 
-### Terminal 2: Abyss Gateway
+### Terminal 2: QOR Gateway
 ```powershell
-cd C:\Repos\DEMIURGE\indexer\abyss-gateway
+cd C:\Repos\DEMIURGE\indexer\qor-gateway
 pnpm dev
 ```
-Expected output: `Abyss Gateway running on http://localhost:4000/graphql`
+Expected output: `QOR Gateway running on http://localhost:4000/graphql`
 
 ### Terminal 3: Portal Web
 ```powershell
@@ -41,7 +41,7 @@ Expected output: `Ready on http://localhost:3000`
    ```
    Should return: `{ "result": { "height": ... } }`
 
-2. **Check Abyss Gateway:**
+2. **Check QOR Gateway:**
    - Open browser: `http://localhost:4000/graphql`
    - Should see GraphiQL interface
    - Try this query:
@@ -263,8 +263,8 @@ Test via GraphiQL at `http://localhost:4000/graphql`:
 ## Troubleshooting
 
 ### Issue: "Connection failed" in portal
-- **Check**: Is Abyss Gateway running on port 4000?
-- **Fix**: Start Abyss Gateway: `cd indexer/abyss-gateway && pnpm dev`
+- **Check**: Is QOR Gateway running on port 4000?
+- **Fix**: Start QOR Gateway: `cd indexer/qor-gateway && pnpm dev`
 
 ### Issue: "Authentication required" errors
 - **Check**: Are you logged in with UrgeID?

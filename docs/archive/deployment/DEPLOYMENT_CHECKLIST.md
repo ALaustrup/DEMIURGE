@@ -154,9 +154,9 @@ curl -X POST https://rpc.demiurge.cloud/rpc \
 }
 ```
 
-### 4.3 Verify AbyssOS Integration
+### 4.3 Verify QOR OS Integration
 
-1. Open AbyssOS portal
+1. Open QOR OS portal
 2. Navigate to Archon Panel
 3. Verify:
    - Archon state updates every 500ms
@@ -231,7 +231,7 @@ curl -X POST http://localhost:8545/rpc \
 - [ ] Service restarted without errors
 - [ ] Archon events appear in logs
 - [ ] RPC endpoint responds correctly
-- [ ] AbyssOS shows Archon state
+- [ ] QOR OS shows Archon state
 - [ ] Pulse seal generated
 - [ ] All diagnostics pass
 
@@ -243,7 +243,7 @@ The Prime Archon Pulse is **IGNITED** when:
 
 1. ✅ Node logs show `[ARCHON_EVENT]` messages every block
 2. ✅ RPC `archon_state` returns valid ASV
-3. ✅ AbyssOS displays real-time Archon presence
+3. ✅ QOR OS displays real-time Archon presence
 4. ✅ `PULSE_SEAL.json` confirms ignition
 
 ---

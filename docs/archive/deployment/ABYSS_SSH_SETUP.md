@@ -8,7 +8,7 @@
 
 **Key Location:**
 - Private Key: `C:\Users\Gnosis\.ssh\id_abyss`
-- Public Key: `C:\Users\Gnosis\.ssh\id_abyss.pub`
+- Public Key: `C:\Users\Gnosis\.ssh\id_qor.pub`
 
 **Public Key:**
 ```
@@ -77,7 +77,7 @@ cd deploy
 **Option C: One-liner (if you have password access)**
 
 ```powershell
-Get-Content $env:USERPROFILE\.ssh\id_abyss.pub | ssh ubuntu@YOUR_SERVER_IP "mkdir -p ~/.ssh && chmod 700 ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
+Get-Content $env:USERPROFILE\.ssh\id_qor.pub | ssh ubuntu@YOUR_SERVER_IP "mkdir -p ~/.ssh && chmod 700 ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
 ```
 
 ### 3. Test Connection
@@ -113,10 +113,10 @@ ssh abyss "command"
 scp file.txt abyss:/path/to/destination/
 ```
 
-### Deploy AbyssOS
+### Deploy QOR OS
 
 ```powershell
-cd apps/abyssos-portal
+cd apps/qloud-os
 .\deploy-alpha.ps1 -ServerIp YOUR_SERVER_IP
 # Or if SSH config is set up:
 # The script will use the SSH config automatically
@@ -149,7 +149,7 @@ ssh-keygen -R YOUR_SERVER_IP
 ## Security Notes
 
 - **Private key** (`id_abyss`) should never be shared
-- **Public key** (`id_abyss.pub`) is safe to share/add to servers
+- **Public key** (`id_qor.pub`) is safe to share/add to servers
 - Keep your `.ssh` directory permissions secure: `chmod 700 ~/.ssh`
 - Consider using a passphrase for additional security (not set in this key)
 
@@ -169,7 +169,7 @@ ssh abyss
 
 **View Public Key:**
 ```powershell
-Get-Content $env:USERPROFILE\.ssh\id_abyss.pub
+Get-Content $env:USERPROFILE\.ssh\id_qor.pub
 ```
 
 **View SSH Config:**

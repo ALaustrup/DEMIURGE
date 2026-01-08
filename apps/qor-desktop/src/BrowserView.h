@@ -1,7 +1,7 @@
 /**
- * BrowserView - WebEngine View with AbyssOS Integration
+ * BrowserView - WebEngine View with QOR OS Integration
  * 
- * Custom WebEngineView that provides native bridge to AbyssID and Wallet.
+ * Custom WebEngineView that provides native bridge to QorID and Wallet.
  * Only available when Qt WebEngine is present.
  */
 
@@ -15,7 +15,7 @@
 #include <QWebEngineView>
 #include <QWebChannel>
 
-class AbyssIDManager;
+class QorIDManager;
 class WalletBridge;
 
 class BrowserView : public QWebEngineView
@@ -23,7 +23,7 @@ class BrowserView : public QWebEngineView
     Q_OBJECT
 
 public:
-    explicit BrowserView(AbyssIDManager *abyssId, WalletBridge *wallet, QWidget *parent = nullptr);
+    explicit BrowserView(QorIDManager *abyssId, WalletBridge *wallet, QWidget *parent = nullptr);
     ~BrowserView();
 
 public slots:
@@ -47,7 +47,7 @@ private:
     void injectAbyssBridge();
 
     QWebChannel *m_channel;
-    AbyssIDManager *m_abyssIdManager;
+    QorIDManager *m_abyssIdManager;
     WalletBridge *m_walletBridge;
 };
 
@@ -58,7 +58,7 @@ private:
 #include <QLabel>
 #include <QVBoxLayout>
 
-class AbyssIDManager;
+class QorIDManager;
 class WalletBridge;
 
 // Placeholder page object for non-WebEngine builds
@@ -77,7 +77,7 @@ class BrowserView : public QWidget
     Q_OBJECT
 
 public:
-    explicit BrowserView(AbyssIDManager *abyssId, WalletBridge *wallet, QWidget *parent = nullptr)
+    explicit BrowserView(QorIDManager *abyssId, WalletBridge *wallet, QWidget *parent = nullptr)
         : QWidget(parent), m_stubPage(new StubPage(this))
     { 
         Q_UNUSED(abyssId); Q_UNUSED(wallet);

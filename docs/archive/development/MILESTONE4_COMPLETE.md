@@ -33,18 +33,18 @@ All changes are **additive** and **backward-compatible** with existing functiona
 
 ---
 
-## Part 2: Dev Capsules (Abyss Gateway + GraphQL)
+## Part 2: Dev Capsules (QOR Gateway + GraphQL)
 
 ### Modified Files
 
-- `indexer/abyss-gateway/src/chatDb.ts`:
+- `indexer/qor-gateway/src/chatDb.ts`:
   - Added `dev_capsules` SQLite table
   - Added helper functions: `upsertDevCapsule`, `getDevCapsuleById`, `getDevCapsulesByOwner`, `getDevCapsulesByProject`
-- `indexer/abyss-gateway/src/schema.ts`:
+- `indexer/qor-gateway/src/schema.ts`:
   - Added `DevCapsule` GraphQL type
   - Added queries: `devCapsulesByOwner`, `devCapsulesByProject`, `devCapsule`
   - Added mutations: `createDevCapsule`, `updateDevCapsuleStatus`
-- `indexer/abyss-gateway/src/resolvers.ts`:
+- `indexer/qor-gateway/src/resolvers.ts`:
   - Implemented all Dev Capsule resolvers with chain RPC integration and SQLite caching
 
 ---
@@ -136,7 +136,7 @@ Future milestones will add GPU rendering, physics, networking, and full Fabric i
 ### Prerequisites
 
 - Rust toolchain (for chain, CLI)
-- Node.js/pnpm (for Portal, Abyss Gateway)
+- Node.js/pnpm (for Portal, QOR Gateway)
 - CMake 3.20+ and C++20 compiler (for Recursion Engine)
 
 ### Running the Chain
@@ -148,10 +148,10 @@ cargo run --release
 
 The chain will start on `http://127.0.0.1:8545/rpc` by default.
 
-### Running Abyss Gateway
+### Running QOR Gateway
 
 ```bash
-cd indexer/abyss-gateway
+cd indexer/qor-gateway
 pnpm install
 pnpm dev
 ```
@@ -235,7 +235,7 @@ curl -X POST http://127.0.0.1:8545/rpc \
 ### Verification Checklist
 
 - ✅ `cargo check` at repo root succeeds
-- ✅ `pnpm install` and `pnpm build` for `indexer/abyss-gateway` succeeds
+- ✅ `pnpm install` and `pnpm build` for `indexer/qor-gateway` succeeds
 - ✅ `pnpm install`, `pnpm lint`, `pnpm build` for `apps/portal-web` succeeds
 - ✅ No TypeScript errors or unexpected warnings
 - ✅ All new RPC methods are accessible

@@ -14,7 +14,7 @@
 #include <QString>
 
 // Forward declarations (outside QOR namespace)
-class AbyssIDManager;
+class QorIDManager;
 class MainWindow;
 
 namespace QOR {
@@ -32,7 +32,7 @@ class SyncManager;
  * Manages the lifecycle of all QØЯ components:
  * - Local storage (SQLite database)
  * - Secure vault (OS keychain integration)
- * - Identity management (AbyssID)
+ * - Identity management (QorID)
  * - Chain connectivity
  * - UI windows
  */
@@ -73,7 +73,7 @@ public:
     // Component accessors
     LocalDatabase* database() const { return m_database.data(); }
     SecureVault* vault() const { return m_vault.data(); }
-    AbyssIDManager* abyssId() const { return m_abyssId.data(); }
+    QorIDManager* abyssId() const { return m_abyssId.data(); }
     WalletManager* wallet() const { return m_wallet.data(); }
     ChainClient* chain() const { return m_chain.data(); }
     SyncManager* sync() const { return m_sync.data(); }
@@ -148,7 +148,7 @@ private:
     // Subsystem instances
     QSharedPointer<LocalDatabase> m_database;
     QSharedPointer<SecureVault> m_vault;
-    QSharedPointer<AbyssIDManager> m_abyssId;
+    QSharedPointer<QorIDManager> m_abyssId;
     QSharedPointer<WalletManager> m_wallet;
     QSharedPointer<ChainClient> m_chain;
     QSharedPointer<SyncManager> m_sync;

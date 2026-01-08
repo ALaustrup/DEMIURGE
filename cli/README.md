@@ -10,25 +10,25 @@ cargo install --path cli
 
 ## Usage
 
-### AbyssOS Operations
+### QOR OS Operations
 
 ```bash
-# Initialize AbyssOS development environment (full setup)
+# Initialize QOR OS development environment (full setup)
 demiurge abyss init
 
 # Initialize specific components
-demiurge abyss init --abyssid        # Initialize AbyssID database
+demiurge abyss init --abyssid        # Initialize QorID database
 demiurge abyss init --install        # Install all dependencies
 demiurge abyss init --directories    # Create necessary directories
 ```
 
-### AbyssID Operations
+### QorID Operations
 
 ```bash
-# Generate a new AbyssID
+# Generate a new QorID
 demiurge abyssid generate
 
-# Get AbyssID profile
+# Get QorID profile
 demiurge abyssid profile 0x...
 
 # Resolve username

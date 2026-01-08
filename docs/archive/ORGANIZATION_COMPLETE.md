@@ -75,7 +75,7 @@ docs/
 │   ├── FRACTURE_V1_IMPLEMENTATION_COMPLETE.md
 │   ├── FRACTURE_V1_AUDIT.md
 │   ├── FRACTURE_V1_MEDIA_FILES.md
-│   └── ABYSSID_RITUAL_IMPLEMENTATION.md
+│   └── QORID_RITUAL_IMPLEMENTATION.md
 │
 └── development/                # 21 files (NEW)
     ├── DEVELOPMENT_STATUS.md

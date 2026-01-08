@@ -20,7 +20,7 @@
  * Available application modes
  */
 enum class AppMode {
-    AbyssOS,    // Full desktop experience
+    QOR OS,    // Full desktop experience
     Explorer,   // Web3 browser
     Neon,       // Media player
     Craft,      // IDE
@@ -104,7 +104,7 @@ private:
     QCheckBox *m_rememberCheckbox;
     QCheckBox *m_startupCheckbox;
     
-    AppMode m_selectedApp = AppMode::AbyssOS;
+    AppMode m_selectedApp = AppMode::QOR OS;
     bool m_rememberChoice = false;
     bool m_launchAtStartup = false;
     

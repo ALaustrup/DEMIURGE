@@ -15,17 +15,17 @@ services:
       - NEXT_PUBLIC_CURRENT_USER_ID=${CURRENT_USER_ID:-default}
       - NEXT_PUBLIC_CURRENT_USER_ROLE=${CURRENT_USER_ROLE:-OBSERVER}
       - NEXT_PUBLIC_CURRENT_USER_NAME=${CURRENT_USER_NAME:-Observer}
-      - NEXT_PUBLIC_GRAPHQL_ENDPOINT=http://abyss-gateway:4000/graphql
+      - NEXT_PUBLIC_GRAPHQL_ENDPOINT=http://qor-gateway:4000/graphql
     depends_on:
-      - abyss-gateway
+      - qor-gateway
     volumes:
       - ./apps/portal-web:/app
       - /app/node_modules
       - /app/.next
 
-  abyss-gateway:
+  qor-gateway:
     build:
-      context: ./indexer/abyss-gateway
+      context: ./indexer/qor-gateway
       dockerfile: Dockerfile
     ports:
       - "4000:4000"
@@ -35,8 +35,8 @@ services:
       - SNAPSHOT_INTERVAL_MS=${SNAPSHOT_INTERVAL_MS:-300000}
       - DEMIURGE_RPC_URL=${DEMIURGE_RPC_URL:-http://127.0.0.1:8545/rpc}
     volumes:
-      - ./indexer/abyss-gateway/data:/app/data
-      - ./indexer/abyss-gateway:/app
+      - ./indexer/qor-gateway/data:/app/data
+      - ./indexer/qor-gateway:/app
       - /app/node_modules
 
 volumes:

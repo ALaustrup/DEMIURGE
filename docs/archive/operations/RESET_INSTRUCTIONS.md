@@ -20,8 +20,8 @@ Get-Process | Where-Object {$_.ProcessName -like "*demiurge*" -or $_.ProcessName
 # Delete chain database
 Remove-Item -Path "chain\.demiurge" -Recurse -Force -ErrorAction SilentlyContinue
 
-# Delete Abyss Gateway database
-Remove-Item -Path "indexer\abyss-gateway\data\chat.db" -Force -ErrorAction SilentlyContinue
+# Delete QOR Gateway database
+Remove-Item -Path "indexer\qor-gateway\data\chat.db" -Force -ErrorAction SilentlyContinue
 
 Write-Host "✅ Databases deleted!" -ForegroundColor Green
 ```
@@ -48,7 +48,7 @@ localStorage.clear()
 
 Wait for all services to start:
 - Chain RPC: `http://127.0.0.1:8545/rpc`
-- Abyss Gateway: `http://localhost:4000/graphql`
+- QOR Gateway: `http://localhost:4000/graphql`
 - Portal Web: `http://localhost:3000`
 
 ## Step 4: Create Fresh UrgeID

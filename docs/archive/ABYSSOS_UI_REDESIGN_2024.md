@@ -1,14 +1,14 @@
-# AbyssOS UI Redesign 2024
+# QOR OS UI Redesign 2024
 
 **Last Updated**: January 5, 2026  
 **Status**: ✅ Implemented
 
 ## Overview
 
-Complete redesign of AbyssOS user interface with ancient yet futuristic cyber aesthetic, featuring:
+Complete redesign of QOR OS user interface with ancient yet futuristic cyber aesthetic, featuring:
 
 - **3D Textured Start Button** - Innovative 3D button with depth, texture, and interactive effects
-- **App Store Interface** - Personalized app store with nano profile showing AbyssID details and stats
+- **App Store Interface** - Personalized app store with nano profile showing QorID details and stats
 - **Tabbed Window System** - Vertically descending angled tabs for organizing content
 - **Audio Reactive Visualization** - Real-time audio-reactive desktop wallpaper
 - **Ancient/Futuristic Cyber Theme** - Complete visual overhaul
@@ -38,7 +38,7 @@ Complete redesign of AbyssOS user interface with ancient yet futuristic cyber ae
 
 **Nano Profile Section**:
 - Avatar with animated border
-- AbyssID username and status
+- QorID username and status
 - CGT balance display
 - Transaction count
 - Asset count
@@ -149,11 +149,11 @@ components/
 2. **StatusBar.tsx**: Uses `StartButton3D` and `AppStoreMenu`
 3. **Audio Sources**: Automatically connects to `<audio>` and `<video>` elements
 
-## AbyssID System Review
+## QorID System Review
 
 **Status**: ✅ Functional
 
-The AbyssID system is working correctly:
+The QorID system is working correctly:
 - Local provider for authentication
 - Session management via localStorage
 - Identity service for unified access

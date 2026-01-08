@@ -1,10 +1,10 @@
-# AbyssID Authentication System
+# QorID Authentication System
 
 **Last Updated**: January 5, 2026
 
 ## Overview
 
-AbyssID is the authentication system used in AbyssOS and the Fracture Portal. It provides username-based authentication with seed phrase recovery, enabling users to securely access their accounts across devices.
+QorID is the authentication system used in QOR OS and the Fracture Portal. It provides username-based authentication with seed phrase recovery, enabling users to securely access their accounts across devices.
 
 ## Key Features
 
@@ -19,7 +19,7 @@ AbyssID is the authentication system used in AbyssOS and the Fracture Portal. It
 
 ### Components
 
-1. **AbyssID Backend** (`apps/abyssid-backend/`)
+1. **QorID Backend** (`apps/abyssid-backend/`)
    - Node.js/Express server
    - SQLite3 database
    - REST API endpoints
@@ -27,13 +27,13 @@ AbyssID is the authentication system used in AbyssOS and the Fracture Portal. It
    - Identity registration
    - Public key storage
 
-2. **AbyssID Service** (`apps/abyssid-service/`)
+2. **QorID Service** (`apps/qorid-service/`)
    - TypeScript service layer
    - Key derivation utilities
    - Wallet integration
    - Chain signing support
 
-3. **Frontend Integration** (`apps/portal-web/`, `apps/abyssos-portal/`)
+3. **Frontend Integration** (`apps/portal-web/`, `apps/qloud-os/`)
    - Login/signup UI components
    - Seed phrase generation
    - Key derivation (client-side)
@@ -64,7 +64,7 @@ CREATE TABLE abyssid_identities (
 
 1. **Username Check**
    - User enters desired username
-   - Frontend calls `GET /api/abyssid/check?username={username}`
+   - Frontend calls `GET /api/qorid/check?username={username}`
    - Backend checks database for existing username (case-insensitive)
    - Returns `{ available: true/false }`
 
@@ -79,7 +79,7 @@ CREATE TABLE abyssid_identities (
    - Generates `publicKey` and `privateKey`
 
 4. **Registration**
-   - Frontend calls `POST /api/abyssid/register`
+   - Frontend calls `POST /api/qorid/register`
    - Sends: `{ username, publicKey, address }`
    - Backend stores identity in database
    - Returns success confirmation
@@ -93,7 +93,7 @@ CREATE TABLE abyssid_identities (
 
 1. **Username Entry**
    - User enters username
-   - Frontend calls `GET /api/abyssid/check?username={username}`
+   - Frontend calls `GET /api/qorid/check?username={username}`
    - If username exists, proceed to login
 
 2. **Seed Phrase Entry**
@@ -102,7 +102,7 @@ CREATE TABLE abyssid_identities (
    - Gets `publicKey` from derivation
 
 3. **Verification**
-   - Frontend calls `GET /api/abyssid/:username`
+   - Frontend calls `GET /api/qorid/:username`
    - Backend returns stored `publicKey` for username
    - Frontend compares derived `publicKey` with stored `publicKey`
    - If match, login succeeds
@@ -117,7 +117,7 @@ CREATE TABLE abyssid_identities (
 
 ### Check Username Availability
 
-**Endpoint**: `GET /api/abyssid/check`
+**Endpoint**: `GET /api/qorid/check`
 
 **Query Parameters**:
 - `username` (string, required) - Username to check
@@ -131,12 +131,12 @@ CREATE TABLE abyssid_identities (
 
 **Example**:
 ```bash
-curl "http://localhost:3001/api/abyssid/check?username=oracle"
+curl "http://localhost:3001/api/qorid/check?username=oracle"
 ```
 
 ### Register New Identity
 
-**Endpoint**: `POST /api/abyssid/register`
+**Endpoint**: `POST /api/qorid/register`
 
 **Request Body**:
 ```json
@@ -164,7 +164,7 @@ curl "http://localhost:3001/api/abyssid/check?username=oracle"
 
 ### Get Identity by Username
 
-**Endpoint**: `GET /api/abyssid/:username`
+**Endpoint**: `GET /api/qorid/:username`
 
 **Response**:
 ```json
@@ -180,9 +180,9 @@ curl "http://localhost:3001/api/abyssid/check?username=oracle"
 
 ### Debug Endpoints (Development Only)
 
-**List All Identities**: `GET /api/abyssid/debug/list`
+**List All Identities**: `GET /api/qorid/debug/list`
 
-**Clear All Identities**: `POST /api/abyssid/debug/clear`
+**Clear All Identities**: `POST /api/qorid/debug/clear`
 
 ## Key Derivation
 
@@ -260,7 +260,7 @@ Once logged in, users can:
 
 ### React Components
 
-**AbyssIDDialog** (`apps/portal-web/src/components/fracture/AbyssIDDialog.tsx`):
+**QorIDDialog** (`apps/portal-web/src/components/fracture/QorIDDialog.tsx`):
 - Handles signup and login UI
 - Manages state machine for authentication flow
 - Displays seed phrase generation and entry
@@ -331,7 +331,7 @@ interface AbyssContext {
 
 ## Related Documentation
 
-- [AbyssID Universal Auth](ABYSSID_UNIVERSAL_AUTH.md) - AbyssOS integration
+- [QorID Universal Auth](QORID_UNIVERSAL_AUTH.md) - QOR OS integration
 - [RPC API](api/RPC.md) - Chain interaction
 - [UrgeID Registry](overview/RUNTIME.md#2-urgeid-registry-module-urgeid_registry) - On-chain identity
 

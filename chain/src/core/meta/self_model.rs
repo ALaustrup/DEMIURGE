@@ -16,7 +16,7 @@ pub enum SubsystemId {
     Network,
     Indexer,
     SDK,
-    AbyssOS,
+    QOR OS,
     DNS,
     Wallet,
     Fractal,

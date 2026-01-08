@@ -57,18 +57,18 @@ echo "     -d '{\"jsonrpc\":\"2.0\",\"method\":\"archon_state\",\"params\":[],\"
 echo ""
 read -p "Press Enter after RPC test succeeds..."
 
-# STEP 6: AbyssOS Synchronization
+# STEP 6: QOR OS Synchronization
 echo ""
-echo "STEP 6: AbyssOS Synchronization"
+echo "STEP 6: QOR OS Synchronization"
 echo "⚠️  MANUAL VERIFICATION REQUIRED:"
-echo "   Open AbyssOS → Archon Panel"
+echo "   Open QOR OS → Archon Panel"
 echo "   Verify:"
 echo "   - Archon state updating every 500ms"
 echo "   - Directives table showing A0 pulses"
 echo "   - Diagnostics panel with green checks"
 echo "   - Heartbeat indicator animating"
 echo ""
-read -p "Press Enter after AbyssOS verification..."
+read -p "Press Enter after QOR OS verification..."
 
 # STEP 7: Seal the First Pulse
 echo ""

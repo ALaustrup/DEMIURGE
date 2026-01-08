@@ -11,7 +11,7 @@ I've created a complete deployment guide and all necessary scripts for deploying
 1. **`phase0_setup.sh`** - Initial server setup, Git configuration, repository clone
 2. **`phase1_build.sh`** - Portal dependency installation and build
 3. **`phase2_nginx.sh`** - NGINX reverse proxy configuration
-4. **`phase5_abyssid_backend.sh`** - AbyssID backend service setup
+4. **`phase5_abyssid_backend.sh`** - QorID backend service setup
 5. **`setup_pm2.sh`** - PM2 process manager configuration
 6. **`deploy_portal.sh`** - Automated deployment script for updates
 
@@ -21,11 +21,11 @@ I've created a complete deployment guide and all necessary scripts for deploying
 2. **`QUICK_START.md`** - Quick reference for experienced users
 3. **`DEPLOYMENT_GUIDE.md`** - Detailed phase-by-phase breakdown
 4. **`scripts/phase4_audio_implementation.md`** - Audio engine implementation details
-5. **`scripts/phase5_frontend_update.md`** - Frontend updates for AbyssID backend
+5. **`scripts/phase5_frontend_update.md`** - Frontend updates for QorID backend
 
 ### Backend Services
 
-1. **`apps/abyssid-backend/`** - Complete AbyssID identity service
+1. **`apps/abyssid-backend/`** - Complete QorID identity service
    - `package.json` - Dependencies
    - `src/server.js` - Express API server
    - `src/db-init.js` - Database initialization
@@ -57,19 +57,19 @@ I've created a complete deployment guide and all necessary scripts for deploying
 
 ### Phase 4: Audio Engine
 - Provides complete AudioEngine.ts implementation
-- Maps AbyssID states to audio-reactive effects
+- Maps QorID states to audio-reactive effects
 - Wires ShaderPlane to audio data
 - Adds background music support structure
 
-### Phase 5: AbyssID Backend
+### Phase 5: QorID Backend
 - Creates SQLite database schema
 - Implements REST API endpoints:
-  - `/api/abyssid/check` - Username availability
-  - `/api/abyssid/register` - Identity registration
-  - `/api/abyssid/:username` - Get by username
-  - `/api/abyssid/by-address/:address` - Get by address
+  - `/api/qorid/check` - Username availability
+  - `/api/qorid/register` - Identity registration
+  - `/api/qorid/:username` - Get by username
+  - `/api/qorid/by-address/:address` - Get by address
 - Provides frontend integration code
-- Creates AbyssIDContext for identity management
+- Creates QorIDContext for identity management
 
 ### Phase 6: Conspire Scaffold
 - Documents basic structure
@@ -119,34 +119,34 @@ I've created a complete deployment guide and all necessary scripts for deploying
    - Phase 2: Configure NGINX
    - Phase 3: Upload media files
    - Phase 4: Implement audio (follow guide)
-   - Phase 5: Set up AbyssID backend
+   - Phase 5: Set up QorID backend
    - Phase 6: Scaffold Conspire
    - Phase 7: Set up PM2 and deploy
 
 4. **Test everything**:
    - Portal accessible via domain
-   - AbyssID ritual works end-to-end
+   - QorID ritual works end-to-end
    - Audio-reactive effects function
    - Backend API responds correctly
 
 ## Key Implementation Details
 
-### AbyssID Backend API
+### QorID Backend API
 
 **Base URL**: `http://localhost:3001` (or your domain)
 
 **Endpoints**:
-- `POST /api/abyssid/check` - Check username availability
-- `POST /api/abyssid/register` - Register new identity
-- `GET /api/abyssid/:username` - Get identity by username
-- `GET /api/abyssid/by-address/:address` - Get identity by address
+- `POST /api/qorid/check` - Check username availability
+- `POST /api/qorid/register` - Register new identity
+- `GET /api/qorid/:username` - Get identity by username
+- `GET /api/qorid/by-address/:address` - Get identity by address
 - `GET /health` - Health check
 
 ### Frontend Updates Needed
 
 1. **AbyssStateMachine.ts**: Replace mock checks with real API calls
-2. **AbyssIDContext.tsx**: Create identity context provider
-3. **layout.tsx**: Wrap app with AbyssIDProvider
+2. **QorIDContext.tsx**: Create identity context provider
+3. **layout.tsx**: Wrap app with QorIDProvider
 4. **AudioEngine.ts**: Complete implementation (see Phase 4 guide)
 5. **AbyssReactive.ts**: Map states to audio effects
 
@@ -154,10 +154,10 @@ I've created a complete deployment guide and all necessary scripts for deploying
 
 **Portal** (`.env.local`):
 ```env
-NEXT_PUBLIC_ABYSSID_API_URL=http://localhost:3001
+NEXT_PUBLIC_QORID_API_URL=http://localhost:3001
 ```
 
-**AbyssID Backend** (`.env`):
+**QorID Backend** (`.env`):
 ```env
 PORT=3001
 DB_PATH=./data/abyssid.db
@@ -217,7 +217,7 @@ See `COMPLETE_DEPLOYMENT_INSTRUCTIONS.md` for detailed troubleshooting.
 After completing all phases, you should have:
 
 ✅ Portal accessible via domain with HTTPS  
-✅ AbyssID ritual fully functional with backend  
+✅ QorID ritual fully functional with backend  
 ✅ Audio-reactive shader effects working  
 ✅ PM2 managing all services  
 ✅ Automated deployment script working  

@@ -11,7 +11,7 @@ All documentation files have been organized into the `docs/` directory structure
 
 ### To `docs/development/`:
 - `A0_DIRECTIVE.md`
-- `ABYSSOS_RESTRUCTURE_PLAN.md`
+- `QLOUD_OS_RESTRUCTURE_PLAN.md`
 - `ASCENSION_PROTOCOL_FINAL_REPORT.md`
 - `ASCENSION_PROTOCOL_REPORT.md`
 - `COMPILATION_FIXES.md`

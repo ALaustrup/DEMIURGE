@@ -154,7 +154,7 @@ Currently, the devnet runs as a single node. To expand to multiple nodes:
 
 ## Next Steps
 
-- Connect AbyssID Wallet to the devnet RPC endpoint
+- Connect QorID Wallet to the devnet RPC endpoint
 - Use Mining Gateway to submit work claims
 - Test CGT transfers and other operations
 - Expand to multi-node network (when P2P is implemented)

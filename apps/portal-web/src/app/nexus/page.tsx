@@ -23,7 +23,7 @@ import {
 } from "@/lib/graphql";
 import { MusicPlayer } from "@/components/chat/MusicPlayer";
 import { DEMIURGE_RPC_URL } from "@/config/demiurge";
-import { useAbyssID } from "@/lib/fracture/identity/AbyssIDContext";
+import { useQorID } from "@/lib/fracture/identity/QorIDContext";
 
 type ChatView = "world" | "dm" | "custom" | null;
 type ActiveRoom = 
@@ -40,7 +40,7 @@ interface ContextMenu {
 type NexusTab = "chat" | "analytics" | "ops";
 
 export default function NexusPage() {
-  const { identity } = useAbyssID();
+  const { identity } = useQorID();
   const { fabricRitualEffects } = useRitual();
   
   // Use FabricServiceProvider for unified Fabric data
@@ -212,9 +212,9 @@ export default function NexusPage() {
     localStorage.setItem("demiurge_silenced_users", JSON.stringify(Array.from(users)));
   };
 
-  // Load current user identity from AbyssID or legacy storage
+  // Load current user identity from QorID or legacy storage
   useEffect(() => {
-    // Try AbyssID first
+    // Try QorID first
     if (identity?.address) {
       setCurrentAddress(identity.address);
       if (identity.username) {
@@ -350,7 +350,7 @@ export default function NexusPage() {
     } catch (err: any) {
       console.error("Failed to load world messages:", err);
       if (err.message?.includes("Connection failed")) {
-        console.warn("Abyss Gateway not available - chat features disabled");
+        console.warn("QOR Gateway not available - chat features disabled");
       }
     }
   };
@@ -369,7 +369,7 @@ export default function NexusPage() {
     } catch (err: any) {
       console.error("Failed to load DM rooms:", err);
       if (err.message?.includes("Connection failed")) {
-        console.warn("Abyss Gateway not available");
+        console.warn("QOR Gateway not available");
       }
     }
   };
@@ -410,7 +410,7 @@ export default function NexusPage() {
     } catch (err: any) {
       console.error("Failed to load custom rooms:", err);
       if (err.message?.includes("Connection failed")) {
-        console.warn("Abyss Gateway not available for custom rooms");
+        console.warn("QOR Gateway not available for custom rooms");
       }
     }
   };
@@ -813,7 +813,7 @@ export default function NexusPage() {
           subtitle="P2P analytics & seeding"
         />
         <div className="text-center space-y-4">
-          <p className="text-zinc-400">Please create an AbyssID to use chat.</p>
+          <p className="text-zinc-400">Please create an QorID to use chat.</p>
           <p className="text-sm text-zinc-500">
             Chat features require an identity. Create one from Haven.
           </p>
@@ -905,7 +905,7 @@ export default function NexusPage() {
 
           {!identity ? (
             <div className="text-center space-y-4 p-8 bg-white/5 border border-white/10 rounded-xl">
-              <p className="text-zinc-400">Please create an AbyssID to view P2P analytics.</p>
+              <p className="text-zinc-400">Please create an QorID to view P2P analytics.</p>
               <p className="text-sm text-zinc-500">
                 P2P features require an identity. Create one from Haven.
               </p>

@@ -135,7 +135,7 @@ sudo chown -R root:root /opt/demiurge
 
 - **Server:** 51.210.209.112
 - **RPC:** https://rpc.demiurge.cloud/rpc
-- **AbyssOS:** https://demiurge.cloud
+- **QOR OS:** https://demiurge.cloud
 
 ---
 

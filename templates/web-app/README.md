@@ -4,7 +4,7 @@ Full-featured Next.js + TypeScript dApp template for building on Demiurge Blockc
 
 ## Features
 
-- ✅ AbyssID generation and login
+- ✅ QorID generation and login
 - ✅ CGT balance viewing and transfers
 - ✅ NFT collection viewer
 - ✅ Marketplace integration
@@ -38,7 +38,7 @@ Full-featured Next.js + TypeScript dApp template for building on Demiurge Blockc
 ## Prerequisites
 
 - **Demiurge Chain Node** running at `http://127.0.0.1:8545/rpc`
-- **Abyss Gateway** running at `http://localhost:4000/graphql` (for chat)
+- **QOR Gateway** running at `http://localhost:4000/graphql` (for chat)
 
 ## Project Structure
 
@@ -46,13 +46,13 @@ Full-featured Next.js + TypeScript dApp template for building on Demiurge Blockc
 src/
 ├── app/
 │   ├── page.tsx          # Home page
-│   ├── abyssid/           # AbyssID page
+│   ├── qorid/           # QorID page
 │   ├── wallet/             # Wallet page
 │   ├── nfts/               # NFT gallery
 │   ├── marketplace/        # Marketplace
 │   └── chat/               # Chat interface
 ├── hooks/
-│   └── useAbyssID.ts       # AbyssID hook
+│   └── useQorID.ts       # QorID hook
 └── lib/
     └── sdk.ts              # SDK initialization
 ```

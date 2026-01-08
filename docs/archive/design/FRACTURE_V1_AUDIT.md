@@ -157,7 +157,7 @@
 ### ⚠️ FractureNav.tsx
 **Current State:**
 - Has all correct routes (Haven, Void, Nexus, Scrolls, Conspire)
-- AbyssID button works
+- QorID button works
 - Brand shows "DEMIURGE"
 
 **Issues:**

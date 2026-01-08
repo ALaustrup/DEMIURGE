@@ -2,14 +2,14 @@
 
 ## Overview
 
-AbyssOS supports an automatic full-screen intro video that plays when users first land on Demiurge.cloud. The video plays after the boot screen and before the login/desktop screen.
+QOR OS supports an automatic full-screen intro video that plays when users first land on Demiurge.cloud. The video plays after the boot screen and before the login/desktop screen.
 
 ## File Placement
 
 Place your `.mp4` video file at the following location:
 
 ```
-apps/abyssos-portal/public/video/intro.mp4
+apps/qloud-os/public/video/intro.mp4
 ```
 
 ### Directory Structure
@@ -17,19 +17,19 @@ apps/abyssos-portal/public/video/intro.mp4
 If the `public/video/` directory doesn't exist, create it:
 
 ```bash
-mkdir -p apps/abyssos-portal/public/video
+mkdir -p apps/qloud-os/public/video
 ```
 
 Then place your `.mp4` file there:
 
 ```bash
-cp /path/to/your/intro.mp4 apps/abyssos-portal/public/video/intro.mp4
+cp /path/to/your/intro.mp4 apps/qloud-os/public/video/intro.mp4
 ```
 
 ## File Requirements
 
 - **Format**: `.mp4` (MP4 video format)
-- **Location**: `apps/abyssos-portal/public/video/intro.mp4`
+- **Location**: `apps/qloud-os/public/video/intro.mp4`
 - **Naming**: Must be exactly `intro.mp4`
 - **Resolution**: Supports 4K and any resolution (will scale to fit screen)
 - **Aspect Ratio**: Any (video will be contained within viewport)
@@ -56,7 +56,7 @@ Boot Screen → Intro Video → Login/Desktop
 
 ## Technical Details
 
-- Component: `apps/abyssos-portal/src/components/IntroVideo.tsx`
+- Component: `apps/qloud-os/src/components/IntroVideo.tsx`
 - Storage key: `abyssos_intro_seen` (localStorage)
 - Video element: Uses HTML5 `<video>` with `object-contain` for proper scaling
 - Z-index: 200 (above all other content)
@@ -65,7 +65,7 @@ Boot Screen → Intro Video → Login/Desktop
 
 To make the intro play every time (not just once):
 
-1. Open `apps/abyssos-portal/src/components/IntroVideo.tsx`
+1. Open `apps/qloud-os/src/components/IntroVideo.tsx`
 2. Remove or comment out the localStorage check in the `useEffect` hook
 3. Remove the `localStorage.setItem('abyssos_intro_seen', 'true')` calls
 

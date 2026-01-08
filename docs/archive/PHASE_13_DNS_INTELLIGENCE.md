@@ -26,9 +26,9 @@ Phase 13 introduces a complete DNS subsystem spanning backend service, frontend 
 
 **Database**: SQLite with `dns_cache` and `chain_dns_records` tables
 
-### 2. AbyssOS DNS Console App
+### 2. QOR OS DNS Console App
 
-**Location**: `apps/abyssos-portal/src/components/desktop/apps/AbyssDNSApp.tsx`
+**Location**: `apps/qloud-os/src/components/desktop/apps/AbyssDNSApp.tsx`
 
 **Features**:
 - Domain lookup with record type selection (A, AAAA, CNAME, TXT, NS)
@@ -38,11 +38,11 @@ Phase 13 introduces a complete DNS subsystem spanning backend service, frontend 
 - Cache inspector with clear cache functionality
 - Chain Records tab for on-chain DNS assets
 - Grid Resolution toggle for peer-based DNS queries
-- AbyssOS glass/neon styling with smooth animations
+- QOR OS glass/neon styling with smooth animations
 
 ### 3. WASM Runtime DNS API
 
-**Location**: `apps/abyssos-portal/src/services/runtime/abi/dns.ts`
+**Location**: `apps/qloud-os/src/services/runtime/abi/dns.ts`
 
 **Methods**:
 - `dns.lookup(domain, type?)` - Lookup DNS record
@@ -54,7 +54,7 @@ Phase 13 introduces a complete DNS subsystem spanning backend service, frontend 
 
 ### 4. Grid Protocol DNS Extension
 
-**Location**: `apps/abyssos-portal/src/services/grid/dns/`
+**Location**: `apps/qloud-os/src/services/grid/dns/`
 
 **Components**:
 - **gridDnsResolver.ts**: Broadcasts DNS queries to peers
@@ -69,7 +69,7 @@ Phase 13 introduces a complete DNS subsystem spanning backend service, frontend 
 
 ### 5. DRC-369 On-Chain DNS Anchoring
 
-**Location**: `apps/abyssos-portal/src/services/drc369/dnsRecord.ts`
+**Location**: `apps/qloud-os/src/services/drc369/dnsRecord.ts`
 
 **Schema Extension**:
 - Added `"dns-record"` to `DRC369ContentType`
@@ -94,7 +94,7 @@ Phase 13 introduces a complete DNS subsystem spanning backend service, frontend 
 
 ### 6. Shared Utilities
 
-**Location**: `apps/abyssos-portal/src/utils/dns/`
+**Location**: `apps/qloud-os/src/utils/dns/`
 
 **Modules**:
 - **normalizeDomain.ts**: Domain normalization and validation
@@ -139,7 +139,7 @@ Phase 13 introduces a complete DNS subsystem spanning backend service, frontend 
 
 ### Frontend
 
-The DNS Console app is automatically available in AbyssOS via the Dock (🌐 DNS icon).
+The DNS Console app is automatically available in QOR OS via the Dock (🌐 DNS icon).
 
 ## Integration Points
 
@@ -161,7 +161,7 @@ pnpm dev
 
 ### Frontend
 
-1. Open AbyssOS
+1. Open QOR OS
 2. Click DNS icon in Dock
 3. Enter domain (e.g., `example.com`)
 4. Select record type
@@ -184,22 +184,22 @@ pnpm dev
 - `apps/dns-service/demiurge-dns.service` (systemd unit)
 
 ### Frontend
-- `apps/abyssos-portal/src/components/desktop/apps/AbyssDNSApp.tsx`
-- `apps/abyssos-portal/src/services/dns/dnsClient.ts`
-- `apps/abyssos-portal/src/services/runtime/abi/dns.ts`
-- `apps/abyssos-portal/src/services/grid/dns/` (grid DNS modules)
-- `apps/abyssos-portal/src/services/drc369/dnsRecord.ts`
-- `apps/abyssos-portal/src/utils/dns/` (utility modules)
+- `apps/qloud-os/src/components/desktop/apps/AbyssDNSApp.tsx`
+- `apps/qloud-os/src/services/dns/dnsClient.ts`
+- `apps/qloud-os/src/services/runtime/abi/dns.ts`
+- `apps/qloud-os/src/services/grid/dns/` (grid DNS modules)
+- `apps/qloud-os/src/services/drc369/dnsRecord.ts`
+- `apps/qloud-os/src/utils/dns/` (utility modules)
 
 ### Modified
-- `apps/abyssos-portal/src/services/runtime/wasmVM.ts` (DNS ABI)
-- `apps/abyssos-portal/src/services/abyssvm/executor.ts` (DNS ABI)
-- `apps/abyssos-portal/src/services/abyssvm/types.ts` (DNS ABI)
-- `apps/abyssos-portal/src/services/drc369/schema.ts` (DNS content type)
-- `apps/abyssos-portal/src/services/grid/types.ts` (DNS message types)
-- `apps/abyssos-portal/src/state/desktopStore.ts` (DNS app registration)
-- `apps/abyssos-portal/src/routes/Desktop.tsx` (DNS app routing)
-- `apps/abyssos-portal/nginx-demiurge.cloud-https.conf` (DNS proxy)
+- `apps/qloud-os/src/services/runtime/wasmVM.ts` (DNS ABI)
+- `apps/qloud-os/src/services/qorvm/executor.ts` (DNS ABI)
+- `apps/qloud-os/src/services/qorvm/types.ts` (DNS ABI)
+- `apps/qloud-os/src/services/drc369/schema.ts` (DNS content type)
+- `apps/qloud-os/src/services/grid/types.ts` (DNS message types)
+- `apps/qloud-os/src/state/desktopStore.ts` (DNS app registration)
+- `apps/qloud-os/src/routes/Desktop.tsx` (DNS app routing)
+- `apps/qloud-os/nginx-demiurge.cloud-https.conf` (DNS proxy)
 
 ## Status
 

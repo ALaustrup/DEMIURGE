@@ -4,7 +4,7 @@ React Native + Expo mobile app template for Demiurge Blockchain.
 
 ## Features
 
-- ✅ AbyssID wallet
+- ✅ QorID wallet
 - ✅ CGT balance and transfers
 - ✅ NFT gallery
 - ✅ World chat

@@ -22,11 +22,11 @@
   - `chain/src/rpc.rs` (added 4 RPC methods: devCapsule_create, devCapsule_get, devCapsule_listByOwner, devCapsule_updateStatus)
 - **Purpose:** Implement on-chain Dev Capsules runtime module with full CRUD operations
 
-**Commit 2: `feat: Milestone 4 - Dev Capsules GraphQL and Abyss Gateway integration`**
+**Commit 2: `feat: Milestone 4 - Dev Capsules GraphQL and QOR Gateway integration`**
 - **Files Modified:**
-  - `indexer/abyss-gateway/src/chatDb.ts` (added dev_capsules table + 4 helper functions)
-  - `indexer/abyss-gateway/src/schema.ts` (added DevCapsule type + 3 queries + 2 mutations)
-  - `indexer/abyss-gateway/src/resolvers.ts` (added 5 resolvers with chain RPC integration)
+  - `indexer/qor-gateway/src/chatDb.ts` (added dev_capsules table + 4 helper functions)
+  - `indexer/qor-gateway/src/schema.ts` (added DevCapsule type + 3 queries + 2 mutations)
+  - `indexer/qor-gateway/src/resolvers.ts` (added 5 resolvers with chain RPC integration)
 - **Purpose:** Add GraphQL layer for Dev Capsules with SQLite caching
 
 **Commit 3: `feat: Milestone 4 - Dev Capsules Portal UI and CLI commands`**
@@ -62,8 +62,8 @@
 - **Files Modified:**
   - `apps/portal-web/src/app/developers/page.tsx` (373 lines changed - major refactor)
   - `apps/portal-web/src/app/developers/[username]/page.tsx` (434 lines changed - major refactor)
-  - `indexer/abyss-gateway/src/resolvers.ts` (316 lines added - enhanced registerDeveloper resolver)
-  - `indexer/abyss-gateway/src/chatDb.ts` (95 lines added - modified getDeveloperByUsername)
+  - `indexer/qor-gateway/src/resolvers.ts` (316 lines added - enhanced registerDeveloper resolver)
+  - `indexer/qor-gateway/src/chatDb.ts` (95 lines added - modified getDeveloperByUsername)
 - **Purpose:** Fix developer registration persistence bug where registration status was lost on page refresh
 
 **Commit 7: `feat: Developer Void Enhancement - DEV NFT system and enhanced My Void`**
@@ -239,9 +239,9 @@
 **Type changes:** None
 **RPC changes:** 8 new JSON-RPC methods added, all follow existing patterns
 
-### 2.3 Abyss Gateway (GraphQL + SQLite)
+### 2.3 QOR Gateway (GraphQL + SQLite)
 
-#### `indexer/abyss-gateway/src/chatDb.ts` (MODIFIED - 95 lines added)
+#### `indexer/qor-gateway/src/chatDb.ts` (MODIFIED - 95 lines added)
 
 **What was changed:**
 
@@ -294,7 +294,7 @@ CREATE TABLE IF NOT EXISTS dev_capsules (
 **Type changes:** None
 **Storage/schema changes:** New `dev_capsules` table added
 
-#### `indexer/abyss-gateway/src/schema.ts` (MODIFIED - 41 lines added)
+#### `indexer/qor-gateway/src/schema.ts` (MODIFIED - 41 lines added)
 
 **What was changed:**
 
@@ -324,7 +324,7 @@ type DevCapsule {
 **Type changes:** None
 **GraphQL changes:** New type and 5 new query/mutation fields
 
-#### `indexer/abyss-gateway/src/resolvers.ts` (MODIFIED - 316 lines added)
+#### `indexer/qor-gateway/src/resolvers.ts` (MODIFIED - 316 lines added)
 
 **What was changed:**
 
@@ -914,7 +914,7 @@ type DevCapsule {
      - Added extensive console logging for debugging
    - **Impact:** Developer profiles now load correctly by username
 
-3. **GraphQL Resolver Fixes** (`indexer/abyss-gateway/src/resolvers.ts`):
+3. **GraphQL Resolver Fixes** (`indexer/qor-gateway/src/resolvers.ts`):
 
    **`registerDeveloper` resolver** (lines 944-1045):
    - **Bug fix:** Username conflicts not handled correctly
@@ -934,7 +934,7 @@ type DevCapsule {
      - Added username normalization: `args.username.toLowerCase().trim().replace(/^@/, "")` at line 1055
    - **Impact:** Username lookups now case-insensitive
 
-4. **Database Query Fix** (`indexer/abyss-gateway/src/chatDb.ts`):
+4. **Database Query Fix** (`indexer/qor-gateway/src/chatDb.ts`):
 
    **`getDeveloperByUsername()` function** (lines ~180-190):
    - **Bug fix:** SQLite `LOWER()` function unreliable in WHERE clauses
@@ -1175,7 +1175,7 @@ All 8 new RPC methods follow existing patterns:
 
 ### 5.3 GraphQL Resolver Fixes
 
-#### `registerDeveloper` Resolver (`indexer/abyss-gateway/src/resolvers.ts`)
+#### `registerDeveloper` Resolver (`indexer/qor-gateway/src/resolvers.ts`)
 
 **Bug fixes:**
 1. **Address normalization** (line 952):
@@ -1202,7 +1202,7 @@ All 8 new RPC methods follow existing patterns:
    - More specific error messages for user-facing errors
    - Better distinction between system errors and user errors
 
-#### `getDeveloper` Resolver (`indexer/abyss-gateway/src/resolvers.ts`)
+#### `getDeveloper` Resolver (`indexer/qor-gateway/src/resolvers.ts`)
 
 **Bug fixes:**
 1. **Username normalization** (line 1055):
@@ -1295,7 +1295,7 @@ CREATE TABLE IF NOT EXISTS dev_capsules (
 
 **Known TO-DOs:**
 
-1. **`indexer/abyss-gateway/src/resolvers.ts` line 1007:**
+1. **`indexer/qor-gateway/src/resolvers.ts` line 1007:**
    - `signed_tx_hex: ""` - TODO: Sign transaction properly
    - **Impact:** On-chain registration may not work fully until transaction signing implemented
 
@@ -1332,7 +1332,7 @@ CREATE TABLE IF NOT EXISTS dev_capsules (
    - **Potential issue:** If old NFTs are deserialized without `class` field, they'll have `None` (expected behavior)
    - **Testing needed:** Verify existing NFTs still load correctly
 
-2. **`indexer/abyss-gateway/src/resolvers.ts`**
+2. **`indexer/qor-gateway/src/resolvers.ts`**
    - **Risk:** Modified `registerDeveloper` resolver logic significantly
    - **Mitigation:** Added comprehensive normalization and error handling
    - **Potential issue:** Edge cases with address/username formats
@@ -1389,9 +1389,9 @@ CREATE TABLE IF NOT EXISTS dev_capsules (
 
 1. **Username Normalization**
    - **Locations:**
-     - `indexer/abyss-gateway/src/resolvers.ts` line 953, 1055
+     - `indexer/qor-gateway/src/resolvers.ts` line 953, 1055
      - `apps/portal-web/src/app/developers/[username]/page.tsx` line 41
-     - `indexer/abyss-gateway/src/chatDb.ts` line ~185 (JavaScript filtering)
+     - `indexer/qor-gateway/src/chatDb.ts` line ~185 (JavaScript filtering)
    - **Brittleness:** Normalization logic duplicated, must stay in sync
    - **Risk:** If normalization changes, must update all locations
    - **Recommendation:** Extract to shared utility
@@ -1400,7 +1400,7 @@ CREATE TABLE IF NOT EXISTS dev_capsules (
    - **Locations:**
      - `apps/portal-web/src/app/developers/page.tsx` lines 67, 74, 133, 142
      - `apps/portal-web/src/app/urgeid/page.tsx` line 202
-     - `indexer/abyss-gateway/src/resolvers.ts` line 952
+     - `indexer/qor-gateway/src/resolvers.ts` line 952
    - **Brittleness:** Same normalization pattern repeated
    - **Risk:** Inconsistent normalization could cause lookup failures
    - **Recommendation:** Extract to shared utility

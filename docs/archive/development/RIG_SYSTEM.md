@@ -7,7 +7,7 @@
 
 ## Overview
 
-**Rig** (short for "Rigging") is an innovative on-chain development state management system designed exclusively for Demiurge Blockchain and AbyssOS. It replicates Git's save-state branching concept but automatically handles all Git processes based on the amount of changes made, logging rigs directly to the user's on-chain ledger.
+**Rig** (short for "Rigging") is an innovative on-chain development state management system designed exclusively for Demiurge Blockchain and QOR OS. It replicates Git's save-state branching concept but automatically handles all Git processes based on the amount of changes made, logging rigs directly to the user's on-chain ledger.
 
 ---
 

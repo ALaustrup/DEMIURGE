@@ -5,7 +5,7 @@
 #include "MainWindow.h"
 #include "BrowserView.h"
 #include "SystemTray.h"
-#include "AbyssIDManager.h"
+#include "QorIDManager.h"
 #include "WalletBridge.h"
 #include "UpdateManager.h"
 
@@ -38,7 +38,7 @@ MainWindow::MainWindow(QWidget *parent)
     setMinimumSize(1024, 768);
     
     // Initialize components
-    m_abyssIdManager = new AbyssIDManager(this);
+    m_abyssIdManager = new QorIDManager(this);
     m_walletBridge = new WalletBridge(m_abyssIdManager, this);
     m_updateManager = new UpdateManager(this);
     
@@ -79,7 +79,7 @@ void MainWindow::setupUI()
     
     setCentralWidget(centralWidget);
     
-    // Load the AbyssOS web app
+    // Load the QOR OS web app
     QString webPath = QDir(QApplication::applicationDirPath()).filePath("web/index.html");
     if (QFile::exists(webPath)) {
         m_browserView->load(QUrl::fromLocalFile(webPath));
@@ -194,8 +194,8 @@ void MainWindow::connectSignals()
             tr("A new version (%1) is available.\n\n%2").arg(version, changelog));
     });
     
-    // AbyssID manager signals
-    connect(m_abyssIdManager, &AbyssIDManager::authChanged, [this]() {
+    // QorID manager signals
+    connect(m_abyssIdManager, &QorIDManager::authChanged, [this]() {
         if (m_abyssIdManager->isAuthenticated()) {
             statusBar()->showMessage(
                 tr("Logged in as %1").arg(m_abyssIdManager->username()), 3000);
@@ -226,8 +226,8 @@ void MainWindow::showAbout()
            "<p>Version %1</p>"
            "<p>The complete desktop client for the Demiurge blockchain.</p>"
            "<p>QØЯ provides native access to the entire Demiurge ecosystem "
-           "including AbyssID, Abyss Wallet, mining, P2P networking, and the "
-           "Abyss OS graphical environment.</p>"
+           "including QorID, QOR Wallet, mining, P2P networking, and the "
+           "QOR OS graphical environment.</p>"
            "<p>© 2024-2026 Demiurge</p>"
            "<p><a href='https://demiurge.cloud'>https://demiurge.cloud</a></p>")
         .arg(APP_VERSION));

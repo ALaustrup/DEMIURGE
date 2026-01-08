@@ -85,8 +85,8 @@ pnpm dev
 DEMIURGE/
 ├── chain/           # L1 blockchain (Rust)
 ├── apps/            # Frontend and backend applications
-│   ├── abyssid-service/    # Identity & Auth API
-│   ├── abyssos-portal/     # AbyssOS desktop environment
+│   ├── qorid-service/    # Identity & Auth API
+│   ├── qloud-os/     # QOR OS desktop environment
 │   ├── portal-web/         # Information portal
 │   └── dns-service/        # DNS resolution
 ├── sdk/             # TypeScript and Rust SDKs

@@ -65,9 +65,9 @@ pnpm install
 
 ### Start Applications
 
-**AbyssOS Portal** (Full desktop environment):
+**QLOUD OS** (Full desktop environment):
 ```bash
-cd apps/abyssos-portal
+cd apps/qloud-os
 pnpm dev
 ```
 Opens at http://localhost:5173
@@ -79,29 +79,29 @@ pnpm dev
 ```
 Opens at http://localhost:3000
 
-**AbyssID Service** (Auth API):
+**QorID Service** (Auth API):
 ```bash
-cd apps/abyssid-service
+cd apps/qorid-service
 pnpm dev
 ```
 Runs on http://localhost:8082
 
-## 6. Create Your AbyssID
+## 6. Create Your QorID
 
 1. Open http://localhost:5173
-2. Click **"Create new AbyssID"**
+2. Click **"Create new QorID"**
 3. Choose a username
 4. **Save your secret code** (required for recovery)
 5. Click **"Create Account"**
 
 ## 7. Explore
 
-Once logged in to AbyssOS Portal:
+Once logged in to QLOUD OS:
 
 | App | Description |
 |-----|-------------|
 | 🪙 **Wallet** | View CGT balance, send/receive |
-| 🌊 **Explorer** | Web browser with AbyssID integration |
+| 🌊 **Explorer** | Web browser with QorID integration |
 | 💎 **DRC369 Studio** | Create and mint NFTs |
 | 📁 **Files** | On-chain file storage |
 | ⚡ **Chain Ops** | Node monitoring and operations |

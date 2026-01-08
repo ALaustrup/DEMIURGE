@@ -6,7 +6,7 @@
 //! - ABI mismatches
 //! - SDK compatibility breaks
 //! - Fractal-1 codec deviates
-//! - AbyssOS APIs fall out of spec
+//! - QOR OS APIs fall out of spec
 //! - Any module loses determinism
 //!
 //! The Archon becomes the unifying force correcting all divergence.
@@ -52,9 +52,9 @@ pub enum ArchonDirective {
     /// Codec determinism needs verification
     A7_ValidateCodec,
     
-    /// A8 - AbyssOS API sync
-    /// AbyssOS APIs need synchronization
-    A8_SyncAbyssOS,
+    /// A8 - QOR OS API sync
+    /// QOR OS APIs need synchronization
+    A8_SyncQOR OS,
     
     /// A9 - Emergency halt
     /// Critical system failure detected
@@ -74,7 +74,7 @@ impl ArchonDirective {
             ArchonDirective::A1_RepairNode(_) => 6,
             ArchonDirective::A5_AlignSDK(_) => 7,
             ArchonDirective::A7_ValidateCodec => 8,
-            ArchonDirective::A8_SyncAbyssOS => 9,
+            ArchonDirective::A8_SyncQOR OS => 9,
         }
     }
     
@@ -89,7 +89,7 @@ impl ArchonDirective {
             ArchonDirective::A5_AlignSDK(issue) => format!("Align SDK: {}", issue),
             ArchonDirective::A6_VerifyRuntime => "Verify runtime integrity".to_string(),
             ArchonDirective::A7_ValidateCodec => "Validate Fractal-1 codec".to_string(),
-            ArchonDirective::A8_SyncAbyssOS => "Synchronize AbyssOS APIs".to_string(),
+            ArchonDirective::A8_SyncQOR OS => "Synchronize QOR OS APIs".to_string(),
             ArchonDirective::A9_EmergencyHalt(reason) => format!("EMERGENCY HALT: {}", reason),
         }
     }
@@ -214,6 +214,6 @@ mod tests {
         assert!(ArchonDirective::A9_EmergencyHalt("test".to_string()).priority() < 
                 ArchonDirective::A0_UnifyState.priority());
         assert!(ArchonDirective::A0_UnifyState.priority() < 
-                ArchonDirective::A8_SyncAbyssOS.priority());
+                ArchonDirective::A8_SyncQOR OS.priority());
     }
 }

@@ -1,9 +1,9 @@
-# Genesis Launcher
+# DEMIURGE QOR
 
 **The Gateway to the Demiurge Blockchain Ecosystem**
 
-Genesis Launcher is a unified application that serves as:
-- 🔐 **Authenticator** - AbyssID login with secure key vault
+DEMIURGE QOR is a unified application that serves as:
+- 🔐 **Authenticator** - QorID login with secure key vault
 - 📦 **Installer** - Downloads and installs QOR Desktop and Miner
 - 🔄 **Updater** - Automatic differential updates
 - 🚀 **Launcher** - Gateway to choose between modes
@@ -23,7 +23,7 @@ A lightweight daemon that runs in the system tray. No heavy desktop overhead.
 ### 🌌 Enter Abyss (Full OS)
 *"Full Immersion. The Desktop."*
 
-Launches the complete QOR Desktop Environment - the full Abyss OS experience.
+Launches the complete QOR Desktop Environment - the full QOR OS experience.
 - Complete desktop environment
 - All applications available
 - Full feature set
@@ -64,7 +64,7 @@ python scripts/deploy.py --qt-path ~/Qt/6.10.1/gcc_64
 
 ## IPC (Inter-Process Communication)
 
-Genesis Launcher provides Single Sign-On (SSO) to child processes:
+DEMIURGE QOR provides Single Sign-On (SSO) to child processes:
 
 1. **QLocalServer** - Named pipe for secure local communication
 2. **QSharedMemory** - Fast session token access

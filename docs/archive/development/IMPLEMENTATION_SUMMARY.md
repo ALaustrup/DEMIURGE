@@ -39,7 +39,7 @@
 - Context-aware responses
 - LLM integration (OpenAI/Anthropic)
 - REST API endpoint
-- Integration points (Portal, AbyssOS, CLI)
+- Integration points (Portal, QOR OS, CLI)
 
 ### 4. Developer Integration System
 **File**: `docs/development/DEVELOPER_INTEGRATION.md`
@@ -53,7 +53,7 @@
 - App marketplace design
 
 ### 5. On-Chain IDE
-**File**: `apps/abyssos-portal/src/components/desktop/apps/OnChainIDEApp.tsx`
+**File**: `apps/qloud-os/src/components/desktop/apps/OnChainIDEApp.tsx`
 
 **Features**:
 - Full code editor
@@ -65,7 +65,7 @@
 - Template support
 
 ### 6. App Marketplace
-**File**: `apps/abyssos-portal/src/components/desktop/apps/AppMarketplaceApp.tsx`
+**File**: `apps/qloud-os/src/components/desktop/apps/AppMarketplaceApp.tsx`
 
 **Features**:
 - Browse apps
@@ -76,7 +76,7 @@
 - Developer tools
 
 ### 7. ArchonAI Assistant
-**File**: `apps/abyssos-portal/src/components/desktop/apps/ArchonAIAssistantApp.tsx`
+**File**: `apps/qloud-os/src/components/desktop/apps/ArchonAIAssistantApp.tsx`
 
 **Features**:
 - Real-time chat
@@ -116,7 +116,7 @@
    ```
 
 3. **Test IDE and Marketplace**
-   - Build AbyssOS
+   - Build QOR OS
    - Open CRAFT IDE app
    - Create test project
    - Test build/deploy flow
@@ -167,7 +167,7 @@
 - ✅ Documentation indexer ready
 - ⏳ LLM integration tested
 - ⏳ Portal integration working
-- ⏳ AbyssOS integration working
+- ⏳ QOR OS integration working
 
 ### Developer Tools
 - ✅ IDE UI complete
@@ -222,8 +222,8 @@ cargo run -p demiurge-chain --release
 # ArchonAI
 cd apps/archonai-service && pnpm dev
 
-# AbyssOS
-cd apps/abyssos-portal && pnpm dev
+# QOR OS
+cd apps/qloud-os && pnpm dev
 
 # Portal Web
 cd apps/portal-web && pnpm dev

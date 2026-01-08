@@ -67,7 +67,7 @@ if ($LASTEXITCODE -eq 0) {
     Write-Host "========================================`n" -ForegroundColor Green
     
     Write-Host "Next steps:" -ForegroundColor Cyan
-    Write-Host "1. Verify services: ssh $ServerHost 'sudo systemctl status demiurge-chain abyssid abyss-gateway nginx'" -ForegroundColor White
+    Write-Host "1. Verify services: ssh $ServerHost 'sudo systemctl status demiurge-chain abyssid qor-gateway nginx'" -ForegroundColor White
     Write-Host "2. Check logs: ssh $ServerHost 'sudo journalctl -u demiurge-chain -f'" -ForegroundColor White
     Write-Host "3. Test RPC: curl -X POST http://$ServerHost:8545/rpc -H 'Content-Type: application/json' -d '{\"jsonrpc\":\"2.0\",\"method\":\"cgt_getChainInfo\",\"params\":[],\"id\":1}'" -ForegroundColor White
     Write-Host "4. Reboot server for final verification: ssh $ServerHost 'sudo reboot'" -ForegroundColor White

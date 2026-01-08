@@ -7,7 +7,7 @@ import type { AbyssState } from "@/components/fracture/AbyssStateMachine";
 /**
  * useAbyssReactive
  * 
- * Audio-reactive hook specifically tuned for AbyssID ritual states.
+ * Audio-reactive hook specifically tuned for QorID ritual states.
  * Maps frequency bands to semantic values for ritual animations.
  */
 export function useAbyssReactive(state: AbyssState) {
