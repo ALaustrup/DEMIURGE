@@ -19,14 +19,14 @@ export function Button({
   ...props
 }: ButtonProps) {
   const baseStyles =
-    "px-6 py-3 rounded-lg font-medium transition-all duration-200";
+    "px-6 py-3 rounded-lg font-medium transition-all duration-200 font-semibold uppercase tracking-wider";
   const variants = {
     primary:
-      "bg-zinc-50 text-zinc-950 hover:bg-zinc-200 active:scale-95",
+      "bg-[var(--genesis-flame-orange)] text-white hover:bg-[var(--genesis-flame-orange-hover)] shadow-[0_0_20px_rgba(255,61,0,0.3)] hover:shadow-[0_0_30px_rgba(255,61,0,0.5)] active:scale-95",
     secondary:
-      "bg-zinc-800 text-zinc-50 hover:bg-zinc-700 active:scale-95",
+      "bg-[var(--genesis-glass)] text-[var(--genesis-text-primary)] border border-[var(--genesis-border-default)] hover:bg-[var(--genesis-glass-hover)] hover:border-[var(--genesis-flame-orange)] active:scale-95",
     outline:
-      "border-2 border-zinc-600 text-zinc-50 hover:border-zinc-400 hover:bg-zinc-900 active:scale-95",
+      "border-2 border-[var(--genesis-cipher-cyan)] text-[var(--genesis-cipher-cyan)] hover:bg-[var(--genesis-cipher-cyan)]/10 hover:shadow-[0_0_20px_rgba(0,255,200,0.3)] active:scale-95",
   };
 
   return (
