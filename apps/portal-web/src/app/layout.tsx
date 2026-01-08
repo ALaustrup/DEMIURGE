@@ -12,6 +12,7 @@ import { OperatorContextProvider } from "@/lib/operator/OperatorContextProvider"
 import { FabricServiceProvider } from "@/lib/fabric/FabricServiceSelector";
 import { Bebas_Neue, Oswald, Rajdhani } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/react";
 
 const bebasNeue = Bebas_Neue({
   weight: "400",
