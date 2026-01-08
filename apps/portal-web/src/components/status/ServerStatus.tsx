@@ -17,7 +17,7 @@ export function ServerStatus() {
     { name: "QLOUD OS", url: "https://demiurge.cloud", status: "checking" },
   ]);
 
-  const [overallStatus, setOverallStatus] = useState<"online" | "degraded" | "offline">("checking");
+  const [overallStatus, setOverallStatus] = useState<"online" | "degraded" | "offline" | "checking">("checking");
 
   useEffect(() => {
     checkServices();

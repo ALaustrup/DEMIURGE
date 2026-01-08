@@ -12,7 +12,7 @@
     "stop:all": "powershell -ExecutionPolicy Bypass -File ./stop-all.ps1"
   },
   "devDependencies": {
-    "turbo": "^2.6.3"
+    "turbo": "^2.7.3"
   },
   "packageManager": "pnpm@9.15.0",
   "engines": {
@@ -25,4 +25,3 @@
     }
   }
 }
-

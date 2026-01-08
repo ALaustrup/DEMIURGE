@@ -5,9 +5,7 @@
     <Title>DEMIURGE QOR Installer</Title>
     <Publisher>Demiurge</Publisher>
     <ProductUrl>https://demiurge.cloud</ProductUrl>
-    <Logo>logo.png</Logo>
-    <InstallerWindowIcon>icon.png</InstallerWindowIcon>
-    <InstallerApplicationIcon>icon</InstallerApplicationIcon>
+    <!-- Logo and icons are optional - removed to prevent crashes if missing -->
     
     <!-- Installation directory -->
     <TargetDir>@ApplicationsDir@/Demiurge/QOR</TargetDir>
@@ -24,8 +22,7 @@
     <!-- Uninstaller name -->
     <MaintenanceToolName>DemiurgeQOR-Uninstall</MaintenanceToolName>
     
-    <!-- Control script -->
-    <ControlScript>controlscript.qs</ControlScript>
+    <!-- Control script - optional, removed to prevent crashes if missing -->
     
     <!-- Wizard pages -->
     <WizardStyle>Classic</WizardStyle>
