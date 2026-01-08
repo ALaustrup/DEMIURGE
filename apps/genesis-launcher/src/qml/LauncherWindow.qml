@@ -61,7 +61,21 @@ ApplicationWindow {
             
             MediaPlayer {
                 id: introPlayer
-                source: Qt.resolvedUrl("file:///" + Qt.application.arguments[0].replace(/[^/\\]*$/, "") + "videos/intro.mp4")
+                // Load video from executable directory
+                // Path: <exe_dir>/videos/intro.mp4
+                property string videoPath: {
+                    var exePath = Qt.application.arguments[0]
+                    // Get directory containing executable
+                    var exeDir = exePath.substring(0, exePath.lastIndexOf("/") + 1).replace(/\\/g, "/")
+                    if (exeDir.indexOf(":") === -1) {
+                        // Relative path - make absolute
+                        exeDir = "file:///" + exeDir
+                    } else {
+                        exeDir = "file:///" + exeDir
+                    }
+                    return exeDir + "videos/intro.mp4"
+                }
+                source: videoPath
                 videoOutput: videoOutput
                 audioOutput: AudioOutput { volume: 0.8 }
                 

@@ -175,6 +175,20 @@ target_link_libraries(DemiurgeMiner PRIVATE
 )
 
 # ============================================================================
+# Copy video files to build directory
+# ============================================================================
+
+# Copy intro video to Release directory after build
+add_custom_command(TARGET ${APP_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory
+        $<TARGET_FILE_DIR:${APP_NAME}>/videos
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/resources/videos/intro.mp4
+        $<TARGET_FILE_DIR:${APP_NAME}>/videos/intro.mp4
+    COMMENT "Copying intro video to build directory"
+)
+
+# ============================================================================
 # Installation / Deployment
 # ============================================================================
 
@@ -183,12 +197,14 @@ install(TARGETS ${APP_NAME} GenesisSeed DemiurgeMiner
     BUNDLE DESTINATION .
 )
 
-# Copy videos folder to output directory
+# Copy videos folder to output directory (always update to latest)
 add_custom_command(TARGET ${APP_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/resources/videos"
+    COMMAND ${CMAKE_COMMAND} -E make_directory
         "$<TARGET_FILE_DIR:${APP_NAME}>/videos"
-    COMMENT "Copying intro videos..."
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/resources/videos/intro.mp4"
+        "$<TARGET_FILE_DIR:${APP_NAME}>/videos/intro.mp4"
+    COMMENT "Copying latest intro video to build directory..."
 )
 
 # Copy Qt DLLs on Windows
