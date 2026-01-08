@@ -11,6 +11,7 @@ import { GENESIS_CONFIG } from "@/config/genesis";
 import { OperatorContextProvider } from "@/lib/operator/OperatorContextProvider";
 import { FabricServiceProvider } from "@/lib/fabric/FabricServiceSelector";
 import { Bebas_Neue, Oswald, Rajdhani } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const bebasNeue = Bebas_Neue({
   weight: "400",
@@ -74,6 +75,7 @@ export default function RootLayout({
       </head>
       <body className="gradient-orbit min-h-screen antialiased">
         <ServiceWorkerRegistration />
+        <SpeedInsights />
         <QorIDProvider>
           <AudioContextProvider>
             <OperatorContextProvider>
