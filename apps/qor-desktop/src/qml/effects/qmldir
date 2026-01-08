@@ -1,0 +1,3 @@
+module QOR.Effects
+
+VoidBackground 1.0 VoidBackground.qml

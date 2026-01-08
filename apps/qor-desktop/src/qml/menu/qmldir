@@ -1,0 +1,4 @@
+module QOR.Menu
+
+QMenu 1.0 QMenu.qml
+QMenuGrid 1.0 QMenuGrid.qml

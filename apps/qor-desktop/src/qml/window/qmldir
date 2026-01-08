@@ -1,0 +1,3 @@
+module QOR.Window
+
+QWindow 1.0 QWindow.qml

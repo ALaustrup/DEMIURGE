@@ -16,6 +16,8 @@ find_package(Qt6 REQUIRED COMPONENTS
     Core
     Gui
     Widgets
+    Quick
+    QuickControls2
     WebEngineWidgets
     WebChannel
     Network
@@ -82,6 +84,7 @@ set(SOURCES
 # Resources
 set(RESOURCES
     src/resources/resources.qrc
+    qml.qrc
 )
 
 # Platform-specific configurations
@@ -109,6 +112,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt6::Core
     Qt6::Gui
     Qt6::Widgets
+    Qt6::Quick
+    Qt6::QuickControls2
     Qt6::WebEngineWidgets
     Qt6::WebChannel
     Qt6::Network

@@ -1,0 +1,5 @@
+module QOR.Dock
+
+QDock 1.0 QDock.qml
+QDockItem 1.0 QDockItem.qml
+QORButton 1.0 QORButton.qml

@@ -1,0 +1,6 @@
+module QOR.Components
+
+GlassPanel 1.0 GlassPanel.qml
+GlowText 1.0 GlowText.qml
+FlameButton 1.0 FlameButton.qml
+BreathingGlow 1.0 BreathingGlow.qml

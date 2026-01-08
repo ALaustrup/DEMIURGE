@@ -1,0 +1,49 @@
+<RCC>
+    <qresource prefix="/qml">
+        <!-- Main Views -->
+        <file>src/qml/Main.qml</file>
+        <file>src/qml/SplashScreen.qml</file>
+        <file>src/qml/LoginView.qml</file>
+        <file>src/qml/DesktopView.qml</file>
+        <file>src/qml/Theme.qml</file>
+        <file>src/qml/qmldir</file>
+        
+        <!-- Components -->
+        <file>src/qml/components/GlassPanel.qml</file>
+        <file>src/qml/components/GlowText.qml</file>
+        <file>src/qml/components/FlameButton.qml</file>
+        <file>src/qml/components/BreathingGlow.qml</file>
+        <file>src/qml/components/qmldir</file>
+        
+        <!-- Dock -->
+        <file>src/qml/dock/QDock.qml</file>
+        <file>src/qml/dock/QDockItem.qml</file>
+        <file>src/qml/dock/QORButton.qml</file>
+        <file>src/qml/dock/qmldir</file>
+        
+        <!-- Menu -->
+        <file>src/qml/menu/QMenu.qml</file>
+        <file>src/qml/menu/QMenuGrid.qml</file>
+        <file>src/qml/menu/qmldir</file>
+        
+        <!-- Window -->
+        <file>src/qml/window/QWindow.qml</file>
+        <file>src/qml/window/qmldir</file>
+        
+        <!-- Effects -->
+        <file>src/qml/effects/VoidBackground.qml</file>
+        <file>src/qml/effects/qmldir</file>
+    </qresource>
+    
+    <qresource prefix="/fonts">
+        <!-- Fonts will be added here when provided -->
+    </qresource>
+    
+    <qresource prefix="/icons">
+        <!-- Icons will be added here -->
+    </qresource>
+    
+    <qresource prefix="/shaders">
+        <!-- GLSL shaders will be added here -->
+    </qresource>
+</RCC>
