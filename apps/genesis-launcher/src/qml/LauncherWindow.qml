@@ -62,32 +62,68 @@ ApplicationWindow {
             MediaPlayer {
                 id: introPlayer
                 // Load video from executable directory
-                // Path: <exe_dir>/videos/intro.mp4
+                // Try: assets/intro.mp4 first, then videos/intro.mp4
                 property string videoPath: {
                     var exePath = Qt.application.arguments[0]
-                    // Get directory containing executable
-                    var exeDir = exePath.substring(0, exePath.lastIndexOf("/") + 1).replace(/\\/g, "/")
-                    if (exeDir.indexOf(":") === -1) {
-                        // Relative path - make absolute
-                        exeDir = "file:///" + exeDir
+                    console.log("Executable path:", exePath)
+                    
+                    // Normalize path separators
+                    var normalizedPath = exePath.replace(/\\/g, "/")
+                    var lastSlash = normalizedPath.lastIndexOf("/")
+                    var exeDir = normalizedPath.substring(0, lastSlash + 1)
+                    
+                    // Try assets/intro.mp4 first (preferred location)
+                    var videoFile = exeDir + "assets/intro.mp4"
+                    
+                    // Fallback to videos/intro.mp4 if assets doesn't exist
+                    // (We'll check this in onErrorOccurred)
+                    
+                    // Convert to file:// URL format for Windows
+                    if (videoFile.indexOf(":") >= 0) {
+                        // Windows absolute path (C:/...)
+                        videoFile = "file:///" + videoFile
                     } else {
-                        exeDir = "file:///" + exeDir
+                        // Relative path
+                        videoFile = "file:///" + videoFile
                     }
-                    return exeDir + "videos/intro.mp4"
+                    
+                    console.log("Video path:", videoFile)
+                    return videoFile
                 }
                 source: videoPath
                 videoOutput: videoOutput
                 audioOutput: AudioOutput { volume: 0.8 }
                 
+                onSourceChanged: {
+                    console.log("MediaPlayer source changed to:", source)
+                }
+                
                 onPlaybackStateChanged: {
+                    console.log("Playback state:", playbackState)
                     if (playbackState === MediaPlayer.StoppedState && !introSkipped) {
                         introComplete = true
                     }
                 }
                 
                 onErrorOccurred: (error, errorString) => {
-                    console.log("Video error:", errorString)
-                    introComplete = true  // Skip to login on error
+                    console.log("Video error:", error, errorString)
+                    console.log("Attempted path:", videoPath)
+                    
+                    // Try fallback path: videos/intro.mp4
+                    var exePath = Qt.application.arguments[0]
+                    var normalizedPath = exePath.replace(/\\/g, "/")
+                    var lastSlash = normalizedPath.lastIndexOf("/")
+                    var exeDir = normalizedPath.substring(0, lastSlash + 1)
+                    var fallbackPath = "file:///" + exeDir + "videos/intro.mp4"
+                    
+                    console.log("Trying fallback path:", fallbackPath)
+                    if (source !== fallbackPath) {
+                        source = fallbackPath
+                        return
+                    }
+                    
+                    // If both paths fail, skip to login
+                    introComplete = true
                 }
             }
             

@@ -179,13 +179,21 @@ target_link_libraries(DemiurgeMiner PRIVATE
 # ============================================================================
 
 # Copy intro video to Release directory after build
+# Priority: assets/intro.mp4 (preferred), then videos/intro.mp4 (fallback)
 add_custom_command(TARGET ${APP_NAME} POST_BUILD
+    # Copy to assets/ (preferred location)
+    COMMAND ${CMAKE_COMMAND} -E make_directory
+        $<TARGET_FILE_DIR:${APP_NAME}>/assets
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${CMAKE_CURRENT_SOURCE_DIR}/assets/intro.mp4
+        $<TARGET_FILE_DIR:${APP_NAME}>/assets/intro.mp4
+    # Also copy to videos/ (fallback location)
     COMMAND ${CMAKE_COMMAND} -E make_directory
         $<TARGET_FILE_DIR:${APP_NAME}>/videos
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/resources/videos/intro.mp4
+        ${CMAKE_CURRENT_SOURCE_DIR}/assets/intro.mp4
         $<TARGET_FILE_DIR:${APP_NAME}>/videos/intro.mp4
-    COMMENT "Copying intro video to build directory"
+    COMMENT "Copying intro video to build directory (assets/ and videos/)"
 )
 
 # ============================================================================
