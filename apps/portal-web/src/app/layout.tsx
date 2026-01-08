@@ -78,6 +78,7 @@ export default function RootLayout({
       <body className="gradient-orbit min-h-screen antialiased">
         <ServiceWorkerRegistration />
         <SpeedInsights />
+        <Analytics />
         <QorIDProvider>
           <AudioContextProvider>
             <OperatorContextProvider>

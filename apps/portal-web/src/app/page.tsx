@@ -1,238 +1,296 @@
 "use client";
 
 import { useState } from "react";
-import { FractureShell } from "@/components/fracture/FractureShell";
-import { GenesisOnboarding } from "@/components/genesis/GenesisOnboarding";
 import { motion } from "framer-motion";
-import { Download, Sparkles, Rocket, Shield } from "lucide-react";
+import { 
+  Download, 
+  Rocket, 
+  Shield, 
+  Zap,
+  FileText,
+  Github,
+  Network,
+  Palette
+} from "lucide-react";
 import { LaunchCountdown } from "@/components/countdown/LaunchCountdown";
 import { DownloadModal } from "@/components/modals/DownloadModal";
 import { QorIDDialog } from "@/components/fracture/QorIDDialog";
+import { ServerStatus } from "@/components/status/ServerStatus";
 import { BackgroundVideo } from "@/components/video/BackgroundVideo";
 import Link from "next/link";
 
-/**
- * Fracture Landing Page
- * 
- * The entry point to the Demiurge chain with QOR Launcher promotion.
- */
 export default function HomePage() {
   const [showDownload, setShowDownload] = useState(false);
   const [showQorID, setShowQorID] = useState(false);
   
-  // Launch date: 3 days from Jan 7, 2026 = Jan 10, 2026 at 12:00 UTC
   const launchDate = new Date('2026-01-10T12:00:00Z');
+
+  const features = [
+    {
+      icon: Shield,
+      title: "QOR ID Identity",
+      description: "Sovereign digital identity with on-chain authentication and encrypted storage",
+      color: "from-cyan-500 to-blue-600",
+    },
+    {
+      icon: Zap,
+      title: "Native Mining",
+      description: "CPU/GPU mining with 10x efficiency compared to web-based solutions",
+      color: "from-orange-500 to-red-600",
+    },
+    {
+      icon: Palette,
+      title: "DRC-369 NFTs",
+      description: "Creator-first NFT standard with built-in royalties and metadata",
+      color: "from-purple-500 to-pink-600",
+    },
+    {
+      icon: Network,
+      title: "P2P Network",
+      description: "Decentralized content delivery and earn CGT by seeding",
+      color: "from-green-500 to-emerald-600",
+    },
+  ];
 
   return (
     <>
-      <GenesisOnboarding />
-      <FractureShell>
-        {/* Background Video */}
-        <BackgroundVideo className="z-0" />
+      {/* Background */}
+      <BackgroundVideo className="z-0" />
 
-        {/* Content Layer */}
-        <div className="relative z-10">
-        {/* Countdown Banner at Top */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-6xl mx-auto mb-8 p-4 bg-gradient-to-r from-genesis-flame-orange/10 via-genesis-cipher-cyan/10 to-genesis-void-purple/10 border border-genesis-flame-orange/30 rounded-2xl backdrop-blur-md"
-        >
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-genesis-flame-orange/20">
-                <Rocket className="h-5 w-5 text-genesis-flame-orange" />
-              </div>
-              <div>
-                <h3 className="text-sm font-bold text-genesis-text-primary">
-                  DEMIURGE QOR Alpha Launch
-                </h3>
-                <p className="text-xs text-genesis-text-tertiary">
-                  The ultimate blockchain launcher
-                </p>
-              </div>
-            </div>
-            <LaunchCountdown targetDate={launchDate} compact />
+      {/* Main Content */}
+      <div className="relative z-10 min-h-screen">
+        {/* Hero Section */}
+        <div className="container mx-auto px-4 pt-24 pb-16">
+          {/* Server Status - Top Right */}
+          <div className="fixed top-20 right-4 z-50">
+            <ServerStatus />
           </div>
-        </motion.div>
 
-        <div className="flex flex-col items-center justify-center min-h-[80vh] py-12 space-y-12">
-          {/* Hero Section */}
+          {/* Countdown Banner */}
           <motion.div
-            className="max-w-4xl mx-auto px-8 py-12 rounded-3xl bg-genesis-glass-light border-2 border-genesis-border-bright backdrop-blur-2xl shadow-[0_0_60px_rgba(0,0,0,0.8)] relative"
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="mb-12 p-6 bg-black/40 border-2 border-orange-500/30 rounded-2xl backdrop-blur-xl max-w-4xl mx-auto"
           >
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="p-3 rounded-xl bg-gradient-to-br from-orange-500 to-red-600">
+                  <Rocket className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-white">
+                    ALPHA LAUNCH
+                  </h3>
+                  <p className="text-sm text-gray-300">
+                    DEMIURGE QOR v1.0
+                  </p>
+                </div>
+              </div>
+              <LaunchCountdown targetDate={launchDate} compact={false} />
+            </div>
+          </motion.div>
+
+          {/* Hero Content */}
+          <div className="max-w-5xl mx-auto text-center space-y-8">
             {/* Badge */}
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-genesis-flame-orange to-genesis-flame-red rounded-full text-xs font-bold text-white">
-              ALPHA v1.0
-            </div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.1 }}
+              className="inline-block px-4 py-2 bg-gradient-to-r from-orange-500 to-red-600 rounded-full text-sm font-bold text-white shadow-lg"
+            >
+              SOVEREIGN L1 BLOCKCHAIN
+            </motion.div>
 
-            {/* Overline */}
-            <div className="text-xs sm:text-sm text-genesis-text-tertiary font-mono tracking-widest mb-4 text-center">
-              DEMIURGE BLOCKCHAIN
-            </div>
-
-            {/* Main Title */}
+            {/* Main Title - Improved Readability */}
             <motion.h1
-              className="text-4xl sm:text-5xl lg:text-6xl font-display mb-6 text-center bg-gradient-to-br from-genesis-flame-orange via-genesis-cipher-cyan to-genesis-void-purple bg-clip-text text-transparent"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="text-5xl md:text-7xl lg:text-8xl font-display font-bold"
               style={{
-                textShadow: "0 0 40px rgba(249, 115, 22, 0.3)",
-                letterSpacing: "0.1em",
-                fontFamily: "var(--font-bebas), sans-serif",
-                fontWeight: 400,
+                background: "linear-gradient(135deg, #FF6B35 0%, #00D9FF 50%, #9D4EDD 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                textShadow: "0 0 80px rgba(255,107,53,0.3)",
+                lineHeight: 1.1,
               }}
             >
-              SOVEREIGN DIGITAL PANTHEON
+              DEMIURGE
             </motion.h1>
 
-            {/* Subtitle */}
-            <p className="text-sm sm:text-lg text-genesis-text-secondary max-w-2xl mx-auto text-center leading-relaxed mb-8">
-              A sovereign L1 blockchain and creator economy for Archons and Nomads. 
-              Built for autonomy, privacy, and true digital ownership.
-            </p>
+            {/* Subtitle - High Contrast */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="text-xl md:text-2xl text-white font-semibold max-w-3xl mx-auto leading-relaxed"
+              style={{
+                textShadow: "0 2px 20px rgba(0,0,0,0.8)",
+              }}
+            >
+              The Sovereign Digital Pantheon for Creators, Builders, and Sovereign Entities
+            </motion.p>
 
-            {/* Download CTA - Prominent */}
-            <div className="flex flex-col items-center gap-4 mb-8">
-              <motion.button
+            {/* Description - Better Contrast */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed px-6 py-4 bg-black/40 rounded-xl backdrop-blur-sm"
+            >
+              A Layer-1 blockchain built for autonomy, privacy, and true digital ownership. 
+              Deploy nodes, mint NFTs, earn CGT, and build the decentralized future.
+            </motion.p>
+
+            {/* Primary CTA */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4"
+            >
+              <button
                 onClick={() => setShowDownload(true)}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="group relative px-10 py-4 bg-gradient-to-r from-genesis-flame-orange to-genesis-flame-red rounded-xl font-bold text-white text-lg shadow-lg overflow-hidden"
+                className="group relative px-10 py-5 bg-gradient-to-r from-orange-500 to-red-600 rounded-xl font-bold text-white text-xl shadow-2xl hover:shadow-orange-500/50 transition-all duration-300 hover:scale-105"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-genesis-cipher-cyan to-genesis-void-purple opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="relative flex items-center gap-3">
-                  <Download className="h-6 w-6" />
+                <div className="flex items-center gap-3">
+                  <Download className="h-7 w-7" />
                   <span>DOWNLOAD QOR LAUNCHER</span>
-                  <Sparkles className="h-5 w-5" />
                 </div>
-              </motion.button>
-              
-              <p className="text-xs text-genesis-text-tertiary text-center">
-                One-click node deployment • Integrated wallet • Mining & staking
-              </p>
-            </div>
+              </button>
 
-            {/* Secondary CTAs */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <button
                 onClick={() => setShowQorID(true)}
-                className="px-8 py-3 bg-genesis-glass-light border border-genesis-cipher-cyan/30 text-genesis-cipher-cyan font-semibold rounded-lg hover:bg-genesis-cipher-cyan/10 hover:border-genesis-cipher-cyan/50 transition-all duration-300 hover:scale-105"
+                className="px-10 py-5 bg-black/60 border-2 border-cyan-500 text-cyan-400 font-bold text-xl rounded-xl backdrop-blur-sm hover:bg-cyan-500/10 hover:border-cyan-400 transition-all duration-300 hover:scale-105"
               >
-                Create QOR ID
+                CREATE QOR ID
+              </button>
+            </motion.div>
+
+            {/* Quick Stats */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+              className="flex flex-wrap justify-center gap-6 pt-8"
+            >
+              {["Windows • macOS • Linux", "Free Forever", "Open Source", "Alpha v1.0"].map((stat, i) => (
+                <div
+                  key={i}
+                  className="px-6 py-3 bg-black/60 border border-gray-700 rounded-lg text-sm font-semibold text-gray-200 backdrop-blur-sm"
+                >
+                  {stat}
+                </div>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Features Section */}
+        <div className="container mx-auto px-4 py-20">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="max-w-6xl mx-auto"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 text-white">
+              Built for Sovereignty
+            </h2>
+            
+            <div className="grid md:grid-cols-2 gap-6">
+              {features.map((feature, index) => (
+                <motion.div
+                  key={feature.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="group p-8 bg-black/60 border-2 border-gray-800 rounded-2xl backdrop-blur-sm hover:border-gray-600 hover:bg-black/80 transition-all duration-300"
+                >
+                  <div className={`inline-flex p-4 rounded-xl bg-gradient-to-br ${feature.color} mb-4`}>
+                    <feature.icon className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-3">
+                    {feature.title}
+                  </h3>
+                  <p className="text-lg text-gray-300 leading-relaxed">
+                    {feature.description}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Quick Links Section - High Visibility */}
+        <div className="container mx-auto px-4 py-20">
+          <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-6">
+            <Link
+              href="/whitepaper"
+              className="group p-8 bg-gradient-to-br from-purple-900/40 to-black/60 border-2 border-purple-500/30 rounded-2xl backdrop-blur-sm hover:border-purple-400 transition-all duration-300 hover:scale-105"
+            >
+              <FileText className="h-12 w-12 text-purple-400 mb-4" />
+              <h3 className="text-2xl font-bold text-white mb-2">Whitepaper</h3>
+              <p className="text-gray-300 text-lg">
+                Complete technical documentation and vision
+              </p>
+            </Link>
+
+            <Link
+              href="/nft-marketplace"
+              className="group p-8 bg-gradient-to-br from-pink-900/40 to-black/60 border-2 border-pink-500/30 rounded-2xl backdrop-blur-sm hover:border-pink-400 transition-all duration-300 hover:scale-105"
+            >
+              <Palette className="h-12 w-12 text-pink-400 mb-4" />
+              <h3 className="text-2xl font-bold text-white mb-2">NFT Marketplace</h3>
+              <p className="text-gray-300 text-lg">
+                Create, trade, and sell DRC-369 NFTs
+              </p>
+            </Link>
+
+            <a
+              href="https://github.com/ALaustrup/DEMIURGE"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group p-8 bg-gradient-to-br from-gray-900/40 to-black/60 border-2 border-gray-500/30 rounded-2xl backdrop-blur-sm hover:border-gray-400 transition-all duration-300 hover:scale-105"
+            >
+              <Github className="h-12 w-12 text-gray-400 mb-4" />
+              <h3 className="text-2xl font-bold text-white mb-2">GitHub</h3>
+              <p className="text-gray-300 text-lg">
+                Open source • MIT License • Contribute
+              </p>
+            </a>
+          </div>
+        </div>
+
+        {/* Footer CTA */}
+        <div className="container mx-auto px-4 py-20">
+          <div className="max-w-4xl mx-auto text-center p-12 bg-gradient-to-br from-orange-900/40 via-purple-900/40 to-cyan-900/40 border-2 border-orange-500/30 rounded-3xl backdrop-blur-sm">
+            <h2 className="text-4xl font-bold text-white mb-6">
+              Ready to Build the Future?
+            </h2>
+            <p className="text-xl text-gray-200 mb-8 max-w-2xl mx-auto">
+              Join the sovereign digital revolution. Download the launcher, create your identity, and start earning CGT.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button
+                onClick={() => setShowDownload(true)}
+                className="px-10 py-4 bg-gradient-to-r from-orange-500 to-red-600 text-white font-bold text-lg rounded-xl hover:shadow-2xl hover:shadow-orange-500/50 transition-all duration-300"
+              >
+                Download Now
               </button>
               <Link
-                href="/scrolls"
-                className="px-8 py-3 bg-genesis-glass-light border border-genesis-border-default text-genesis-text-secondary font-semibold rounded-lg hover:bg-genesis-glass-medium hover:border-genesis-border-bright transition-all duration-300 hover:scale-105"
+                href="/whitepaper"
+                className="px-10 py-4 bg-black/60 border-2 border-white/30 text-white font-bold text-lg rounded-xl hover:bg-white/10 transition-all duration-300"
               >
-                Read Documentation
-              </Link>
-            </div>
-          </motion.div>
-
-          {/* Quick Signup Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="w-full max-w-4xl mx-auto px-4"
-          >
-            <div className="p-8 bg-gradient-to-br from-genesis-void-purple/10 via-genesis-glass-light to-genesis-cipher-cyan/10 border border-genesis-border-bright rounded-2xl backdrop-blur-sm">
-              <div className="flex flex-col md:flex-row items-center gap-6">
-                <div className="flex-shrink-0 p-4 rounded-2xl bg-gradient-to-br from-genesis-cipher-cyan/20 to-genesis-void-purple/20">
-                  <Shield className="h-12 w-12 text-genesis-cipher-cyan" />
-                </div>
-                
-                <div className="flex-1 text-center md:text-left">
-                  <h3 className="text-xl font-bold text-genesis-text-primary mb-2">
-                    Reserve Your QOR ID Now
-                  </h3>
-                  <p className="text-sm text-genesis-text-secondary mb-4">
-                    Secure your identity before the alpha launch. Early adopters get exclusive benefits 
-                    and priority access to the QOR ecosystem.
-                  </p>
-                  <div className="flex flex-wrap items-center gap-2 text-xs text-genesis-text-tertiary">
-                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-genesis-glass-light rounded">
-                      <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
-                      Free forever
-                    </span>
-                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-genesis-glass-light rounded">
-                      <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
-                      2GB storage
-                    </span>
-                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-genesis-glass-light rounded">
-                      <span className="h-1.5 w-1.5 rounded-full bg-purple-500" />
-                      On-chain wallet
-                    </span>
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => setShowQorID(true)}
-                  className="flex-shrink-0 px-6 py-3 bg-gradient-to-r from-genesis-cipher-cyan to-genesis-void-purple text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-300 hover:scale-105"
-                >
-                  Sign Up Free
-                </button>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Features Grid */}
-          <div className="mt-8 max-w-4xl mx-auto w-full px-4">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Link
-                href="/haven"
-                className="group p-6 bg-genesis-glass-light border border-genesis-border-default rounded-xl backdrop-blur-sm hover:border-genesis-cipher-cyan/50 hover:bg-genesis-glass-medium transition-all duration-300"
-              >
-                <div className="text-genesis-cipher-cyan mb-2 group-hover:scale-110 transition-transform">
-                  HAVEN
-                </div>
-                <div className="text-sm text-genesis-text-tertiary">
-                  Identity & Profile
-                </div>
-              </Link>
-              
-              <Link
-                href="/void"
-                className="group p-6 bg-genesis-glass-light border border-genesis-border-default rounded-xl backdrop-blur-sm hover:border-genesis-void-purple/50 hover:bg-genesis-glass-medium transition-all duration-300"
-              >
-                <div className="text-genesis-void-purple mb-2 group-hover:scale-110 transition-transform">
-                  VOID
-                </div>
-                <div className="text-sm text-genesis-text-tertiary">
-                  Developer HQ
-                </div>
-              </Link>
-              
-              <Link
-                href="/nexus"
-                className="group p-6 bg-genesis-glass-light border border-genesis-border-default rounded-xl backdrop-blur-sm hover:border-genesis-flame-orange/50 hover:bg-genesis-glass-medium transition-all duration-300"
-              >
-                <div className="text-genesis-flame-orange mb-2 group-hover:scale-110 transition-transform">
-                  NEXUS
-                </div>
-                <div className="text-sm text-genesis-text-tertiary">
-                  P2P Analytics
-                </div>
-              </Link>
-              
-              <Link
-                href="/scrolls"
-                className="group p-6 bg-genesis-glass-light border border-genesis-border-default rounded-xl backdrop-blur-sm hover:border-genesis-text-primary/50 hover:bg-genesis-glass-medium transition-all duration-300"
-              >
-                <div className="text-genesis-text-primary mb-2 group-hover:scale-110 transition-transform">
-                  SCROLLS
-                </div>
-                <div className="text-sm text-genesis-text-tertiary">
-                  Knowledge Base
-                </div>
+                Read Whitepaper
               </Link>
             </div>
           </div>
         </div>
-        </div>
-      </FractureShell>
+      </div>
 
       {/* Modals */}
       <DownloadModal 
