@@ -76,7 +76,7 @@ export function StatusBar() {
         className="fixed top-0 left-0 right-0 h-8 z-50 flex items-center justify-between px-4 text-xs"
         style={toolbarStyle}
       >
-        <div className="text-abyss-cyan">AbyssOS – Demiurge Devnet</div>
+        <div className="text-genesis-cipher-cyan">GENESIS – Demiurge Network</div>
         
         {/* Start Button - Center */}
         <div className="absolute left-1/2 transform -translate-x-1/2">
@@ -93,25 +93,25 @@ export function StatusBar() {
           {visibleWidgets.map((widget) => {
             if (widget.id === 'music-player' && currentTrack && isBackgroundMode) {
               return (
-                <div key={widget.id} className="flex items-center gap-2 px-2 py-1 rounded bg-abyss-navy/60 border border-abyss-cyan/20">
-                  <span className="text-abyss-cyan text-[10px] truncate max-w-[120px]">
+                <div key={widget.id} className="flex items-center gap-2 px-2 py-1 rounded bg-genesis-glass/60 border border-genesis-border-cyan">
+                  <span className="text-genesis-cipher-cyan text-[10px] truncate max-w-[120px]">
                     {currentTrack.music?.trackName || currentTrack.name || 'Unknown Track'}
                   </span>
                   <button
                     onClick={togglePlayPause}
-                    className="w-5 h-5 rounded bg-abyss-cyan/20 hover:bg-abyss-cyan/40 text-abyss-cyan flex items-center justify-center text-[10px]"
+                    className="w-5 h-5 rounded bg-genesis-cipher-cyan/20 hover:bg-genesis-cipher-cyan/40 text-genesis-cipher-cyan flex items-center justify-center text-[10px] transition-colors"
                   >
                     {isPlaying ? '⏸' : '▶'}
                   </button>
                   <button
                     onClick={nextTrack}
-                    className="w-5 h-5 rounded bg-abyss-cyan/20 hover:bg-abyss-cyan/40 text-abyss-cyan flex items-center justify-center text-[10px]"
+                    className="w-5 h-5 rounded bg-genesis-cipher-cyan/20 hover:bg-genesis-cipher-cyan/40 text-genesis-cipher-cyan flex items-center justify-center text-[10px] transition-colors"
                   >
                     ⏭
                   </button>
                   <button
                     onClick={() => openApp('neonPlayer')}
-                    className="w-5 h-5 rounded bg-abyss-cyan/20 hover:bg-abyss-cyan/40 text-abyss-cyan flex items-center justify-center text-[10px]"
+                    className="w-5 h-5 rounded bg-genesis-cipher-cyan/20 hover:bg-genesis-cipher-cyan/40 text-genesis-cipher-cyan flex items-center justify-center text-[10px] transition-colors"
                     title="Open NEON Player"
                   >
                     🎵
@@ -141,7 +141,7 @@ export function StatusBar() {
           {/* Avatar Button */}
           <button
             onClick={() => setShowMenu(!showMenu)}
-            className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold text-white transition-all hover:ring-2 hover:ring-abyss-cyan/50"
+            className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold text-white transition-all hover:ring-2 hover:ring-genesis-cipher-cyan/50"
             style={{
               backgroundColor: session?.username ? getAvatarColor(session.username) : '#666',
             }}
@@ -188,7 +188,7 @@ export function StatusBar() {
                 <div className="pt-1 border-t border-abyss-cyan/20">
                   <button
                     onClick={handleDisengage}
-                    className="w-full text-left px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded transition-colors"
+                    className="w-full text-left px-3 py-2 text-sm text-genesis-error hover:bg-genesis-error/10 rounded transition-colors"
                   >
                     Disengage
                   </button>

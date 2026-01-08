@@ -34,7 +34,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
     return (
       <FullscreenContainer>
         <AbyssBackground />
-        <div className="absolute inset-0 flex items-center justify-center text-abyss-cyan">
+        <div className="absolute inset-0 flex items-center justify-center text-genesis-cipher-cyan">
           Loading...
         </div>
       </FullscreenContainer>

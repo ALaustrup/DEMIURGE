@@ -1,286 +1,306 @@
 /**
  * LauncherWindow.qml - Genesis Launcher Main Window
- * 
- * Style: "Obsidian Monolith" - Frameless, dark glass, floating construct
- * 
- * Features:
- * - Cinematic intro video sequence on first launch
- * - Minimize to system tray on close
- * - State machine for login/signup/dashboard
+ * Features: Intro video sequence → Login screen
  */
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import QtQuick.Effects
-
-import "components"
-import "views"
+import QtMultimedia
 
 ApplicationWindow {
     id: root
     
-    // Frameless, floating monolith
-    flags: Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
-    color: "transparent"
-    
     width: 800
     height: 600
-    visible: !startMinimized  // From C++ context
+    visible: true
     title: "Genesis Launcher"
+    color: "transparent"
+    flags: Qt.FramelessWindowHint | Qt.Window
     
-    // State machine
-    property string appState: skipIntro ? "main" : "intro"  // intro, main
-    property bool introComplete: skipIntro || false
-    property bool hasPlayedIntro: false
+    // State management
+    property bool introComplete: false
+    property bool introSkipped: false
     
     // Center on screen
     Component.onCompleted: {
         x = (Screen.width - width) / 2
         y = (Screen.height - height) / 2
-        
-        // Check if intro should be skipped
-        checkIntroState()
-    }
-    
-    function checkIntroState() {
-        // Check if intro has been played before in this session
-        if (skipIntro || hasPlayedIntro) {
-            appState = "main"
-            introComplete = true
-        }
     }
     
     // Theme colors
     readonly property color voidColor: "#050505"
-    readonly property color glassColor: "#0A0A0A"
     readonly property color textPrimary: "#E0E0E0"
     readonly property color textSecondary: "#7A7A7A"
     readonly property color flameOrange: "#FF3D00"
-    readonly property color flameGold: "#FF9100"
     readonly property color cipherCyan: "#00FFC8"
     
-    // Main container with drop shadow
+    // Main container
     Rectangle {
         id: container
         anchors.fill: parent
         anchors.margins: 20
-        
         color: voidColor
         radius: 16
+        border.color: Qt.rgba(1, 1, 1, 0.1)
+        border.width: 1
+        clip: true
         
-        // Obsidian glass effect
-        layer.enabled: true
-        layer.effect: MultiEffect {
-            shadowEnabled: true
-            shadowColor: "#000000"
-            shadowBlur: 1.0
-            shadowHorizontalOffset: 0
-            shadowVerticalOffset: 8
-        }
-        
-        // Subtle noise texture overlay
-        Image {
-            anchors.fill: parent
-            source: "qrc:/textures/noise.png"
-            opacity: 0.03
-            fillMode: Image.Tile
-            visible: appState === "main"
-        }
-        
-        // Border glow
-        Rectangle {
-            anchors.fill: parent
-            radius: parent.radius
-            color: "transparent"
-            border.color: Qt.rgba(1, 1, 1, 0.05)
-            border.width: 1
-            visible: appState === "main"
-        }
-        
-        // ==================== INTRO SEQUENCE ====================
-        IntroSequence {
-            id: introSequence
-            anchors.fill: parent
-            visible: appState === "intro"
-            
-            onSequenceComplete: {
-                hasPlayedIntro = true
-                introComplete = true
-                appState = "main"
-            }
-            
-            onSkipRequested: {
-                hasPlayedIntro = true
-            }
-        }
-        
-        // ==================== MAIN CONTENT ====================
+        // ====================================================================
+        // INTRO VIDEO SEQUENCE
+        // ====================================================================
         Item {
-            id: mainContent
+            id: introLayer
             anchors.fill: parent
-            visible: appState === "main"
-            opacity: appState === "main" ? 1.0 : 0.0
+            visible: !introComplete
+            z: 100
+            
+            Rectangle {
+                anchors.fill: parent
+                color: "#000"
+            }
+            
+            MediaPlayer {
+                id: introPlayer
+                source: Qt.resolvedUrl("file:///" + Qt.application.arguments[0].replace(/[^/\\]*$/, "") + "videos/intro.mp4")
+                videoOutput: videoOutput
+                audioOutput: AudioOutput { volume: 0.8 }
+                
+                onPlaybackStateChanged: {
+                    if (playbackState === MediaPlayer.StoppedState && !introSkipped) {
+                        introComplete = true
+                    }
+                }
+                
+                onErrorOccurred: (error, errorString) => {
+                    console.log("Video error:", errorString)
+                    introComplete = true  // Skip to login on error
+                }
+            }
+            
+            VideoOutput {
+                id: videoOutput
+                anchors.fill: parent
+                fillMode: VideoOutput.PreserveAspectFit
+            }
+            
+            // Skip button
+            Rectangle {
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                anchors.margins: 20
+                width: skipText.width + 30
+                height: 36
+                radius: 18
+                color: skipArea.containsMouse ? Qt.rgba(1, 1, 1, 0.2) : Qt.rgba(1, 1, 1, 0.1)
+                border.color: Qt.rgba(1, 1, 1, 0.3)
+                border.width: 1
+                
+                Text {
+                    id: skipText
+                    anchors.centerIn: parent
+                    text: "SKIP ▸"
+                    color: "#AAA"
+                    font.pixelSize: 12
+                    font.bold: true
+                }
+                
+                MouseArea {
+                    id: skipArea
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: {
+                        introSkipped = true
+                        introPlayer.stop()
+                        introComplete = true
+                    }
+                }
+            }
+            
+            // Start video when component is ready
+            Component.onCompleted: {
+                introPlayer.play()
+            }
+        }
+        
+        // ====================================================================
+        // LOGIN SCREEN
+        // ====================================================================
+        Item {
+            id: loginLayer
+            anchors.fill: parent
+            visible: introComplete
+            opacity: introComplete ? 1 : 0
             
             Behavior on opacity {
-                NumberAnimation { duration: 500; easing.type: Easing.OutQuad }
+                NumberAnimation { duration: 500; easing.type: Easing.OutCubic }
             }
             
-            // Draggable title bar area
+            // Draggable area
             MouseArea {
-                id: dragArea
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.right: parent.right
                 height: 50
-                
                 property point clickPos
-                
-                onPressed: (mouse) => {
-                    clickPos = Qt.point(mouse.x, mouse.y)
-                }
-                
+                onPressed: (mouse) => { clickPos = Qt.point(mouse.x, mouse.y) }
                 onPositionChanged: (mouse) => {
                     if (pressed) {
-                        var delta = Qt.point(mouse.x - clickPos.x, mouse.y - clickPos.y)
-                        root.x += delta.x
-                        root.y += delta.y
+                        root.x += mouse.x - clickPos.x
+                        root.y += mouse.y - clickPos.y
                     }
                 }
             }
             
-            // Close button - minimizes to tray
-            CloseButton {
+            // Close button
+            Rectangle {
                 anchors.right: parent.right
                 anchors.top: parent.top
                 anchors.margins: 16
-                onClicked: {
-                    if (TrayManager.minimizeToTray && TrayManager.isSystemTrayAvailable()) {
-                        root.hide()
-                        TrayManager.hideToTray()
-                    } else {
-                        Qt.quit()
-                    }
+                width: 24; height: 24; radius: 12
+                color: closeArea.containsMouse ? "#FF4444" : "transparent"
+                Text {
+                    anchors.centerIn: parent
+                    text: "✕"
+                    color: closeArea.containsMouse ? "#FFF" : "#666"
+                    font.pixelSize: 12
+                }
+                MouseArea {
+                    id: closeArea
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: Qt.quit()
                 }
             }
             
             // Minimize button
-            MinimizeButton {
+            Rectangle {
                 anchors.right: parent.right
                 anchors.top: parent.top
                 anchors.rightMargin: 50
                 anchors.topMargin: 16
-                onClicked: root.showMinimized()
+                width: 24; height: 24; radius: 12
+                color: minArea.containsMouse ? "#333" : "transparent"
+                Rectangle {
+                    anchors.centerIn: parent
+                    width: 10; height: 2
+                    color: minArea.containsMouse ? "#FFF" : "#666"
+                }
+                MouseArea {
+                    id: minArea
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: root.showMinimized()
+                }
             }
             
-            // Content area
-            StackView {
-                id: contentStack
-                anchors.fill: parent
-                anchors.margins: 20
+            // Main content
+            ColumnLayout {
+                anchors.centerIn: parent
+                spacing: 30
+                width: 360
                 
-                initialItem: AuthManager.isAuthenticated ? dashboardView : loginView
-            }
-            
-            // View components
-            Component {
-                id: loginView
-                LoginView {
-                    onLoginSuccess: {
-                        contentStack.replace(dashboardView)
+                // Logo
+                Text {
+                    Layout.alignment: Qt.AlignHCenter
+                    text: "GENESIS"
+                    font.pixelSize: 42
+                    font.bold: true
+                    color: textPrimary
+                }
+                
+                // Subtitle
+                Text {
+                    Layout.alignment: Qt.AlignHCenter
+                    text: "Sign in with your AbyssID"
+                    color: textSecondary
+                    font.pixelSize: 14
+                }
+                
+                // Username field
+                TextField {
+                    id: usernameField
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 50
+                    placeholderText: "Username"
+                    color: textPrimary
+                    placeholderTextColor: "#555"
+                    background: Rectangle {
+                        color: "#0D0D0D"
+                        radius: 8
+                        border.color: usernameField.activeFocus ? flameOrange : "#252525"
+                        border.width: 1
                     }
-                    onCreateAccount: {
-                        contentStack.push(signUpView)
+                }
+                
+                // Password field
+                TextField {
+                    id: passwordField
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 50
+                    placeholderText: "Password"
+                    echoMode: TextInput.Password
+                    color: textPrimary
+                    placeholderTextColor: "#555"
+                    background: Rectangle {
+                        color: "#0D0D0D"
+                        radius: 8
+                        border.color: passwordField.activeFocus ? flameOrange : "#252525"
+                        border.width: 1
+                    }
+                }
+                
+                // Login button
+                Rectangle {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 50
+                    radius: 8
+                    color: loginArea.containsMouse ? "#FF5722" : flameOrange
+                    
+                    Text {
+                        anchors.centerIn: parent
+                        text: "SIGN IN"
+                        color: "#FFF"
+                        font.pixelSize: 14
+                        font.bold: true
+                    }
+                    
+                    MouseArea {
+                        id: loginArea
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            console.log("Login clicked:", usernameField.text)
+                        }
+                    }
+                }
+                
+                // Create account link
+                Text {
+                    Layout.alignment: Qt.AlignHCenter
+                    text: "Create new AbyssID"
+                    color: cipherCyan
+                    font.pixelSize: 13
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: console.log("Create account")
                     }
                 }
             }
             
-            Component {
-                id: signUpView
-                SignUpView {
-                    onSignUpSuccess: {
-                        contentStack.replace(dashboardView)
-                    }
-                    onBackToLogin: {
-                        contentStack.pop()
-                    }
-                }
-            }
-            
-            Component {
-                id: dashboardView
-                DashboardView {
-                    onLogout: {
-                        contentStack.replace(loginView)
-                    }
-                }
-            }
-            
-            // Update overlay
-            UpdateOverlay {
-                id: updateOverlay
-                anchors.fill: parent
-                visible: UpdateEngine.isDownloading
-            }
-            
-            // Version label
+            // Version
             Text {
                 anchors.bottom: parent.bottom
                 anchors.right: parent.right
                 anchors.margins: 12
-                
-                text: "Genesis v" + LauncherCore.version
+                text: "Genesis v1.0.0"
                 color: textSecondary
-                font.family: "JetBrains Mono"
                 font.pixelSize: 10
             }
-        }
-    }
-    
-    // Breathing glow animation on the border (only in main state)
-    SequentialAnimation on opacity {
-        loops: Animation.Infinite
-        running: appState === "main"
-        
-        NumberAnimation {
-            from: 1.0
-            to: 0.97
-            duration: 2000
-            easing.type: Easing.InOutSine
-        }
-        NumberAnimation {
-            from: 0.97
-            to: 1.0
-            duration: 2000
-            easing.type: Easing.InOutSine
-        }
-    }
-    
-    // Keyboard shortcuts
-    Shortcut {
-        sequence: "Escape"
-        onActivated: {
-            if (appState === "intro" && introSequence.canSkip) {
-                introSequence.sequenceComplete()
-            }
-        }
-    }
-    
-    // Listen for tray manager signals
-    Connections {
-        target: TrayManager
-        
-        function onShowWindowRequested() {
-            root.show()
-            root.raise()
-            root.requestActivate()
-        }
-    }
-    
-    // Handle window visibility changes
-    onVisibleChanged: {
-        if (visible && !introComplete && !hasPlayedIntro) {
-            // Window is showing for first time, play intro
-            appState = "intro"
         }
     }
 }

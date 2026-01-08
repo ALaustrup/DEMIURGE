@@ -1,21 +1,20 @@
 <RCC>
-    <qresource prefix="/">
-        <file alias="qml/LauncherWindow.qml">LauncherWindow.qml</file>
+    <qresource prefix="/qml">
+        <file>LauncherWindow.qml</file>
         
         <!-- Views -->
-        <file alias="qml/views/LoginView.qml">views/LoginView.qml</file>
-        <file alias="qml/views/SignUpView.qml">views/SignUpView.qml</file>
-        <file alias="qml/views/DashboardView.qml">views/DashboardView.qml</file>
-        <file alias="qml/views/IntroSequence.qml">views/IntroSequence.qml</file>
+        <file>views/LoginView.qml</file>
+        <file>views/SignUpView.qml</file>
+        <file>views/DashboardView.qml</file>
         
         <!-- Components -->
-        <file alias="qml/components/LaunchCard.qml">components/LaunchCard.qml</file>
-        <file alias="qml/components/FlameButton.qml">components/FlameButton.qml</file>
-        <file alias="qml/components/GlassTextField.qml">components/GlassTextField.qml</file>
-        <file alias="qml/components/GlassCheckBox.qml">components/GlassCheckBox.qml</file>
-        <file alias="qml/components/CloseButton.qml">components/CloseButton.qml</file>
-        <file alias="qml/components/MinimizeButton.qml">components/MinimizeButton.qml</file>
-        <file alias="qml/components/CyberpunkProgressBar.qml">components/CyberpunkProgressBar.qml</file>
-        <file alias="qml/components/UpdateOverlay.qml">components/UpdateOverlay.qml</file>
+        <file>components/LaunchCard.qml</file>
+        <file>components/FlameButton.qml</file>
+        <file>components/GlassTextField.qml</file>
+        <file>components/GlassCheckBox.qml</file>
+        <file>components/CloseButton.qml</file>
+        <file>components/MinimizeButton.qml</file>
+        <file>components/CyberpunkProgressBar.qml</file>
+        <file>components/UpdateOverlay.qml</file>
     </qresource>
 </RCC>

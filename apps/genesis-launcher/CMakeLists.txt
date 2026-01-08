@@ -183,6 +183,14 @@ install(TARGETS ${APP_NAME} GenesisSeed DemiurgeMiner
     BUNDLE DESTINATION .
 )
 
+# Copy videos folder to output directory
+add_custom_command(TARGET ${APP_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/resources/videos"
+        "$<TARGET_FILE_DIR:${APP_NAME}>/videos"
+    COMMENT "Copying intro videos..."
+)
+
 # Copy Qt DLLs on Windows
 if(WIN32)
     add_custom_command(TARGET ${APP_NAME} POST_BUILD

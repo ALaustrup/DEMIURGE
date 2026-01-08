@@ -1,18 +1,18 @@
 /**
- * IntroSequence.qml - Cinematic Intro Video Sequence
+ * IntroSequence.qml - Cinematic Intro Sequence
  * 
- * Plays 3 branded intro videos in sequence:
- * 1. Genesis Logo (3-5s)
- * 2. Abyss OS Logo (3-5s)
- * 3. Demiurge Blockchain Logo (3-5s)
+ * Shows branded intro animations in sequence:
+ * 1. Genesis Logo (3s)
+ * 2. Abyss OS Logo (3s)
+ * 3. Demiurge Blockchain Logo (3s)
  * 
- * Shows skip option after first video.
+ * Uses animated text with glow effects.
+ * Video support can be added later when video files are available.
  */
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Effects
-import QtMultimedia
 
 Item {
     id: root
@@ -22,19 +22,22 @@ Item {
     
     // Theme colors
     readonly property color voidColor: "#050505"
+    readonly property color textPrimary: "#E0E0E0"
     readonly property color textSecondary: "#7A7A7A"
     readonly property color flameOrange: "#FF3D00"
+    readonly property color flameGold: "#FF9100"
+    readonly property color cipherCyan: "#00FFC8"
     
-    // Video sequence configuration
-    readonly property var videoSequence: [
-        "qrc:/videos/01_genesis_intro.mp4",
-        "qrc:/videos/02_abyssos_intro.mp4", 
-        "qrc:/videos/03_demiurge_intro.mp4"
+    // Sequence configuration
+    readonly property var logoSequence: [
+        { text: "GENESIS", color: flameOrange, duration: 3000 },
+        { text: "ABYSS OS", color: cipherCyan, duration: 3000 },
+        { text: "DEMIURGE", color: "#8844FF", duration: 3000 }
     ]
     
-    property int currentVideoIndex: 0
+    property int currentIndex: 0
     property bool canSkip: false
-    property bool hasVideos: false
+    property bool isRunning: false
     
     // Full black background
     Rectangle {
@@ -42,103 +45,84 @@ Item {
         color: voidColor
     }
     
-    // Video player
-    Video {
-        id: videoPlayer
-        anchors.fill: parent
-        fillMode: VideoOutput.PreserveAspectFit
-        
-        // Audio settings
-        volume: 0.7
-        
-        onErrorOccurred: (error, errorString) => {
-            console.warn("Video error:", errorString)
-            // Skip to next video or complete
-            playNext()
-        }
-        
-        onPlaybackStateChanged: {
-            if (playbackState === MediaPlayer.StoppedState && 
-                position >= duration - 100) {  // Near end
-                playNext()
-            }
-        }
-        
-        onMediaStatusChanged: {
-            if (mediaStatus === MediaPlayer.EndOfMedia) {
-                playNext()
-            } else if (mediaStatus === MediaPlayer.InvalidMedia ||
-                       mediaStatus === MediaPlayer.NoMedia) {
-                // Video file doesn't exist, skip
-                playNext()
-            } else if (mediaStatus === MediaPlayer.LoadedMedia) {
-                hasVideos = true
-            }
-        }
-    }
-    
-    // Fallback for missing videos - animated logo
+    // Logo display
     Item {
-        id: fallbackLogo
+        id: logoContainer
         anchors.centerIn: parent
-        visible: !hasVideos && videoPlayer.mediaStatus !== MediaPlayer.LoadingMedia
+        width: parent.width
+        height: 120
         
         Text {
+            id: logoText
             anchors.centerIn: parent
-            text: getCurrentLogoText()
+            text: currentIndex < logoSequence.length ? logoSequence[currentIndex].text : ""
             font.family: "Orbitron"
-            font.pixelSize: 48
+            font.pixelSize: 56
             font.weight: Font.Bold
-            color: "#E0E0E0"
-            
-            opacity: fadeAnim.running ? fadeAnim.opacity : 1.0
+            color: textPrimary
+            opacity: 0
             
             // Glow effect
             layer.enabled: true
             layer.effect: MultiEffect {
                 blurEnabled: true
                 blur: 0.4
-                blurMax: 20
+                blurMax: 24
                 colorization: 1.0
-                colorizationColor: currentVideoIndex === 0 ? flameOrange : 
-                                   currentVideoIndex === 1 ? "#00FFC8" : "#8844FF"
+                colorizationColor: currentIndex < logoSequence.length ? 
+                    logoSequence[currentIndex].color : flameOrange
             }
-        }
-        
-        SequentialAnimation {
-            id: fadeAnim
-            running: fallbackLogo.visible
-            
-            property real opacity: 0
-            
-            // Fade in
-            NumberAnimation {
-                target: fadeAnim
-                property: "opacity"
-                from: 0
-                to: 1
-                duration: 500
-                easing.type: Easing.OutQuad
-            }
-            
-            // Hold
-            PauseAnimation { duration: 2500 }
-            
-            // Fade out
-            NumberAnimation {
-                target: fadeAnim
-                property: "opacity"
-                from: 1
-                to: 0
-                duration: 500
-                easing.type: Easing.InQuad
-            }
-            
-            onFinished: playNext()
         }
     }
     
-    // Skip button (appears after first video)
+    // Animation sequence
+    SequentialAnimation {
+        id: logoAnimation
+        
+        // Fade in
+        NumberAnimation {
+            target: logoText
+            property: "opacity"
+            from: 0
+            to: 1
+            duration: 400
+            easing.type: Easing.OutQuad
+        }
+        
+        // Scale pulse
+        ParallelAnimation {
+            NumberAnimation {
+                target: logoText
+                property: "scale"
+                from: 0.95
+                to: 1.0
+                duration: 300
+                easing.type: Easing.OutBack
+            }
+        }
+        
+        // Hold
+        PauseAnimation { 
+            duration: currentIndex < logoSequence.length ? 
+                logoSequence[currentIndex].duration - 800 : 2000
+        }
+        
+        // Fade out
+        NumberAnimation {
+            target: logoText
+            property: "opacity"
+            from: 1
+            to: 0
+            duration: 400
+            easing.type: Easing.InQuad
+        }
+        
+        onFinished: {
+            playNext()
+        }
+    }
+    
+    // Skip button (appears after first logo)
     Rectangle {
         anchors.bottom: parent.bottom
         anchors.right: parent.right
@@ -176,7 +160,7 @@ Item {
             cursorShape: Qt.PointingHandCursor
             
             onClicked: {
-                videoPlayer.stop()
+                logoAnimation.stop()
                 root.skipRequested()
                 root.sequenceComplete()
             }
@@ -191,13 +175,13 @@ Item {
         spacing: 12
         
         Repeater {
-            model: 3
+            model: logoSequence.length
             
             Rectangle {
                 width: 8
                 height: 8
                 radius: 4
-                color: index <= currentVideoIndex ? "#E0E0E0" : "#404040"
+                color: index <= currentIndex ? textPrimary : "#404040"
                 
                 Behavior on color {
                     ColorAnimation { duration: 300 }
@@ -206,75 +190,59 @@ Item {
         }
     }
     
-    // Click anywhere to skip (after first video)
+    // Click to skip after first logo
     MouseArea {
         anchors.fill: parent
         enabled: canSkip
         
-        onClicked: {
-            // Double-click or press Enter to skip entirely
-        }
-        
         onDoubleClicked: {
-            videoPlayer.stop()
+            logoAnimation.stop()
             root.skipRequested()
             root.sequenceComplete()
         }
     }
     
-    // Keyboard shortcut to skip
+    // Keyboard shortcuts
     Keys.onPressed: (event) => {
         if (event.key === Qt.Key_Escape || event.key === Qt.Key_Space || 
             event.key === Qt.Key_Return) {
             if (canSkip) {
-                videoPlayer.stop()
+                logoAnimation.stop()
                 root.skipRequested()
                 root.sequenceComplete()
             }
-        }
-    }
-    
-    function getCurrentLogoText() {
-        switch (currentVideoIndex) {
-            case 0: return "GENESIS"
-            case 1: return "ABYSS OS"
-            case 2: return "DEMIURGE"
-            default: return ""
+            event.accepted = true
         }
     }
     
     function playNext() {
-        currentVideoIndex++
+        currentIndex++
         
-        if (currentVideoIndex >= videoSequence.length) {
+        if (currentIndex >= logoSequence.length) {
             // Sequence complete
+            isRunning = false
             root.sequenceComplete()
             return
         }
         
-        // Enable skip after first video
-        if (currentVideoIndex >= 1) {
+        // Enable skip after first logo
+        if (currentIndex >= 1) {
             canSkip = true
         }
         
-        // Reset for fallback animation
-        hasVideos = false
-        
-        // Try to play next video
-        videoPlayer.source = videoSequence[currentVideoIndex]
-        videoPlayer.play()
+        // Play next logo animation
+        logoAnimation.start()
     }
     
     function start() {
-        currentVideoIndex = 0
+        currentIndex = 0
         canSkip = false
-        hasVideos = false
+        isRunning = true
+        logoText.opacity = 0
+        logoText.scale = 0.95
         
-        // Start with first video
-        videoPlayer.source = videoSequence[0]
-        videoPlayer.play()
-        
-        // If video fails to load, fallback animation will trigger
+        // Start first animation
+        logoAnimation.start()
     }
     
     Component.onCompleted: {

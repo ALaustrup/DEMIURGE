@@ -2,9 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Genesis Launcher Theme CSS Variables */
+:root {
+  --genesis-void: #050505;
+  --genesis-void-dark: #000000;
+  --genesis-glass: #0A0A0A;
+  --genesis-glass-light: #0D0D0D;
+  --genesis-glass-hover: #151515;
+  --genesis-text-primary: #E0E0E0;
+  --genesis-text-secondary: #7A7A7A;
+  --genesis-text-tertiary: #555555;
+  --genesis-flame-orange: #FF3D00;
+  --genesis-flame-orange-hover: #FF5722;
+  --genesis-cipher-cyan: #00FFC8;
+  --genesis-cipher-cyan-hover: #00E5B8;
+  --genesis-border-default: #252525;
+  --genesis-border-light: rgba(255, 255, 255, 0.1);
+  --genesis-border-medium: rgba(255, 255, 255, 0.2);
+  --genesis-border-accent: rgba(255, 61, 0, 0.3);
+  --genesis-border-cyan: rgba(0, 255, 200, 0.3);
+  --genesis-success: #00FF88;
+  --genesis-warning: #FF9100;
+  --genesis-error: #FF4444;
+  --genesis-info: #00FFC8;
+  --genesis-radius-sm: 8px;
+  --genesis-radius-md: 12px;
+  --genesis-radius-lg: 16px;
+  --genesis-radius-xl: 24px;
+  --genesis-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --genesis-transition-default: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --genesis-transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --genesis-transition-spring: 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
 @layer base {
   body {
-    @apply bg-abyss-dark text-white overflow-hidden;
+    @apply bg-genesis-void text-genesis-text-primary overflow-hidden;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
     /* Prevent mobile address bar collapse issues */
     height: 100dvh;
@@ -131,19 +164,19 @@
   }
 
   .abyss-files-sidebar {
-    @apply flex flex-col items-center py-4 w-16 bg-abyss-navy/40 backdrop-blur-sm border-r border-abyss-cyan/20;
+    @apply flex flex-col items-center py-4 w-16 bg-genesis-glass/40 backdrop-blur-sm border-r border-genesis-border-cyan;
     min-width: 4rem;
   }
 
   .abyss-files-tab {
     @apply w-12 h-12 rounded-lg flex items-center justify-center text-xl mb-2 transition-all duration-200;
-    @apply bg-abyss-dark/50 border border-abyss-cyan/20 text-gray-400;
-    @apply hover:border-abyss-cyan/50 hover:text-abyss-cyan hover:bg-abyss-navy/60;
+    @apply bg-genesis-glass-light/50 border border-genesis-border-cyan text-genesis-text-secondary;
+    @apply hover:border-genesis-cipher-cyan hover:text-genesis-cipher-cyan hover:bg-genesis-glass-hover;
   }
 
   .abyss-files-tab.is-active {
-    @apply border-abyss-cyan bg-abyss-cyan/10 text-abyss-cyan;
-    @apply shadow-[0_0_12px_rgba(0,255,255,0.3)];
+    @apply border-genesis-cipher-cyan bg-genesis-cipher-cyan/10 text-genesis-cipher-cyan;
+    @apply shadow-genesis-cyan;
   }
 
   .abyss-files-tab-icon {

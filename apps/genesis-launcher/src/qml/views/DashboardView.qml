@@ -8,7 +8,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Effects
 
-import "../components"
+import "qrc:/qml/components"
 
 Item {
     id: root

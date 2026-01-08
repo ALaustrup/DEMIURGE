@@ -66,8 +66,8 @@ function AppContent() {
 
   if (abyssIDLoading) {
     return (
-      <div className="w-screen h-screen bg-abyss-dark flex items-center justify-center">
-        <div className="text-abyss-cyan">Loading...</div>
+      <div className="w-screen h-screen bg-genesis-void flex items-center justify-center">
+        <div className="text-genesis-cipher-cyan">Loading...</div>
       </div>
     );
   }
