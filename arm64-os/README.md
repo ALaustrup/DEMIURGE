@@ -228,6 +228,19 @@ This will:
 - Enable automatic updates
 - Configure fail2ban
 
+## Documentation
+
+Complete documentation is available:
+
+- **[INDEX.md](INDEX.md)** - Documentation index and navigation
+- **[QUICKSTART.md](QUICKSTART.md)** - Fast setup guide
+- **[INSTALLATION_GUIDE.md](INSTALLATION_GUIDE.md)** - Detailed installation steps
+- **[BUILD_WINDOWS.md](BUILD_WINDOWS.md)** - Building on Windows/WSL
+- **[FLASH_IMAGE.md](FLASH_IMAGE.md)** - SD card flashing guide
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - Technical architecture details
+- **[DOCUMENTATION.md](DOCUMENTATION.md)** - Complete system reference
+- **[FAQ.md](FAQ.md)** - Frequently asked questions
+
 ## License
 
 Part of the Demiurge Blockchain ecosystem.
