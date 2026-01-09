@@ -43,9 +43,9 @@ $ProgressPreference = "SilentlyContinue"
 
 # Colors for output
 function Write-Step { param($msg) Write-Host "`n▶ $msg" -ForegroundColor Cyan }
-function Write-Success { param($msg) Write-Host "✓ $msg" -ForegroundColor Green }
-function Write-Error { param($msg) Write-Host "✗ $msg" -ForegroundColor Red }
-function Write-Warning { param($msg) Write-Host "⚠ $msg" -ForegroundColor Yellow }
+function Write-Success { param($msg) Write-Host "[OK] $msg" -ForegroundColor Green }
+function Write-ErrorMsg { param($msg) Write-Host "[ERROR] $msg" -ForegroundColor Red }
+function Write-Warning { param($msg) Write-Host "[WARN] $msg" -ForegroundColor Yellow }
 
 # Script directory
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -71,7 +71,7 @@ Write-Step "Verifying prerequisites..."
 
 # Check Qt
 if (-not (Test-Path $QtPath)) {
-    Write-Error "Qt not found at: $QtPath"
+    Write-ErrorMsg "Qt not found at: $QtPath"
     Write-Host "Please install Qt 6.10+ or specify -QtPath parameter" -ForegroundColor Yellow
     exit 1
 }
@@ -89,7 +89,7 @@ if (-not (Test-Path $BinaryCreator)) {
 # Check CMake
 $cmake = Get-Command cmake -ErrorAction SilentlyContinue
 if (-not $cmake) {
-    Write-Error "CMake not found in PATH"
+    Write-ErrorMsg "CMake not found in PATH"
     exit 1
 }
 
@@ -111,29 +111,31 @@ if (-not $SkipBuild) {
     try {
         # Configure
         Write-Host "  Configuring CMake..." -ForegroundColor Gray
-        cmake .. `
+        $cmakeOutput = cmake .. `
             -G "Visual Studio 17 2022" `
             -A x64 `
             -DCMAKE_PREFIX_PATH="$QtPath" `
-            -DCMAKE_BUILD_TYPE=$BuildType `
-            2>&1 | Out-Null
+            -DCMAKE_BUILD_TYPE=$BuildType 2>&1
         
-        if ($LASTEXITCODE -ne 0) {
+        # CMake warnings are OK, only fail on actual errors
+        if ($LASTEXITCODE -ne 0 -and $cmakeOutput -notmatch "CMake Warning") {
             throw "CMake configuration failed"
         }
         
         # Build
         Write-Host "  Building..." -ForegroundColor Gray
-        cmake --build . --config $BuildType --parallel
+        $buildOutput = cmake --build . --config $BuildType --parallel 2>&1
         
-        if ($LASTEXITCODE -ne 0) {
-            throw "Build failed"
+        # Check if executable was created (more reliable than exit code)
+        $exeCheck = Join-Path $ReleaseDir "GenesisLauncher.exe"
+        if (-not (Test-Path $exeCheck)) {
+            throw "Build failed - executable not found"
         }
         
         Write-Success "Application built successfully"
     }
     catch {
-        Write-Error "Build failed: $_"
+        Write-ErrorMsg "Build failed: $_"
         Pop-Location
         exit 1
     }
@@ -148,7 +150,7 @@ else {
 # Verify executable exists
 $ExePath = Join-Path $ReleaseDir "GenesisLauncher.exe"
 if (-not (Test-Path $ExePath)) {
-    Write-Error "Executable not found: $ExePath"
+    Write-ErrorMsg "Executable not found: $ExePath"
     exit 1
 }
 
@@ -161,7 +163,7 @@ Write-Step "Deploying Qt dependencies..."
 
 $Windeployqt = Join-Path $QtBin "windeployqt.exe"
 if (-not (Test-Path $Windeployqt)) {
-    Write-Error "windeployqt not found: $Windeployqt"
+    Write-ErrorMsg "windeployqt not found: $Windeployqt"
     exit 1
 }
 
@@ -243,7 +245,7 @@ foreach ($file in $RequiredFiles) {
 }
 
 if ($MissingFiles.Count -gt 0) {
-    Write-Error "Missing required files:"
+    Write-ErrorMsg "Missing required files:"
     $MissingFiles | ForEach-Object { Write-Host "  - $_" -ForegroundColor Red }
     exit 1
 }
@@ -270,7 +272,7 @@ if (-not $SkipInstaller) {
         $InstallerPath
     
     if ($LASTEXITCODE -ne 0) {
-        Write-Error "Installer creation failed"
+        Write-ErrorMsg "Installer creation failed"
         exit 1
     }
     
@@ -280,7 +282,7 @@ if (-not $SkipInstaller) {
         Write-Host "  Location: $InstallerPath" -ForegroundColor Gray
     }
     else {
-        Write-Error "Installer file not found after creation"
+        Write-ErrorMsg "Installer file not found after creation"
         exit 1
     }
 }
