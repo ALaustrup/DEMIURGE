@@ -41,7 +41,6 @@
     color: var(--genesis-text-primary);
     overflow: hidden;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-    /* Prevent mobile address bar collapse issues */
     height: 100dvh;
     min-height: 100vh;
     position: fixed;
@@ -49,13 +48,12 @@
     overscroll-behavior: none;
   }
   #root {
-    @apply w-screen;
+    width: 100vw;
     height: 100dvh;
     min-height: 100vh;
     overflow: hidden;
   }
   
-  /* Mobile optimizations */
   @media (max-width: 768px) {
     body {
       -webkit-tap-highlight-color: transparent;
@@ -63,7 +61,6 @@
       user-select: none;
     }
     
-    /* Ensure smooth scrolling on mobile */
     * {
       -webkit-overflow-scrolling: touch;
     }
@@ -125,76 +122,128 @@
   }
 
   .abyss-pill {
-    @apply flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-medium backdrop-blur-sm border;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    backdrop-filter: blur(4px);
+    border: 1px solid;
   }
 
   .abyss-pill--connecting {
-    @apply bg-abyss-navy/40 border-abyss-cyan/30 text-gray-300;
+    background-color: rgba(10, 10, 10, 0.4);
+    border-color: rgba(0, 255, 200, 0.3);
+    color: rgb(209, 213, 219);
   }
 
   .abyss-pill--online {
-    @apply bg-green-500/20 border-green-400/50 text-green-300;
+    background-color: rgba(34, 197, 94, 0.2);
+    border-color: rgba(74, 222, 128, 0.5);
+    color: rgb(134, 239, 172);
   }
 
   .abyss-pill--offline {
-    @apply bg-red-500/20 border-red-400/50 text-red-300;
+    background-color: rgba(239, 68, 68, 0.2);
+    border-color: rgba(248, 113, 113, 0.5);
+    color: rgb(252, 165, 165);
   }
 
   .abyss-pill-dot {
-    @apply w-2 h-2 rounded-full;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
   }
 
   .abyss-pill--connecting .abyss-pill-dot {
-    @apply bg-abyss-cyan animate-pulse;
+    background-color: #00FFC8;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 
   .abyss-pill--online .abyss-pill-dot {
-    @apply bg-green-400;
+    background-color: #4ade80;
   }
 
   .abyss-pill--offline .abyss-pill-dot {
-    @apply bg-red-400;
+    background-color: #f87171;
   }
 
   .abyss-pill-text {
-    @apply text-xs;
+    font-size: 0.75rem;
   }
 
-  /* Files App Sidebar */
   .abyss-files-root {
-    @apply flex flex-row h-full min-h-0;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    min-height: 0;
   }
 
   .abyss-files-sidebar {
-    @apply flex flex-col items-center py-4 w-16 bg-genesis-glass/40 backdrop-blur-sm border-r border-genesis-border-cyan;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 0;
+    width: 4rem;
+    background-color: rgba(10, 10, 10, 0.4);
+    backdrop-filter: blur(4px);
+    border-right: 1px solid rgba(0, 255, 200, 0.3);
     min-width: 4rem;
   }
 
   .abyss-files-tab {
-    @apply w-12 h-12 rounded-lg flex items-center justify-center text-xl mb-2 transition-all duration-200;
-    @apply bg-genesis-glass-light/50 border border-genesis-border-cyan text-genesis-text-secondary;
-    @apply hover:border-genesis-cipher-cyan hover:text-genesis-cipher-cyan hover:bg-genesis-glass-hover;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    transition: all 200ms;
+    background-color: rgba(13, 13, 13, 0.5);
+    border: 1px solid rgba(0, 255, 200, 0.3);
+    color: var(--genesis-text-secondary);
+  }
+
+  .abyss-files-tab:hover {
+    border-color: #00FFC8;
+    color: #00FFC8;
+    background-color: rgba(21, 21, 21, 1);
   }
 
   .abyss-files-tab.is-active {
-    @apply border-genesis-cipher-cyan bg-genesis-cipher-cyan/10 text-genesis-cipher-cyan;
-    @apply shadow-genesis-cyan;
+    border-color: #00FFC8;
+    background-color: rgba(0, 255, 200, 0.1);
+    color: #00FFC8;
+    box-shadow: 0 0 20px rgba(0, 255, 200, 0.3);
   }
 
   .abyss-files-tab-icon {
-    @apply text-xl;
+    font-size: 1.25rem;
   }
 
   .abyss-files-tab-add {
-    @apply mt-auto text-2xl font-light;
-    @apply hover:bg-abyss-purple/20 hover:border-abyss-purple/50 hover:text-abyss-purple;
+    margin-top: auto;
+    font-size: 1.5rem;
+    font-weight: 300;
+  }
+
+  .abyss-files-tab-add:hover {
+    background-color: rgba(157, 0, 255, 0.2);
+    border-color: rgba(157, 0, 255, 0.5);
+    color: #9d00ff;
   }
 
   .abyss-files-content {
-    @apply flex-1 overflow-auto p-6 min-h-0;
+    flex: 1;
+    overflow: auto;
+    padding: 1.5rem;
+    min-height: 0;
   }
 
-  /* Premium UI Polish - Spring Animations */
   .abyss-spring {
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
@@ -207,7 +256,6 @@
     transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
-  /* Depth Blur Layers */
   .abyss-blur-layer-1 {
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
@@ -223,7 +271,6 @@
     -webkit-backdrop-filter: blur(24px);
   }
 
-  /* Glitch Shader Overlay */
   .abyss-glitch-overlay {
     position: relative;
   }
@@ -258,7 +305,6 @@
     }
   }
 
-  /* Touch-optimized zones */
   @media (max-width: 768px) {
     .abyss-touch-target {
       min-width: 44px;
@@ -267,7 +313,6 @@
     }
   }
 
-  /* High-DPI texture scaling */
   @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     .abyss-hd-texture {
       image-rendering: -webkit-optimize-contrast;
@@ -275,4 +320,3 @@
     }
   }
 }
-
