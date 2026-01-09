@@ -22,18 +22,84 @@ TORRNT is a Qt-based torrent client that integrates with the Demiurge blockchain
 
 ### Optional (for full functionality)
 - **libtorrent-rasterbar** - Core torrenting library
-  - Windows: `vcpkg install libtorrent:x64-windows`
-  - Linux: `sudo apt-get install libtorrent-rasterbar-dev`
-  - macOS: `brew install libtorrent-rasterbar`
+
+#### Quick Installation
+
+**Windows (PowerShell):**
+```powershell
+cd apps/torrnt/scripts
+.\install-libtorrent.ps1
+```
+
+**Linux/macOS:**
+```bash
+cd apps/torrnt/scripts
+chmod +x install-libtorrent.sh
+./install-libtorrent.sh
+```
+
+#### Manual Installation
+
+**Windows (vcpkg):**
+```powershell
+# Install vcpkg (if not already installed)
+git clone https://github.com/Microsoft/vcpkg.git $env:USERPROFILE\vcpkg
+cd $env:USERPROFILE\vcpkg
+.\bootstrap-vcpkg.bat
+
+# Install libtorrent
+.\vcpkg.exe install libtorrent:x64-windows
+
+# When building, add to CMake:
+# -DCMAKE_TOOLCHAIN_FILE="$env:USERPROFILE\vcpkg\scripts\buildsystems\vcpkg.cmake"
+```
+
+**Linux:**
+```bash
+# Debian/Ubuntu
+sudo apt-get install libtorrent-rasterbar-dev
+
+# Fedora/RHEL
+sudo dnf install libtorrent-rasterbar-devel
+
+# Arch Linux
+sudo pacman -S libtorrent-rasterbar
+```
+
+**macOS:**
+```bash
+brew install libtorrent-rasterbar
+```
 
 ## Building
 
 ### Windows (MSVC)
+
+**With vcpkg (recommended):**
 ```powershell
 cd apps/torrnt
 mkdir build
 cd build
-cmake .. -G "Visual Studio 17 2022" -A x64 -DCMAKE_PREFIX_PATH="C:\Qt\6.10.1\msvc2022_64"
+
+# If using vcpkg, set the toolchain file
+$vcpkgRoot = "$env:USERPROFILE\vcpkg"
+cmake .. -G "Visual Studio 17 2022" -A x64 `
+    -DCMAKE_PREFIX_PATH="C:\Qt\6.10.1\msvc2022_64" `
+    -DCMAKE_TOOLCHAIN_FILE="$vcpkgRoot\scripts\buildsystems\vcpkg.cmake"
+
+cmake --build . --config Release
+```
+
+**Without vcpkg (manual paths):**
+```powershell
+cd apps/torrnt
+mkdir build
+cd build
+cmake .. -G "Visual Studio 17 2022" -A x64 `
+    -DCMAKE_PREFIX_PATH="C:\Qt\6.10.1\msvc2022_64" `
+    -DLIBTORRENT_INCLUDE_DIR="C:\path\to\libtorrent\include" `
+    -DLIBTORRENT_LIBRARY="C:\path\to\libtorrent\lib\torrent-rasterbar.lib"
+
 cmake --build . --config Release
 ```
 

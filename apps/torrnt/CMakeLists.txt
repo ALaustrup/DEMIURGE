@@ -20,6 +20,13 @@ find_package(Qt6 REQUIRED COMPONENTS
 )
 
 # Find libtorrent
+# Try vcpkg first (Windows)
+if(WIN32 AND EXISTS "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
+    set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
+    message(STATUS "Using vcpkg toolchain: ${CMAKE_TOOLCHAIN_FILE}")
+endif()
+
+# Try pkg-config (Linux/macOS)
 find_package(PkgConfig QUIET)
 if(PkgConfig_FOUND)
     pkg_check_modules(LIBTORRENT QUIET libtorrent-rasterbar)
@@ -27,22 +34,31 @@ endif()
 
 # Try to find libtorrent manually if pkg-config didn't work
 if(NOT LIBTORRENT_FOUND)
+    # Common vcpkg paths
+    set(VCPKG_PATHS
+        "$ENV{VCPKG_ROOT}/installed/x64-windows"
+        "$ENV{USERPROFILE}/vcpkg/installed/x64-windows"
+        "C:/vcpkg/installed/x64-windows"
+    )
+    
+    # Common system paths
+    set(SYSTEM_PATHS
+        /usr/include
+        /usr/local/include
+        /opt/homebrew/include  # macOS Homebrew
+        ${CMAKE_SOURCE_DIR}/third_party/libtorrent/include
+    )
+    
     find_path(LIBTORRENT_INCLUDE_DIR
         NAMES libtorrent/session.hpp
-        PATHS
-            /usr/include
-            /usr/local/include
-            C:/vcpkg/installed/x64-windows/include
-            ${CMAKE_SOURCE_DIR}/third_party/libtorrent/include
+        PATHS ${VCPKG_PATHS} ${SYSTEM_PATHS}
+        PATH_SUFFIXES include
     )
     
     find_library(LIBTORRENT_LIBRARY
         NAMES torrent-rasterbar torrent
-        PATHS
-            /usr/lib
-            /usr/local/lib
-            C:/vcpkg/installed/x64-windows/lib
-            ${CMAKE_SOURCE_DIR}/third_party/libtorrent/lib
+        PATHS ${VCPKG_PATHS} ${SYSTEM_PATHS}
+        PATH_SUFFIXES lib
     )
     
     if(LIBTORRENT_INCLUDE_DIR AND LIBTORRENT_LIBRARY)
