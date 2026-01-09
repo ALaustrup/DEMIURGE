@@ -99,14 +99,13 @@ set(SOURCES
     src/main.cpp
     src/TorrentManager.cpp
     src/blockchain/BlockchainTorrentBridge.cpp
-    src/blockchain/TorrentRegistry.cpp
 )
 
 # Header files
 set(HEADERS
     src/TorrentManager.h
     src/blockchain/BlockchainTorrentBridge.h
-    src/blockchain/TorrentRegistry.h
+    src/blockchain/TorrentRegistry.h  # Interface header only
 )
 
 # QML resources

@@ -75,7 +75,7 @@ void TorrentManager::cleanupSession()
 #endif
 }
 
-bool TorrentManager::addMagnetLink(const QString &magnetUri)
+bool TorrentManager::addMagnetLink(const QString &magnetUriStr)
 {
 #ifdef TORRNT_LIBTORRENT_ENABLED
     if (!m_session) {
@@ -84,7 +84,7 @@ bool TorrentManager::addMagnetLink(const QString &magnetUri)
     }
     
     try {
-        std::string magnetStr = magnetUri.toStdString();
+        std::string magnetStr = magnetUriStr.toStdString();
         libtorrent::error_code ec;
         libtorrent::add_torrent_params params = libtorrent::parse_magnet_uri(magnetStr, ec);
         
@@ -110,7 +110,7 @@ bool TorrentManager::addMagnetLink(const QString &magnetUri)
         m_torrents[infoHash] = handle;
         
         // Extract name from magnet URI if available
-        QString name = magnetUri;
+        QString name = magnetUriStr;
         if (name.contains("&dn=")) {
             int start = name.indexOf("&dn=") + 4;
             int end = name.indexOf("&", start);
@@ -139,7 +139,7 @@ bool TorrentManager::addMagnetLink(const QString &magnetUri)
 #endif
 }
 
-bool TorrentManager::addTorrentFile(const QString &filePath)
+bool TorrentManager::addTorrentFile(const QString &/*filePath*/)
 {
 #ifdef TORRNT_LIBTORRENT_ENABLED
     if (!m_session) {

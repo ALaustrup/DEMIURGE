@@ -28,7 +28,9 @@ if ([string]::IsNullOrEmpty($VcpkgPath)) {
 
 # Install vcpkg if needed
 if ([string]::IsNullOrEmpty($VcpkgPath) -or $InstallVcpkg) {
-    if ($InstallVcpkg -or (Read-Host "vcpkg not found. Install vcpkg? (y/n)") -eq "y") {
+    # Auto-install in non-interactive mode, or if flag is set
+    $shouldInstall = $InstallVcpkg -or $PSStyle.OutputRendering -eq "PlainText" -or $env:CI -eq "true"
+    if ($shouldInstall) {
         Write-Step "Installing vcpkg..."
         
         $vcpkgDir = "$env:USERPROFILE\vcpkg"

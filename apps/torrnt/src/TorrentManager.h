@@ -78,7 +78,6 @@ signals:
 
 private slots:
     void updateStats();
-    void onTorrentStatusUpdate();
 
 private:
     void initializeSession();

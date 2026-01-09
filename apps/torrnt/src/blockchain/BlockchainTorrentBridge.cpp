@@ -82,7 +82,8 @@ QVariantList BlockchainTorrentBridge::searchTorrents(const QString &query)
     request["method"] = "call_module";
     request["params"] = params;
     
-    QNetworkRequest req(QUrl(m_rpcUrl));
+    QUrl url(m_rpcUrl);
+    QNetworkRequest req(url);
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     
     QJsonDocument doc(request);
@@ -136,7 +137,8 @@ QVariantMap BlockchainTorrentBridge::getTorrentMetadata(const QString &infoHash)
     request["method"] = "call_module";
     request["params"] = params;
     
-    QNetworkRequest req(QUrl(m_rpcUrl));
+    QUrl url(m_rpcUrl);
+    QNetworkRequest req(url);
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     
     QJsonDocument doc(request);
@@ -201,7 +203,8 @@ int BlockchainTorrentBridge::getPeerReputation(const QString &peerId)
     request["method"] = "call_module";
     request["params"] = params;
     
-    QNetworkRequest req(QUrl(m_rpcUrl));
+    QUrl url(m_rpcUrl);
+    QNetworkRequest req(url);
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     
     QJsonDocument doc(request);
@@ -235,7 +238,8 @@ void BlockchainTorrentBridge::callRPC(const QString &method, const QJsonObject &
     request["method"] = method;
     request["params"] = params;
     
-    QNetworkRequest req(QUrl(m_rpcUrl));
+    QUrl url(m_rpcUrl);
+    QNetworkRequest req(url);
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     
     QJsonDocument doc(request);
