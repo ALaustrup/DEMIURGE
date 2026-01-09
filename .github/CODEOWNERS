@@ -1,0 +1,37 @@
+# Code Owners
+# Each line is a file pattern followed by one or more owners
+# Order is important; the last matching pattern takes precedence
+
+# Global owners
+* @Alaustrup
+
+# Chain / Blockchain
+/chain/ @Alaustrup
+/chain/src/runtime/ @Alaustrup
+
+# SDK
+/sdk/ @Alaustrup
+/sdk/rust-sdk/ @Alaustrup
+/sdk/ts-sdk/ @Alaustrup
+
+# Indexer / Gateway
+/indexer/ @Alaustrup
+/indexer/abyss-gateway/ @Alaustrup
+/indexer/ingestor-rs/ @Alaustrup
+
+# Applications
+/apps/portal-web/ @Alaustrup
+/apps/qloud-os/ @Alaustrup
+/apps/qor-desktop/ @Alaustrup
+/apps/genesis-launcher/ @Alaustrup
+
+# Documentation
+/docs/ @Alaustrup
+README.md @Alaustrup
+
+# Deployment
+/deploy/ @Alaustrup
+/scripts/ @Alaustrup
+
+# GitHub workflows
+/.github/ @Alaustrup

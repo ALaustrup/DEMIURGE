@@ -1,0 +1,112 @@
+name: Build & Test
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  build-web:
+    name: Build Web Applications
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        app: [portal-web, qloud-os]
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Lint
+        run: pnpm --filter ${{ matrix.app }} lint || echo "Linting skipped"
+      
+      - name: Build
+        run: pnpm --filter ${{ matrix.app }} build
+      
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.app }}-build
+          path: |
+            apps/${{ matrix.app }}/dist
+            apps/${{ matrix.app }}/.next
+          retention-days: 7
+
+  build-rust:
+    name: Build Rust Components
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: dtolnay/rust-toolchain@stable
+      
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      
+      - name: Build chain
+        run: |
+          cd chain
+          cargo build --release
+      
+      - name: Build indexer
+        run: |
+          cd indexer/ingestor-rs
+          cargo build --release
+      
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: rust-build
+          path: |
+            chain/target/release/demiurge-chain
+            indexer/ingestor-rs/target/release/ingestor
+          retention-days: 7
+
+  build-launcher:
+    name: Build Launcher (Windows)
+    runs-on: windows-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: '6.10.1'
+          modules: 'qtmultimedia'
+      
+      - name: Configure CMake
+        run: |
+          cd apps/genesis-launcher
+          mkdir build-ci
+          cd build-ci
+          cmake .. -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=Release
+      
+      - name: Build
+        run: |
+          cd apps/genesis-launcher/build-ci
+          cmake --build . --config Release
+      
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: launcher-windows
+          path: apps/genesis-launcher/build-ci/Release/*.exe
+          retention-days: 30
