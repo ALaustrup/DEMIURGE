@@ -1,0 +1,23 @@
+[Unit]
+Description=Demiurge Portal Web
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=demiurge
+Group=demiurge
+WorkingDirectory=/opt/demiurge/apps/portal-web
+Environment="NODE_ENV=production"
+Environment="PORT=3000"
+ExecStart=/usr/bin/node node_modules/.bin/next start
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=demiurge-portal
+
+MemoryMax=1G
+
+[Install]
+WantedBy=multi-user.target

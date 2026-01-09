@@ -1,0 +1,23 @@
+[Unit]
+Description=QorID Service (Identity & Authentication)
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=demiurge
+Group=demiurge
+WorkingDirectory=/opt/demiurge/apps/qorid-service
+Environment="NODE_ENV=production"
+Environment="PORT=8082"
+ExecStart=/usr/bin/node src/index.ts
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=demiurge-qorid
+
+MemoryMax=512M
+
+[Install]
+WantedBy=multi-user.target

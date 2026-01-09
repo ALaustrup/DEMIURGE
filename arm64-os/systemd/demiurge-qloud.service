@@ -1,0 +1,23 @@
+[Unit]
+Description=QLOUD OS Web Desktop
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=demiurge
+Group=demiurge
+WorkingDirectory=/opt/demiurge/apps/qloud-os
+Environment="NODE_ENV=production"
+Environment="PORT=5173"
+ExecStart=/usr/bin/node node_modules/.bin/vite preview --host 0.0.0.0 --port 5173
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=demiurge-qloud
+
+MemoryMax=1G
+
+[Install]
+WantedBy=multi-user.target
