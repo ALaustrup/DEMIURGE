@@ -1,0 +1,29 @@
+[Unit]
+Description=Demiurge Indexer (GraphQL Gateway)
+After=network.target demiurge-chain.service
+Requires=demiurge-chain.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=demiurge
+Group=demiurge
+WorkingDirectory=/opt/demiurge/indexer/abyss-gateway
+Environment="NODE_ENV=production"
+Environment="PORT=4000"
+ExecStart=/usr/bin/node src/index.ts
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=demiurge-indexer
+
+# Resource limits
+MemoryMax=2G
+
+# Security
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

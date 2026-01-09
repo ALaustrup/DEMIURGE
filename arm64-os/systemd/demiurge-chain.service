@@ -1,0 +1,30 @@
+[Unit]
+Description=Demiurge Chain Node
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=demiurge
+Group=demiurge
+WorkingDirectory=/opt/demiurge/chain
+ExecStart=/opt/demiurge/chain/demiurge-chain --config /etc/demiurge/chain.toml
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=demiurge-chain
+
+# Resource limits
+LimitNOFILE=65536
+MemoryMax=4G
+
+# Security
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/demiurge/chain /var/log/demiurge
+
+[Install]
+WantedBy=multi-user.target
